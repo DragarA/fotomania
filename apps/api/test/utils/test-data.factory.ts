@@ -79,4 +79,34 @@ export const TestDataFactory = {
     _json: {},
     ...overrides,
   }),
+
+  /**
+   * Create a test catalogue
+   */
+  createCatalogue: (overrides: Partial<any> = {}) => ({
+    id: 'test-catalogue-id-1',
+    title: 'Test Catalogue',
+    description: 'Test Description',
+    coverImage: 'https://example.com/cover.jpg',
+    password: null,
+    publicUrlSlug: 'test-catalogue',
+    ownerId: 'test-user-id-1',
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01'),
+    ...overrides,
+  }),
+
+  /**
+   * Create multiple test catalogues
+   */
+  createCatalogues: (count: number, overrides: Partial<any> = {}) => {
+    return Array.from({ length: count }, (_, i) =>
+      TestDataFactory.createCatalogue({
+        id: `test-catalogue-id-${i + 1}`,
+        title: `Test Catalogue ${i + 1}`,
+        publicUrlSlug: `test-catalogue-${i + 1}`,
+        ...overrides,
+      })
+    );
+  },
 };

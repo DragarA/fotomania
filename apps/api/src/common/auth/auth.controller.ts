@@ -10,6 +10,8 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
+import { User } from './decorators/current-user.decorator';
+import { UserEntity } from './interfaces/user-entity.interface';
 
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
@@ -101,7 +103,7 @@ export class AuthController {
   @Get('me')
   @ApiOperation({ summary: 'Get current user' })
   @ApiResponse({ status: 200, description: 'Returns current user' })
-  async getCurrentUser(@Req() req: Request) {
-    return req.user;
+  async getCurrentUser(@User() user: UserEntity) {
+    return user;
   }
 }

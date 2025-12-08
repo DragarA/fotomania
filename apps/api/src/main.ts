@@ -1,5 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { writeFileSync } from 'fs';
+import { resolve } from 'path';
 
 import { AppModule } from './app.module';
 
@@ -33,6 +35,11 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
+
+  // Write OpenAPI spec to file on startup
+  const openApiPath = resolve(__dirname, '../openapi.json');
+  writeFileSync(openApiPath, JSON.stringify(document, null, 2));
+  console.log(`✅ OpenAPI spec written to: ${openApiPath}`);
 
   // Expose OpenAPI spec as JSON endpoint
   app.getHttpAdapter().get('/api-json', (_req, res) => {

@@ -15,11 +15,7 @@ Fotomania is a **Turborepo monorepo** with a type-safe API-to-frontend pipeline:
 
 ### Development
 ```bash
-# First time setup (generate OpenAPI spec)
-pnpm dev                                    # Start all services
-pnpm --filter @repo/api generate-openapi   # Generate OpenAPI spec (in separate terminal after API starts)
-
-# Regular development
+# Development (OpenAPI spec auto-generates on API startup)
 pnpm dev                                    # API (port 3000), Web (port 5173), SDK watcher
 
 # Individual packages
@@ -53,12 +49,14 @@ pnpm --filter @repo/api db:studio           # Open Drizzle Studio
 
 ### OpenAPI/SDK Generation
 ```bash
-# Manual OpenAPI generation (API must be running)
-pnpm --filter @repo/api generate-openapi   # Fetches from http://localhost:3000/api-json
-curl http://localhost:3000/api-json > apps/api/openapi.json  # Alternative
+# OpenAPI spec is automatically generated on API startup to apps/api/openapi.json
+# The SDK watcher (in dev mode) automatically regenerates when openapi.json changes
 
-# Manual SDK generation
+# Manual SDK generation (if needed)
 pnpm --filter @repo/sdk generate           # Reads apps/api/openapi.json
+
+# Manual OpenAPI fetch (alternative, but not needed since auto-generated)
+curl http://localhost:3000/api-json > apps/api/openapi.json
 ```
 
 ### Testing
@@ -90,14 +88,18 @@ Database Schema (Drizzle)
   ↓
 API Endpoints (NestJS + Swagger decorators)
   ↓
-OpenAPI Spec (auto-generated at apps/api/openapi.json)
+OpenAPI Spec (auto-generated on API startup → apps/api/openapi.json)
   ↓
-TypeScript SDK (auto-generated via @hey-api/openapi-ts)
+TypeScript SDK (auto-generated via @hey-api/openapi-ts, watches openapi.json in dev)
   ↓
 Frontend Components (React + TanStack Query)
 ```
 
-**Critical Flow**: Changes to API controllers automatically propagate types to the frontend through SDK regeneration.
+**Critical Flow**:
+1. API starts → OpenAPI spec auto-generates to `apps/api/openapi.json`
+2. SDK watcher detects change → auto-regenerates TypeScript client
+3. Frontend imports types and services from `@repo/sdk`
+4. End-to-end type safety from database to UI
 
 ### Dependency Injection Patterns
 
@@ -179,8 +181,8 @@ All apps extend base configs via workspace references:
 
 ### Critical Files
 
-- **apps/api/openapi.json**: Generated OpenAPI spec (gitignored, must regenerate on first run)
-- **apps/api/src/main.ts**: Bootstrap logic (CORS, Swagger, session middleware, passport)
+- **apps/api/openapi.json**: Auto-generated OpenAPI spec (created on API startup)
+- **apps/api/src/main.ts**: Bootstrap logic (CORS, Swagger, OpenAPI file generation, session middleware, passport)
 - **apps/web/src/routeTree.gen.ts**: Auto-generated route tree (don't edit manually)
 - **packages/sdk/src/generated/**: Auto-generated SDK (don't edit manually)
 
@@ -196,9 +198,10 @@ All apps extend base configs via workspace references:
    @ApiResponse({ status: 200, description: 'Success' })
    ```
 3. Service logic in `<module>.service.ts` using `@Inject(DRIZZLE)`
-4. Run `pnpm --filter @repo/api generate-openapi` (or SDK watcher auto-detects)
-5. SDK regenerates automatically
-6. Import types/functions from `@repo/sdk` in frontend
+4. **Automatic flow (in dev mode)**:
+   - Save changes → API auto-restarts → OpenAPI spec regenerates
+   - SDK watcher detects change → SDK regenerates automatically
+5. Import types/functions from `@repo/sdk` in frontend
 
 ### Adding a Frontend Route
 
@@ -388,9 +391,10 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 ## Troubleshooting
 
 ### SDK Generation Issues
-- Ensure `apps/api/openapi.json` exists (run `generate-openapi` script)
-- API must be running or built to generate OpenAPI spec
-- SDK watches `openapi.json` file in dev mode
+- OpenAPI spec auto-generates when API starts - check console for "✅ OpenAPI spec written to..." message
+- If `apps/api/openapi.json` is missing, restart the API server
+- SDK watches `openapi.json` file in dev mode and regenerates automatically
+- For manual regeneration: `pnpm --filter @repo/sdk generate`
 
 ### TypeScript Errors in Frontend
 - Rebuild SDK: `pnpm --filter @repo/sdk build`

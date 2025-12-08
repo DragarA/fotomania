@@ -15,6 +15,20 @@
       "when": 1765192419733,
       "tag": "0001_famous_black_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765204269365,
+      "tag": "0002_lucky_black_bird",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1765216057386,
+      "tag": "0003_lying_zarda",
+      "breakpoints": true
     }
   ]
 }

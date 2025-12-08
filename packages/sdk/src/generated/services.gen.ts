@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerFindBySlugData, CataloguesControllerFindBySlugResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -27,6 +27,274 @@ export class AppService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/health'
+        });
+    }
+    
+}
+
+export class AuthService {
+    /**
+     * Register a new user
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown User registered successfully
+     * @throws ApiError
+     */
+    public static authControllerRegister(data: AuthControllerRegisterData): CancelablePromise<AuthControllerRegisterResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/auth/register',
+            body: data.requestBody,
+            mediaType: 'application/json'
+        });
+    }
+    
+    /**
+     * Login with email and password
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Login successful
+     * @throws ApiError
+     */
+    public static authControllerLogin(data: AuthControllerLoginData): CancelablePromise<AuthControllerLoginResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/auth/login',
+            body: data.requestBody,
+            mediaType: 'application/json'
+        });
+    }
+    
+    /**
+     * Logout current user (client-side with JWT)
+     * @returns unknown Logout successful
+     * @throws ApiError
+     */
+    public static authControllerLogout(): CancelablePromise<AuthControllerLogoutResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/auth/logout'
+        });
+    }
+    
+    /**
+     * Initiate Google OAuth login
+     * @returns unknown
+     * @throws ApiError
+     */
+    public static authControllerGoogleAuth(): CancelablePromise<AuthControllerGoogleAuthResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/auth/google'
+        });
+    }
+    
+    /**
+     * Google OAuth callback
+     * @returns unknown
+     * @throws ApiError
+     */
+    public static authControllerGoogleAuthRedirect(): CancelablePromise<AuthControllerGoogleAuthRedirectResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/auth/google/callback'
+        });
+    }
+    
+    /**
+     * Get current user
+     * @returns unknown Returns current user
+     * @throws ApiError
+     */
+    public static authControllerGetCurrentUser(): CancelablePromise<AuthControllerGetCurrentUserResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/auth/me'
+        });
+    }
+    
+}
+
+export class UsersService {
+    /**
+     * Get all users
+     * @returns unknown Returns all users
+     * @throws ApiError
+     */
+    public static usersControllerFindAll(): CancelablePromise<UsersControllerFindAllResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/users'
+        });
+    }
+    
+    /**
+     * Get user by ID
+     * @param data The data for the request.
+     * @param data.id
+     * @returns unknown Returns a user
+     * @throws ApiError
+     */
+    public static usersControllerFindOne(data: UsersControllerFindOneData): CancelablePromise<UsersControllerFindOneResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/users/{id}',
+            path: {
+                id: data.id
+            }
+        });
+    }
+    
+    /**
+     * Update user
+     * @param data The data for the request.
+     * @param data.id
+     * @returns unknown User updated successfully
+     * @throws ApiError
+     */
+    public static usersControllerUpdate(data: UsersControllerUpdateData): CancelablePromise<UsersControllerUpdateResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/users/{id}',
+            path: {
+                id: data.id
+            }
+        });
+    }
+    
+    /**
+     * Delete user
+     * @param data The data for the request.
+     * @param data.id
+     * @returns unknown User deleted successfully
+     * @throws ApiError
+     */
+    public static usersControllerRemove(data: UsersControllerRemoveData): CancelablePromise<UsersControllerRemoveResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/users/{id}',
+            path: {
+                id: data.id
+            }
+        });
+    }
+    
+}
+
+export class CataloguesService {
+    /**
+     * Create a new catalogue
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns unknown Catalogue created successfully
+     * @throws ApiError
+     */
+    public static cataloguesControllerCreate(data: CataloguesControllerCreateData): CancelablePromise<CataloguesControllerCreateResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/catalogues',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                409: 'URL slug already exists'
+            }
+        });
+    }
+    
+    /**
+     * Get all catalogues for the current user
+     * @returns unknown Returns all user catalogues
+     * @throws ApiError
+     */
+    public static cataloguesControllerFindAll(): CancelablePromise<CataloguesControllerFindAllResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/catalogues'
+        });
+    }
+    
+    /**
+     * Get a catalogue by ID
+     * @param data The data for the request.
+     * @param data.id Catalogue ID
+     * @returns unknown Returns the catalogue
+     * @throws ApiError
+     */
+    public static cataloguesControllerFindOne(data: CataloguesControllerFindOneData): CancelablePromise<CataloguesControllerFindOneResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/catalogues/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                404: 'Catalogue not found'
+            }
+        });
+    }
+    
+    /**
+     * Update a catalogue
+     * @param data The data for the request.
+     * @param data.id Catalogue ID
+     * @param data.requestBody
+     * @returns unknown Catalogue updated successfully
+     * @throws ApiError
+     */
+    public static cataloguesControllerUpdate(data: CataloguesControllerUpdateData): CancelablePromise<CataloguesControllerUpdateResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/catalogues/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                403: 'Forbidden',
+                404: 'Catalogue not found'
+            }
+        });
+    }
+    
+    /**
+     * Delete a catalogue
+     * @param data The data for the request.
+     * @param data.id Catalogue ID
+     * @returns unknown Catalogue deleted successfully
+     * @throws ApiError
+     */
+    public static cataloguesControllerRemove(data: CataloguesControllerRemoveData): CancelablePromise<CataloguesControllerRemoveResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/catalogues/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                403: 'Forbidden',
+                404: 'Catalogue not found'
+            }
+        });
+    }
+    
+    /**
+     * Get a catalogue by public URL slug
+     * @param data The data for the request.
+     * @param data.slug Public URL slug
+     * @returns unknown Returns the catalogue
+     * @throws ApiError
+     */
+    public static cataloguesControllerFindBySlug(data: CataloguesControllerFindBySlugData): CancelablePromise<CataloguesControllerFindBySlugResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/catalogues/slug/{slug}',
+            path: {
+                slug: data.slug
+            },
+            errors: {
+                404: 'Catalogue not found'
+            }
         });
     }
     
