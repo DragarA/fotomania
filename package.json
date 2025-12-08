@@ -1,0 +1,24 @@
+{
+  "name": "fotomania",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "turbo format",
+    "clean": "turbo clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "^0.25.12"
+    }
+  }
+}
