@@ -1,13 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { eq } from 'drizzle-orm';
 
 import { DRIZZLE, DrizzleDB } from '../db/drizzle';
-import { account, session, user } from '../db/schema';
+import { account, user } from '../db/schema';
 
 @Injectable()
 export class AuthService {
-  constructor(@Inject(DRIZZLE) private readonly db: DrizzleDB) {}
+  constructor(
+    @Inject(DRIZZLE) private readonly db: DrizzleDB,
+    private jwtService: JwtService,
+    private configService: ConfigService
+  ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
     const [foundUser] = await this.db
@@ -75,7 +81,7 @@ export class AuthService {
       id: crypto.randomUUID(),
       accountId: email,
       providerId: 'credential',
-      userId: newUser.id,
+      userId: newUser!.id,
       password: hashedPassword,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -84,30 +90,40 @@ export class AuthService {
     return newUser;
   }
 
-  async createSession(userId: string, req: any) {
-    const token = crypto.randomUUID();
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 30); // 30 days
-
-    const [newSession] = await this.db
-      .insert(session)
-      .values({
-        id: crypto.randomUUID(),
-        userId,
-        token,
-        expiresAt,
-        ipAddress: req.ip,
-        userAgent: req.headers['user-agent'],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-      .returning();
-
-    return newSession;
+  generateAccessToken(userId: string, email: string): string {
+    const payload = { sub: userId, email };
+    return this.jwtService.sign(payload, {
+      secret:
+        this.configService.get<string>('JWT_SECRET') ||
+        'your-secret-key-change-in-production',
+      expiresIn: '7d', // 7 days
+    });
   }
 
-  async deleteSession(sessionId: string) {
-    await this.db.delete(session).where(eq(session.id, sessionId));
+  generateRefreshToken(userId: string, email: string): string {
+    const payload = { sub: userId, email };
+    return this.jwtService.sign(payload, {
+      secret:
+        this.configService.get<string>('JWT_REFRESH_SECRET') ||
+        'your-refresh-secret-change-in-production',
+      expiresIn: '30d', // 30 days
+    });
+  }
+
+  async login(user: any) {
+    const accessToken = this.generateAccessToken(user.id, user.email);
+    const refreshToken = this.generateRefreshToken(user.id, user.email);
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        emailVerified: user.emailVerified,
+      },
+    };
   }
 
   async findUserById(id: string) {

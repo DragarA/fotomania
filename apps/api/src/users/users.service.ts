@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
+import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
+import { user } from '../common/db/schema';
 
-import { DRIZZLE, DrizzleDB } from '../db/drizzle';
-import { user } from '../db/schema';
 
 @Injectable()
 export class UsersService {

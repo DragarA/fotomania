@@ -1,30 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import session from 'express-session';
-import passport from 'passport';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  // Session configuration
-  app.use(
-    session({
-      secret: process.env.SESSION_SECRET || 'your-secret-key-change-in-production',
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-      },
-    })
-  );
-
-  // Initialize Passport
-  app.use(passport.initialize());
-  app.use(passport.session());
 
   // Enable CORS for frontend
   app.enableCors({
@@ -38,6 +18,17 @@ async function bootstrap() {
     .setDescription('The Fotomania API documentation')
     .setVersion('1.0')
     .addTag('app')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth'
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

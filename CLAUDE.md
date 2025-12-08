@@ -61,6 +61,24 @@ curl http://localhost:3000/api-json > apps/api/openapi.json  # Alternative
 pnpm --filter @repo/sdk generate           # Reads apps/api/openapi.json
 ```
 
+### Testing
+```bash
+# Run all tests
+pnpm --filter @repo/api test               # All tests (unit + e2e)
+
+# Unit tests
+pnpm --filter @repo/api test:unit          # Run unit tests
+pnpm --filter @repo/api test:watch         # Watch mode
+pnpm --filter @repo/api test:cov:unit      # Unit tests with coverage
+
+# E2E tests
+pnpm --filter @repo/api test:e2e           # Run e2e tests
+pnpm --filter @repo/api test:cov:e2e       # E2E tests with coverage
+
+# Coverage
+pnpm --filter @repo/api test:cov           # All tests with coverage
+```
+
 ## Architecture
 
 ### Type-Safe API Pipeline
@@ -201,6 +219,160 @@ All apps extend base configs via workspace references:
 3. Run `pnpm --filter @repo/api db:generate` to create migration
 4. Run `pnpm --filter @repo/api db:migrate` (or `db:push` for dev)
 5. Access via injected Drizzle instance in services
+
+## Testing Architecture
+
+### Testing Strategy
+
+The API uses **Jest** with a comprehensive testing setup:
+
+- **Unit Tests** (`.spec.ts`): Test individual services and strategies in isolation
+- **E2E Tests** (`.e2e-spec.ts`): Test full HTTP request/response cycles
+
+### Deep Mock Pattern for Drizzle
+
+**Critical Pattern**: Use `jest-mock-extended` for clean, type-safe Drizzle mocking:
+
+```typescript
+import { createDrizzleMock, MockDrizzleDB, resetDrizzleMock } from 'test/utils/drizzle-mock.factory';
+
+// Create mock
+const mockDb: MockDrizzleDB = createDrizzleMock();
+
+// Mock query chain
+mockDb.select.mockReturnValue({
+  from: jest.fn().mockReturnValue({
+    where: jest.fn().mockResolvedValue([testUser]),
+  }),
+} as any);
+
+// Execute query
+const result = await service.findOne('user-id');
+
+// Reset between tests
+resetDrizzleMock(mockDb);
+```
+
+The mock uses **jest-mock-extended's mockDeep**:
+- Automatically mocks all nested methods and properties
+- Type-safe with full TypeScript support
+- Chainable query builder support (select, from, where, insert, update, delete)
+- Simple `mockReturnValue` and `mockReturnValueOnce` for different query results
+
+### Test Utilities
+
+**Location**: `apps/api/test/utils/`
+
+1. **drizzle-mock.factory.ts**: Deep mock using jest-mock-extended
+   - `createDrizzleMock()`: Creates type-safe Drizzle mock
+   - `resetDrizzleMock()`: Clears all mock call history
+   - `MockDrizzleDB`: Type alias for mocked Drizzle instance
+
+2. **test-data.factory.ts**: Test fixture factories
+   - `TestDataFactory.createUser()`: Generate test users
+   - `TestDataFactory.createAccount()`: Generate auth accounts
+   - `TestDataFactory.createSession()`: Generate sessions
+   - `TestDataFactory.createGoogleProfile()`: Generate OAuth profiles
+
+3. **test.module.ts**: Test module with mocked providers
+   - Provides mocked `DRIZZLE` instance
+   - Loads test environment config
+
+4. **setup-e2e.ts**: E2E test infrastructure
+   - `setupE2ETest()`: Bootstrap test app with mocks
+   - `teardownE2ETest()`: Cleanup after tests
+
+### Writing Tests
+
+#### Unit Test Pattern
+
+```typescript
+describe('ServiceName', () => {
+  let service: ServiceName;
+  let mockDb: MockDrizzleDB;
+
+  beforeEach(async () => {
+    mockDb = createDrizzleMock();
+
+    const module = await Test.createTestingModule({
+      providers: [
+        ServiceName,
+        { provide: DRIZZLE, useValue: mockDb },
+      ],
+    }).compile();
+
+    service = module.get<ServiceName>(ServiceName);
+  });
+
+  afterEach(() => {
+    resetDrizzleMock(mockDb);
+  });
+
+  it('should perform operation', async () => {
+    // Arrange: Mock query chain
+    mockDb.select.mockReturnValue({
+      from: jest.fn().mockReturnValue({
+        where: jest.fn().mockResolvedValue([testData]),
+      }),
+    } as any);
+
+    // Act: Call service method
+    const result = await service.method();
+
+    // Assert: Verify results
+    expect(result).toEqual(testData);
+  });
+});
+```
+
+#### E2E Test Pattern
+
+```typescript
+describe('ControllerName (e2e)', () => {
+  let app: INestApplication;
+  let mockDb: any;
+  let mockDbInternals: any;
+
+  beforeAll(async () => {
+    const setup = await setupE2ETest();
+    app = setup.app;
+    mockDb = setup.mockDb;
+    mockDbInternals = getDrizzleMockInternals(mockDb);
+  });
+
+  it('should handle GET request', async () => {
+    // Arrange
+    mockDbInternals.setResults({ selectResult: [testData] });
+
+    // Act & Assert
+    const response = await request(app.getHttpServer())
+      .get('/endpoint')
+      .expect(200);
+
+    expect(response.body).toEqual(testData);
+  });
+});
+```
+
+### Test Coverage
+
+- **Services**: AuthService, UsersService (100% critical paths)
+- **Strategies**: LocalStrategy, GoogleStrategy
+- **Controllers**: Full e2e coverage for auth and users endpoints
+- **Guards**: Tested via e2e controller tests
+
+### Running Specific Tests
+
+```bash
+# Single test file
+pnpm --filter @repo/api test auth.service.spec.ts
+
+# Pattern matching
+pnpm --filter @repo/api test --testNamePattern="validateUser"
+
+# Update snapshots
+pnpm --filter @repo/api test -u
+```
 
 ## Environment Variables
 
