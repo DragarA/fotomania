@@ -5,6 +5,9 @@ import { useDropzone } from 'react-dropzone';
 
 import { usePhotoUpload } from '../../features/photos/usePhotoUpload';
 import { UploadQueue } from '../../features/photos/UploadQueue';
+import { usePhotosQuery } from '../../features/photos/hooks';
+import { PhotoGrid } from '../../features/photos/PhotoGrid';
+import { PhotoLightbox } from '../../features/photos/PhotoLightbox';
 
 import { requireAuth } from '../../features/auth/guards';
 import { useCatalogueQuery } from '../../features/catalogues/hooks';
@@ -38,9 +41,13 @@ function CatalogueDetailPage() {
     isOpen: false,
     mode: 'create',
   });
+  const [selectedPhoto, setSelectedPhoto] = useState<any | null>(null);
 
   const { uploadQueue, addFiles, removeFile, clearCompleted } =
     usePhotoUpload(selectedCollectionId);
+
+  const { data: photos, isLoading: photosLoading } =
+    usePhotosQuery(selectedCollectionId);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -244,19 +251,11 @@ function CatalogueDetailPage() {
             <h2 className="text-3xl font-bold text-gray-900 mb-6">
               {selectedCollection.name}
             </h2>
-            <div className="bg-white rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-              <div className="text-gray-400 text-6xl mb-4">📷</div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                No photos yet
-              </h3>
-              <p className="text-gray-500 mb-6">
-                Drag and drop images anywhere on this area to upload
-              </p>
-              <div className="inline-flex items-center gap-2 text-sm text-gray-400">
-                <span>💡</span>
-                <span>You can upload JPG, PNG, WebP or HEIC images</span>
-              </div>
-            </div>
+            <PhotoGrid
+              photos={photos || []}
+              isLoading={photosLoading}
+              onPhotoClick={(photo) => setSelectedPhoto(photo)}
+            />
           </div>
         ) : (
           <div className="flex items-center justify-center h-full">
@@ -300,6 +299,30 @@ function CatalogueDetailPage() {
           files={uploadQueue}
           onRemove={removeFile}
           onClear={clearCompleted}
+        />
+      )}
+
+      {selectedPhoto && photos && (
+        <PhotoLightbox
+          photo={selectedPhoto}
+          photos={photos}
+          onClose={() => setSelectedPhoto(null)}
+          onNext={() => {
+            const currentIndex = photos.findIndex(
+              (p) => p.id === selectedPhoto.id
+            );
+            if (currentIndex < photos.length - 1) {
+              setSelectedPhoto(photos[currentIndex + 1]);
+            }
+          }}
+          onPrevious={() => {
+            const currentIndex = photos.findIndex(
+              (p) => p.id === selectedPhoto.id
+            );
+            if (currentIndex > 0) {
+              setSelectedPhoto(photos[currentIndex - 1]);
+            }
+          }}
         />
       )}
     </div>

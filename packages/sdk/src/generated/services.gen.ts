@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerFindBySlugData, CataloguesControllerFindBySlugResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerUpdateData, PhotosControllerUpdateResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerFindBySlugData, CataloguesControllerFindBySlugResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerCreateData, PhotosControllerCreateResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerUpdateData, PhotosControllerUpdateResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -414,13 +414,22 @@ export class CollectionsService {
 export class PhotosService {
     /**
      * Create a new photo
-     * @returns unknown
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns PhotoResDto Photo created successfully
      * @throws ApiError
      */
-    public static photosControllerUploadFile(): CancelablePromise<PhotosControllerUploadFileResponse> {
+    public static photosControllerCreate(data: PhotosControllerCreateData): CancelablePromise<PhotosControllerCreateResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/photos'
+            url: '/photos',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                400: 'Invalid request data',
+                403: 'Forbidden',
+                404: 'Collection not found'
+            }
         });
     }
     
@@ -439,6 +448,31 @@ export class PhotosService {
                 collectionId: data.collectionId
             },
             errors: {
+                403: 'Forbidden',
+                404: 'Collection not found'
+            }
+        });
+    }
+    
+    /**
+     * Upload a photo file
+     * @param data The data for the request.
+     * @param data.collectionId Collection ID
+     * @param data.formData
+     * @returns PhotoResDto Photo uploaded successfully
+     * @throws ApiError
+     */
+    public static photosControllerUploadFile(data: PhotosControllerUploadFileData): CancelablePromise<PhotosControllerUploadFileResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/photos/upload/{collectionId}',
+            path: {
+                collectionId: data.collectionId
+            },
+            formData: data.formData,
+            mediaType: 'multipart/form-data',
+            errors: {
+                400: 'Invalid file or request data',
                 403: 'Forbidden',
                 404: 'Collection not found'
             }

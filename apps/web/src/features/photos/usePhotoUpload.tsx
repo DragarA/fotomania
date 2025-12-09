@@ -1,36 +1,58 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
+import { useUploadPhotoMutation } from './hooks';
 import { UploadingFile } from './types';
 
 export function usePhotoUpload(collectionId: string | null) {
   const [uploadQueue, setUploadQueue] = useState<UploadingFile[]>([]);
-  const intervalsRef = useRef<Map<string, any>>(new Map());
+  const uploadMutation = useUploadPhotoMutation();
 
-  const simulateUpload = useCallback((fileId: string) => {
-    let progress = 0;
+  const uploadFile = useCallback(
+    async (uploadingFile: UploadingFile) => {
+      if (!collectionId) return;
 
-    const interval = setInterval(() => {
-      progress += Math.random() * 15;
+      try {
+        setUploadQueue((prev) =>
+          prev.map((f) =>
+            f.id === uploadingFile.id ? { ...f, status: 'uploading' } : f
+          )
+        );
 
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-        intervalsRef.current.delete(fileId);
+        await uploadMutation.mutateAsync({
+          file: uploadingFile.file,
+          collectionId,
+          onProgress: (progress) => {
+            setUploadQueue((prev) =>
+              prev.map((f) =>
+                f.id === uploadingFile.id ? { ...f, progress } : f
+              )
+            );
+          },
+        });
 
         setUploadQueue((prev) =>
           prev.map((f) =>
-            f.id === fileId ? { ...f, progress: 100, status: 'success' } : f
+            f.id === uploadingFile.id
+              ? { ...f, progress: 100, status: 'success' }
+              : f
           )
         );
-      } else {
+      } catch (error: any) {
         setUploadQueue((prev) =>
-          prev.map((f) => (f.id === fileId ? { ...f, progress } : f))
+          prev.map((f) =>
+            f.id === uploadingFile.id
+              ? {
+                  ...f,
+                  status: 'error',
+                  error: error.message || 'Upload failed',
+                }
+              : f
+          )
         );
       }
-    }, 200);
-
-    intervalsRef.current.set(fileId, interval);
-  }, []);
+    },
+    [collectionId, uploadMutation]
+  );
 
   const addFiles = useCallback(
     (acceptedFiles: File[]) => {
@@ -52,25 +74,15 @@ export function usePhotoUpload(collectionId: string | null) {
 
       setUploadQueue((prev) => [...prev, ...newFiles]);
 
+      // Upload files sequentially
       newFiles.forEach((newFile) => {
-        setUploadQueue((prev) =>
-          prev.map((f) =>
-            f.id === newFile.id ? { ...f, status: 'uploading' } : f
-          )
-        );
-        simulateUpload(newFile.id);
+        uploadFile(newFile);
       });
     },
-    [collectionId, simulateUpload]
+    [collectionId, uploadFile]
   );
 
   const removeFile = useCallback((fileId: string) => {
-    const interval = intervalsRef.current.get(fileId);
-    if (interval) {
-      clearInterval(interval);
-      intervalsRef.current.delete(fileId);
-    }
-
     setUploadQueue((prev) => {
       const file = prev.find((f) => f.id === fileId);
       if (file) {
@@ -97,9 +109,6 @@ export function usePhotoUpload(collectionId: string | null) {
       uploadQueue.forEach((file) => {
         URL.revokeObjectURL(file.preview);
       });
-
-      intervalsRef.current.forEach((interval) => clearInterval(interval));
-      intervalsRef.current.clear();
     };
   }, []);
 

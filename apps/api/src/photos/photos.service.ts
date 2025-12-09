@@ -124,4 +124,52 @@ export class PhotosService {
 
     return { message: 'Photo deleted successfully' };
   }
+
+  async uploadFile(
+    file: Express.Multer.File,
+    collectionId: string,
+    ownerId: string
+  ) {
+    // 1. Verify collection exists and user owns it
+    const [existingCollection] = await this.db
+      .select({ collection, catalogue })
+      .from(collection)
+      .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
+      .where(eq(collection.id, collectionId));
+
+    if (!existingCollection) {
+      throw new NotFoundException(`Collection with ID ${collectionId} not found`);
+    }
+
+    if (existingCollection.catalogue.ownerId !== ownerId) {
+      throw new ForbiddenException(
+        'You do not have permission to upload photos to this collection'
+      );
+    }
+
+    // 2. Create photo record
+    const photoId = crypto.randomUUID();
+    const now = new Date();
+
+    const photoData = {
+      id: photoId,
+      originalFileName: file.originalname,
+      storagePath: file.path,
+      mimeType: file.mimetype,
+      size: file.size,
+      collectionId,
+      thumbnailPath: null, // Future: generate thumbnail
+      width: null, // Future: extract from EXIF
+      height: null, // Future: extract from EXIF
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    const [newPhoto] = await this.db
+      .insert(photo)
+      .values(photoData)
+      .returning();
+
+    return newPhoto;
+  }
 }

@@ -677,11 +677,37 @@
     },
     "/photos": {
       "post": {
-        "operationId": "PhotosController_uploadFile",
+        "operationId": "PhotosController_create",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePhotoDtoClass"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": ""
+            "description": "Photo created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhotoResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
           }
         },
         "security": [
@@ -734,6 +760,68 @@
           }
         ],
         "summary": "Get all photos for a collection",
+        "tags": [
+          "photos"
+        ]
+      }
+    },
+    "/photos/upload/{collectionId}": {
+      "post": {
+        "operationId": "PhotosController_uploadFile",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Photo uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhotoResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid file or request data"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Upload a photo file",
         "tags": [
           "photos"
         ]
@@ -1185,22 +1273,22 @@
             "example": "image/jpeg"
           },
           "thumbnailPath": {
-            "type": "object",
+            "type": "string",
             "description": "Path to the thumbnail image",
             "example": "/uploads/catalogues/abc123/thumbnails/uuid.jpg"
           },
           "width": {
-            "type": "object",
+            "type": "number",
             "description": "Width of the photo in pixels",
             "example": 1920
           },
           "height": {
-            "type": "object",
+            "type": "number",
             "description": "Height of the photo in pixels",
             "example": 1080
           },
           "size": {
-            "type": "object",
+            "type": "number",
             "description": "File size in bytes",
             "example": 2048576
           },

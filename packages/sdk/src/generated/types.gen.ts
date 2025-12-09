@@ -199,27 +199,19 @@ export type PhotoResDto = {
     /**
      * Path to the thumbnail image
      */
-    thumbnailPath?: {
-        [key: string]: unknown;
-    };
+    thumbnailPath?: string;
     /**
      * Width of the photo in pixels
      */
-    width?: {
-        [key: string]: unknown;
-    };
+    width?: number;
     /**
      * Height of the photo in pixels
      */
-    height?: {
-        [key: string]: unknown;
-    };
+    height?: number;
     /**
      * File size in bytes
      */
-    size?: {
-        [key: string]: unknown;
-    };
+    size?: number;
     /**
      * ID of the collection this photo belongs to
      */
@@ -405,7 +397,11 @@ export type CollectionsControllerRemoveData = {
 
 export type CollectionsControllerRemoveResponse = unknown;
 
-export type PhotosControllerUploadFileResponse = unknown;
+export type PhotosControllerCreateData = {
+    requestBody: CreatePhotoDtoClass;
+};
+
+export type PhotosControllerCreateResponse = PhotoResDto;
 
 export type PhotosControllerFindAllData = {
     /**
@@ -415,6 +411,18 @@ export type PhotosControllerFindAllData = {
 };
 
 export type PhotosControllerFindAllResponse = Array<PhotoResDto>;
+
+export type PhotosControllerUploadFileData = {
+    /**
+     * Collection ID
+     */
+    collectionId: string;
+    formData: {
+        file?: (Blob | File);
+    };
+};
+
+export type PhotosControllerUploadFileResponse = PhotoResDto;
 
 export type PhotosControllerFindOneData = {
     /**
@@ -742,8 +750,24 @@ export type $OpenApiTs = {
     };
     '/photos': {
         post: {
+            req: PhotosControllerCreateData;
             res: {
-                201: unknown;
+                /**
+                 * Photo created successfully
+                 */
+                201: PhotoResDto;
+                /**
+                 * Invalid request data
+                 */
+                400: unknown;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Collection not found
+                 */
+                404: unknown;
             };
         };
         get: {
@@ -753,6 +777,29 @@ export type $OpenApiTs = {
                  * Returns all photos for the collection
                  */
                 200: Array<PhotoResDto>;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Collection not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/photos/upload/{collectionId}': {
+        post: {
+            req: PhotosControllerUploadFileData;
+            res: {
+                /**
+                 * Photo uploaded successfully
+                 */
+                201: PhotoResDto;
+                /**
+                 * Invalid file or request data
+                 */
+                400: unknown;
                 /**
                  * Forbidden
                  */

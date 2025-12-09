@@ -269,22 +269,22 @@ export const $PhotoResDto = {
             example: 'image/jpeg'
         },
         thumbnailPath: {
-            type: 'object',
+            type: 'string',
             description: 'Path to the thumbnail image',
             example: '/uploads/catalogues/abc123/thumbnails/uuid.jpg'
         },
         width: {
-            type: 'object',
+            type: 'number',
             description: 'Width of the photo in pixels',
             example: 1920
         },
         height: {
-            type: 'object',
+            type: 'number',
             description: 'Height of the photo in pixels',
             example: 1080
         },
         size: {
-            type: 'object',
+            type: 'number',
             description: 'File size in bytes',
             example: 2048576
         },

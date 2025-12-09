@@ -7,13 +7,15 @@ import {
   Patch,
   Post,
   Query,
-  UploadedFiles,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiConsumes,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -36,8 +38,8 @@ import {
   UpdatePhotoDtoClass,
   updatePhotoSchema,
 } from './dto/update-photo.dto';
+import { photoFileFilter, photoStorage } from './multer.config';
 import { PhotosService } from './photos.service';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('photos')
 @Controller('photos')
@@ -64,13 +66,41 @@ export class PhotosController {
     return this.photosService.create(dto, user.id);
   }
 
-  @Post()
+  @Post('upload/:collectionId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Create a new photo' })
-  @UseInterceptors(FileInterceptor('file'))
-  uploadFile(@UploadedFiles() files: Express.Multer.File[], @User() user: UserEntity) {
-    console.log(files, user)
+  @ApiOperation({ summary: 'Upload a photo file' })
+  @ApiParam({ name: 'collectionId', description: 'Collection ID' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary' },
+      },
+    },
+  })
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: photoStorage,
+      fileFilter: photoFileFilter,
+      limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+    })
+  )
+  @ApiResponse({
+    status: 201,
+    description: 'Photo uploaded successfully',
+    type: PhotoResDto,
+  })
+  @ApiResponse({ status: 400, description: 'Invalid file or request data' })
+  @ApiResponse({ status: 404, description: 'Collection not found' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Param('collectionId') collectionId: string,
+    @User() user: UserEntity
+  ) {
+    return this.photosService.uploadFile(file, collectionId, user.id);
   }
 
   @Get()

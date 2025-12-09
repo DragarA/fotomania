@@ -403,4 +403,91 @@ describe('PhotosController (e2e)', () => {
         .expect(404);
     });
   });
+
+  describe('POST /photos/upload/:collectionId', () => {
+    it('should upload a photo file', async () => {
+      const collectionId = 'collection-123';
+
+      // Mock collection check
+      const mockCollection = TestDataFactory.createCollection({
+        id: collectionId,
+      });
+      const mockCatalogue = TestDataFactory.createCatalogue({
+        ownerId: testUser.id,
+      });
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([
+              { collection: mockCollection, catalogue: mockCatalogue },
+            ]),
+          }),
+        }),
+      } as any);
+
+      // Mock insert
+      const mockPhoto = TestDataFactory.createPhoto({
+        id: 'photo-upload-123',
+        collectionId,
+      });
+      mockDb.insert.mockReturnValueOnce({
+        values: jest.fn().mockReturnValue({
+          returning: jest.fn().mockResolvedValue([mockPhoto]),
+        }),
+      } as any);
+
+      const response = await request(app.getHttpServer())
+        .post(`/photos/upload/${collectionId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .attach('file', Buffer.from('fake image data'), 'test.jpg')
+        .expect(201);
+
+      expect(response.body).toHaveProperty('id');
+      expect(response.body.collectionId).toBe(collectionId);
+    });
+
+    it('should return 404 when collection not found', async () => {
+      const collectionId = 'non-existent';
+
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([]),
+          }),
+        }),
+      } as any);
+
+      await request(app.getHttpServer())
+        .post(`/photos/upload/${collectionId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .attach('file', Buffer.from('fake image data'), 'test.jpg')
+        .expect(404);
+    });
+
+    it('should return 403 when user does not own collection', async () => {
+      const collectionId = 'collection-123';
+
+      const mockCollection = TestDataFactory.createCollection({
+        id: collectionId,
+      });
+      const mockCatalogue = TestDataFactory.createCatalogue({
+        ownerId: 'different-user',
+      });
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([
+              { collection: mockCollection, catalogue: mockCatalogue },
+            ]),
+          }),
+        }),
+      } as any);
+
+      await request(app.getHttpServer())
+        .post(`/photos/upload/${collectionId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .attach('file', Buffer.from('fake image data'), 'test.jpg')
+        .expect(403);
+    });
+  });
 });

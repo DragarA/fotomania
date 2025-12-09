@@ -29,25 +29,25 @@ export class PhotoResDto {
     description: 'Path to the thumbnail image',
     example: '/uploads/catalogues/abc123/thumbnails/uuid.jpg',
   })
-  thumbnailPath?: string | null;
+  thumbnailPath?: string;
 
   @ApiPropertyOptional({
     description: 'Width of the photo in pixels',
     example: 1920,
   })
-  width?: number | null;
+  width?: number;
 
   @ApiPropertyOptional({
     description: 'Height of the photo in pixels',
     example: 1080,
   })
-  height?: number | null;
+  height?: number;
 
   @ApiPropertyOptional({
     description: 'File size in bytes',
     example: 2048576,
   })
-  size?: number | null;
+  size?: number;
 
   @ApiProperty({
     description: 'ID of the collection this photo belongs to',

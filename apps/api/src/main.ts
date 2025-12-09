@@ -2,11 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Serve static files from uploads directory
+  app.useStaticAssets(resolve('./uploads'), {
+    prefix: '/uploads',
+  });
 
   // Enable CORS for frontend
   app.enableCors({
@@ -42,7 +48,7 @@ async function bootstrap() {
   console.log(`✅ OpenAPI spec written to: ${openApiPath}`);
 
   // Expose OpenAPI spec as JSON endpoint
-  app.getHttpAdapter().get('/api-json', (_req, res) => {
+  app.getHttpAdapter().get('/api-json', (_req: any, res: any) => {
     res.json(document);
   });
 
