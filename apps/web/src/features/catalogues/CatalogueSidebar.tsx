@@ -69,43 +69,6 @@ export function CatalogueSidebar({
             Share
           </button>
         </div>
-
-        {/* Public URL Section */}
-        <div className="bg-gray-50 rounded-lg p-3 mb-4">
-          <div className="text-xs text-gray-500 mb-1">Public URL</div>
-          <div className="flex items-center gap-2">
-            <Link
-              to="/c/$slug"
-              params={{ slug: catalogue.publicUrlSlug }}
-              className="text-sm text-accent-600 hover:text-accent-700 truncate flex-1"
-            >
-              /c/{catalogue.publicUrlSlug}
-            </Link>
-            <button
-              onClick={copyPublicUrl}
-              className="text-gray-500 hover:text-gray-700 cursor-pointer"
-              title="Copy link"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div className="text-sm text-gray-500">
-          {catalogue.photoCount ?? 0} photos
-        </div>
       </div>
 
       {/* Collections list */}
