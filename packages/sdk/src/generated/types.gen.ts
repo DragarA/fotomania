@@ -41,6 +41,49 @@ export type CreateCatalogueDtoClass = {
     password?: string;
 };
 
+export type CatalogueResDto = {
+    /**
+     * Unique identifier for the catalogue
+     */
+    id: string;
+    /**
+     * Title of the catalogue
+     */
+    title: string;
+    /**
+     * Description of the catalogue
+     */
+    description?: {
+        [key: string]: unknown;
+    };
+    /**
+     * URL of the cover image
+     */
+    coverImage?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Auto-generated public URL slug
+     */
+    publicUrlSlug: string;
+    /**
+     * ID of the catalogue owner
+     */
+    ownerId: string;
+    /**
+     * Timestamp when the catalogue was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the catalogue was last updated
+     */
+    updatedAt: string;
+    /**
+     * Number of photos in the catalogue
+     */
+    photoCount: number;
+};
+
 export type UpdateCatalogueDtoClass = {
     /**
      * Catalogue title
@@ -104,9 +147,9 @@ export type CataloguesControllerCreateData = {
     requestBody: CreateCatalogueDtoClass;
 };
 
-export type CataloguesControllerCreateResponse = unknown;
+export type CataloguesControllerCreateResponse = CatalogueResDto;
 
-export type CataloguesControllerFindAllResponse = unknown;
+export type CataloguesControllerFindAllResponse = Array<CatalogueResDto>;
 
 export type CataloguesControllerFindOneData = {
     /**
@@ -268,7 +311,7 @@ export type $OpenApiTs = {
                 /**
                  * Catalogue created successfully
                  */
-                201: unknown;
+                201: CatalogueResDto;
                 /**
                  * URL slug already exists
                  */
@@ -280,7 +323,7 @@ export type $OpenApiTs = {
                 /**
                  * Returns all user catalogues
                  */
-                200: unknown;
+                200: Array<CatalogueResDto>;
             };
         };
     };

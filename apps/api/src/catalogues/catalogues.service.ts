@@ -4,7 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, count } from 'drizzle-orm';
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
 import { catalogue } from '../common/db/schema/catalogues.schema';
 import { CreateCatalogueDto } from './dto/create-catalogue.dto';
@@ -40,10 +40,14 @@ export class CataloguesService {
 
   async findAll(ownerId: string) {
     return this.db
-        .select()
+        .select({
+          catalogue,
+          photoCount: count(photo.id),
+        })
         .from(catalogue)
-        .innerJoin(collection, eq(catalogue.id, collection.catalogueId))
-        .innerJoin(photo, eq(collection.id, photo.collectionId))
+        .leftJoin(collection, eq(catalogue.id, collection.catalogueId))
+        .leftJoin(photo, eq(collection.id, photo.collectionId))
+        .groupBy(catalogue.id)
         .where(eq(catalogue.ownerId, ownerId));
   }
 

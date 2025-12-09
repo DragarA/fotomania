@@ -186,7 +186,7 @@ export class CataloguesService {
      * Create a new catalogue
      * @param data The data for the request.
      * @param data.requestBody
-     * @returns unknown Catalogue created successfully
+     * @returns CatalogueResDto Catalogue created successfully
      * @throws ApiError
      */
     public static cataloguesControllerCreate(data: CataloguesControllerCreateData): CancelablePromise<CataloguesControllerCreateResponse> {
@@ -203,7 +203,7 @@ export class CataloguesService {
     
     /**
      * Get all catalogues for the current user
-     * @returns unknown Returns all user catalogues
+     * @returns CatalogueResDto Returns all user catalogues
      * @throws ApiError
      */
     public static cataloguesControllerFindAll(): CancelablePromise<CataloguesControllerFindAllResponse> {

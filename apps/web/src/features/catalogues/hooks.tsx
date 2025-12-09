@@ -13,6 +13,7 @@ export interface Catalogue {
   ownerId: string;
   createdAt: string;
   updatedAt: string;
+  photoCount?: number;
 }
 
 export interface DeleteCatalogueResponse {

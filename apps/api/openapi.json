@@ -245,10 +245,17 @@
         },
         "responses": {
           "201": {
-            "description": "Catalogue created successfully"
+            "description": "Catalogue created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
           },
-          "409": {
-            "description": "URL slug already exists"
+          "400": {
+            "description": "Invalid request data"
           }
         },
         "security": [
@@ -266,7 +273,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Returns all user catalogues"
+            "description": "Returns all user catalogues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CatalogueResDto"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -296,7 +313,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns the catalogue"
+            "description": "Returns the catalogue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
           },
           "404": {
             "description": "Catalogue not found"
@@ -337,7 +361,14 @@
         },
         "responses": {
           "200": {
-            "description": "Catalogue updated successfully"
+            "description": "Catalogue updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
           },
           "403": {
             "description": "Forbidden"
@@ -407,7 +438,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Returns the catalogue"
+            "description": "Returns the catalogue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
           },
           "404": {
             "description": "Catalogue not found"
@@ -505,6 +543,67 @@
         },
         "required": [
           "title"
+        ]
+      },
+      "CatalogueResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the catalogue",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the catalogue",
+            "example": "Summer Wedding 2024"
+          },
+          "description": {
+            "type": "object",
+            "description": "Description of the catalogue",
+            "example": "Beautiful moments from our summer wedding"
+          },
+          "coverImage": {
+            "type": "object",
+            "description": "URL of the cover image",
+            "example": "https://example.com/images/cover.jpg"
+          },
+          "publicUrlSlug": {
+            "type": "string",
+            "description": "Auto-generated public URL slug",
+            "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+          },
+          "ownerId": {
+            "type": "string",
+            "description": "ID of the catalogue owner",
+            "example": "550e8400-e29b-41d4-a716-446655440001"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Timestamp when the catalogue was created",
+            "example": "2024-12-08T19:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Timestamp when the catalogue was last updated",
+            "example": "2024-12-08T19:30:00.000Z"
+          },
+          "photoCount": {
+            "type": "number",
+            "description": "Number of photos in the catalogue",
+            "example": 150
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "publicUrlSlug",
+          "ownerId",
+          "createdAt",
+          "updatedAt",
+          "photoCount"
         ]
       },
       "UpdateCatalogueDtoClass": {

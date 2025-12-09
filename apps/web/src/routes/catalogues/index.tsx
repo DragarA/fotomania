@@ -10,6 +10,8 @@ export const Route = createFileRoute('/catalogues/')({
 function CataloguesPage() {
   const { data, isLoading, isError, error } = useCataloguesQuery();
 
+ 
+  console.log('catalogues', data)
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4">
@@ -83,6 +85,12 @@ function CataloguesPage() {
                     >
                       /c/{catalogue.publicUrlSlug}
                     </Link>
+                  </div>
+                </div>
+
+                <div className="mt-6 space-y-2">
+                  <div className="text-sm text-gray-500">
+                    Number of photos: {catalogue.photoCount || 0}
                   </div>
                 </div>
               </div>

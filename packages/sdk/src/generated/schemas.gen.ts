@@ -56,6 +56,60 @@ export const $CreateCatalogueDtoClass = {
     required: ['title']
 } as const;
 
+export const $CatalogueResDto = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: 'Unique identifier for the catalogue',
+            example: '550e8400-e29b-41d4-a716-446655440000'
+        },
+        title: {
+            type: 'string',
+            description: 'Title of the catalogue',
+            example: 'Summer Wedding 2024'
+        },
+        description: {
+            type: 'object',
+            description: 'Description of the catalogue',
+            example: 'Beautiful moments from our summer wedding'
+        },
+        coverImage: {
+            type: 'object',
+            description: 'URL of the cover image',
+            example: 'https://example.com/images/cover.jpg'
+        },
+        publicUrlSlug: {
+            type: 'string',
+            description: 'Auto-generated public URL slug',
+            example: '7c9e6679-7425-40de-944b-e07fc1f90ae7'
+        },
+        ownerId: {
+            type: 'string',
+            description: 'ID of the catalogue owner',
+            example: '550e8400-e29b-41d4-a716-446655440001'
+        },
+        createdAt: {
+            format: 'date-time',
+            type: 'string',
+            description: 'Timestamp when the catalogue was created',
+            example: '2024-12-08T19:00:00.000Z'
+        },
+        updatedAt: {
+            format: 'date-time',
+            type: 'string',
+            description: 'Timestamp when the catalogue was last updated',
+            example: '2024-12-08T19:30:00.000Z'
+        },
+        photoCount: {
+            type: 'number',
+            description: 'Number of photos in the catalogue',
+            example: 150
+        }
+    },
+    required: ['id', 'title', 'publicUrlSlug', 'ownerId', 'createdAt', 'updatedAt', 'photoCount']
+} as const;
+
 export const $UpdateCatalogueDtoClass = {
     type: 'object',
     properties: {
