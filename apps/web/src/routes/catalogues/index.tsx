@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { requireAuth } from '../../features/auth/guards';
 import { useCataloguesQuery } from '../../features/catalogues/hooks';
-import { OpenAPI } from '@repo/sdk';
+import { API_BASE_URL } from '../../lib/api-client';
 
 export const Route = createFileRoute('/catalogues/')({
   beforeLoad: requireAuth,
@@ -10,9 +10,6 @@ export const Route = createFileRoute('/catalogues/')({
 
 function CataloguesPage() {
   const { data, isLoading, isError, error } = useCataloguesQuery();
-
- 
-  const baseUrl = OpenAPI.BASE || 'http://localhost:3000';
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
@@ -53,7 +50,7 @@ function CataloguesPage() {
               <div className="relative h-72 bg-gray-100 overflow-hidden">
                 {catalogue.coverImage ? (
                   <img
-                    src={`${baseUrl}/uploads/${catalogue.coverImage}`}
+                    src={`${API_BASE_URL}/uploads/${catalogue.coverImage}`}
                     alt={catalogue.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />

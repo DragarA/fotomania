@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { OpenAPI } from '@repo/sdk';
+import { API_BASE_URL } from '../../lib/api-client';
 
 interface Photo {
   id: string;
@@ -30,7 +30,6 @@ export function PhotoLightbox({
   onNext,
   onPrevious,
 }: PhotoLightboxProps) {
-  const baseUrl = OpenAPI.BASE || 'http://localhost:3000';
   const currentIndex = photos.findIndex((p) => p.id === photo.id);
   const hasPrevious = currentIndex > 0;
   const hasNext = currentIndex < photos.length - 1;
@@ -143,7 +142,7 @@ export function PhotoLightbox({
         onClick={(e) => e.stopPropagation()}
       >
         <img
-          src={`${baseUrl}/uploads/${photo.storagePath}`}
+          src={`${API_BASE_URL}/uploads/${photo.storagePath}`}
           alt={photo.originalFileName}
           className="max-w-full max-h-[90vh] object-contain"
         />

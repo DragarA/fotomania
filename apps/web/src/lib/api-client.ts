@@ -4,6 +4,9 @@ import { OpenAPI } from '@repo/sdk';
 OpenAPI.BASE =
   ((import.meta as any).env?.VITE_API_BASE_URL as string) || 'http://localhost:3000';
 
+// Export the base URL for use in components that need direct URL access
+export const API_BASE_URL = OpenAPI.BASE;
+
 // Add request interceptor to include JWT token
 OpenAPI.TOKEN = async () => {
   const token = localStorage.getItem('accessToken');

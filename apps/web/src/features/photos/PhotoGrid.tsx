@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { OpenAPI } from '@repo/sdk';
+import { API_BASE_URL } from '../../lib/api-client';
 import { PhotoContextMenu } from './PhotoContextMenu';
 
 interface Photo {
@@ -71,12 +71,9 @@ export function PhotoGrid({
     );
   }
 
-  // Get base URL for image serving
-  const baseUrl = OpenAPI.BASE || 'http://localhost:3000';
-
   const handleDownload = (photo: Photo) => {
     const link = document.createElement('a');
-    link.href = `${baseUrl}/uploads/${photo.storagePath}`;
+    link.href = `${API_BASE_URL}/uploads/${photo.storagePath}`;
     link.download = photo.originalFileName;
     document.body.appendChild(link);
     link.click();
@@ -99,7 +96,7 @@ export function PhotoGrid({
               }`}
             >
               <img
-                src={`${baseUrl}/uploads/${photo.thumbnailPath}`}
+                src={`${API_BASE_URL}/uploads/${photo.thumbnailPath}`}
                 alt={photo.originalFileName}
                 className="w-full h-full object-cover cursor-pointer"
                 loading="lazy"

@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { OpenAPI, PhotosService } from '@repo/sdk';
 import { toast } from 'sonner';
 
+import { API_BASE_URL } from '../../lib/api-client';
 import { uploadWithProgress } from './upload-helper';
 
 interface UploadPhotoParams {
@@ -51,8 +52,7 @@ export function useUploadPhotoMutation() {
       const formData = new FormData();
       formData.append('file', file);
 
-      // Reuse SDK configuration for base URL and token
-      const baseUrl = OpenAPI.BASE || 'http://localhost:3000';
+      // Get token from SDK configuration
       let token = '';
       if (typeof OpenAPI.TOKEN === 'function') {
         const result = await OpenAPI.TOKEN({} as any);
@@ -62,7 +62,7 @@ export function useUploadPhotoMutation() {
       }
 
       const data = await uploadWithProgress(
-        `${baseUrl}/photos/upload/${collectionId}`,
+        `${API_BASE_URL}/photos/upload/${collectionId}`,
         formData,
         token,
         onProgress || (() => {})
