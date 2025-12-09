@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { useDropzone } from 'react-dropzone';
 
@@ -213,9 +213,68 @@ function CatalogueDetailPage() {
             {catalogue.title}
           </h1>
           {catalogue.description && (
-            <p className="text-gray-600 text-sm">{catalogue.description}</p>
+            <p className="text-gray-600 text-sm mb-4">{catalogue.description}</p>
           )}
-          <div className="mt-4 text-sm text-gray-500">
+
+          {/* Action Buttons */}
+          <div className="flex gap-2 mb-4">
+            <Link
+              to="/catalogues/$catalogueId/edit"
+              params={{ catalogueId }}
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors text-center"
+            >
+              Edit Details
+            </Link>
+            <button
+              onClick={() => {
+                const fullUrl = `${window.location.origin}/c/${catalogue.publicUrlSlug}`;
+                navigator.clipboard.writeText(fullUrl);
+                toast.success('Link copied to clipboard');
+              }}
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+            >
+              Share
+            </button>
+          </div>
+
+          {/* Public URL Section */}
+          <div className="bg-gray-50 rounded-lg p-3 mb-4">
+            <div className="text-xs text-gray-500 mb-1">Public URL</div>
+            <div className="flex items-center gap-2">
+              <Link
+                to="/c/$slug"
+                params={{ slug: catalogue.publicUrlSlug }}
+                className="text-sm text-accent-600 hover:text-accent-700 truncate flex-1"
+              >
+                /c/{catalogue.publicUrlSlug}
+              </Link>
+              <button
+                onClick={() => {
+                  const fullUrl = `${window.location.origin}/c/${catalogue.publicUrlSlug}`;
+                  navigator.clipboard.writeText(fullUrl);
+                  toast.success('Link copied to clipboard');
+                }}
+                className="text-gray-500 hover:text-gray-700 cursor-pointer"
+                title="Copy link"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div className="text-sm text-gray-500">
             {catalogue.photoCount} photos
           </div>
         </div>

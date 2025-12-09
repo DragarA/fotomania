@@ -43,76 +43,67 @@ function CataloguesPage() {
       ) : data && data.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {data.map((catalogue) => (
-            <div
+            <Link
               key={catalogue.id}
-              className="bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col"
+              to="/catalogues/$catalogueId"
+              params={{ catalogueId: catalogue.id }}
+              className="group block bg-white rounded-xl border border-gray-200 overflow-hidden transition-all hover:shadow-lg hover:border-accent-300"
             >
-              {catalogue.coverImage && (
-                <img
-                  src={`${baseUrl}/uploads/${catalogue.coverImage}`}
-                  alt={catalogue.title}
-                  className="h-48 w-full object-cover"
-                />
-              )}
-              <div className="p-6 flex-1 flex flex-col">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h2 className="text-2xl font-semibold text-gray-900">
-                      {catalogue.title}
-                    </h2>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Updated {new Date(catalogue.updatedAt).toLocaleDateString()}
-                    </p>
+              {/* Cover Image - Large and Prominent */}
+              <div className="relative h-72 bg-gray-100 overflow-hidden">
+                {catalogue.coverImage ? (
+                  <img
+                    src={`${baseUrl}/uploads/${catalogue.coverImage}`}
+                    alt={catalogue.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    <svg
+                      className="w-16 h-16"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
                   </div>
-                  <Link
-                    to="/catalogues/$catalogueId"
-                    params={{ catalogueId: catalogue.id }}
-                    className="text-accent-600 font-semibold hover:text-accent-700"
-                  >
-                    View
-                  </Link>
-                </div>
+                )}
+              </div>
 
-                <p className="text-gray-600 mt-4 flex-1 line-clamp-3">
+              {/* Content Section */}
+              <div className="p-5">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-accent-600 transition-colors">
+                  {catalogue.title}
+                </h2>
+
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                   {catalogue.description || 'No description provided.'}
                 </p>
 
-                <div className="mt-6 space-y-2">
-                  <div className="text-sm text-gray-500">
-                    Public URL:{' '}
-                    <Link
-                      to="/c/$slug"
-                      params={{ slug: catalogue.publicUrlSlug }}
-                      className="text-accent-600 underline"
-                    >
-                      /c/{catalogue.publicUrlSlug}
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="mt-6 space-y-2">
-                  <div className="text-sm text-gray-500">
-                    Number of photos: {catalogue.photoCount || 0}
-                  </div>
+                <div className="flex items-center text-sm text-gray-500">
+                  <svg
+                    className="w-4 h-4 mr-1.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  {catalogue.photoCount || 0} photos
                 </div>
               </div>
-              <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end space-x-3">
-                <Link
-                  to="/catalogues/$catalogueId/edit"
-                  params={{ catalogueId: catalogue.id }}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
-                >
-                  Edit
-                </Link>
-                <Link
-                  to="/catalogues/$catalogueId"
-                  params={{ catalogueId: catalogue.id }}
-                  className="px-4 py-2 bg-accent-500 text-white rounded-lg hover:bg-accent-600 transition-colors"
-                >
-                  Manage
-                </Link>
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       ) : (
