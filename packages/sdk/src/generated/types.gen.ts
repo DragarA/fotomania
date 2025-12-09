@@ -144,6 +144,135 @@ export type UpdateCollectionDtoClass = {
     name?: string;
 };
 
+export type CreatePhotoDtoClass = {
+    /**
+     * Original filename of the photo
+     */
+    originalFileName: string;
+    /**
+     * Storage path where the photo is stored
+     */
+    storagePath: string;
+    /**
+     * MIME type of the photo
+     */
+    mimeType: string;
+    /**
+     * Path to the thumbnail image
+     */
+    thumbnailPath?: string;
+    /**
+     * Width of the photo in pixels
+     */
+    width?: number;
+    /**
+     * Height of the photo in pixels
+     */
+    height?: number;
+    /**
+     * File size in bytes
+     */
+    size?: number;
+    /**
+     * ID of the collection this photo belongs to
+     */
+    collectionId: string;
+};
+
+export type PhotoResDto = {
+    /**
+     * Unique identifier for the photo
+     */
+    id: string;
+    /**
+     * Original filename of the photo
+     */
+    originalFileName: string;
+    /**
+     * Storage path where the photo is stored
+     */
+    storagePath: string;
+    /**
+     * MIME type of the photo
+     */
+    mimeType: string;
+    /**
+     * Path to the thumbnail image
+     */
+    thumbnailPath?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Width of the photo in pixels
+     */
+    width?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Height of the photo in pixels
+     */
+    height?: {
+        [key: string]: unknown;
+    };
+    /**
+     * File size in bytes
+     */
+    size?: {
+        [key: string]: unknown;
+    };
+    /**
+     * ID of the collection this photo belongs to
+     */
+    collectionId: string;
+    /**
+     * Timestamp when the photo was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the photo was last updated
+     */
+    updatedAt: string;
+};
+
+export type UpdatePhotoDtoClass = {
+    /**
+     * Original filename of the photo
+     */
+    originalFileName?: string;
+    /**
+     * Storage path where the photo is stored
+     */
+    storagePath?: string;
+    /**
+     * MIME type of the photo
+     */
+    mimeType?: string;
+    /**
+     * Path to the thumbnail image
+     */
+    thumbnailPath?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Width of the photo in pixels
+     */
+    width?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Height of the photo in pixels
+     */
+    height?: {
+        [key: string]: unknown;
+    };
+    /**
+     * File size in bytes
+     */
+    size?: {
+        [key: string]: unknown;
+    };
+};
+
 export type AppControllerGetHelloResponse = unknown;
 
 export type AppControllerHealthCheckResponse = unknown;
@@ -275,6 +404,45 @@ export type CollectionsControllerRemoveData = {
 };
 
 export type CollectionsControllerRemoveResponse = unknown;
+
+export type PhotosControllerUploadFileResponse = unknown;
+
+export type PhotosControllerFindAllData = {
+    /**
+     * Collection ID to filter photos
+     */
+    collectionId: string;
+};
+
+export type PhotosControllerFindAllResponse = Array<PhotoResDto>;
+
+export type PhotosControllerFindOneData = {
+    /**
+     * Photo ID
+     */
+    id: string;
+};
+
+export type PhotosControllerFindOneResponse = PhotoResDto;
+
+export type PhotosControllerUpdateData = {
+    /**
+     * Photo ID
+     */
+    id: string;
+    requestBody: UpdatePhotoDtoClass;
+};
+
+export type PhotosControllerUpdateResponse = PhotoResDto;
+
+export type PhotosControllerRemoveData = {
+    /**
+     * Photo ID
+     */
+    id: string;
+};
+
+export type PhotosControllerRemoveResponse = unknown;
 
 export type $OpenApiTs = {
     '/': {
@@ -567,6 +735,83 @@ export type $OpenApiTs = {
                 403: unknown;
                 /**
                  * Collection not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/photos': {
+        post: {
+            res: {
+                201: unknown;
+            };
+        };
+        get: {
+            req: PhotosControllerFindAllData;
+            res: {
+                /**
+                 * Returns all photos for the collection
+                 */
+                200: Array<PhotoResDto>;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Collection not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/photos/{id}': {
+        get: {
+            req: PhotosControllerFindOneData;
+            res: {
+                /**
+                 * Returns the photo
+                 */
+                200: PhotoResDto;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Photo not found
+                 */
+                404: unknown;
+            };
+        };
+        patch: {
+            req: PhotosControllerUpdateData;
+            res: {
+                /**
+                 * Photo updated successfully
+                 */
+                200: PhotoResDto;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Photo not found
+                 */
+                404: unknown;
+            };
+        };
+        delete: {
+            req: PhotosControllerRemoveData;
+            res: {
+                /**
+                 * Photo deleted successfully
+                 */
+                200: unknown;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Photo not found
                  */
                 404: unknown;
             };

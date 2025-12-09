@@ -109,4 +109,62 @@ export const TestDataFactory = {
       })
     );
   },
+
+  /**
+   * Create a test collection
+   */
+  createCollection: (overrides: Partial<any> = {}) => ({
+    id: 'test-collection-id-1',
+    name: 'Test Collection',
+    catalogueId: 'test-catalogue-id-1',
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01'),
+    ...overrides,
+  }),
+
+  /**
+   * Create multiple test collections
+   */
+  createCollections: (count: number, overrides: Partial<any> = {}) => {
+    return Array.from({ length: count }, (_, i) =>
+      TestDataFactory.createCollection({
+        id: `test-collection-id-${i + 1}`,
+        name: `Test Collection ${i + 1}`,
+        ...overrides,
+      })
+    );
+  },
+
+  /**
+   * Create a test photo
+   */
+  createPhoto: (overrides: Partial<any> = {}) => ({
+    id: 'test-photo-id-1',
+    originalFileName: 'test-photo.jpg',
+    storagePath: '/uploads/test/test-photo.jpg',
+    mimeType: 'image/jpeg',
+    thumbnailPath: '/uploads/test/thumbnails/test-photo.jpg',
+    width: 1920,
+    height: 1080,
+    size: 2048576,
+    collectionId: 'test-collection-id-1',
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01'),
+    ...overrides,
+  }),
+
+  /**
+   * Create multiple test photos
+   */
+  createPhotos: (count: number, overrides: Partial<any> = {}) => {
+    return Array.from({ length: count }, (_, i) =>
+      TestDataFactory.createPhoto({
+        id: `test-photo-id-${i + 1}`,
+        originalFileName: `test-photo-${i + 1}.jpg`,
+        storagePath: `/uploads/test/test-photo-${i + 1}.jpg`,
+        thumbnailPath: `/uploads/test/thumbnails/test-photo-${i + 1}.jpg`,
+        ...overrides,
+      })
+    );
+  },
 };

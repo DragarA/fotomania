@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerFindBySlugData, CataloguesControllerFindBySlugResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerFindBySlugData, CataloguesControllerFindBySlugResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerUpdateData, PhotosControllerUpdateResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -405,6 +405,108 @@ export class CollectionsService {
             errors: {
                 403: 'Forbidden',
                 404: 'Collection not found'
+            }
+        });
+    }
+    
+}
+
+export class PhotosService {
+    /**
+     * Create a new photo
+     * @returns unknown
+     * @throws ApiError
+     */
+    public static photosControllerUploadFile(): CancelablePromise<PhotosControllerUploadFileResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/photos'
+        });
+    }
+    
+    /**
+     * Get all photos for a collection
+     * @param data The data for the request.
+     * @param data.collectionId Collection ID to filter photos
+     * @returns PhotoResDto Returns all photos for the collection
+     * @throws ApiError
+     */
+    public static photosControllerFindAll(data: PhotosControllerFindAllData): CancelablePromise<PhotosControllerFindAllResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/photos',
+            query: {
+                collectionId: data.collectionId
+            },
+            errors: {
+                403: 'Forbidden',
+                404: 'Collection not found'
+            }
+        });
+    }
+    
+    /**
+     * Get a photo by ID
+     * @param data The data for the request.
+     * @param data.id Photo ID
+     * @returns PhotoResDto Returns the photo
+     * @throws ApiError
+     */
+    public static photosControllerFindOne(data: PhotosControllerFindOneData): CancelablePromise<PhotosControllerFindOneResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/photos/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                403: 'Forbidden',
+                404: 'Photo not found'
+            }
+        });
+    }
+    
+    /**
+     * Update a photo
+     * @param data The data for the request.
+     * @param data.id Photo ID
+     * @param data.requestBody
+     * @returns PhotoResDto Photo updated successfully
+     * @throws ApiError
+     */
+    public static photosControllerUpdate(data: PhotosControllerUpdateData): CancelablePromise<PhotosControllerUpdateResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/photos/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                403: 'Forbidden',
+                404: 'Photo not found'
+            }
+        });
+    }
+    
+    /**
+     * Delete a photo
+     * @param data The data for the request.
+     * @param data.id Photo ID
+     * @returns unknown Photo deleted successfully
+     * @throws ApiError
+     */
+    public static photosControllerRemove(data: PhotosControllerRemoveData): CancelablePromise<PhotosControllerRemoveResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/photos/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                403: 'Forbidden',
+                404: 'Photo not found'
             }
         });
     }

@@ -4,10 +4,11 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './common/auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { DbModule } from './common/db/db.module';
 import { CataloguesModule } from './catalogues/catalogues.module';
 import { CollectionsModule } from './collections/collections.module';
+import { DbModule } from './common/db/db.module';
+import { PhotosModule } from './photos/photos.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CollectionsModule } from './collections/collections.module';
     UsersModule,
     CataloguesModule,
     CollectionsModule,
+    PhotosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
