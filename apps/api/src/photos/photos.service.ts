@@ -5,60 +5,19 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { and, eq } from 'drizzle-orm';
+import * as path from 'path';
+import * as fs from 'fs';
+import sharp from 'sharp';
 
 import { catalogue } from '../common/db/schema/catalogues.schema';
 import { collection } from '../common/db/schema/collections.schema';
 import { photo } from '../common/db/schema/photos.schema';
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
-import { CreatePhotoDto } from './dto/create-photo.dto';
-import { UpdatePhotoDto } from './dto/update-photo.dto';
 
 @Injectable()
 export class PhotosService {
+  private uploadRoot = path.resolve('./uploads');
   constructor(@Inject(DRIZZLE) private readonly db: DrizzleDB) {}
-
-  async create(createPhotoDto: CreatePhotoDto, ownerId: string) {
-    // Verify the collection exists and user owns it (through catalogue)
-    const [existingCollection] = await this.db
-      .select({ collection, catalogue })
-      .from(collection)
-      .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
-      .where(eq(collection.id, createPhotoDto.collectionId));
-
-    if (!existingCollection) {
-      throw new NotFoundException(
-        `Collection with ID ${createPhotoDto.collectionId} not found`
-      );
-    }
-
-    if (existingCollection.catalogue.ownerId !== ownerId) {
-      throw new ForbiddenException(
-        'You do not have permission to add photos to this collection'
-      );
-    }
-
-    const id = crypto.randomUUID();
-    const now = new Date();
-
-    const [newPhoto] = await this.db
-      .insert(photo)
-      .values({
-        id,
-        originalFileName: createPhotoDto.originalFileName,
-        storagePath: createPhotoDto.storagePath,
-        mimeType: createPhotoDto.mimeType,
-        thumbnailPath: createPhotoDto.thumbnailPath,
-        width: createPhotoDto.width,
-        height: createPhotoDto.height,
-        size: createPhotoDto.size,
-        collectionId: createPhotoDto.collectionId,
-        createdAt: now,
-        updatedAt: now,
-      })
-      .returning();
-
-    return newPhoto;
-  }
 
   async findAll(collectionId: string, ownerId: string) {
     // Verify the collection exists and user owns it
@@ -69,7 +28,9 @@ export class PhotosService {
       .where(eq(collection.id, collectionId));
 
     if (!existingCollection) {
-      throw new NotFoundException(`Collection with ID ${collectionId} not found`);
+      throw new NotFoundException(
+        `Collection with ID ${collectionId} not found`
+      );
     }
 
     if (existingCollection.catalogue.ownerId !== ownerId) {
@@ -100,26 +61,22 @@ export class PhotosService {
     return result.photo;
   }
 
-  async update(id: string, updatePhotoDto: UpdatePhotoDto, ownerId: string) {
-    // First check if photo exists and user owns it
-    await this.findOne(id, ownerId);
-
-    const [updated] = await this.db
-      .update(photo)
-      .set({
-        ...updatePhotoDto,
-        updatedAt: new Date(),
-      })
-      .where(eq(photo.id, id))
-      .returning();
-
-    return updated;
-  }
-
   async remove(id: string, ownerId: string) {
     // First check if photo exists and user owns it
-    await this.findOne(id, ownerId);
+    const result = await this.findOne(id, ownerId);
+    const collectionPath = path.dirname(
+      path.join(this.uploadRoot, result.storagePath)
+    );
+    fs.unlinkSync(path.join(this.uploadRoot, result.storagePath))
+    
+    if(result.thumbnailPath)
+      fs.unlinkSync(path.join(this.uploadRoot, result.thumbnailPath))
 
+    //if after deleting the directory is empty, remove it
+    if (fs.readdirSync(collectionPath).length === 0) {
+      fs.rmdirSync(collectionPath);
+    }
+    
     await this.db.delete(photo).where(eq(photo.id, id));
 
     return { message: 'Photo deleted successfully' };
@@ -138,7 +95,9 @@ export class PhotosService {
       .where(eq(collection.id, collectionId));
 
     if (!existingCollection) {
-      throw new NotFoundException(`Collection with ID ${collectionId} not found`);
+      throw new NotFoundException(
+        `Collection with ID ${collectionId} not found`
+      );
     }
 
     if (existingCollection.catalogue.ownerId !== ownerId) {
@@ -147,23 +106,75 @@ export class PhotosService {
       );
     }
 
+    const collectionPath = path.join(
+      this.uploadRoot,
+      'collections',
+      collectionId
+    );
+
+    console.log('collectionPath', collectionPath);
+
+    if (!fs.existsSync(collectionPath)) {
+      fs.mkdirSync(collectionPath, { recursive: true });
+    }
+
     // 2. Create photo record
     const photoId = crypto.randomUUID();
     const now = new Date();
 
+    const filePath = path.join(
+      collectionPath,
+      photoId + path.extname(file.originalname)
+    );
+    const thumbnailPath = path.join(
+      collectionPath,
+      'thumb_' + photoId + path.extname(file.originalname)
+    );
+
+    const originalSharp = sharp(file.buffer).rotate();
+    const originalMetadata = await originalSharp.metadata();
+
+    await originalSharp
+      .resize({
+        width: 1000,
+        withoutEnlargement: true,
+      })
+      .jpeg({ quality: 80 })
+      .toFile(filePath);
+
+    const thumbSharp = sharp(file.buffer).rotate();
+    await thumbSharp
+      .resize({
+        width: 400,
+      })
+      .jpeg({ quality: 80 })
+      .toFile(thumbnailPath);
+
+    const stats = fs.statSync(filePath);
+
+    const relativeOriginalPath = path
+      .relative(this.uploadRoot, filePath)
+      .replace(/\\/g, '/'); // normalize for URLs
+
+    const relativeThumbPath = path
+      .relative(this.uploadRoot, thumbnailPath)
+      .replace(/\\/g, '/');
+
     const photoData = {
       id: photoId,
       originalFileName: file.originalname,
-      storagePath: file.path,
+      storagePath: relativeOriginalPath,
       mimeType: file.mimetype,
-      size: file.size,
+      size: stats.size,
       collectionId,
-      thumbnailPath: null, // Future: generate thumbnail
-      width: null, // Future: extract from EXIF
-      height: null, // Future: extract from EXIF
+      thumbnailPath: relativeThumbPath, // Future: generate thumbnail
+      width: originalMetadata.width || null,
+      height: originalMetadata.height || null,
       createdAt: now,
       updatedAt: now,
     };
+
+    console.log(photoData);
 
     const [newPhoto] = await this.db
       .insert(photo)

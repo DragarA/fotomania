@@ -9,6 +9,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  console.log('resolve', resolve('./uploads'))
   // Serve static files from uploads directory
   app.useStaticAssets(resolve('./uploads'), {
     prefix: '/uploads',

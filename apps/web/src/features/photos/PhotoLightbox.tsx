@@ -143,7 +143,7 @@ export function PhotoLightbox({
         onClick={(e) => e.stopPropagation()}
       >
         <img
-          src={`${baseUrl}/${photo.storagePath}`}
+          src={`${baseUrl}/uploads/${photo.storagePath}`}
           alt={photo.originalFileName}
           className="max-w-full max-h-[90vh] object-contain"
         />

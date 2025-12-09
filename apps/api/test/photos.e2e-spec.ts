@@ -10,6 +10,14 @@ import { DRIZZLE } from '../src/common/db/drizzle';
 import { createDrizzleMock } from './utils/drizzle-mock.factory';
 import { JwtAuthGuard } from '../src/common/auth/guards/jwt-auth.guard';
 
+// Create a minimal valid 1x1 PNG image buffer for tests
+const createTestImageBuffer = () => {
+  return Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+    'base64'
+  );
+};
+
 describe('PhotosController (e2e)', () => {
   let app: INestApplication;
   let mockDb: MockDrizzleDB;
@@ -52,131 +60,6 @@ describe('PhotosController (e2e)', () => {
   beforeEach(() => {
     resetDrizzleMock(mockDb);
     jest.clearAllMocks();
-  });
-
-  describe('POST /photos', () => {
-    it('should create a new photo', async () => {
-      const collectionId = '550e8400-e29b-41d4-a716-446655440000';
-      const createDto = {
-        originalFileName: 'wedding-001.jpg',
-        storagePath: '/uploads/test/wedding-001.jpg',
-        mimeType: 'image/jpeg',
-        thumbnailPath: '/uploads/test/thumbnails/wedding-001.jpg',
-        width: 1920,
-        height: 1080,
-        size: 2048576,
-        collectionId,
-      };
-
-      // Mock collection check
-      const mockCollection = TestDataFactory.createCollection({
-        id: collectionId,
-      });
-      const mockCatalogue = TestDataFactory.createCatalogue({
-        ownerId: testUser.id,
-      });
-      mockDb.select.mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          innerJoin: jest.fn().mockReturnValue({
-            where: jest.fn().mockResolvedValue([
-              { collection: mockCollection, catalogue: mockCatalogue },
-            ]),
-          }),
-        }),
-      } as any);
-
-      // Mock insert
-      const mockPhoto = TestDataFactory.createPhoto({
-        id: '550e8400-e29b-41d4-a716-446655440001',
-        ...createDto,
-      });
-
-      mockDb.insert.mockReturnValueOnce({
-        values: jest.fn().mockReturnValue({
-          returning: jest.fn().mockResolvedValue([mockPhoto]),
-        }),
-      } as any);
-
-      const response = await request(app.getHttpServer())
-        .post('/photos')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(createDto)
-        .expect(201);
-
-      expect(response.body).toHaveProperty('id');
-      expect(response.body.originalFileName).toBe(createDto.originalFileName);
-      expect(response.body.collectionId).toBe(createDto.collectionId);
-    });
-
-    it('should return 404 when collection not found', async () => {
-      const createDto = {
-        originalFileName: 'wedding-001.jpg',
-        storagePath: '/uploads/test/wedding-001.jpg',
-        mimeType: 'image/jpeg',
-        collectionId: '550e8400-e29b-41d4-a716-446655440000',
-      };
-
-      // Mock collection check (not found)
-      mockDb.select.mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          innerJoin: jest.fn().mockReturnValue({
-            where: jest.fn().mockResolvedValue([]),
-          }),
-        }),
-      } as any);
-
-      await request(app.getHttpServer())
-        .post('/photos')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(createDto)
-        .expect(404);
-    });
-
-    it('should return 403 when user does not own collection', async () => {
-      const collectionId = '550e8400-e29b-41d4-a716-446655440000';
-      const createDto = {
-        originalFileName: 'wedding-001.jpg',
-        storagePath: '/uploads/test/wedding-001.jpg',
-        mimeType: 'image/jpeg',
-        collectionId,
-      };
-
-      // Mock collection check (different owner)
-      const mockCollection = TestDataFactory.createCollection({
-        id: collectionId,
-      });
-      const mockCatalogue = TestDataFactory.createCatalogue({
-        ownerId: 'different-user',
-      });
-      mockDb.select.mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          innerJoin: jest.fn().mockReturnValue({
-            where: jest.fn().mockResolvedValue([
-              { collection: mockCollection, catalogue: mockCatalogue },
-            ]),
-          }),
-        }),
-      } as any);
-
-      await request(app.getHttpServer())
-        .post('/photos')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(createDto)
-        .expect(403);
-    });
-
-    it('should return 400 for missing required fields', async () => {
-      const createDto = {
-        collectionId: '550e8400-e29b-41d4-a716-446655440000',
-        // missing required fields
-      };
-
-      await request(app.getHttpServer())
-        .post('/photos')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(createDto)
-        .expect(400);
-    });
   });
 
   describe('GET /photos', () => {
@@ -286,72 +169,6 @@ describe('PhotosController (e2e)', () => {
     });
   });
 
-  describe('PATCH /photos/:id', () => {
-    it('should update a photo', async () => {
-      const photoId = 'photo-123';
-      const updateDto = { originalFileName: 'updated-photo.jpg' };
-
-      // Mock findOne
-      const existingPhoto = TestDataFactory.createPhoto({
-        id: photoId,
-        originalFileName: 'old-photo.jpg',
-      });
-      const mockCatalogue = TestDataFactory.createCatalogue({
-        ownerId: testUser.id,
-      });
-      mockDb.select.mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          innerJoin: jest.fn().mockReturnValue({
-            innerJoin: jest.fn().mockReturnValue({
-              where: jest.fn().mockResolvedValue([
-                { photo: existingPhoto, catalogue: mockCatalogue },
-              ]),
-            }),
-          }),
-        }),
-      } as any);
-
-      // Mock update
-      const updatedPhoto = { ...existingPhoto, ...updateDto };
-      mockDb.update.mockReturnValueOnce({
-        set: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            returning: jest.fn().mockResolvedValue([updatedPhoto]),
-          }),
-        }),
-      } as any);
-
-      const response = await request(app.getHttpServer())
-        .patch(`/photos/${photoId}`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(updateDto)
-        .expect(200);
-
-      expect(response.body.originalFileName).toBe(updateDto.originalFileName);
-    });
-
-    it('should return 404 when photo not found', async () => {
-      const photoId = 'non-existent';
-      const updateDto = { originalFileName: 'updated-photo.jpg' };
-
-      mockDb.select.mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          innerJoin: jest.fn().mockReturnValue({
-            innerJoin: jest.fn().mockReturnValue({
-              where: jest.fn().mockResolvedValue([]),
-            }),
-          }),
-        }),
-      } as any);
-
-      await request(app.getHttpServer())
-        .patch(`/photos/${photoId}`)
-        .set('Authorization', `Bearer ${authToken}`)
-        .send(updateDto)
-        .expect(404);
-    });
-  });
-
   describe('DELETE /photos/:id', () => {
     it('should delete a photo', async () => {
       const photoId = 'photo-123';
@@ -439,7 +256,7 @@ describe('PhotosController (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post(`/photos/upload/${collectionId}`)
         .set('Authorization', `Bearer ${authToken}`)
-        .attach('file', Buffer.from('fake image data'), 'test.jpg')
+        .attach('file', createTestImageBuffer(), 'test.png')
         .expect(201);
 
       expect(response.body).toHaveProperty('id');
@@ -460,7 +277,7 @@ describe('PhotosController (e2e)', () => {
       await request(app.getHttpServer())
         .post(`/photos/upload/${collectionId}`)
         .set('Authorization', `Bearer ${authToken}`)
-        .attach('file', Buffer.from('fake image data'), 'test.jpg')
+        .attach('file', createTestImageBuffer(), 'test.png')
         .expect(404);
     });
 
@@ -486,7 +303,7 @@ describe('PhotosController (e2e)', () => {
       await request(app.getHttpServer())
         .post(`/photos/upload/${collectionId}`)
         .set('Authorization', `Bearer ${authToken}`)
-        .attach('file', Buffer.from('fake image data'), 'test.jpg')
+        .attach('file', createTestImageBuffer(), 'test.png')
         .expect(403);
     });
   });

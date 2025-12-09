@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { OpenAPI } from '@repo/sdk';
+import { PhotoContextMenu } from './PhotoContextMenu';
 
 interface Photo {
   id: string;
@@ -18,9 +20,20 @@ interface PhotoGridProps {
   photos: Photo[];
   isLoading: boolean;
   onPhotoClick?: (photo: Photo) => void;
+  onPhotoDelete?: (photo: Photo) => void;
 }
 
-export function PhotoGrid({ photos, isLoading, onPhotoClick }: PhotoGridProps) {
+export function PhotoGrid({
+  photos,
+  isLoading,
+  onPhotoClick,
+  onPhotoDelete,
+}: PhotoGridProps) {
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+    photo: Photo;
+  } | null>(null);
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -55,27 +68,102 @@ export function PhotoGrid({ photos, isLoading, onPhotoClick }: PhotoGridProps) {
   // Get base URL for image serving
   const baseUrl = OpenAPI.BASE || 'http://localhost:3000';
 
+  const handleDownload = (photo: Photo) => {
+    const link = document.createElement('a');
+    link.href = `${baseUrl}/uploads/${photo.storagePath}`;
+    link.download = photo.originalFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-      {photos.map((photo) => (
-        <div
-          key={photo.id}
-          onClick={() => onPhotoClick?.(photo)}
-          className="group relative aspect-square bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-indigo-500 transition-all cursor-pointer"
-        >
-          <img
-            src={`${baseUrl}/${photo.storagePath}`}
-            alt={photo.originalFileName}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-colors flex items-end p-3">
-            <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm truncate">
-              {photo.originalFileName}
+    <>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        {photos.map((photo) => {
+          const isMenuOpen = contextMenu?.photo.id === photo.id;
+
+          return (
+            <div
+              key={photo.id}
+              className={`group relative aspect-square bg-gray-100 rounded-lg overflow-hidden transition-all ${
+                isMenuOpen
+                  ? 'ring-2 ring-indigo-500'
+                  : 'hover:ring-2 hover:ring-indigo-500'
+              }`}
+            >
+              <img
+                src={`${baseUrl}/uploads/${photo.thumbnailPath}`}
+                alt={photo.originalFileName}
+                className="w-full h-full object-cover cursor-pointer"
+                loading="lazy"
+                onClick={() => onPhotoClick?.(photo)}
+              />
+
+              {/* Three-dot menu button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setContextMenu({
+                    x: rect.left,
+                    y: rect.bottom + 4,
+                    photo,
+                  });
+                }}
+                className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-black/60 transition-all text-white cursor-pointer ${
+                  isMenuOpen
+                    ? 'opacity-100 scale-110'
+                    : 'opacity-0 group-hover:opacity-100 hover:scale-110'
+                }`}
+                aria-label="Photo options"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="12" cy="5" r="2" />
+                  <circle cx="12" cy="12" r="2" />
+                  <circle cx="12" cy="19" r="2" />
+                </svg>
+              </button>
+
+              <div className="absolute inset-0 bg-black/0 transition-colors flex items-end p-3 pointer-events-none">
+                <div
+                  className={`text-white transition-opacity text-sm truncate ${
+                    isMenuOpen
+                      ? 'opacity-100'
+                      : 'opacity-0 group-hover:opacity-100'
+                  }`}
+                >
+                  {photo.originalFileName}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      ))}
-    </div>
+          );
+        })}
+      </div>
+
+      {contextMenu && (
+        <PhotoContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          onClose={() => setContextMenu(null)}
+          onOpen={() => {
+            onPhotoClick?.(contextMenu.photo);
+            setContextMenu(null);
+          }}
+          onDownload={() => {
+            handleDownload(contextMenu.photo);
+            setContextMenu(null);
+          }}
+          onDelete={() => {
+            onPhotoDelete?.(contextMenu.photo);
+            setContextMenu(null);
+          }}
+        />
+      )}
+    </>
   );
 }

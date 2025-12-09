@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerFindBySlugData, CataloguesControllerFindBySlugResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerCreateData, PhotosControllerCreateResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerUpdateData, PhotosControllerUpdateResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerFindBySlugData, CataloguesControllerFindBySlugResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -413,20 +413,24 @@ export class CollectionsService {
 
 export class PhotosService {
     /**
-     * Create a new photo
+     * Upload a photo file
      * @param data The data for the request.
-     * @param data.requestBody
-     * @returns PhotoResDto Photo created successfully
+     * @param data.collectionId Collection ID
+     * @param data.formData
+     * @returns PhotoResDto Photo uploaded successfully
      * @throws ApiError
      */
-    public static photosControllerCreate(data: PhotosControllerCreateData): CancelablePromise<PhotosControllerCreateResponse> {
+    public static photosControllerUploadFile(data: PhotosControllerUploadFileData): CancelablePromise<PhotosControllerUploadFileResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/photos',
-            body: data.requestBody,
-            mediaType: 'application/json',
+            url: '/photos/upload/{collectionId}',
+            path: {
+                collectionId: data.collectionId
+            },
+            formData: data.formData,
+            mediaType: 'multipart/form-data',
             errors: {
-                400: 'Invalid request data',
+                400: 'Invalid file or request data',
                 403: 'Forbidden',
                 404: 'Collection not found'
             }
@@ -455,31 +459,6 @@ export class PhotosService {
     }
     
     /**
-     * Upload a photo file
-     * @param data The data for the request.
-     * @param data.collectionId Collection ID
-     * @param data.formData
-     * @returns PhotoResDto Photo uploaded successfully
-     * @throws ApiError
-     */
-    public static photosControllerUploadFile(data: PhotosControllerUploadFileData): CancelablePromise<PhotosControllerUploadFileResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/photos/upload/{collectionId}',
-            path: {
-                collectionId: data.collectionId
-            },
-            formData: data.formData,
-            mediaType: 'multipart/form-data',
-            errors: {
-                400: 'Invalid file or request data',
-                403: 'Forbidden',
-                404: 'Collection not found'
-            }
-        });
-    }
-    
-    /**
      * Get a photo by ID
      * @param data The data for the request.
      * @param data.id Photo ID
@@ -493,30 +472,6 @@ export class PhotosService {
             path: {
                 id: data.id
             },
-            errors: {
-                403: 'Forbidden',
-                404: 'Photo not found'
-            }
-        });
-    }
-    
-    /**
-     * Update a photo
-     * @param data The data for the request.
-     * @param data.id Photo ID
-     * @param data.requestBody
-     * @returns PhotoResDto Photo updated successfully
-     * @throws ApiError
-     */
-    public static photosControllerUpdate(data: PhotosControllerUpdateData): CancelablePromise<PhotosControllerUpdateResponse> {
-        return __request(OpenAPI, {
-            method: 'PATCH',
-            url: '/photos/{id}',
-            path: {
-                id: data.id
-            },
-            body: data.requestBody,
-            mediaType: 'application/json',
             errors: {
                 403: 'Forbidden',
                 404: 'Photo not found'

@@ -675,96 +675,6 @@
         ]
       }
     },
-    "/photos": {
-      "post": {
-        "operationId": "PhotosController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreatePhotoDtoClass"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Photo created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PhotoResDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request data"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Collection not found"
-          }
-        },
-        "security": [
-          {
-            "JWT-auth": []
-          }
-        ],
-        "summary": "Create a new photo",
-        "tags": [
-          "photos"
-        ]
-      },
-      "get": {
-        "operationId": "PhotosController_findAll",
-        "parameters": [
-          {
-            "name": "collectionId",
-            "required": true,
-            "in": "query",
-            "description": "Collection ID to filter photos",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Returns all photos for the collection",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PhotoResDto"
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Collection not found"
-          }
-        },
-        "security": [
-          {
-            "JWT-auth": []
-          }
-        ],
-        "summary": "Get all photos for a collection",
-        "tags": [
-          "photos"
-        ]
-      }
-    },
     "/photos/upload/{collectionId}": {
       "post": {
         "operationId": "PhotosController_uploadFile",
@@ -827,6 +737,52 @@
         ]
       }
     },
+    "/photos": {
+      "get": {
+        "operationId": "PhotosController_findAll",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "required": true,
+            "in": "query",
+            "description": "Collection ID to filter photos",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all photos for the collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PhotoResDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all photos for a collection",
+        "tags": [
+          "photos"
+        ]
+      }
+    },
     "/photos/{id}": {
       "get": {
         "operationId": "PhotosController_findOne",
@@ -865,57 +821,6 @@
           }
         ],
         "summary": "Get a photo by ID",
-        "tags": [
-          "photos"
-        ]
-      },
-      "patch": {
-        "operationId": "PhotosController_update",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "Photo ID",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePhotoDtoClass"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Photo updated successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PhotoResDto"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Photo not found"
-          }
-        },
-        "security": [
-          {
-            "JWT-auth": []
-          }
-        ],
-        "summary": "Update a photo",
         "tags": [
           "photos"
         ]
@@ -1198,57 +1103,6 @@
           }
         }
       },
-      "CreatePhotoDtoClass": {
-        "type": "object",
-        "properties": {
-          "originalFileName": {
-            "type": "string",
-            "description": "Original filename of the photo",
-            "example": "wedding-ceremony-001.jpg"
-          },
-          "storagePath": {
-            "type": "string",
-            "description": "Storage path where the photo is stored",
-            "example": "/uploads/catalogues/abc123/photos/uuid.jpg"
-          },
-          "mimeType": {
-            "type": "string",
-            "description": "MIME type of the photo",
-            "example": "image/jpeg"
-          },
-          "thumbnailPath": {
-            "type": "string",
-            "description": "Path to the thumbnail image",
-            "example": "/uploads/catalogues/abc123/thumbnails/uuid.jpg"
-          },
-          "width": {
-            "type": "number",
-            "description": "Width of the photo in pixels",
-            "example": 1920
-          },
-          "height": {
-            "type": "number",
-            "description": "Height of the photo in pixels",
-            "example": 1080
-          },
-          "size": {
-            "type": "number",
-            "description": "File size in bytes",
-            "example": 2048576
-          },
-          "collectionId": {
-            "type": "string",
-            "description": "ID of the collection this photo belongs to",
-            "example": "550e8400-e29b-41d4-a716-446655440000"
-          }
-        },
-        "required": [
-          "originalFileName",
-          "storagePath",
-          "mimeType",
-          "collectionId"
-        ]
-      },
       "PhotoResDto": {
         "type": "object",
         "properties": {
@@ -1319,46 +1173,6 @@
           "createdAt",
           "updatedAt"
         ]
-      },
-      "UpdatePhotoDtoClass": {
-        "type": "object",
-        "properties": {
-          "originalFileName": {
-            "type": "string",
-            "description": "Original filename of the photo",
-            "example": "wedding-ceremony-001.jpg"
-          },
-          "storagePath": {
-            "type": "string",
-            "description": "Storage path where the photo is stored",
-            "example": "/uploads/catalogues/abc123/photos/uuid.jpg"
-          },
-          "mimeType": {
-            "type": "string",
-            "description": "MIME type of the photo",
-            "example": "image/jpeg"
-          },
-          "thumbnailPath": {
-            "type": "object",
-            "description": "Path to the thumbnail image",
-            "example": "/uploads/catalogues/abc123/thumbnails/uuid.jpg"
-          },
-          "width": {
-            "type": "object",
-            "description": "Width of the photo in pixels",
-            "example": 1920
-          },
-          "height": {
-            "type": "object",
-            "description": "Height of the photo in pixels",
-            "example": 1080
-          },
-          "size": {
-            "type": "object",
-            "description": "File size in bytes",
-            "example": 2048576
-          }
-        }
       }
     }
   }

@@ -5,7 +5,10 @@ import { useDropzone } from 'react-dropzone';
 
 import { usePhotoUpload } from '../../features/photos/usePhotoUpload';
 import { UploadQueue } from '../../features/photos/UploadQueue';
-import { usePhotosQuery } from '../../features/photos/hooks';
+import {
+  usePhotosQuery,
+  useDeletePhotoMutation,
+} from '../../features/photos/hooks';
 import { PhotoGrid } from '../../features/photos/PhotoGrid';
 import { PhotoLightbox } from '../../features/photos/PhotoLightbox';
 
@@ -48,6 +51,8 @@ function CatalogueDetailPage() {
 
   const { data: photos, isLoading: photosLoading } =
     usePhotosQuery(selectedCollectionId);
+
+  const deletePhotoMutation = useDeletePhotoMutation();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -108,6 +113,47 @@ function CatalogueDetailPage() {
                     },
                   }
                 );
+              }}
+              className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 transition-colors"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => toast.dismiss(t)}
+              className="px-3 py-1.5 bg-gray-200 text-gray-700 text-sm font-medium rounded hover:bg-gray-300 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }
+    );
+  };
+
+  const handleDeletePhoto = (photo: any) => {
+    toast.custom(
+      (t) => (
+        <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
+          <p className="font-semibold mb-2">Delete photo?</p>
+          <p className="text-sm text-gray-600 mb-1">
+            {photo.originalFileName}
+          </p>
+          <p className="text-sm text-gray-600 mb-3">
+            This action cannot be undone.
+          </p>
+          <div className="flex gap-2">
+            <button
+              onClick={() => {
+                toast.dismiss(t);
+                deletePhotoMutation.mutate({
+                  id: photo.id,
+                  collectionId: photo.collectionId,
+                });
+                // Close lightbox if this photo is currently open
+                if (selectedPhoto?.id === photo.id) {
+                  setSelectedPhoto(null);
+                }
               }}
               className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 transition-colors"
             >
@@ -255,6 +301,7 @@ function CatalogueDetailPage() {
               photos={photos || []}
               isLoading={photosLoading}
               onPhotoClick={(photo) => setSelectedPhoto(photo)}
+              onPhotoDelete={handleDeletePhoto}
             />
           </div>
         ) : (

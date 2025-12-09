@@ -84,3 +84,23 @@ export function useUploadPhotoMutation() {
     },
   });
 }
+
+export function useDeletePhotoMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, { id: string; collectionId: string }>({
+    mutationFn: async ({ id }) => {
+      await PhotosService.photosControllerRemove({ id });
+    },
+    onSuccess: (_, { collectionId }) => {
+      // Invalidate photos query for this collection
+      queryClient.invalidateQueries({
+        queryKey: ['photos', collectionId],
+      });
+      toast.success('Photo deleted successfully');
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Delete failed');
+    },
+  });
+}

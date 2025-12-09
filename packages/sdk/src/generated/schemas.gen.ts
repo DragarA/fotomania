@@ -198,53 +198,6 @@ export const $UpdateCollectionDtoClass = {
     }
 } as const;
 
-export const $CreatePhotoDtoClass = {
-    type: 'object',
-    properties: {
-        originalFileName: {
-            type: 'string',
-            description: 'Original filename of the photo',
-            example: 'wedding-ceremony-001.jpg'
-        },
-        storagePath: {
-            type: 'string',
-            description: 'Storage path where the photo is stored',
-            example: '/uploads/catalogues/abc123/photos/uuid.jpg'
-        },
-        mimeType: {
-            type: 'string',
-            description: 'MIME type of the photo',
-            example: 'image/jpeg'
-        },
-        thumbnailPath: {
-            type: 'string',
-            description: 'Path to the thumbnail image',
-            example: '/uploads/catalogues/abc123/thumbnails/uuid.jpg'
-        },
-        width: {
-            type: 'number',
-            description: 'Width of the photo in pixels',
-            example: 1920
-        },
-        height: {
-            type: 'number',
-            description: 'Height of the photo in pixels',
-            example: 1080
-        },
-        size: {
-            type: 'number',
-            description: 'File size in bytes',
-            example: 2048576
-        },
-        collectionId: {
-            type: 'string',
-            description: 'ID of the collection this photo belongs to',
-            example: '550e8400-e29b-41d4-a716-446655440000'
-        }
-    },
-    required: ['originalFileName', 'storagePath', 'mimeType', 'collectionId']
-} as const;
-
 export const $PhotoResDto = {
     type: 'object',
     properties: {
@@ -307,45 +260,4 @@ export const $PhotoResDto = {
         }
     },
     required: ['id', 'originalFileName', 'storagePath', 'mimeType', 'collectionId', 'createdAt', 'updatedAt']
-} as const;
-
-export const $UpdatePhotoDtoClass = {
-    type: 'object',
-    properties: {
-        originalFileName: {
-            type: 'string',
-            description: 'Original filename of the photo',
-            example: 'wedding-ceremony-001.jpg'
-        },
-        storagePath: {
-            type: 'string',
-            description: 'Storage path where the photo is stored',
-            example: '/uploads/catalogues/abc123/photos/uuid.jpg'
-        },
-        mimeType: {
-            type: 'string',
-            description: 'MIME type of the photo',
-            example: 'image/jpeg'
-        },
-        thumbnailPath: {
-            type: 'object',
-            description: 'Path to the thumbnail image',
-            example: '/uploads/catalogues/abc123/thumbnails/uuid.jpg'
-        },
-        width: {
-            type: 'object',
-            description: 'Width of the photo in pixels',
-            example: 1920
-        },
-        height: {
-            type: 'object',
-            description: 'Height of the photo in pixels',
-            example: 1080
-        },
-        size: {
-            type: 'object',
-            description: 'File size in bytes',
-            example: 2048576
-        }
-    }
 } as const;

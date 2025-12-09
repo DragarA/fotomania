@@ -1,7 +1,8 @@
 import { mkdirSync } from 'fs';
-import { diskStorage } from 'multer';
+import { diskStorage, memoryStorage } from 'multer';
 import { extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { resourceLimits } from 'worker_threads';
 
 export const photoStorage = diskStorage({
   destination: (req, file, cb) => {
@@ -30,6 +31,9 @@ export const photoStorage = diskStorage({
     cb(null, `${photoId}${ext}`);
   },
 });
+
+export const photoStorageMemory = memoryStorage();
+
 
 export const photoFileFilter = (
   req: any,
