@@ -97,6 +97,12 @@ export type UpdateCatalogueDtoClass = {
      * Password for protected catalogue
      */
     password?: string;
+    /**
+     * Catalogue cover image path
+     */
+    coverImage?: {
+        [key: string]: unknown;
+    } | null;
 };
 
 export type CreateCollectionDtoClass = {
@@ -279,6 +285,19 @@ export type CataloguesControllerFindBySlugData = {
 };
 
 export type CataloguesControllerFindBySlugResponse = CatalogueResDto;
+
+export type CataloguesControllerSetCoverData = {
+    /**
+     * Catalogue ID
+     */
+    catalogueId: string;
+    /**
+     * Photo ID to set as cover
+     */
+    photoId: string;
+};
+
+export type CataloguesControllerSetCoverResponse = CatalogueResDto;
 
 export type CollectionsControllerCreateData = {
     requestBody: CreateCollectionDtoClass;
@@ -560,6 +579,25 @@ export type $OpenApiTs = {
                 200: CatalogueResDto;
                 /**
                  * Catalogue not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/catalogues/{catalogueId}/cover/{photoId}': {
+        patch: {
+            req: CataloguesControllerSetCoverData;
+            res: {
+                /**
+                 * Cover updated
+                 */
+                200: CatalogueResDto;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Catalogue or photo not found
                  */
                 404: unknown;
             };

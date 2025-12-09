@@ -7,6 +7,8 @@ interface PhotoContextMenuProps {
   onOpen: () => void;
   onDownload: () => void;
   onDelete: () => void;
+  onSetAsCover?: () => void;
+  isCurrentCover?: boolean;
 }
 
 export function PhotoContextMenu({
@@ -16,6 +18,8 @@ export function PhotoContextMenu({
   onOpen,
   onDownload,
   onDelete,
+  onSetAsCover,
+  isCurrentCover,
 }: PhotoContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -100,6 +104,26 @@ export function PhotoContextMenu({
       onClick: onDownload,
     },
     {
+      label: isCurrentCover ? 'Current Cover' : 'Set as Cover',
+      icon: (
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
+        </svg>
+      ),
+      onClick: onSetAsCover || (() => {}),
+      disabled: isCurrentCover || !onSetAsCover,
+    },
+    {
       label: 'Delete',
       icon: (
         <svg
@@ -131,17 +155,27 @@ export function PhotoContextMenu({
         <button
           key={index}
           onClick={() => {
-            item.onClick();
-            onClose();
+            if (!item.disabled) {
+              item.onClick();
+              onClose();
+            }
           }}
+          disabled={item.disabled}
           className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
-            item.danger
-              ? 'text-red-600 hover:bg-red-50'
-              : 'text-gray-700 hover:bg-gray-100'
+            item.disabled
+              ? 'text-gray-400 cursor-not-allowed bg-gray-50'
+              : item.danger
+              ? 'text-red-600 hover:bg-red-50 cursor-pointer'
+              : 'text-gray-700 hover:bg-gray-100 cursor-pointer'
           }`}
         >
           {item.icon}
           <span>{item.label}</span>
+          {item.disabled && isCurrentCover && (
+            <svg className="w-4 h-4 ml-auto" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+          )}
         </button>
       ))}
     </div>

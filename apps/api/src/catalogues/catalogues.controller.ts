@@ -119,6 +119,23 @@ export class CataloguesController {
     return this.cataloguesService.update(id, dto, user.id);
   }
 
+  @Patch(':catalogueId/cover/:photoId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Set a photo as catalogue cover' })
+  @ApiParam({ name: 'catalogueId', description: 'Catalogue ID' })
+  @ApiParam({ name: 'photoId', description: 'Photo ID to set as cover' })
+  @ApiResponse({ status: 200, description: 'Cover updated', type: CatalogueResDto })
+  @ApiResponse({ status: 404, description: 'Catalogue or photo not found' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  setCover(
+    @Param('catalogueId') catalogueId: string,
+    @Param('photoId') photoId: string,
+    @User() user: UserEntity
+  ) {
+    return this.cataloguesService.setCover(catalogueId, photoId, user.id);
+  }
+
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')

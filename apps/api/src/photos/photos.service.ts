@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, isNotNull } from 'drizzle-orm';
 import * as path from 'path';
 import * as fs from 'fs';
 import sharp from 'sharp';
@@ -62,24 +62,68 @@ export class PhotosService {
   }
 
   async remove(id: string, ownerId: string) {
-    // First check if photo exists and user owns it
+    // 1. Fetch photo and verify ownership
     const result = await this.findOne(id, ownerId);
+
+    // 2. Check if this photo is used as catalogue cover
+    const [catalogueWithCover] = result.thumbnailPath
+      ? await this.db
+          .select({ catalogue, collection })
+          .from(collection)
+          .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
+          .where(
+            and(
+              eq(collection.id, result.collectionId),
+              isNotNull(catalogue.coverImage),
+              eq(catalogue.coverImage, result.thumbnailPath)
+            )
+          )
+      : [];
+
+    // 3. Delete physical files
     const collectionPath = path.dirname(
       path.join(this.uploadRoot, result.storagePath)
     );
-    fs.unlinkSync(path.join(this.uploadRoot, result.storagePath))
-    
-    if(result.thumbnailPath)
-      fs.unlinkSync(path.join(this.uploadRoot, result.thumbnailPath))
+    fs.unlinkSync(path.join(this.uploadRoot, result.storagePath));
 
-    //if after deleting the directory is empty, remove it
+    if (result.thumbnailPath) {
+      fs.unlinkSync(path.join(this.uploadRoot, result.thumbnailPath));
+    }
+
+    // If after deleting the directory is empty, remove it
     if (fs.readdirSync(collectionPath).length === 0) {
       fs.rmdirSync(collectionPath);
     }
-    
+
+    // 4. Delete photo from database
     await this.db.delete(photo).where(eq(photo.id, id));
 
+    // 5. If photo was catalogue cover, auto-select next photo
+    if (catalogueWithCover) {
+      await this.reassignCatalogueCover(catalogueWithCover.catalogue.id);
+    }
+
     return { message: 'Photo deleted successfully' };
+  }
+
+  private async reassignCatalogueCover(catalogueId: string) {
+    // Find next available photo (oldest first for consistency)
+    const [nextPhoto] = await this.db
+      .select()
+      .from(photo)
+      .innerJoin(collection, eq(photo.collectionId, collection.id))
+      .where(eq(collection.catalogueId, catalogueId))
+      .orderBy(photo.createdAt)
+      .limit(1);
+
+    // Update catalogue cover (null if no photos remain)
+    await this.db
+      .update(catalogue)
+      .set({
+        coverImage: nextPhoto ? nextPhoto.photo.thumbnailPath : null,
+        updatedAt: new Date(),
+      })
+      .where(eq(catalogue.id, catalogueId));
   }
 
   async uploadFile(
@@ -180,6 +224,18 @@ export class PhotosService {
       .insert(photo)
       .values(photoData)
       .returning();
+
+    // Auto-set as catalogue cover if catalogue has no cover yet
+    const catalogueId = existingCollection.catalogue.id;
+    if (!existingCollection.catalogue.coverImage) {
+      await this.db
+        .update(catalogue)
+        .set({
+          coverImage: relativeThumbPath,
+          updatedAt: new Date(),
+        })
+        .where(eq(catalogue.id, catalogueId));
+    }
 
     return newPhoto;
   }

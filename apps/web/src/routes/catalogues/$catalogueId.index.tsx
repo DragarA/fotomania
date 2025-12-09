@@ -13,7 +13,10 @@ import { PhotoGrid } from '../../features/photos/PhotoGrid';
 import { PhotoLightbox } from '../../features/photos/PhotoLightbox';
 
 import { requireAuth } from '../../features/auth/guards';
-import { useCatalogueQuery } from '../../features/catalogues/hooks';
+import {
+  useCatalogueQuery,
+  useSetCatalogueCoverMutation,
+} from '../../features/catalogues/hooks';
 import {
   useCollectionsQuery,
   useDeleteCollectionMutation,
@@ -59,6 +62,7 @@ function CatalogueDetailPage() {
     usePhotosQuery(selectedCollectionId);
 
   const deletePhotoMutation = useDeletePhotoMutation();
+  const setCoverMutation = useSetCatalogueCoverMutation();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -176,6 +180,13 @@ function CatalogueDetailPage() {
       ),
       { duration: Infinity }
     );
+  };
+
+  const handleSetAsCover = (photo: any) => {
+    setCoverMutation.mutate({
+      catalogueId,
+      photoId: photo.id,
+    });
   };
 
   if (catalogueLoading) {
@@ -298,8 +309,11 @@ function CatalogueDetailPage() {
             <PhotoGrid
               photos={photos || []}
               isLoading={photosLoading}
+              catalogueId={catalogueId}
+              catalogueCoverImage={catalogue?.coverImage}
               onPhotoClick={(photo) => setSelectedPhoto(photo)}
               onPhotoDelete={handleDeletePhoto}
+              onSetAsCover={handleSetAsCover}
             />
           </div>
         ) : (

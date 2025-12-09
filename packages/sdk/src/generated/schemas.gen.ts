@@ -127,6 +127,12 @@ export const $UpdateCatalogueDtoClass = {
             type: 'string',
             description: 'Password for protected catalogue',
             example: 'secret123'
+        },
+        coverImage: {
+            type: 'object',
+            description: 'Catalogue cover image path',
+            nullable: true,
+            example: 'collections/abc123/thumb_photo456.jpg'
         }
     }
 } as const;

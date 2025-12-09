@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { CataloguesService } from '@repo/sdk';
 import type { CreateCatalogueDtoClass, UpdateCatalogueDtoClass } from '@repo/sdk';
 
@@ -118,6 +119,34 @@ export function useDeleteCatalogueMutation() {
     onSuccess: (_result, id) => {
       queryClient.invalidateQueries({ queryKey: ['catalogues'] });
       queryClient.removeQueries({ queryKey: ['catalogues', id] });
+    },
+  });
+}
+
+export function useSetCatalogueCoverMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    Catalogue,
+    Error,
+    { catalogueId: string; photoId: string }
+  >({
+    mutationFn: ({ catalogueId, photoId }) =>
+      CataloguesService.cataloguesControllerSetCover({
+        catalogueId,
+        photoId,
+      }) as Promise<Catalogue>,
+    onSuccess: (catalogue) => {
+      // Invalidate catalogue list
+      queryClient.invalidateQueries({ queryKey: ['catalogues'] });
+
+      // Update specific catalogue cache
+      queryClient.setQueryData(['catalogues', catalogue.id], catalogue);
+
+      toast.success('Catalogue cover updated');
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Failed to update cover');
     },
   });
 }

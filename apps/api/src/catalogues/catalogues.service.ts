@@ -122,4 +122,43 @@ export class CataloguesService {
 
     return { message: 'Catalogue deleted successfully' };
   }
+
+  async setCover(catalogueId: string, photoId: string, ownerId: string) {
+    // 1. Verify catalogue exists and user owns it
+    const existingCatalogue = await this.findOne(catalogueId, ownerId);
+
+    if (!existingCatalogue) {
+      throw new NotFoundException(`Catalogue with ID ${catalogueId} not found`);
+    }
+
+    // 2. Verify photo exists and belongs to this catalogue
+    const [photoResult] = await this.db
+      .select({ photo, collection })
+      .from(photo)
+      .innerJoin(collection, eq(photo.collectionId, collection.id))
+      .where(
+        and(
+          eq(photo.id, photoId),
+          eq(collection.catalogueId, catalogueId)
+        )
+      );
+
+    if (!photoResult) {
+      throw new NotFoundException(
+        `Photo with ID ${photoId} not found in catalogue ${catalogueId}`
+      );
+    }
+
+    // 3. Update catalogue with photo's thumbnailPath
+    const [updated] = await this.db
+      .update(catalogue)
+      .set({
+        coverImage: photoResult.photo.thumbnailPath,
+        updatedAt: new Date(),
+      })
+      .where(eq(catalogue.id, catalogueId))
+      .returning();
+
+    return updated;
+  }
 }

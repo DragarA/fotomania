@@ -457,6 +457,58 @@
         ]
       }
     },
+    "/catalogues/{catalogueId}/cover/{photoId}": {
+      "patch": {
+        "operationId": "CataloguesController_setCover",
+        "parameters": [
+          {
+            "name": "catalogueId",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "photoId",
+            "required": true,
+            "in": "path",
+            "description": "Photo ID to set as cover",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cover updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue or photo not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Set a photo as catalogue cover",
+        "tags": [
+          "catalogues"
+        ]
+      }
+    },
     "/collections": {
       "post": {
         "operationId": "CollectionsController_create",
@@ -1026,6 +1078,12 @@
             "type": "string",
             "description": "Password for protected catalogue",
             "example": "secret123"
+          },
+          "coverImage": {
+            "type": "object",
+            "description": "Catalogue cover image path",
+            "nullable": true,
+            "example": "collections/abc123/thumb_photo456.jpg"
           }
         }
       },

@@ -9,6 +9,7 @@ export const updateCatalogueSchema = z.object({
     .optional(),
   description: z.string().optional(),
   password: z.string().optional().nullable(),
+  coverImage: z.string().nullable().optional(),
 });
 
 export type UpdateCatalogueDto = z.infer<typeof updateCatalogueSchema>;
@@ -35,4 +36,12 @@ export class UpdateCatalogueDtoClass {
     example: 'secret123',
   })
   password?: string;
+
+  @ApiProperty({
+    description: 'Catalogue cover image path',
+    required: false,
+    nullable: true,
+    example: 'collections/abc123/thumb_photo456.jpg',
+  })
+  coverImage?: string | null;
 }
