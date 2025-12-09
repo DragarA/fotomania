@@ -19,6 +19,7 @@ import {
   useDeleteCollectionMutation,
 } from '../../features/collections/hooks';
 import { CollectionModal } from '../../features/collections/CollectionModal';
+import { CollectionContextMenu } from '../../features/collections/CollectionContextMenu';
 
 export const Route = createFileRoute('/catalogues/$catalogueId/')({
   beforeLoad: requireAuth,
@@ -45,6 +46,11 @@ function CatalogueDetailPage() {
     mode: 'create',
   });
   const [selectedPhoto, setSelectedPhoto] = useState<any | null>(null);
+  const [collectionContextMenu, setCollectionContextMenu] = useState<{
+    x: number;
+    y: number;
+    collection: any;
+  } | null>(null);
 
   const { uploadQueue, addFiles, removeFile, clearCompleted } =
     usePhotoUpload(selectedCollectionId);
@@ -114,13 +120,13 @@ function CatalogueDetailPage() {
                   }
                 );
               }}
-              className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 transition-colors"
+              className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 transition-colors cursor-pointer"
             >
               Delete
             </button>
             <button
               onClick={() => toast.dismiss(t)}
-              className="px-3 py-1.5 bg-gray-200 text-gray-700 text-sm font-medium rounded hover:bg-gray-300 transition-colors"
+              className="px-3 py-1.5 bg-gray-200 text-gray-700 text-sm font-medium rounded hover:bg-gray-300 transition-colors cursor-pointer"
             >
               Cancel
             </button>
@@ -155,13 +161,13 @@ function CatalogueDetailPage() {
                   setSelectedPhoto(null);
                 }
               }}
-              className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 transition-colors"
+              className="px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 transition-colors cursor-pointer"
             >
               Delete
             </button>
             <button
               onClick={() => toast.dismiss(t)}
-              className="px-3 py-1.5 bg-gray-200 text-gray-700 text-sm font-medium rounded hover:bg-gray-300 transition-colors"
+              className="px-3 py-1.5 bg-gray-200 text-gray-700 text-sm font-medium rounded hover:bg-gray-300 transition-colors cursor-pointer"
             >
               Cancel
             </button>
@@ -208,7 +214,7 @@ function CatalogueDetailPage() {
             <h2 className="text-lg font-semibold text-gray-900">Collections</h2>
             <button
               onClick={() => setModalState({ isOpen: true, mode: 'create' })}
-              className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
+              className="text-accent-600 hover:text-accent-700 text-sm font-medium cursor-pointer"
             >
               + Add
             </button>
@@ -225,7 +231,7 @@ function CatalogueDetailPage() {
                   key={collection.id}
                   className={`p-3 rounded-lg cursor-pointer transition-colors group ${
                     selectedCollectionId === collection.id
-                      ? 'bg-indigo-50 border-2 border-indigo-500'
+                      ? 'bg-indigo-50 border-2 border-accent-500'
                       : 'bg-gray-50 border-2 border-transparent hover:border-gray-300'
                   }`}
                   onClick={() => setSelectedCollectionId(collection.id)}
@@ -239,35 +245,27 @@ function CatalogueDetailPage() {
                         {collection.photoCount} photos
                       </p>
                     </div>
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setModalState({
-                            isOpen: true,
-                            mode: 'edit',
-                            initialData: collection,
-                          });
-                        }}
-                        className="p-1 text-gray-600 hover:text-indigo-600"
-                        title="Edit"
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        setCollectionContextMenu({
+                          x: rect.left,
+                          y: rect.bottom + 4,
+                          collection,
+                        });
+                      }}
+                      className="p-1 text-gray-600 hover:text-gray-900 cursor-pointer"
+                      title="More options"
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        ✎
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteCollection(
-                            collection.id,
-                            collection.name
-                          );
-                        }}
-                        className="p-1 text-gray-600 hover:text-red-600"
-                        title="Delete"
-                      >
-                        🗑
-                      </button>
-                    </div>
+                        <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
               ))}
@@ -277,7 +275,7 @@ function CatalogueDetailPage() {
               <p className="text-gray-500 mb-4">No collections yet</p>
               <button
                 onClick={() => setModalState({ isOpen: true, mode: 'create' })}
-                className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all"
+                className="px-4 py-2 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-all cursor-pointer"
               >
                 Create First Collection
               </button>
@@ -288,7 +286,7 @@ function CatalogueDetailPage() {
 
       <main
         {...getRootProps()}
-        className="flex-1 bg-gray-50 overflow-y-auto relative"
+        className="flex-1 bg-gray-50 overflow-y-auto relative cursor-pointer"
       >
         <input {...getInputProps()} />
 
@@ -318,7 +316,7 @@ function CatalogueDetailPage() {
         )}
 
         {isDragActive && selectedCollectionId && (
-          <div className="absolute inset-0 bg-indigo-600/10 backdrop-blur-sm flex items-center justify-center z-30 border-4 border-dashed border-indigo-500">
+          <div className="absolute inset-0 bg-accent-500/10 backdrop-blur-sm flex items-center justify-center z-30 border-4 border-dashed border-accent-500">
             <div className="bg-white rounded-2xl p-12 shadow-2xl text-center">
               <div className="text-6xl mb-4">📤</div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -335,11 +333,38 @@ function CatalogueDetailPage() {
 
       <CollectionModal
         isOpen={modalState.isOpen}
-        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        onClose={(createdCollectionId?: string) => {
+          setModalState({ ...modalState, isOpen: false });
+          // Switch to the newly created collection
+          if (createdCollectionId && modalState.mode === 'create') {
+            setSelectedCollectionId(createdCollectionId);
+          }
+        }}
         mode={modalState.mode}
         catalogueId={catalogueId}
         initialData={modalState.initialData}
       />
+
+      {collectionContextMenu && (
+        <CollectionContextMenu
+          x={collectionContextMenu.x}
+          y={collectionContextMenu.y}
+          onClose={() => setCollectionContextMenu(null)}
+          onEdit={() => {
+            setModalState({
+              isOpen: true,
+              mode: 'edit',
+              initialData: collectionContextMenu.collection,
+            });
+          }}
+          onDelete={() => {
+            handleDeleteCollection(
+              collectionContextMenu.collection.id,
+              collectionContextMenu.collection.name
+            );
+          }}
+        />
+      )}
 
       {uploadQueue.length > 0 && (
         <UploadQueue

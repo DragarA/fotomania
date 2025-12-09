@@ -40,7 +40,7 @@ export function PhotoGrid({
         {[...Array(10)].map((_, i) => (
           <div
             key={i}
-            className="aspect-square bg-gray-200 rounded-lg animate-pulse"
+            className="aspect-square bg-gray-200 rounded-lg animate-pulse cursor-pointer"
           />
         ))}
       </div>
@@ -119,7 +119,7 @@ export function PhotoGrid({
                 aria-label="Photo options"
               >
                 <svg
-                  className="w-5 h-5"
+                  className="w-5 h-5 cursor-pointer"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >

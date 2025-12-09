@@ -67,7 +67,7 @@ export function PhotoLightbox({
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-10 w-12 h-12 flex items-center justify-center text-white hover:bg-white/10 rounded-full transition-colors"
+        className="absolute top-4 right-4 z-10 w-12 h-12 flex items-center justify-center text-white hover:bg-white/10 rounded-full transition-colors cursor-pointer"
         aria-label="Close"
       >
         <svg
@@ -92,7 +92,7 @@ export function PhotoLightbox({
             e.stopPropagation();
             onPrevious();
           }}
-          className="absolute left-4 z-10 w-12 h-12 flex items-center justify-center text-white hover:bg-white/10 rounded-full transition-colors"
+          className="absolute left-4 z-10 w-12 h-12 flex items-center justify-center text-white hover:bg-white/10 rounded-full transition-colors cursor-pointer"
           aria-label="Previous photo"
         >
           <svg

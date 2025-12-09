@@ -11,9 +11,12 @@ import { catalogue } from '../common/db/schema/catalogues.schema';
 import { photo } from '../common/db/schema/photos.schema';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
-
+import * as fs from 'fs'
+import * as path from 'path';
 @Injectable()
 export class CollectionsService {
+  private uploadRoot = path.resolve('./uploads');
+  
   constructor(@Inject(DRIZZLE) private readonly db: DrizzleDB) {}
 
   async create(createCollectionDto: CreateCollectionDto, ownerId: string) {
@@ -132,6 +135,8 @@ export class CollectionsService {
     if (!existing) {
       throw new NotFoundException(`Collection with ID ${id} not found`);
     }
+
+    fs.rmdirSync(path.join(this.uploadRoot, 'collections', id), { recursive: true });
 
     await this.db.delete(collection).where(eq(collection.id, id));
 

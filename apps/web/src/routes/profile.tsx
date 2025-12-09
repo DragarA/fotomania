@@ -21,9 +21,9 @@ function ProfilePage() {
     <div className="max-w-4xl mx-auto">
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden mt-10">
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-12 text-white">
+        <div className="bg-accent-500 px-8 py-12 text-white">
           <div className="flex items-center space-x-4">
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-indigo-600 text-3xl font-bold">
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-accent-600 text-3xl font-bold">
               {user.name?.charAt(0).toUpperCase() || 'U'}
             </div>
             <div>
@@ -44,7 +44,7 @@ function ProfilePage() {
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
                     <svg
-                      className="w-6 h-6 text-indigo-600"
+                      className="w-6 h-6 text-accent-600 cursor-pointer"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ function ProfilePage() {
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
                     <svg
-                      className="w-6 h-6 text-indigo-600"
+                      className="w-6 h-6 text-accent-600 cursor-pointer"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -92,7 +92,7 @@ function ProfilePage() {
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
                     <svg
-                      className="w-6 h-6 text-indigo-600"
+                      className="w-6 h-6 text-accent-600 cursor-pointer"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -128,7 +128,7 @@ function ProfilePage() {
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
                     <svg
-                      className="w-6 h-6 text-indigo-600"
+                      className="w-6 h-6 text-accent-600 cursor-pointer"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -157,10 +157,10 @@ function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Link
                   to="/catalogues"
-                  className="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors"
+                  className="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-lg hover:border-accent-500 hover:bg-indigo-50 transition-colors cursor-pointer"
                 >
                   <svg
-                    className="w-5 h-5 text-gray-600"
+                    className="w-5 h-5 text-gray-600 cursor-pointer"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -177,10 +177,10 @@ function ProfilePage() {
 
                 <Link
                   to="/catalogues/new"
-                  className="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors"
+                  className="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-lg hover:border-accent-500 hover:bg-indigo-50 transition-colors cursor-pointer"
                 >
                   <svg
-                    className="w-5 h-5 text-gray-600"
+                    className="w-5 h-5 text-gray-600 cursor-pointer"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -195,9 +195,9 @@ function ProfilePage() {
                   <span className="font-medium text-gray-700">New catalogue</span>
                 </Link>
 
-                <button className="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-colors">
+                <button className="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-lg hover:border-accent-500 hover:bg-indigo-50 transition-colors cursor-pointer">
                   <svg
-                    className="w-5 h-5 text-gray-600"
+                    className="w-5 h-5 text-gray-600 cursor-pointer"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

@@ -59,7 +59,7 @@ export function PhotoContextMenu({
       label: 'Open',
       icon: (
         <svg
-          className="w-4 h-4"
+          className="w-4 h-4 cursor-pointer"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -84,7 +84,7 @@ export function PhotoContextMenu({
       label: 'Download',
       icon: (
         <svg
-          className="w-4 h-4"
+          className="w-4 h-4 cursor-pointer"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -103,7 +103,7 @@ export function PhotoContextMenu({
       label: 'Delete',
       icon: (
         <svg
-          className="w-4 h-4"
+          className="w-4 h-4 cursor-pointer"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -124,7 +124,7 @@ export function PhotoContextMenu({
   return (
     <div
       ref={menuRef}
-      className="fixed z-50 bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[160px]"
+      className="fixed z-50 bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[160px] cursor-pointer"
       style={{ left: x, top: y }}
     >
       {menuItems.map((item, index) => (

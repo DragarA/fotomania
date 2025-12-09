@@ -76,6 +76,11 @@ export function useUploadPhotoMutation() {
         queryKey: ['photos', collectionId],
       });
 
+      // Invalidate collections query to update photo counts
+      queryClient.invalidateQueries({
+        queryKey: ['collections'],
+      });
+
       // Optionally cache the individual photo
       queryClient.setQueryData(['photos', photo.id], photo);
     },
@@ -97,6 +102,12 @@ export function useDeletePhotoMutation() {
       queryClient.invalidateQueries({
         queryKey: ['photos', collectionId],
       });
+
+      // Invalidate collections query to update photo counts
+      queryClient.invalidateQueries({
+        queryKey: ['collections'],
+      });
+
       toast.success('Photo deleted successfully');
     },
     onError: (error: Error) => {

@@ -38,7 +38,7 @@ function PublicCataloguePage() {
           <img src={data.coverImage} alt="" className="w-full h-72 object-cover" />
         )}
         <div className="p-10">
-          <p className="text-sm font-semibold text-indigo-600 uppercase tracking-widest mb-2">
+          <p className="text-sm font-semibold text-accent-600 uppercase tracking-widest mb-2">
             Client Gallery
           </p>
           <h1 className="text-4xl font-bold text-gray-900">{data.title}</h1>

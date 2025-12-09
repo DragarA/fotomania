@@ -23,15 +23,15 @@ function CataloguesPage() {
         </div>
         <Link
           to="/catalogues/new"
-          className="inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg shadow hover:from-indigo-700 hover:to-purple-700 transition-all"
+          className="inline-flex items-center justify-center px-4 py-3 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors"
         >
           + Create Catalogue
         </Link>
       </div>
 
       {isLoading ? (
-        <div className="bg-white rounded-xl shadow p-8 text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-accent-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading catalogues...</p>
         </div>
       ) : isError ? (
@@ -43,7 +43,7 @@ function CataloguesPage() {
           {data.map((catalogue) => (
             <div
               key={catalogue.id}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col"
+              className="bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col"
             >
               {catalogue.coverImage && (
                 <img
@@ -65,7 +65,7 @@ function CataloguesPage() {
                   <Link
                     to="/catalogues/$catalogueId"
                     params={{ catalogueId: catalogue.id }}
-                    className="text-indigo-600 font-semibold hover:text-indigo-800"
+                    className="text-accent-600 font-semibold hover:text-accent-700"
                   >
                     View
                   </Link>
@@ -81,7 +81,7 @@ function CataloguesPage() {
                     <Link
                       to="/c/$slug"
                       params={{ slug: catalogue.publicUrlSlug }}
-                      className="text-indigo-600 underline"
+                      className="text-accent-600 underline"
                     >
                       /c/{catalogue.publicUrlSlug}
                     </Link>
@@ -105,7 +105,7 @@ function CataloguesPage() {
                 <Link
                   to="/catalogues/$catalogueId"
                   params={{ catalogueId: catalogue.id }}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                  className="px-4 py-2 bg-accent-500 text-white rounded-lg hover:bg-accent-600 transition-colors"
                 >
                   Manage
                 </Link>
@@ -114,7 +114,7 @@ function CataloguesPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow p-10 text-center">
+        <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
           <h2 className="text-2xl font-semibold text-gray-900 mb-3">
             No catalogues yet
           </h2>
@@ -123,7 +123,7 @@ function CataloguesPage() {
           </p>
           <Link
             to="/catalogues/new"
-            className="inline-flex items-center px-5 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors"
+            className="inline-flex items-center px-5 py-3 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors"
           >
             Create Catalogue
           </Link>

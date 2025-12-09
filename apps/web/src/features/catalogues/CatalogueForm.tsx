@@ -45,7 +45,7 @@ export function CatalogueForm({
           className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
             errors.title
               ? 'border-red-500'
-              : 'border-gray-200 focus:border-indigo-500'
+              : 'border-gray-200 focus:border-accent-500'
           }`}
           placeholder="Summer Wedding 2024"
         />
@@ -68,7 +68,7 @@ export function CatalogueForm({
           className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors min-h-[120px] ${
             errors.description
               ? 'border-red-500'
-              : 'border-gray-200 focus:border-indigo-500'
+              : 'border-gray-200 focus:border-accent-500'
           }`}
           placeholder="Share a short description for your clients..."
         />
@@ -94,7 +94,7 @@ export function CatalogueForm({
           className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
             errors.password
               ? 'border-red-500'
-              : 'border-gray-200 focus:border-indigo-500'
+              : 'border-gray-200 focus:border-accent-500'
           }`}
           placeholder="Leave blank to keep current password"
         />
@@ -107,7 +107,7 @@ export function CatalogueForm({
       <button
         type="submit"
         disabled={isSubmitting || !isDirty}
-        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-accent-500 text-white font-semibold py-3 rounded-lg hover:bg-accent-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting ? `${submitLabel}...` : submitLabel}
       </button>

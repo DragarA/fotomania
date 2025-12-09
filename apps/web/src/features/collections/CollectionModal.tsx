@@ -14,7 +14,7 @@ import {
 
 interface CollectionModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (createdCollectionId?: string) => void;
   mode: 'create' | 'edit';
   catalogueId: string;
   initialData?: {
@@ -59,8 +59,8 @@ export function CollectionModal({
   const onSubmit = (values: CollectionFormValues) => {
     if (mode === 'create') {
       createMutation.mutate(values, {
-        onSuccess: () => {
-          onClose();
+        onSuccess: (data) => {
+          onClose(data.id);
           reset();
         },
       });
@@ -90,7 +90,7 @@ export function CollectionModal({
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-semibold text-gray-700 mb-2"
+              className="block text-sm font-semibold text-gray-700 mb-2 cursor-pointer"
             >
               Collection Name
             </label>
@@ -100,7 +100,7 @@ export function CollectionModal({
               className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none transition-colors ${
                 errors.name
                   ? 'border-red-500'
-                  : 'border-gray-200 focus:border-indigo-500'
+                  : 'border-gray-200 focus:border-accent-500'
               }`}
               placeholder="Ceremony Photos"
             />
@@ -113,7 +113,7 @@ export function CollectionModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-2 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all disabled:opacity-50"
+              className="flex-1 bg-accent-500 text-white font-semibold py-2 rounded-lg hover:bg-accent-600 transition-all disabled:opacity-50 cursor-pointer"
             >
               {isSubmitting
                 ? mode === 'create'
@@ -126,7 +126,7 @@ export function CollectionModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-300 transition-colors"
+              className="flex-1 bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-300 transition-colors cursor-pointer"
             >
               Cancel
             </button>

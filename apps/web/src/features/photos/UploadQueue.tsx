@@ -26,7 +26,7 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
       <div className="rounded-lg bg-white shadow-2xl border border-gray-200">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors rounded-t-lg"
+          className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors rounded-t-lg cursor-pointer"
         >
           <div className="flex items-center gap-2">
             <span className="text-lg">📤</span>
@@ -47,14 +47,14 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
               {files.map((file) => (
                 <div
                   key={file.id}
-                  className="px-4 py-3 border-b border-gray-100 last:border-b-0"
+                  className="px-4 py-3 border-b border-gray-100 last:border-b-0 cursor-pointer"
                 >
                   <div className="flex items-start gap-3">
                     <div className="w-12 h-12 rounded overflow-hidden bg-gray-100 flex-shrink-0">
                       <img
                         src={file.preview}
                         alt={file.file.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover cursor-pointer"
                       />
                     </div>
 
@@ -65,7 +65,7 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
                         </span>
                         <div className="flex items-center gap-2 flex-shrink-0">
                           {file.status === 'uploading' && (
-                            <span className="text-indigo-600 text-lg animate-spin">
+                            <span className="text-accent-600 text-lg animate-spin">
                               ⏳
                             </span>
                           )}
@@ -77,7 +77,7 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
                           )}
                           <button
                             onClick={() => onRemove(file.id)}
-                            className="text-gray-400 hover:text-gray-600 text-lg leading-none"
+                            className="text-gray-400 hover:text-gray-600 text-lg leading-none cursor-pointer"
                             title="Remove"
                           >
                             ×
@@ -89,7 +89,7 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
                         <div className="space-y-1">
                           <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                             <div
-                              className="bg-indigo-600 h-2 rounded-full transition-all duration-200"
+                              className="bg-accent-500 h-2 rounded-full transition-all duration-200 cursor-pointer"
                               style={{ width: `${file.progress}%` }}
                             />
                           </div>
@@ -110,7 +110,7 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
                           <span className="text-xs text-red-600 block">
                             {file.error || 'Upload failed'}
                           </span>
-                          <button className="text-xs text-indigo-600 hover:text-indigo-700 font-medium">
+                          <button className="text-xs text-accent-600 hover:text-accent-700 font-medium cursor-pointer">
                             Retry
                           </button>
                         </div>
@@ -125,7 +125,7 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
               <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
                 <button
                   onClick={onClear}
-                  className="w-full text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors"
+                  className="w-full text-sm font-medium text-accent-600 hover:text-accent-700 transition-colors cursor-pointer"
                 >
                   Clear Completed
                 </button>

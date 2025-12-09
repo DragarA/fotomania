@@ -33,7 +33,7 @@ function CreateCataloguePage() {
     <div className="max-w-3xl mx-auto px-4 py-10">
       <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
         <div className="mb-8">
-          <p className="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-2">
+          <p className="text-sm font-semibold text-accent-600 uppercase tracking-wide mb-2">
             New Catalogue
           </p>
           <h1 className="text-3xl font-bold text-gray-900">Create a catalogue</h1>

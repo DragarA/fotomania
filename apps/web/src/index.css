@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+@theme {
+  /* Pastel Blue Accent Color Palette */
+  --color-accent-50: #f0f7ff;
+  --color-accent-100: #e0f0ff;
+  --color-accent-200: #bae0ff;
+  --color-accent-300: #7cc5ff;
+  --color-accent-400: #38a8ff;
+  --color-accent-500: #0e8aff;
+  --color-accent-600: #006dd6;
+  --color-accent-700: #0056ad;
+  --color-accent-800: #00458a;
+  --color-accent-900: #003768;
+
+  /* Neutral Grays for Light Theme */
+  --color-gray-50: #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e5e5e5;
+  --color-gray-300: #d4d4d4;
+  --color-gray-400: #a3a3a3;
+  --color-gray-500: #737373;
+  --color-gray-600: #525252;
+  --color-gray-700: #404040;
+  --color-gray-800: #262626;
+  --color-gray-900: #171717;
+}

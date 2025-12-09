@@ -18,8 +18,8 @@ function RegisterPage() {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-8">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gray-50 p-8">
+      <div className="bg-white rounded-lg border border-gray-200 p-8 max-w-md w-full">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
           <p className="text-gray-600">
@@ -33,7 +33,7 @@ function RegisterPage() {
           <span className="text-gray-600 mr-2">Already have an account?</span>
           <Link
             to="/login"
-            className="text-indigo-600 font-semibold hover:text-indigo-700 underline"
+            className="text-accent-600 font-semibold hover:text-accent-700 underline"
           >
             Sign in
           </Link>
@@ -82,7 +82,7 @@ function RegisterForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent-500 transition-colors"
           placeholder="John Doe"
           autoComplete="name"
         />
@@ -98,7 +98,7 @@ function RegisterForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent-500 transition-colors"
           placeholder="you@example.com"
           autoComplete="email"
         />
@@ -117,7 +117,7 @@ function RegisterForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
+          className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent-500 transition-colors"
           placeholder="Create a strong password"
           autoComplete="new-password"
         />
@@ -130,7 +130,7 @@ function RegisterForm() {
       <button
         type="submit"
         disabled={registerMutation.isPending}
-        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-accent-500 text-white font-semibold py-3 rounded-lg hover:bg-accent-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {registerMutation.isPending ? 'Creating account...' : 'Create Account'}
       </button>
