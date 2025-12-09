@@ -104,15 +104,17 @@ describe('CataloguesController (e2e)', () => {
   describe('GET /catalogues', () => {
     it('should return all catalogues for the authenticated user', async () => {
       const mockCatalogues = [
-        TestDataFactory.createCatalogue({ ownerId: testUser.id }),
-        TestDataFactory.createCatalogue({ ownerId: testUser.id }),
+        { catalogue: TestDataFactory.createCatalogue({ ownerId: testUser.id }), photoCount: 5 },
+        { catalogue: TestDataFactory.createCatalogue({ ownerId: testUser.id }), photoCount: 10 },
       ];
 
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
-          innerJoin: jest.fn().mockReturnValue({
-            innerJoin: jest.fn().mockReturnValue({
-              where: jest.fn().mockResolvedValue(mockCatalogues),
+          leftJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              groupBy: jest.fn().mockReturnValue({
+                where: jest.fn().mockResolvedValue(mockCatalogues),
+              }),
             }),
           }),
         }),
@@ -125,6 +127,7 @@ describe('CataloguesController (e2e)', () => {
 
       expect(response.body).toHaveLength(2);
       expect(response.body[0]).toHaveProperty('id');
+      expect(response.body[0]).toHaveProperty('photoCount');
     });
   });
 

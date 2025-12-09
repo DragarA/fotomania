@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerFindBySlugData, CataloguesControllerFindBySlugResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerFindBySlugData, CataloguesControllerFindBySlugResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -196,7 +196,7 @@ export class CataloguesService {
             body: data.requestBody,
             mediaType: 'application/json',
             errors: {
-                409: 'URL slug already exists'
+                400: 'Invalid request data'
             }
         });
     }
@@ -217,7 +217,7 @@ export class CataloguesService {
      * Get a catalogue by ID
      * @param data The data for the request.
      * @param data.id Catalogue ID
-     * @returns unknown Returns the catalogue
+     * @returns CatalogueResDto Returns the catalogue
      * @throws ApiError
      */
     public static cataloguesControllerFindOne(data: CataloguesControllerFindOneData): CancelablePromise<CataloguesControllerFindOneResponse> {
@@ -238,7 +238,7 @@ export class CataloguesService {
      * @param data The data for the request.
      * @param data.id Catalogue ID
      * @param data.requestBody
-     * @returns unknown Catalogue updated successfully
+     * @returns CatalogueResDto Catalogue updated successfully
      * @throws ApiError
      */
     public static cataloguesControllerUpdate(data: CataloguesControllerUpdateData): CancelablePromise<CataloguesControllerUpdateResponse> {
@@ -282,7 +282,7 @@ export class CataloguesService {
      * Get a catalogue by public URL slug
      * @param data The data for the request.
      * @param data.slug Public URL slug
-     * @returns unknown Returns the catalogue
+     * @returns CatalogueResDto Returns the catalogue
      * @throws ApiError
      */
     public static cataloguesControllerFindBySlug(data: CataloguesControllerFindBySlugData): CancelablePromise<CataloguesControllerFindBySlugResponse> {
@@ -294,6 +294,117 @@ export class CataloguesService {
             },
             errors: {
                 404: 'Catalogue not found'
+            }
+        });
+    }
+    
+}
+
+export class CollectionsService {
+    /**
+     * Create a new collection
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns CollectionResDto Collection created successfully
+     * @throws ApiError
+     */
+    public static collectionsControllerCreate(data: CollectionsControllerCreateData): CancelablePromise<CollectionsControllerCreateResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/collections',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                400: 'Invalid request data',
+                403: 'Forbidden',
+                404: 'Catalogue not found'
+            }
+        });
+    }
+    
+    /**
+     * Get all collections for a catalogue
+     * @param data The data for the request.
+     * @param data.catalogueId Catalogue ID to filter collections
+     * @returns CollectionResDto Returns all collections for the catalogue
+     * @throws ApiError
+     */
+    public static collectionsControllerFindAll(data: CollectionsControllerFindAllData): CancelablePromise<CollectionsControllerFindAllResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/collections',
+            query: {
+                catalogueId: data.catalogueId
+            },
+            errors: {
+                403: 'Forbidden',
+                404: 'Catalogue not found'
+            }
+        });
+    }
+    
+    /**
+     * Get a collection by ID
+     * @param data The data for the request.
+     * @param data.id Collection ID
+     * @returns CollectionResDto Returns the collection
+     * @throws ApiError
+     */
+    public static collectionsControllerFindOne(data: CollectionsControllerFindOneData): CancelablePromise<CollectionsControllerFindOneResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/collections/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                403: 'Forbidden',
+                404: 'Collection not found'
+            }
+        });
+    }
+    
+    /**
+     * Update a collection
+     * @param data The data for the request.
+     * @param data.id Collection ID
+     * @param data.requestBody
+     * @returns CollectionResDto Collection updated successfully
+     * @throws ApiError
+     */
+    public static collectionsControllerUpdate(data: CollectionsControllerUpdateData): CancelablePromise<CollectionsControllerUpdateResponse> {
+        return __request(OpenAPI, {
+            method: 'PATCH',
+            url: '/collections/{id}',
+            path: {
+                id: data.id
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                403: 'Forbidden',
+                404: 'Collection not found'
+            }
+        });
+    }
+    
+    /**
+     * Delete a collection
+     * @param data The data for the request.
+     * @param data.id Collection ID
+     * @returns unknown Collection deleted successfully
+     * @throws ApiError
+     */
+    public static collectionsControllerRemove(data: CollectionsControllerRemoveData): CancelablePromise<CollectionsControllerRemoveResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/collections/{id}',
+            path: {
+                id: data.id
+            },
+            errors: {
+                403: 'Forbidden',
+                404: 'Collection not found'
             }
         });
     }

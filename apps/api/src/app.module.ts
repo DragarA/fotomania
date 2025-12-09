@@ -7,6 +7,7 @@ import { AuthModule } from './common/auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { DbModule } from './common/db/db.module';
 import { CataloguesModule } from './catalogues/catalogues.module';
+import { CollectionsModule } from './collections/collections.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CataloguesModule } from './catalogues/catalogues.module';
     AuthModule,
     UsersModule,
     CataloguesModule,
+    CollectionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

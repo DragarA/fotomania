@@ -99,6 +99,51 @@ export type UpdateCatalogueDtoClass = {
     password?: string;
 };
 
+export type CreateCollectionDtoClass = {
+    /**
+     * Collection name
+     */
+    name: string;
+    /**
+     * ID of the catalogue this collection belongs to
+     */
+    catalogueId: string;
+};
+
+export type CollectionResDto = {
+    /**
+     * Unique identifier for the collection
+     */
+    id: string;
+    /**
+     * Name of the collection
+     */
+    name: string;
+    /**
+     * ID of the catalogue this collection belongs to
+     */
+    catalogueId: string;
+    /**
+     * Timestamp when the collection was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the collection was last updated
+     */
+    updatedAt: string;
+    /**
+     * Number of photos in the collection
+     */
+    photoCount: number;
+};
+
+export type UpdateCollectionDtoClass = {
+    /**
+     * Collection name
+     */
+    name?: string;
+};
+
 export type AppControllerGetHelloResponse = unknown;
 
 export type AppControllerHealthCheckResponse = unknown;
@@ -158,7 +203,7 @@ export type CataloguesControllerFindOneData = {
     id: string;
 };
 
-export type CataloguesControllerFindOneResponse = unknown;
+export type CataloguesControllerFindOneResponse = CatalogueResDto;
 
 export type CataloguesControllerUpdateData = {
     /**
@@ -168,7 +213,7 @@ export type CataloguesControllerUpdateData = {
     requestBody: UpdateCatalogueDtoClass;
 };
 
-export type CataloguesControllerUpdateResponse = unknown;
+export type CataloguesControllerUpdateResponse = CatalogueResDto;
 
 export type CataloguesControllerRemoveData = {
     /**
@@ -186,7 +231,50 @@ export type CataloguesControllerFindBySlugData = {
     slug: string;
 };
 
-export type CataloguesControllerFindBySlugResponse = unknown;
+export type CataloguesControllerFindBySlugResponse = CatalogueResDto;
+
+export type CollectionsControllerCreateData = {
+    requestBody: CreateCollectionDtoClass;
+};
+
+export type CollectionsControllerCreateResponse = CollectionResDto;
+
+export type CollectionsControllerFindAllData = {
+    /**
+     * Catalogue ID to filter collections
+     */
+    catalogueId: string;
+};
+
+export type CollectionsControllerFindAllResponse = Array<CollectionResDto>;
+
+export type CollectionsControllerFindOneData = {
+    /**
+     * Collection ID
+     */
+    id: string;
+};
+
+export type CollectionsControllerFindOneResponse = CollectionResDto;
+
+export type CollectionsControllerUpdateData = {
+    /**
+     * Collection ID
+     */
+    id: string;
+    requestBody: UpdateCollectionDtoClass;
+};
+
+export type CollectionsControllerUpdateResponse = CollectionResDto;
+
+export type CollectionsControllerRemoveData = {
+    /**
+     * Collection ID
+     */
+    id: string;
+};
+
+export type CollectionsControllerRemoveResponse = unknown;
 
 export type $OpenApiTs = {
     '/': {
@@ -313,9 +401,9 @@ export type $OpenApiTs = {
                  */
                 201: CatalogueResDto;
                 /**
-                 * URL slug already exists
+                 * Invalid request data
                  */
-                409: unknown;
+                400: unknown;
             };
         };
         get: {
@@ -334,7 +422,7 @@ export type $OpenApiTs = {
                 /**
                  * Returns the catalogue
                  */
-                200: unknown;
+                200: CatalogueResDto;
                 /**
                  * Catalogue not found
                  */
@@ -347,7 +435,7 @@ export type $OpenApiTs = {
                 /**
                  * Catalogue updated successfully
                  */
-                200: unknown;
+                200: CatalogueResDto;
                 /**
                  * Forbidden
                  */
@@ -383,9 +471,102 @@ export type $OpenApiTs = {
                 /**
                  * Returns the catalogue
                  */
-                200: unknown;
+                200: CatalogueResDto;
                 /**
                  * Catalogue not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/collections': {
+        post: {
+            req: CollectionsControllerCreateData;
+            res: {
+                /**
+                 * Collection created successfully
+                 */
+                201: CollectionResDto;
+                /**
+                 * Invalid request data
+                 */
+                400: unknown;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Catalogue not found
+                 */
+                404: unknown;
+            };
+        };
+        get: {
+            req: CollectionsControllerFindAllData;
+            res: {
+                /**
+                 * Returns all collections for the catalogue
+                 */
+                200: Array<CollectionResDto>;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Catalogue not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/collections/{id}': {
+        get: {
+            req: CollectionsControllerFindOneData;
+            res: {
+                /**
+                 * Returns the collection
+                 */
+                200: CollectionResDto;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Collection not found
+                 */
+                404: unknown;
+            };
+        };
+        patch: {
+            req: CollectionsControllerUpdateData;
+            res: {
+                /**
+                 * Collection updated successfully
+                 */
+                200: CollectionResDto;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Collection not found
+                 */
+                404: unknown;
+            };
+        };
+        delete: {
+            req: CollectionsControllerRemoveData;
+            res: {
+                /**
+                 * Collection deleted successfully
+                 */
+                200: unknown;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Collection not found
                  */
                 404: unknown;
             };

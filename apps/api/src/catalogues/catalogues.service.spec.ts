@@ -69,15 +69,17 @@ describe('CataloguesService', () => {
     it('should return all catalogues for a specific owner', async () => {
       const ownerId = 'user-123';
       const mockCatalogues = [
-        { id: '1', title: 'Cat 1', ownerId },
-        { id: '2', title: 'Cat 2', ownerId },
+        { catalogue: { id: '1', title: 'Cat 1', ownerId }, photoCount: 5 },
+        { catalogue: { id: '2', title: 'Cat 2', ownerId }, photoCount: 10 },
       ];
 
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
-          innerJoin: jest.fn().mockReturnValue({
-            innerJoin: jest.fn().mockReturnValue({
-              where: jest.fn().mockResolvedValue(mockCatalogues),
+          leftJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              groupBy: jest.fn().mockReturnValue({
+                where: jest.fn().mockResolvedValue(mockCatalogues),
+              }),
             }),
           }),
         }),
@@ -86,7 +88,8 @@ describe('CataloguesService', () => {
       const result = await service.findAll(ownerId);
 
       expect(result).toHaveLength(2);
-      expect(result).toEqual(mockCatalogues);
+      expect(result[0]!.photoCount).toBe(5);
+      expect(result[1]!.photoCount).toBe(10);
     });
   });
 

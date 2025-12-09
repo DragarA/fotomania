@@ -130,3 +130,70 @@ export const $UpdateCatalogueDtoClass = {
         }
     }
 } as const;
+
+export const $CreateCollectionDtoClass = {
+    type: 'object',
+    properties: {
+        name: {
+            type: 'string',
+            description: 'Collection name',
+            example: 'Ceremony Photos'
+        },
+        catalogueId: {
+            type: 'string',
+            description: 'ID of the catalogue this collection belongs to',
+            example: '550e8400-e29b-41d4-a716-446655440000'
+        }
+    },
+    required: ['name', 'catalogueId']
+} as const;
+
+export const $CollectionResDto = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: 'Unique identifier for the collection',
+            example: '550e8400-e29b-41d4-a716-446655440000'
+        },
+        name: {
+            type: 'string',
+            description: 'Name of the collection',
+            example: 'Ceremony Photos'
+        },
+        catalogueId: {
+            type: 'string',
+            description: 'ID of the catalogue this collection belongs to',
+            example: '550e8400-e29b-41d4-a716-446655440001'
+        },
+        createdAt: {
+            format: 'date-time',
+            type: 'string',
+            description: 'Timestamp when the collection was created',
+            example: '2024-12-08T19:00:00.000Z'
+        },
+        updatedAt: {
+            format: 'date-time',
+            type: 'string',
+            description: 'Timestamp when the collection was last updated',
+            example: '2024-12-08T19:30:00.000Z'
+        },
+        photoCount: {
+            type: 'number',
+            description: 'Number of photos in the collection',
+            example: 42
+        }
+    },
+    required: ['id', 'name', 'catalogueId', 'createdAt', 'updatedAt', 'photoCount']
+} as const;
+
+export const $UpdateCollectionDtoClass = {
+    type: 'object',
+    properties: {
+        name: {
+            type: 'string',
+            description: 'Collection name',
+            example: 'Ceremony Photos'
+        }
+    }
+} as const;
