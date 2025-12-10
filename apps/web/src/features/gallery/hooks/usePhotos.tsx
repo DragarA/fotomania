@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { OpenAPI, PhotosService, PublicService } from '@repo/sdk';
 import { toast } from 'sonner';
 import { API_BASE_URL } from '../../../lib/api-client';
-import { uploadWithProgress } from '../../photos/upload-helper';
+import { uploadWithProgress } from '../utils/upload-helper';
 import type { Photo, UploadPhotoParams } from '../types';
 
 export function usePhotosQuery(collectionId: string | null) {
