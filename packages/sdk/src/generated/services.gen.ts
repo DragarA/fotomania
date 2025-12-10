@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerFindBySlugData, CataloguesControllerFindBySlugResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -279,26 +279,6 @@ export class CataloguesService {
     }
     
     /**
-     * Get a catalogue by public URL slug
-     * @param data The data for the request.
-     * @param data.slug Public URL slug
-     * @returns CatalogueResDto Returns the catalogue
-     * @throws ApiError
-     */
-    public static cataloguesControllerFindBySlug(data: CataloguesControllerFindBySlugData): CancelablePromise<CataloguesControllerFindBySlugResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/catalogues/slug/{slug}',
-            path: {
-                slug: data.slug
-            },
-            errors: {
-                404: 'Catalogue not found'
-            }
-        });
-    }
-    
-    /**
      * Set a photo as catalogue cover
      * @param data The data for the request.
      * @param data.catalogueId Catalogue ID
@@ -519,6 +499,51 @@ export class PhotosService {
             errors: {
                 403: 'Forbidden',
                 404: 'Photo not found'
+            }
+        });
+    }
+    
+}
+
+export class PublicService {
+    /**
+     * Get public catalogue data by public URL slug
+     * @param data The data for the request.
+     * @param data.slug Public URL slug
+     * @returns CataloguePublicResDto Returns the catalogue
+     * @throws ApiError
+     */
+    public static publicControllerFindBySlug(data: PublicControllerFindBySlugData): CancelablePromise<PublicControllerFindBySlugResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/public/catalogue/{slug}',
+            path: {
+                slug: data.slug
+            },
+            errors: {
+                404: 'Catalogue not found'
+            }
+        });
+    }
+    
+    /**
+     * Get photos for a public collection
+     * @param data The data for the request.
+     * @param data.slug Public URL slug
+     * @param data.collectionId Collection ID
+     * @returns CollectionPhotoPublicResDto Returns the photos
+     * @throws ApiError
+     */
+    public static publicControllerFindCollectionPhotosBySlug(data: PublicControllerFindCollectionPhotosBySlugData): CancelablePromise<PublicControllerFindCollectionPhotosBySlugResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/public/catalogue/{slug}/collection/{collectionId}/photos',
+            path: {
+                slug: data.slug,
+                collectionId: data.collectionId
+            },
+            errors: {
+                404: 'Collection not found'
             }
         });
     }

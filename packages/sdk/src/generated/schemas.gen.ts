@@ -267,3 +267,129 @@ export const $PhotoResDto = {
     },
     required: ['id', 'originalFileName', 'storagePath', 'mimeType', 'collectionId', 'createdAt', 'updatedAt']
 } as const;
+
+export const $CollectionPublicResDto = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: 'Unique identifier of the collection',
+            example: 'd63bb7c9-b5b3-4d91-89a9-32fd573017cc'
+        },
+        name: {
+            type: 'string',
+            description: 'Display name of the collection',
+            example: 'Ceremony'
+        }
+    },
+    required: ['id', 'name']
+} as const;
+
+export const $CataloguePublicResDto = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: 'Unique identifier of the catalogue',
+            example: '7a934018-12bd-4501-9e7f-8d2b9669dcfb'
+        },
+        title: {
+            type: 'string',
+            description: 'Display title of the catalogue',
+            example: 'Summer Wedding 2024'
+        },
+        description: {
+            type: 'object',
+            description: 'Optional description presented on the public page'
+        },
+        coverImage: {
+            type: 'object',
+            description: 'Optional cover image that will be shown to guests',
+            example: '/uploads/catalogues/cat-123/cover.jpg'
+        },
+        publicUrlSlug: {
+            type: 'string',
+            description: 'Slug that identifies the catalogue in public routes',
+            example: 'c0b4bf8c-0757-4c8d-bfa1-aa4a8f7bbf72'
+        },
+        createdAt: {
+            format: 'date-time',
+            type: 'string',
+            description: 'Creation timestamp of the catalogue',
+            example: '2024-02-05T10:15:32.000Z'
+        },
+        updatedAt: {
+            format: 'date-time',
+            type: 'string',
+            description: 'Last modification timestamp of the catalogue',
+            example: '2024-02-10T19:04:12.000Z'
+        },
+        collections: {
+            description: 'Collections grouped under this catalogue',
+            type: 'array',
+            items: {
+                '$ref': '#/components/schemas/CollectionPublicResDto'
+            }
+        }
+    },
+    required: ['id', 'title', 'publicUrlSlug', 'createdAt', 'updatedAt', 'collections']
+} as const;
+
+export const $CollectionPhotoPublicResDto = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: 'Unique identifier of the photo',
+            example: '9b5c4e28-2bd3-4e43-9f75-7dd29586a7b4'
+        },
+        originalFileName: {
+            type: 'string',
+            description: 'Original filename uploaded by the photographer',
+            example: 'IMG_1042.CR3'
+        },
+        storagePath: {
+            type: 'string',
+            description: 'Relative path to the processed photo asset',
+            example: '/uploads/collections/1234/abcd.jpg'
+        },
+        thumbnailPath: {
+            type: 'object',
+            description: 'Relative path to the thumbnail image, if generated',
+            example: '/uploads/collections/1234/thumb_abcd.jpg'
+        },
+        mimeType: {
+            type: 'string',
+            description: 'Mime type of the stored photo',
+            example: 'image/jpeg'
+        },
+        width: {
+            type: 'object',
+            description: 'Image width in pixels, if available',
+            example: 2400
+        },
+        height: {
+            type: 'object',
+            description: 'Image height in pixels, if available',
+            example: 1600
+        },
+        size: {
+            type: 'object',
+            description: 'File size in bytes, if available',
+            example: 5463221
+        },
+        createdAt: {
+            format: 'date-time',
+            type: 'string',
+            description: 'Timestamp when the photo was uploaded',
+            example: '2024-03-04T19:55:11.000Z'
+        },
+        updatedAt: {
+            format: 'date-time',
+            type: 'string',
+            description: 'Timestamp when the photo metadata was last updated',
+            example: '2024-03-05T10:12:42.000Z'
+        }
+    },
+    required: ['id', 'originalFileName', 'storagePath', 'mimeType', 'createdAt', 'updatedAt']
+} as const;

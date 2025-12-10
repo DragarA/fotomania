@@ -9,7 +9,7 @@ import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
 import { catalogue } from '../common/db/schema/catalogues.schema';
 import { CreateCatalogueDto } from './dto/create-catalogue.dto';
 import { UpdateCatalogueDto } from './dto/update-catalogue.dto';
-import { v4 as uuid } from 'uuid'
+import { v4 as uuid } from 'uuid';
 import { collection } from '../common/db/schema/collections.schema';
 import { photo } from '../common/db/schema/photos.schema';
 
@@ -18,7 +18,7 @@ export class CataloguesService {
   constructor(@Inject(DRIZZLE) private readonly db: DrizzleDB) {}
 
   async create(createCatalogueDto: CreateCatalogueDto, ownerId: string) {
-    const publicUrlSlug = uuid()
+    const publicUrlSlug = uuid();
 
     const id = crypto.randomUUID();
     const now = new Date();
@@ -40,19 +40,22 @@ export class CataloguesService {
 
   async findAll(ownerId: string) {
     return this.db
-        .select({
-          catalogue,
-          photoCount: count(photo.id),
-        })
-        .from(catalogue)
-        .leftJoin(collection, eq(catalogue.id, collection.catalogueId))
-        .leftJoin(photo, eq(collection.id, photo.collectionId))
-        .groupBy(catalogue.id)
-        .where(eq(catalogue.ownerId, ownerId));
+      .select({
+        catalogue,
+        photoCount: count(photo.id),
+      })
+      .from(catalogue)
+      .leftJoin(collection, eq(catalogue.id, collection.catalogueId))
+      .leftJoin(photo, eq(collection.id, photo.collectionId))
+      .groupBy(catalogue.id)
+      .where(eq(catalogue.ownerId, ownerId));
   }
 
   async findOne(id: string, ownerId: string) {
-    const [result] = await this.db.select().from(catalogue).where(and(eq(catalogue.id, id), eq(catalogue.ownerId, ownerId)));
+    const [result] = await this.db
+      .select()
+      .from(catalogue)
+      .where(and(eq(catalogue.id, id), eq(catalogue.ownerId, ownerId)));
 
     if (!result) {
       throw new NotFoundException(`Catalogue with ID ${id} not found`);
@@ -61,17 +64,23 @@ export class CataloguesService {
     return result;
   }
 
-  async findBySlug(slug: string) {
-    const [result] = await this.db
+  async findPublicBySlug(slug: string) {
+    const [catalogueResult] = await this.db
       .select()
       .from(catalogue)
+      .leftJoin(collection, eq(catalogue.id, collection.catalogueId))
       .where(eq(catalogue.publicUrlSlug, slug));
 
-    if (!result) {
+    if (!catalogueResult) {
       throw new NotFoundException(`Catalogue with slug ${slug} not found`);
     }
 
-    return result;
+    const collectionResult = await this.db.select().from(collection).where(eq(collection.catalogueId, catalogueResult.catalogue.id));
+
+    return {
+      catalogue: catalogueResult.catalogue,
+      collections: collectionResult,
+    };
   }
 
   async update(
@@ -137,10 +146,7 @@ export class CataloguesService {
       .from(photo)
       .innerJoin(collection, eq(photo.collectionId, collection.id))
       .where(
-        and(
-          eq(photo.id, photoId),
-          eq(collection.catalogueId, catalogueId)
-        )
+        and(eq(photo.id, photoId), eq(collection.catalogueId, catalogueId))
       );
 
     if (!photoResult) {

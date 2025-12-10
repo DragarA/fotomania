@@ -8,6 +8,7 @@ import { CataloguesModule } from './catalogues/catalogues.module';
 import { CollectionsModule } from './collections/collections.module';
 import { DbModule } from './common/db/db.module';
 import { PhotosModule } from './photos/photos.module';
+import { PublicModule } from './public/public.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
     CataloguesModule,
     CollectionsModule,
     PhotosModule,
+    PublicModule,
   ],
   controllers: [AppController],
   providers: [AppService],

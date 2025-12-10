@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { CataloguesService } from '@repo/sdk';
+import { CataloguesService, PublicService } from '@repo/sdk';
 import type { CreateCatalogueDtoClass, UpdateCatalogueDtoClass } from '@repo/sdk';
 
 // Type for Catalogue entity (based on database schema)
@@ -40,11 +40,10 @@ export function useCatalogueQuery(catalogueId: string) {
   });
 }
 
-export function useCatalogueBySlugQuery(slug: string) {
-  return useQuery<Catalogue>({
-    queryKey: ['catalogues', 'slug', slug],
-    queryFn: () =>
-      CataloguesService.cataloguesControllerFindBySlug({ slug }) as Promise<Catalogue>,
+export function usePublicCatalogueQuery(slug: string) {
+  return useQuery({
+    queryKey: ['catalogue', 'public', slug],
+    queryFn: () => PublicService.publicControllerFindBySlug({ slug }),
     enabled: Boolean(slug),
   });
 }

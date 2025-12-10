@@ -125,7 +125,7 @@ export function CollectionModal({
             </button>
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => onClose()}
               className="flex-1 bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-300 transition-colors cursor-pointer"
             >
               Cancel

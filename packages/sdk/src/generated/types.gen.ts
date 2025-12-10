@@ -197,6 +197,107 @@ export type PhotoResDto = {
     updatedAt: string;
 };
 
+export type CollectionPublicResDto = {
+    /**
+     * Unique identifier of the collection
+     */
+    id: string;
+    /**
+     * Display name of the collection
+     */
+    name: string;
+};
+
+export type CataloguePublicResDto = {
+    /**
+     * Unique identifier of the catalogue
+     */
+    id: string;
+    /**
+     * Display title of the catalogue
+     */
+    title: string;
+    /**
+     * Optional description presented on the public page
+     */
+    description?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Optional cover image that will be shown to guests
+     */
+    coverImage?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Slug that identifies the catalogue in public routes
+     */
+    publicUrlSlug: string;
+    /**
+     * Creation timestamp of the catalogue
+     */
+    createdAt: string;
+    /**
+     * Last modification timestamp of the catalogue
+     */
+    updatedAt: string;
+    /**
+     * Collections grouped under this catalogue
+     */
+    collections: Array<CollectionPublicResDto>;
+};
+
+export type CollectionPhotoPublicResDto = {
+    /**
+     * Unique identifier of the photo
+     */
+    id: string;
+    /**
+     * Original filename uploaded by the photographer
+     */
+    originalFileName: string;
+    /**
+     * Relative path to the processed photo asset
+     */
+    storagePath: string;
+    /**
+     * Relative path to the thumbnail image, if generated
+     */
+    thumbnailPath?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Mime type of the stored photo
+     */
+    mimeType: string;
+    /**
+     * Image width in pixels, if available
+     */
+    width?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Image height in pixels, if available
+     */
+    height?: {
+        [key: string]: unknown;
+    };
+    /**
+     * File size in bytes, if available
+     */
+    size?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Timestamp when the photo was uploaded
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the photo metadata was last updated
+     */
+    updatedAt: string;
+};
+
 export type AppControllerGetHelloResponse = unknown;
 
 export type AppControllerHealthCheckResponse = unknown;
@@ -276,15 +377,6 @@ export type CataloguesControllerRemoveData = {
 };
 
 export type CataloguesControllerRemoveResponse = unknown;
-
-export type CataloguesControllerFindBySlugData = {
-    /**
-     * Public URL slug
-     */
-    slug: string;
-};
-
-export type CataloguesControllerFindBySlugResponse = CatalogueResDto;
 
 export type CataloguesControllerSetCoverData = {
     /**
@@ -380,6 +472,28 @@ export type PhotosControllerRemoveData = {
 };
 
 export type PhotosControllerRemoveResponse = unknown;
+
+export type PublicControllerFindBySlugData = {
+    /**
+     * Public URL slug
+     */
+    slug: string;
+};
+
+export type PublicControllerFindBySlugResponse = CataloguePublicResDto;
+
+export type PublicControllerFindCollectionPhotosBySlugData = {
+    /**
+     * Collection ID
+     */
+    collectionId: string;
+    /**
+     * Public URL slug
+     */
+    slug: string;
+};
+
+export type PublicControllerFindCollectionPhotosBySlugResponse = Array<CollectionPhotoPublicResDto>;
 
 export type $OpenApiTs = {
     '/': {
@@ -562,21 +676,6 @@ export type $OpenApiTs = {
                  * Forbidden
                  */
                 403: unknown;
-                /**
-                 * Catalogue not found
-                 */
-                404: unknown;
-            };
-        };
-    };
-    '/catalogues/slug/{slug}': {
-        get: {
-            req: CataloguesControllerFindBySlugData;
-            res: {
-                /**
-                 * Returns the catalogue
-                 */
-                200: CatalogueResDto;
                 /**
                  * Catalogue not found
                  */
@@ -769,6 +868,36 @@ export type $OpenApiTs = {
                 403: unknown;
                 /**
                  * Photo not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/public/catalogue/{slug}': {
+        get: {
+            req: PublicControllerFindBySlugData;
+            res: {
+                /**
+                 * Returns the catalogue
+                 */
+                200: CataloguePublicResDto;
+                /**
+                 * Catalogue not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/public/catalogue/{slug}/collection/{collectionId}/photos': {
+        get: {
+            req: PublicControllerFindCollectionPhotosBySlugData;
+            res: {
+                /**
+                 * Returns the photos
+                 */
+                200: Array<CollectionPhotoPublicResDto>;
+                /**
+                 * Collection not found
                  */
                 404: unknown;
             };

@@ -46,6 +46,28 @@ export class PhotosService {
       .orderBy(photo.createdAt);
   }
 
+  async findPublicBySlugAndCollection(slug: string, collectionId: string) {
+    const [existingCollection] = await this.db
+      .select()
+      .from(collection)
+      .leftJoin(catalogue, eq(collection.catalogueId, catalogue.id))
+      .where(and(eq(catalogue.publicUrlSlug, slug), eq(collection.id, collectionId)));
+
+    if (!existingCollection) {
+      throw new NotFoundException(
+        `Collection ID ${collectionId} not found under public slug ${slug}`
+      );
+    }
+
+    console.log('Existing Collection:', existingCollection.collection.id);
+
+    return await this.db
+      .select()
+      .from(photo)
+      .where(eq(photo.collectionId, existingCollection.collection.id))
+      .orderBy(photo.createdAt);
+  }
+
   async findOne(id: string, ownerId: string) {
     const [result] = await this.db
       .select({ photo, catalogue })

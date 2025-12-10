@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { OpenAPI, PhotosService } from '@repo/sdk';
+import { OpenAPI, PhotosService, PublicService } from '@repo/sdk';
 import { toast } from 'sonner';
 
 import { API_BASE_URL } from '../../lib/api-client';
@@ -37,6 +37,25 @@ export function usePhotosQuery(collectionId: string | null) {
       });
     },
     enabled: !!collectionId,
+  });
+}
+
+export function usePublicPhotosQuery(
+  slug: string,
+  collectionId: string | null
+) {
+  return useQuery({
+    queryKey: ['photos', 'public', slug, collectionId],
+    queryFn: async () => {
+      if (!collectionId) {
+        return [];
+      }
+      return await PublicService.publicControllerFindCollectionPhotosBySlug({
+        slug,
+        collectionId,
+      });
+    },
+    enabled: Boolean(slug) && Boolean(collectionId),
   });
 }
 

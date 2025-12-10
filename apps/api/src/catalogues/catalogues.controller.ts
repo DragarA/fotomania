@@ -85,19 +85,6 @@ export class CataloguesController {
     return this.cataloguesService.findOne(id, user.id);
   }
 
-  @Get('slug/:slug')
-  @ApiOperation({ summary: 'Get a catalogue by public URL slug' })
-  @ApiParam({ name: 'slug', description: 'Public URL slug' })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns the catalogue',
-    type: CatalogueResDto,
-  })
-  @ApiResponse({ status: 404, description: 'Catalogue not found' })
-  findBySlug(@Param('slug') slug: string) {
-    return this.cataloguesService.findBySlug(slug);
-  }
-
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth('JWT-auth')
