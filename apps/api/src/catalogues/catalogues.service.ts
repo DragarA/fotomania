@@ -4,7 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import { eq, and, count } from 'drizzle-orm';
+import { eq, and, count, gt } from 'drizzle-orm';
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
 import { catalogue } from '../common/db/schema/catalogues.schema';
 import { CreateCatalogueDto } from './dto/create-catalogue.dto';
@@ -75,11 +75,18 @@ export class CataloguesService {
       throw new NotFoundException(`Catalogue with slug ${slug} not found`);
     }
 
-    const collectionResult = await this.db.select().from(collection).where(eq(collection.catalogueId, catalogueResult.catalogue.id));
-
+    const collectionResult = await this.db
+      .select({
+        collection
+      })
+      .from(collection)
+      .innerJoin(photo, eq(collection.id, photo.collectionId))
+      .where(and(eq(collection.catalogueId, catalogueResult.catalogue.id)))
+      .having(gt(count(photo.id), 0))
+      .groupBy(collection.id);
     return {
       catalogue: catalogueResult.catalogue,
-      collections: collectionResult,
+      collections: collectionResult.map((cr) => cr.collection),
     };
   }
 
@@ -159,7 +166,7 @@ export class CataloguesService {
     const [updated] = await this.db
       .update(catalogue)
       .set({
-        coverImage: photoResult.photo.thumbnailPath,
+        coverImage: photoResult.photo.storagePath,
         updatedAt: new Date(),
       })
       .where(eq(catalogue.id, catalogueId))

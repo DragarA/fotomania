@@ -253,7 +253,7 @@ export class PhotosService {
       await this.db
         .update(catalogue)
         .set({
-          coverImage: relativeThumbPath,
+          coverImage: relativeOriginalPath,
           updatedAt: new Date(),
         })
         .where(eq(catalogue.id, catalogueId));
