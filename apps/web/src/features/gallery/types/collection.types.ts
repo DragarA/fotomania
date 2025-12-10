@@ -5,5 +5,5 @@
 export interface Collection {
   id: string;
   name: string;
-  photoCount: number;
+  photoCount?: number;
 }

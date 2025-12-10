@@ -306,9 +306,15 @@ describe('CollectionsService', () => {
         where: jest.fn().mockResolvedValue(undefined),
       } as any);
 
+      // Mock fs operations
+      const rmdirSyncSpy = jest.spyOn(require('fs'), 'rmdirSync').mockImplementation();
+
       const result = await service.remove(collectionId, ownerId);
 
       expect(result.message).toBe('Collection deleted successfully');
+
+      // Cleanup spy
+      rmdirSyncSpy.mockRestore();
     });
   });
 });

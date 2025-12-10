@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse, PublicControllerAddFavouritesData, PublicControllerAddFavouritesResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -544,6 +544,30 @@ export class PublicService {
             },
             errors: {
                 404: 'Collection not found'
+            }
+        });
+    }
+    
+    /**
+     * Add favourite photos for a client
+     * @param data The data for the request.
+     * @param data.slug Public URL slug
+     * @param data.requestBody
+     * @returns AddFavouritesResDto Favourites added successfully
+     * @throws ApiError
+     */
+    public static publicControllerAddFavourites(data: PublicControllerAddFavouritesData): CancelablePromise<PublicControllerAddFavouritesResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/public/catalogue/{slug}/favourites',
+            path: {
+                slug: data.slug
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                400: 'Invalid request payload',
+                404: 'Catalogue not found'
             }
         });
     }

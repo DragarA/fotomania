@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './common/auth/auth.module';
 import { CataloguesModule } from './catalogues/catalogues.module';
+import { ClientSessionsModule } from './client-sessions/client-sessions.module';
 import { CollectionsModule } from './collections/collections.module';
 import { DbModule } from './common/db/db.module';
 import { PhotosModule } from './photos/photos.module';
@@ -21,6 +22,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     UsersModule,
     CataloguesModule,
+    ClientSessionsModule,
     CollectionsModule,
     PhotosModule,
     PublicModule,

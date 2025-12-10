@@ -1,8 +1,15 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../../../../components/ui/dialog';
 import {
   useCreateCollectionMutation,
   useUpdateCollectionMutation,
@@ -77,31 +84,44 @@ export function CollectionModal({
     }
   };
 
-  if (!isOpen) return null;
+  const handleClose = () => {
+    if (!isSubmitting) {
+      onClose();
+      reset();
+    }
+  };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">
-          {mode === 'create' ? 'Create Collection' : 'Edit Collection'}
-        </h2>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+      <DialogContent showCloseButton={!isSubmitting}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogHeader>
+            <DialogTitle>
+              {mode === 'create' ? 'Create Collection' : 'Edit Collection'}
+            </DialogTitle>
+            <DialogDescription>
+              {mode === 'create'
+                ? 'Create a new collection to organize your photos.'
+                : 'Update the collection name.'}
+            </DialogDescription>
+          </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
+          <div className="py-4">
             <label
               htmlFor="name"
-              className="block text-sm font-semibold text-gray-700 mb-2 cursor-pointer"
+              className="block text-sm font-medium text-gray-700 mb-2"
             >
               Collection Name
             </label>
             <input
               id="name"
               {...register('name')}
-              className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none transition-colors ${
+              disabled={isSubmitting}
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:outline-hidden transition-colors ${
                 errors.name
-                  ? 'border-red-500'
-                  : 'border-gray-200 focus:border-accent-500'
-              }`}
+                  ? 'border-red-500 focus:border-red-500 focus:ring-red-200'
+                  : 'border-gray-200 focus:border-accent-500 focus:ring-accent-200'
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
               placeholder="Ceremony Photos"
             />
             {errors.name && (
@@ -109,30 +129,34 @@ export function CollectionModal({
             )}
           </div>
 
-          <div className="flex gap-3 mt-6">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="flex-1 bg-accent-500 text-white font-semibold py-2 rounded-lg hover:bg-accent-600 transition-all disabled:opacity-50 cursor-pointer"
-            >
-              {isSubmitting
-                ? mode === 'create'
-                  ? 'Creating...'
-                  : 'Saving...'
-                : mode === 'create'
-                  ? 'Create'
-                  : 'Save'}
-            </button>
+          <DialogFooter>
             <button
               type="button"
-              onClick={() => onClose()}
-              className="flex-1 bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-300 transition-colors cursor-pointer"
+              onClick={handleClose}
+              disabled={isSubmitting}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
-          </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-4 py-2 bg-accent-500 text-white rounded-lg hover:bg-accent-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                  {mode === 'create' ? 'Creating...' : 'Saving...'}
+                </>
+              ) : mode === 'create' ? (
+                'Create'
+              ) : (
+                'Save'
+              )}
+            </button>
+          </DialogFooter>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

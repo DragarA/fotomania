@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Heart, ChevronDown } from 'lucide-react';
+import { toast } from 'sonner';
 
 import {
   usePublicCatalogueQuery,
@@ -11,6 +12,8 @@ import { PublicPhotoGrid } from '../../features/gallery/components/photo/PublicP
 import { PhotoLightbox } from '../../features/gallery/components/photo/PhotoLightbox';
 import { API_BASE_URL } from '../../lib/api-client';
 import { useFavorites } from '../../hooks/useFavorites';
+import { SaveFavouritesModal } from '../../features/gallery/components/favourites/SaveFavouritesModal';
+import { SaveSuccessModal } from '../../features/gallery/components/favourites/SaveSuccessModal';
 
 export const Route = createFileRoute('/c/$slug')({
   component: PublicCataloguePage,
@@ -22,6 +25,9 @@ function PublicCataloguePage() {
     string | null
   >(null);
   const [selectedPhoto, setSelectedPhoto] = useState<any>(null);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [savedEmail, setSavedEmail] = useState<string>('');
 
   // Data fetching
   const {
@@ -38,6 +44,7 @@ function PublicCataloguePage() {
   // Favorites management
   const { toggleFavorite, isFavorite, getFavoriteIds, favoritesCount } =
     useFavorites();
+    
 
   // Auto-select first collection when catalogue loads
   useEffect(() => {
@@ -53,16 +60,23 @@ function PublicCataloguePage() {
     }
   }, [catalogue, selectedCollectionId]);
 
-  // Handle show favorites alert
-  const handleShowFavorites = () => {
+  // Handle show favorites
+  const handleSendToPhotographer = () => {
     const favoriteIds = getFavoriteIds();
     if (favoriteIds.length === 0) {
-      alert(
+      toast.info(
         'No favorite photos yet! Click the heart icon on photos to add them to your favorites.'
       );
     } else {
-      alert(`Favorite Photo IDs:\n\n${favoriteIds.join('\n')}`);
+      setShowSaveModal(true);
     }
+  };
+
+  // Handle successful save
+  const handleSaveSuccess = (email: string) => {
+    setSavedEmail(email);
+    setShowSaveModal(false);
+    setShowSuccessModal(true);
   };
 
   // Scroll to gallery section
@@ -191,16 +205,16 @@ function PublicCataloguePage() {
             </div>
           )}
 
-          {/* Show Favorites Button */}
+          {/* Send to photographer button */}
           {favoritesCount > 0 && (
             <div className="mb-6 flex justify-end">
               <button
-                onClick={handleShowFavorites}
+                onClick={handleSendToPhotographer}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors"
               >
                 <Heart className="w-5 h-5 fill-red-500 text-red-500" />
                 <span className="text-sm font-medium text-gray-700">
-                  Show Favorites
+                  Send to Photographer
                 </span>
               </button>
             </div>
@@ -243,6 +257,24 @@ function PublicCataloguePage() {
           isFavorite={isFavorite}
         />
       )}
+
+      {/* Save Favorites Modal */}
+      <SaveFavouritesModal
+        isOpen={showSaveModal}
+        onClose={() => setShowSaveModal(false)}
+        slug={slug}
+        favoriteIds={getFavoriteIds()}
+        favoritesCount={favoritesCount}
+        onSuccess={handleSaveSuccess}
+      />
+
+      {/* Success Confirmation Modal */}
+      <SaveSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        email={savedEmail}
+        favoritesCount={favoritesCount}
+      />
     </div>
   );
 }

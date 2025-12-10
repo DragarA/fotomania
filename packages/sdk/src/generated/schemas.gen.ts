@@ -393,3 +393,40 @@ export const $CollectionPhotoPublicResDto = {
     },
     required: ['id', 'originalFileName', 'storagePath', 'mimeType', 'createdAt', 'updatedAt']
 } as const;
+
+export const $AddFavouritesReqDtoClass = {
+    type: 'object',
+    properties: {
+        email: {
+            type: 'string',
+            description: 'Email address of the client',
+            example: 'john.doe@example.com'
+        },
+        photoIds: {
+            description: 'Array of photo IDs to mark as favourites',
+            example: ['9b5c4e28-2bd3-4e43-9f75-7dd29586a7b4', 'a3f1c2d8-4e5f-6a7b-8c9d-0e1f2a3b4c5d'],
+            type: 'array',
+            items: {
+                type: 'string'
+            }
+        }
+    },
+    required: ['email', 'photoIds']
+} as const;
+
+export const $AddFavouritesResDto = {
+    type: 'object',
+    properties: {
+        success: {
+            type: 'boolean',
+            description: 'Success indicator',
+            example: true
+        },
+        clientSessionEmail: {
+            type: 'string',
+            description: 'Client session email associated with the favourites',
+            example: 'test@email.com'
+        }
+    },
+    required: ['success', 'clientSessionEmail']
+} as const;

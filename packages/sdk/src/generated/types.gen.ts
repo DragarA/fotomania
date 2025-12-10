@@ -298,6 +298,28 @@ export type CollectionPhotoPublicResDto = {
     updatedAt: string;
 };
 
+export type AddFavouritesReqDtoClass = {
+    /**
+     * Email address of the client
+     */
+    email: string;
+    /**
+     * Array of photo IDs to mark as favourites
+     */
+    photoIds: Array<(string)>;
+};
+
+export type AddFavouritesResDto = {
+    /**
+     * Success indicator
+     */
+    success: boolean;
+    /**
+     * Client session email associated with the favourites
+     */
+    clientSessionEmail: string;
+};
+
 export type AppControllerGetHelloResponse = unknown;
 
 export type AppControllerHealthCheckResponse = unknown;
@@ -494,6 +516,16 @@ export type PublicControllerFindCollectionPhotosBySlugData = {
 };
 
 export type PublicControllerFindCollectionPhotosBySlugResponse = Array<CollectionPhotoPublicResDto>;
+
+export type PublicControllerAddFavouritesData = {
+    requestBody: AddFavouritesReqDtoClass;
+    /**
+     * Public URL slug
+     */
+    slug: string;
+};
+
+export type PublicControllerAddFavouritesResponse = AddFavouritesResDto;
 
 export type $OpenApiTs = {
     '/': {
@@ -898,6 +930,25 @@ export type $OpenApiTs = {
                 200: Array<CollectionPhotoPublicResDto>;
                 /**
                  * Collection not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/public/catalogue/{slug}/favourites': {
+        post: {
+            req: PublicControllerAddFavouritesData;
+            res: {
+                /**
+                 * Favourites added successfully
+                 */
+                201: AddFavouritesResDto;
+                /**
+                 * Invalid request payload
+                 */
+                400: unknown;
+                /**
+                 * Catalogue not found
                  */
                 404: unknown;
             };

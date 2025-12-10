@@ -7,6 +7,7 @@ import {
   MockDrizzleDB,
   resetDrizzleMock,
 } from '../../test/utils/drizzle-mock.factory';
+import { TestDataFactory } from '../../test/utils/test-data.factory';
 
 describe('CataloguesService', () => {
   let service: CataloguesService;
@@ -124,20 +125,48 @@ describe('CataloguesService', () => {
     });
   });
 
-  describe('findBySlug', () => {
+  describe('findPublicBySlug', () => {
     it('should return a catalogue by slug', async () => {
       const slug = 'test-catalogue';
-      const mockCatalogue = { id: '1', publicUrlSlug: slug };
+      const mockCatalogue = TestDataFactory.createCatalogue({
+        id: 'catalogue-1',
+        publicUrlSlug: slug,
+      });
+      const mockCollection = TestDataFactory.createCollection({
+        id: 'collection-1',
+        catalogueId: mockCatalogue.id,
+      });
 
+      // First select - catalogue with collections
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([mockCatalogue]),
+          leftJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([
+              { catalogue: mockCatalogue, collection: mockCollection },
+            ]),
+          }),
         }),
       } as any);
 
-      const result = await service.findBySlug(slug);
+      // Second select - collections with photos
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockReturnValue({
+              having: jest.fn().mockReturnValue({
+                groupBy: jest.fn().mockResolvedValue([
+                  { collection: mockCollection },
+                ]),
+              }),
+            }),
+          }),
+        }),
+      } as any);
 
-      expect(result).toEqual(mockCatalogue);
+      const result = await service.findPublicBySlug(slug);
+
+      expect(result.catalogue).toEqual(mockCatalogue);
+      expect(result.collections).toEqual([mockCollection]);
     });
 
     it('should throw NotFoundException when slug not found', async () => {
@@ -145,11 +174,13 @@ describe('CataloguesService', () => {
 
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]),
+          leftJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([]),
+          }),
         }),
       } as any);
 
-      await expect(service.findBySlug(slug)).rejects.toThrow(NotFoundException);
+      await expect(service.findPublicBySlug(slug)).rejects.toThrow(NotFoundException);
     });
   });
 
