@@ -5,7 +5,7 @@ import { CatalogueForm } from '../../features/catalogues/CatalogueForm';
 import {
   useCatalogueQuery,
   useUpdateCatalogueMutation,
-} from '../../features/catalogues/hooks';
+} from '../../features/gallery/hooks';
 import type { CatalogueCreateFormValues } from '../../features/catalogues/validation';
 
 export const Route = createFileRoute('/catalogues/$catalogueId/edit')({

@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { requireAuth } from '../../features/auth/guards';
-import { useCataloguesQuery } from '../../features/catalogues/hooks';
+import { useCataloguesQuery } from '../../features/gallery/hooks';
 import { API_BASE_URL } from '../../lib/api-client';
 
 export const Route = createFileRoute('/catalogues/')({

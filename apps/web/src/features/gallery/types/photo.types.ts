@@ -7,11 +7,11 @@ export interface Photo {
   originalFileName: string;
   storagePath: string;
   mimeType: string;
-  width: number | null;
-  height: number | null;
-  size: number;
+  width?: number;
+  height?: number;
+  size?: number;
   collectionId: string;
-  thumbnailPath: string | null;
+  thumbnailPath?: string;
   createdAt: string;
   updatedAt: string;
 }

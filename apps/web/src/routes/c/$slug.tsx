@@ -1,8 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 
-import { usePublicCatalogueQuery } from '../../features/catalogues/hooks';
-import { usePublicPhotosQuery } from '../../features/photos/hooks';
+import { usePublicCatalogueQuery, usePublicPhotosQuery } from '../../features/gallery/hooks';
 import { CollectionTabs } from '../../features/collections/CollectionTabs';
 import { PublicPhotoGrid } from '../../features/photos/PublicPhotoGrid';
 import { PhotoLightbox } from '../../features/photos/PhotoLightbox';

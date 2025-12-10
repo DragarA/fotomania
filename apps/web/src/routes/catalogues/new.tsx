@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { CatalogueForm } from '../../features/catalogues/CatalogueForm';
-import { useCreateCatalogueMutation } from '../../features/catalogues/hooks';
+import { useCreateCatalogueMutation } from '../../features/gallery/hooks';
 import { requireAuth } from '../../features/auth/guards';
 import type { CatalogueCreateFormValues, CatalogueFormValues } from '../../features/catalogues/validation';
 

@@ -5,8 +5,5 @@
 export interface Collection {
   id: string;
   name: string;
-  catalogueId: string;
   photoCount: number;
-  createdAt: string;
-  updatedAt: string;
 }

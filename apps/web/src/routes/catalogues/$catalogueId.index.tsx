@@ -6,18 +6,17 @@ import { requireAuth } from '../../features/auth/guards';
 import {
   useCatalogueQuery,
   useSetCatalogueCoverMutation,
-} from '../../features/catalogues/hooks';
-import { useCatalogueDetailState } from '../../features/catalogues/useCatalogueDetailState';
-import { CatalogueSidebar } from '../../features/catalogues/CatalogueSidebar';
-import {
   useCollectionsQuery,
   useDeleteCollectionMutation,
-} from '../../features/collections/hooks';
+  usePhotosQuery,
+  useDeletePhotoMutation,
+  usePhotoUpload,
+} from '../../features/gallery/hooks';
+import { useCatalogueDetailState } from '../../features/catalogues/useCatalogueDetailState';
+import { CatalogueSidebar } from '../../features/catalogues/CatalogueSidebar';
 import { CollectionModal } from '../../features/collections/CollectionModal';
 import { CollectionContextMenu } from '../../features/collections/CollectionContextMenu';
-import { usePhotoUpload } from '../../features/photos/usePhotoUpload';
 import { UploadQueue } from '../../features/photos/UploadQueue';
-import { usePhotosQuery, useDeletePhotoMutation } from '../../features/photos/hooks';
 import { PhotoWorkspace } from '../../features/photos/PhotoWorkspace';
 import { PhotoLightbox } from '../../features/photos/PhotoLightbox';
 import { useConfirmDialog } from '../../features/common/useConfirmDialog';
