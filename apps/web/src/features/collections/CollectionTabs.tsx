@@ -1,8 +1,4 @@
-interface Collection {
-  id: string;
-  name: string;
-  photoCount: number;
-}
+import type { Collection } from '../gallery/types';
 
 interface CollectionTabsProps {
   collections: Collection[];

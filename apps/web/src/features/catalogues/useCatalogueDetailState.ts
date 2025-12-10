@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react';
-
-interface Collection {
-  id: string;
-  name: string;
-  photoCount: number;
-}
+import type { Collection } from '../gallery/types';
 
 interface ModalState {
   isOpen: boolean;

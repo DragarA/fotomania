@@ -2,24 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { CataloguesService, PublicService } from '@repo/sdk';
 import type { CreateCatalogueDtoClass, UpdateCatalogueDtoClass } from '@repo/sdk';
-
-// Type for Catalogue entity (based on database schema)
-export interface Catalogue {
-  id: string;
-  title: string;
-  description?: string | null;
-  coverImage?: string | null;
-  password?: string | null;
-  publicUrlSlug: string;
-  ownerId: string;
-  createdAt: string;
-  updatedAt: string;
-  photoCount?: number;
-}
-
-export interface DeleteCatalogueResponse {
-  message: string;
-}
+import type { Catalogue, DeleteCatalogueResponse } from '../gallery/types';
 
 export function useCataloguesQuery() {
   return useQuery<Catalogue[]>({

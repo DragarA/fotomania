@@ -1,24 +1,5 @@
 import { PhotoGrid } from './PhotoGrid';
-
-interface Collection {
-  id: string;
-  name: string;
-  photoCount: number;
-}
-
-interface Photo {
-  id: string;
-  originalFileName: string;
-  storagePath: string;
-  mimeType: string;
-  width?: number;
-  height?: number;
-  size?: number;
-  collectionId: string;
-  thumbnailPath?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { Collection, Photo } from '../gallery/types';
 
 interface Catalogue {
   id: string;

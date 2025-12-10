@@ -4,26 +4,7 @@ import { toast } from 'sonner';
 
 import { API_BASE_URL } from '../../lib/api-client';
 import { uploadWithProgress } from './upload-helper';
-
-interface UploadPhotoParams {
-  file: File;
-  collectionId: string;
-  onProgress?: (progress: number) => void;
-}
-
-interface PhotoResponse {
-  id: string;
-  originalFileName: string;
-  storagePath: string;
-  mimeType: string;
-  width: number | null;
-  height: number | null;
-  size: number;
-  collectionId: string;
-  thumbnailPath: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { Photo, UploadPhotoParams } from '../gallery/types';
 
 export function usePhotosQuery(collectionId: string | null) {
   return useQuery({
@@ -62,7 +43,7 @@ export function usePublicPhotosQuery(
 export function useUploadPhotoMutation() {
   const queryClient = useQueryClient();
 
-  return useMutation<PhotoResponse, Error, UploadPhotoParams>({
+  return useMutation<Photo, Error, UploadPhotoParams>({
     mutationFn: async ({
       file,
       collectionId,
@@ -87,7 +68,7 @@ export function useUploadPhotoMutation() {
         onProgress || (() => {})
       );
 
-      return data as PhotoResponse;
+      return data as Photo;
     },
     onSuccess: (photo, { collectionId }) => {
       // Invalidate photos query for this collection

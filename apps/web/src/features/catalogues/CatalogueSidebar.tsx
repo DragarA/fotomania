@@ -1,19 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { toast } from 'sonner';
-
-interface Catalogue {
-  id: string;
-  title: string;
-  description?: string | null;
-  publicUrlSlug: string;
-  photoCount?: number;
-}
-
-interface Collection {
-  id: string;
-  name: string;
-  photoCount: number;
-}
+import type { Catalogue, Collection } from '../gallery/types';
 
 interface CatalogueSidebarProps {
   catalogue: Catalogue;
