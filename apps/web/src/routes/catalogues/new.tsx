@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import { CatalogueForm } from '../../features/catalogues/CatalogueForm';
+import { CatalogueForm } from '../../features/gallery/components/catalogue/CatalogueForm';
 import { useCreateCatalogueMutation } from '../../features/gallery/hooks';
 import { requireAuth } from '../../features/auth/guards';
-import type { CatalogueCreateFormValues, CatalogueFormValues } from '../../features/catalogues/validation';
+import type { CatalogueCreateFormValues, CatalogueFormValues } from '../../features/gallery/utils/validation';
 
 export const Route = createFileRoute('/catalogues/new')({
   beforeLoad: requireAuth,

@@ -2,9 +2,9 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 
 import { usePublicCatalogueQuery, usePublicPhotosQuery } from '../../features/gallery/hooks';
-import { CollectionTabs } from '../../features/collections/CollectionTabs';
-import { PublicPhotoGrid } from '../../features/photos/PublicPhotoGrid';
-import { PhotoLightbox } from '../../features/photos/PhotoLightbox';
+import { CollectionTabs } from '../../features/gallery/components/collection/CollectionTabs';
+import { PublicPhotoGrid } from '../../features/gallery/components/photo/PublicPhotoGrid';
+import { PhotoLightbox } from '../../features/gallery/components/photo/PhotoLightbox';
 import { API_BASE_URL } from '../../lib/api-client';
 
 export const Route = createFileRoute('/c/$slug')({

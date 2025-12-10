@@ -12,13 +12,13 @@ import {
   useDeletePhotoMutation,
   usePhotoUpload,
 } from '../../features/gallery/hooks';
-import { useCatalogueDetailState } from '../../features/catalogues/useCatalogueDetailState';
-import { CatalogueSidebar } from '../../features/catalogues/CatalogueSidebar';
-import { CollectionModal } from '../../features/collections/CollectionModal';
-import { CollectionContextMenu } from '../../features/collections/CollectionContextMenu';
-import { UploadQueue } from '../../features/photos/UploadQueue';
-import { PhotoWorkspace } from '../../features/photos/PhotoWorkspace';
-import { PhotoLightbox } from '../../features/photos/PhotoLightbox';
+import { useCatalogueDetailState } from '../../features/gallery/state/useCatalogueDetailState';
+import { CatalogueSidebar } from '../../features/gallery/components/catalogue/CatalogueSidebar';
+import { CollectionModal } from '../../features/gallery/components/collection/CollectionModal';
+import { CollectionContextMenu } from '../../features/gallery/components/collection/CollectionContextMenu';
+import { UploadQueue } from '../../features/gallery/components/photo/UploadQueue';
+import { PhotoWorkspace } from '../../features/gallery/components/photo/PhotoWorkspace';
+import { PhotoLightbox } from '../../features/gallery/components/photo/PhotoLightbox';
 import { useConfirmDialog } from '../../features/common/useConfirmDialog';
 
 export const Route = createFileRoute('/catalogues/$catalogueId/')({

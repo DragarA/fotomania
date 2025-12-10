@@ -1,12 +1,12 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { requireAuth } from '../../features/auth/guards';
-import { CatalogueForm } from '../../features/catalogues/CatalogueForm';
+import { CatalogueForm } from '../../features/gallery/components/catalogue/CatalogueForm';
 import {
   useCatalogueQuery,
   useUpdateCatalogueMutation,
 } from '../../features/gallery/hooks';
-import type { CatalogueCreateFormValues } from '../../features/catalogues/validation';
+import type { CatalogueCreateFormValues } from '../../features/gallery/utils/validation';
 
 export const Route = createFileRoute('/catalogues/$catalogueId/edit')({
   beforeLoad: requireAuth,
