@@ -28,6 +28,7 @@ import {
   updateCatalogueSchema,
 } from './dto/update-catalogue.dto';
 import { CatalogueResDto } from './dto/catalogue-res.dto';
+import { ClientFavouritesResDto } from './dto/client-favourites-res.dto';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { JwtAuthGuard } from '../common/auth/guards/jwt-auth.guard';
 import { User } from '../common/auth/decorators/current-user.decorator';
@@ -133,5 +134,24 @@ export class CataloguesController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   remove(@Param('id') id: string, @User() user: UserEntity) {
     return this.cataloguesService.remove(id, user.id);
+  }
+
+  @Get(':catalogueId/favourites')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Get all client favourites for a catalogue' })
+  @ApiParam({ name: 'catalogueId', description: 'Catalogue ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all client sessions with their favourites',
+    type: [ClientFavouritesResDto],
+  })
+  @ApiResponse({ status: 404, description: 'Catalogue not found' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async getCatalogueFavourites(
+    @Param('catalogueId') catalogueId: string,
+    @User() user: UserEntity
+  ) {
+    return this.cataloguesService.getCatalogueFavourites(catalogueId, user.id);
   }
 }

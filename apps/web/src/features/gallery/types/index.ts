@@ -20,3 +20,7 @@ export type {
   UploadingFile,
   UploadPhotoParams,
 } from './photo.types';
+
+export type {
+  ClientFavouriteSession,
+} from '../hooks/useCatalogueFavourites';

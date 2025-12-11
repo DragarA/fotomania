@@ -176,7 +176,7 @@ function ProfilePage() {
                 </Link>
 
                 <Link
-                  to="/catalogues/new"
+                  to="/catalogues"
                   className="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-lg hover:border-accent-500 hover:bg-indigo-50 transition-colors cursor-pointer"
                 >
                   <svg

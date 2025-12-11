@@ -35,3 +35,8 @@ export {
 
 // Photo upload management hook
 export { usePhotoUpload } from './usePhotoUpload';
+
+// Client favourites hooks
+export { useCatalogueFavouritesQuery } from './useCatalogueFavourites';
+export type { ClientFavouriteSession } from './useCatalogueFavourites';
+export { useSessionFavouritesQuery } from './useSessionFavourites';

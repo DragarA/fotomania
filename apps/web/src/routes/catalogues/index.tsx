@@ -1,7 +1,9 @@
-import { Link, createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
 import { requireAuth } from '../../features/auth/guards';
 import { useCataloguesQuery } from '../../features/gallery/hooks';
 import { API_BASE_URL } from '../../lib/api-client';
+import { CatalogueFormModal } from '../../features/gallery/components/catalogue/CatalogueFormModal';
 
 export const Route = createFileRoute('/catalogues/')({
   beforeLoad: requireAuth,
@@ -9,7 +11,13 @@ export const Route = createFileRoute('/catalogues/')({
 });
 
 function CataloguesPage() {
+  const navigate = useNavigate();
   const { data, isLoading, isError, error } = useCataloguesQuery();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const handleCreateSuccess = (catalogueId: string) => {
+    navigate({ to: '/catalogues/$catalogueId', params: { catalogueId } });
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
@@ -20,12 +28,12 @@ function CataloguesPage() {
             Manage the galleries that you share with your clients.
           </p>
         </div>
-        <Link
-          to="/catalogues/new"
-          className="inline-flex items-center justify-center px-4 py-3 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors"
+        <button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="inline-flex items-center justify-center px-4 py-3 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors cursor-pointer"
         >
           + Create Catalogue
-        </Link>
+        </button>
       </div>
 
       {isLoading ? (
@@ -111,14 +119,20 @@ function CataloguesPage() {
           <p className="text-gray-600 mb-6">
             Create your first catalogue to start sharing photo galleries with clients.
           </p>
-          <Link
-            to="/catalogues/new"
-            className="inline-flex items-center px-5 py-3 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors"
+          <button
+            onClick={() => setIsCreateModalOpen(true)}
+            className="inline-flex items-center px-5 py-3 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors cursor-pointer"
           >
             Create Catalogue
-          </Link>
+          </button>
         </div>
       )}
+
+      <CatalogueFormModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={handleCreateSuccess}
+      />
     </div>
   );
 }

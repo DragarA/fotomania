@@ -474,6 +474,52 @@
         ]
       }
     },
+    "/catalogues/{catalogueId}/favourites": {
+      "get": {
+        "operationId": "CataloguesController_getCatalogueFavourites",
+        "parameters": [
+          {
+            "name": "catalogueId",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all client sessions with their favourites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientFavouritesResDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all client favourites for a catalogue",
+        "tags": [
+          "catalogues"
+        ]
+      }
+    },
     "/collections": {
       "post": {
         "operationId": "CollectionsController_create",
@@ -877,6 +923,57 @@
         ]
       }
     },
+    "/client-sessions/{catalogueId}/favourites/{sessionId}": {
+      "get": {
+        "operationId": "ClientSessionsController_getCatalogueFavourites",
+        "parameters": [
+          {
+            "name": "catalogueId",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sessionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all client sessions with their favourites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSessionFavouritesResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all client favourites for a catalogue",
+        "tags": [
+          "client-sessions"
+        ]
+      }
+    },
     "/public/catalogue/{slug}": {
       "get": {
         "operationId": "PublicController_findBySlug",
@@ -1182,6 +1279,34 @@
           }
         }
       },
+      "ClientFavouritesResDto": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "description": "Client session ID"
+          },
+          "email": {
+            "type": "string",
+            "description": "Client email address"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Session created timestamp"
+          },
+          "photoCount": {
+            "type": "number",
+            "description": "Array of favorited photos"
+          }
+        },
+        "required": [
+          "sessionId",
+          "email",
+          "createdAt",
+          "photoCount"
+        ]
+      },
       "CreateCollectionDtoClass": {
         "type": "object",
         "properties": {
@@ -1303,18 +1428,6 @@
             "type": "string",
             "description": "ID of the collection this photo belongs to",
             "example": "550e8400-e29b-41d4-a716-446655440000"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "Timestamp when the photo was created",
-            "example": "2024-12-09T10:00:00.000Z"
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "Timestamp when the photo was last updated",
-            "example": "2024-12-09T10:30:00.000Z"
           }
         },
         "required": [
@@ -1322,9 +1435,38 @@
           "originalFileName",
           "storagePath",
           "mimeType",
-          "collectionId",
+          "collectionId"
+        ]
+      },
+      "ClientSessionFavouritesResDto": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "description": "Client session ID"
+          },
+          "email": {
+            "type": "string",
+            "description": "Client email address"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Session created timestamp"
+          },
+          "photos": {
+            "description": "Array of favorited photos",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhotoResDto"
+            }
+          }
+        },
+        "required": [
+          "sessionId",
+          "email",
           "createdAt",
-          "updatedAt"
+          "photos"
         ]
       },
       "CollectionPublicResDto": {

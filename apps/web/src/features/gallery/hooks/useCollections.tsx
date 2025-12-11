@@ -111,6 +111,9 @@ export function useDeleteCollectionMutation() {
       queryClient.invalidateQueries({
         queryKey: ['collections', context?.catalogueId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['catalogues'],
+      })
       toast.success('Collection deleted successfully!');
     },
   });

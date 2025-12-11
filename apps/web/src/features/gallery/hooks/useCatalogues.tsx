@@ -12,14 +12,14 @@ export function useCataloguesQuery() {
   });
 }
 
-export function useCatalogueQuery(catalogueId: string) {
+export function useCatalogueQuery(catalogueId: string, options?: { enabled?: boolean }) {
   return useQuery<Catalogue>({
     queryKey: ['catalogues', catalogueId],
     queryFn: () =>
       CataloguesService.cataloguesControllerFindOne({ id: catalogueId }) as Promise<
         Catalogue
       >,
-    enabled: Boolean(catalogueId),
+    enabled: options?.enabled !== undefined ? options.enabled : Boolean(catalogueId),
   });
 }
 

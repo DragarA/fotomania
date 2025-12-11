@@ -23,8 +23,6 @@ interface Photo {
   size?: number;
   collectionId: string;
   thumbnailPath?: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export function useCatalogueDetailState(collections: Collection[] | undefined) {

@@ -92,4 +92,51 @@ export class ClientSessionsService {
 
     return existingSession;
   }
+
+  async getFavouritesBySession(sessionId: string, catalogueId: string, ownerId: string) {
+    const [existingCatalogue] = await this.db.select()
+      .from(catalogue)
+      .where(eq(catalogue.id, catalogueId));
+
+    if (!existingCatalogue) {
+      throw new NotFoundException(`Catalogue with ID ${catalogueId} not found`);
+    }
+
+    if(existingCatalogue.ownerId !== ownerId) {
+      throw new BadRequestException(`Forbidden`);
+    }
+
+    const [session] = await this.db
+      .select()
+      .from(clientSession)
+      .where(eq(clientSession.id, sessionId))
+      .limit(1);
+
+    if (!session) {
+      throw new NotFoundException(`Client session with ID ${sessionId} not found`);
+    }
+    
+    const photos = await this.db.select({
+      id: photo.id,
+      originalFileName: photo.originalFileName,
+      storagePath: photo.storagePath,
+      thumbnailPath: photo.thumbnailPath,
+      mimeType: photo.mimeType,
+      width: photo.width,
+      height: photo.height,
+      size: photo.size,
+      collectionId: photo.collectionId,
+    }).from(photo)
+      .innerJoin(
+        clientFavourite,
+        eq(photo.id, clientFavourite.photoId)
+      )
+      .where(eq(clientFavourite.clientSessionId, sessionId));
+
+    return {
+      ...session,
+      sessionId: session.id,
+      photos,
+    };
+  }
 }

@@ -54,16 +54,4 @@ export class PhotoResDto {
     example: '550e8400-e29b-41d4-a716-446655440000',
   })
   collectionId!: string;
-
-  @ApiProperty({
-    description: 'Timestamp when the photo was created',
-    example: '2024-12-09T10:00:00.000Z',
-  })
-  createdAt!: Date;
-
-  @ApiProperty({
-    description: 'Timestamp when the photo was last updated',
-    example: '2024-12-09T10:30:00.000Z',
-  })
-  updatedAt!: Date;
 }

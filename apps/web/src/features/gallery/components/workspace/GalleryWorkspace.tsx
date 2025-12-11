@@ -9,6 +9,7 @@ import {
   usePhotosQuery,
   useDeletePhotoMutation,
   usePhotoUpload,
+  useCatalogueFavouritesQuery,
 } from '../../hooks';
 import { useCatalogueDetailState } from '../../state/useCatalogueDetailState';
 import { CatalogueSidebar } from '../catalogue/CatalogueSidebar';
@@ -29,6 +30,8 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
   // Data queries
   const { data: catalogue, isLoading: catalogueLoading } = useCatalogueQuery(catalogueId);
   const { data: collections, isLoading: collectionsLoading } = useCollectionsQuery(catalogueId);
+  const { data: favouriteSessions, isLoading: favouritesLoading } =
+    useCatalogueFavouritesQuery(catalogueId);
 
   // State management
   const {
@@ -65,7 +68,7 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
       'image/heic': ['.heic'],
     },
     maxSize: 10 * 1024 * 1024,
-    maxFiles: 20,
+    maxFiles: 1000,
     disabled: !selectedCollectionId,
     onDrop: (acceptedFiles, rejectedFiles) => {
       if (rejectedFiles.length > 0) {
@@ -145,6 +148,9 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
         onSelectCollection={setSelectedCollectionId}
         onCreateCollection={openCreateModal}
         onCollectionContextMenu={handleCollectionContextMenu}
+        favouriteSessions={favouriteSessions}
+        favouritesLoading={favouritesLoading}
+        onFavouritePhotoClick={setSelectedPhoto}
       />
 
       <PhotoWorkspace
