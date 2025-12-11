@@ -1,7 +1,10 @@
 import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import { useAuth, useLogout } from '../../features/auth/hooks';
+import { LanguageSwitcher } from '../ui/LanguageSwitcher';
 
 export function Navigation() {
+  const { t } = useTranslation('common');
   const { user, isLoading } = useAuth();
   const logoutMutation = useLogout();
 
@@ -27,14 +30,14 @@ export function Navigation() {
                 className="text-gray-700 hover:text-accent-600 font-medium transition-colors"
                 activeProps={{ className: 'text-accent-600' }}
               >
-                Home
+                {t('nav.home')}
               </Link>
               <Link
                 to="/about"
                 className="text-gray-700 hover:text-accent-600 font-medium transition-colors"
                 activeProps={{ className: 'text-accent-600' }}
               >
-                About
+                {t('nav.about')}
               </Link>
               {user && (
                 <Link
@@ -42,7 +45,7 @@ export function Navigation() {
                   className="text-gray-700 hover:text-accent-600 font-medium transition-colors"
                   activeProps={{ className: 'text-accent-600' }}
                 >
-                  Catalogues
+                  {t('nav.catalogues')}
                 </Link>
               )}
             </div>
@@ -50,10 +53,11 @@ export function Navigation() {
 
           {/* User Menu */}
           <div className="flex items-center space-x-4">
+            <LanguageSwitcher />
             {isLoading ? (
               <div className="flex items-center space-x-2">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-accent-600"></div>
-                <span className="text-gray-600 text-sm">Loading...</span>
+                <span className="text-gray-600 text-sm">{t('common.loading')}</span>
               </div>
             ) : user ? (
               <div className="flex items-center space-x-4">
@@ -71,7 +75,7 @@ export function Navigation() {
                   disabled={logoutMutation.isPending}
                   className="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
+                  {logoutMutation.isPending ? t('nav.loggingOut') : t('nav.logout')}
                 </button>
               </div>
             ) : (
@@ -80,13 +84,13 @@ export function Navigation() {
                   to="/login"
                   className="px-4 py-2 text-gray-700 font-medium hover:text-accent-600 transition-colors"
                 >
-                  Sign In
+                  {t('nav.signIn')}
                 </Link>
                 <Link
                   to="/login"
                   className="px-4 py-2 bg-accent-500 text-white font-medium rounded-lg hover:bg-accent-600 transition-colors"
                 >
-                  Get Started
+                  {t('nav.getStarted')}
                 </Link>
               </div>
             )}

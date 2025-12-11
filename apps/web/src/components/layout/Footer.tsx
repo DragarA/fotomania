@@ -1,6 +1,9 @@
 import { Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 export function Footer() {
+  const { t } = useTranslation('common');
+
   return (
     <footer className="bg-gray-50 border-t border-gray-200 text-gray-600 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -8,73 +11,72 @@ export function Footer() {
           <div>
             <h3 className="text-gray-900 text-lg font-bold mb-4">Fotomania</h3>
             <p className="text-sm">
-              The ultimate platform for photographers to store, manage, and showcase
-              their work beautifully.
+              {t('footer.description')}
             </p>
           </div>
           <div>
-            <h4 className="text-gray-900 font-semibold mb-4">Product</h4>
+            <h4 className="text-gray-900 font-semibold mb-4">{t('footer.product.title')}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <a href="#" className="hover:text-accent-600 transition-colors">
-                  Features
+                  {t('footer.product.features')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-accent-600 transition-colors">
-                  Pricing
+                  {t('footer.product.pricing')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-accent-600 transition-colors">
-                  Security
+                  {t('footer.product.security')}
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h4 className="text-gray-900 font-semibold mb-4">Company</h4>
+            <h4 className="text-gray-900 font-semibold mb-4">{t('footer.company.title')}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link to="/about" className="hover:text-accent-600 transition-colors">
-                  About
+                  {t('footer.company.about')}
                 </Link>
               </li>
               <li>
                 <a href="#" className="hover:text-accent-600 transition-colors">
-                  Blog
+                  {t('footer.company.blog')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-accent-600 transition-colors">
-                  Careers
+                  {t('footer.company.careers')}
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h4 className="text-gray-900 font-semibold mb-4">Legal</h4>
+            <h4 className="text-gray-900 font-semibold mb-4">{t('footer.legal.title')}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <a href="#" className="hover:text-accent-600 transition-colors">
-                  Privacy
+                  {t('footer.legal.privacy')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-accent-600 transition-colors">
-                  Terms
+                  {t('footer.legal.terms')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-accent-600 transition-colors">
-                  Cookie Policy
+                  {t('footer.legal.cookiePolicy')}
                 </a>
               </li>
             </ul>
           </div>
         </div>
         <div className="border-t border-gray-200 mt-8 pt-8 text-sm text-center">
-          <p>&copy; 2024 Fotomania. All rights reserved.</p>
+          <p>{t('footer.copyright', { year: new Date().getFullYear() })}</p>
         </div>
       </div>
     </footer>

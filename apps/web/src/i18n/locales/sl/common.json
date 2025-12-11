@@ -3,10 +3,36 @@
     "home": "Domov",
     "about": "O nas",
     "catalogues": "Katalogi",
-    "sign_in": "Prijava",
-    "get_started": "Začni",
+    "signIn": "Prijava",
+    "getStarted": "Začni",
     "logout": "Odjava",
+    "loggingOut": "Odjavljanje...",
     "profile": "Profil"
+  },
+  "common": {
+    "loading": "Nalaganje..."
+  },
+  "footer": {
+    "description": "Ultimativna platforma za fotografe za shranjevanje, upravljanje in prikazovanje svojega dela.",
+    "copyright": "© {{year}} Fotomania. Vse pravice pridržane.",
+    "product": {
+      "title": "Izdelek",
+      "features": "Funkcije",
+      "pricing": "Cenik",
+      "security": "Varnost"
+    },
+    "company": {
+      "title": "Podjetje",
+      "about": "O nas",
+      "blog": "Blog",
+      "careers": "Kariera"
+    },
+    "legal": {
+      "title": "Pravno",
+      "privacy": "Zasebnost",
+      "terms": "Pogoji",
+      "cookiePolicy": "Politika piškotkov"
+    }
   },
   "actions": {
     "save": "Shrani",

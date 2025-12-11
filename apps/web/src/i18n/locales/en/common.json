@@ -3,10 +3,36 @@
     "home": "Home",
     "about": "About",
     "catalogues": "Catalogues",
-    "sign_in": "Sign In",
-    "get_started": "Get Started",
+    "signIn": "Sign In",
+    "getStarted": "Get Started",
     "logout": "Logout",
+    "loggingOut": "Logging out...",
     "profile": "Profile"
+  },
+  "common": {
+    "loading": "Loading..."
+  },
+  "footer": {
+    "description": "The ultimate platform for photographers to store, manage, and showcase their work beautifully.",
+    "copyright": "© {{year}} Fotomania. All rights reserved.",
+    "product": {
+      "title": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "security": "Security"
+    },
+    "company": {
+      "title": "Company",
+      "about": "About",
+      "blog": "Blog",
+      "careers": "Careers"
+    },
+    "legal": {
+      "title": "Legal",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "cookiePolicy": "Cookie Policy"
+    }
   },
   "actions": {
     "save": "Save",
