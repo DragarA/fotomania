@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import { CataloguesService, PublicService } from '@repo/sdk';
-import type { CreateCatalogueDtoClass, UpdateCatalogueDtoClass } from '@repo/sdk';
+import { CreateCatalogueDtoClass, UpdateCatalogueDtoClass } from '@repo/sdk';
 import type { Catalogue, DeleteCatalogueResponse } from '../types';
 
 export function useCataloguesQuery() {
@@ -106,6 +107,7 @@ export function useDeleteCatalogueMutation() {
 }
 
 export function useSetCatalogueCoverMutation() {
+  const { t } = useTranslation('gallery');
   const queryClient = useQueryClient();
 
   return useMutation<
@@ -125,10 +127,10 @@ export function useSetCatalogueCoverMutation() {
       // Update specific catalogue cache
       queryClient.setQueryData(['catalogues', catalogue.id], catalogue);
 
-      toast.success('Catalogue cover updated');
+      toast.success(t('toast.catalogueCoverUpdated'));
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Failed to update cover');
+      toast.error(error.message || t('toast.catalogueCoverUpdateFailed'));
     },
   });
 }

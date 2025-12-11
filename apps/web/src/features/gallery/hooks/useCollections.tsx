@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import { CollectionsService } from '@repo/sdk';
 import type {
   CreateCollectionDtoClass,
@@ -29,6 +30,7 @@ export function useCollectionQuery(collectionId: string) {
 }
 
 export function useCreateCollectionMutation() {
+  const { t } = useTranslation('gallery');
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -38,15 +40,16 @@ export function useCreateCollectionMutation() {
       queryClient.invalidateQueries({
         queryKey: ['collections', collection.catalogueId],
       });
-      toast.success('Collection created successfully!');
+      toast.success(t('toast.collectionCreatedSuccess'));
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Failed to create collection');
+      toast.error(error.message || t('toast.collectionCreateFailed'));
     },
   });
 }
 
 export function useUpdateCollectionMutation() {
+  const { t } = useTranslation('gallery');
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -68,15 +71,16 @@ export function useUpdateCollectionMutation() {
       queryClient.invalidateQueries({
         queryKey: ['collections', 'detail', collection.id],
       });
-      toast.success('Collection updated successfully!');
+      toast.success(t('toast.collectionUpdatedSuccess'));
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Failed to update collection');
+      toast.error(error.message || t('toast.collectionUpdateFailed'));
     },
   });
 }
 
 export function useDeleteCollectionMutation() {
+  const { t } = useTranslation('gallery');
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -105,7 +109,7 @@ export function useDeleteCollectionMutation() {
           context.previousCollections
         );
       }
-      toast.error('Failed to delete collection');
+      toast.error(t('toast.collectionDeleteFailed'));
     },
     onSuccess: (_data, _vars, context) => {
       queryClient.invalidateQueries({
@@ -114,7 +118,7 @@ export function useDeleteCollectionMutation() {
       queryClient.invalidateQueries({
         queryKey: ['catalogues'],
       })
-      toast.success('Collection deleted successfully!');
+      toast.success(t('toast.collectionDeletedSuccess'));
     },
   });
 }

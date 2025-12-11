@@ -135,6 +135,20 @@
     "photos": "fotografij",
     "locale": "sl-SI",
     "noPhotosFound": "Fotografije niso najdene",
-    "noFavouritedPhotos": "Ta seja nima nobenih priljubljenih fotografij."
+    "noFavouritedPhotos": "Ta seja nima nobenih priljubljenih fotografij.",
+    "close": "Zapri"
+  },
+  "toast": {
+    "uploadFailed": "Nalaganje ni uspelo",
+    "photoDeletedSuccess": "Fotografija uspešno izbrisana",
+    "deleteFailed": "Brisanje ni uspelo",
+    "collectionCreatedSuccess": "Zbirka uspešno ustvarjena!",
+    "collectionCreateFailed": "Ustvarjanje zbirke ni uspelo",
+    "collectionUpdatedSuccess": "Zbirka uspešno posodobljena!",
+    "collectionUpdateFailed": "Posodabljanje zbirke ni uspelo",
+    "collectionDeletedSuccess": "Zbirka uspešno izbrisana!",
+    "collectionDeleteFailed": "Brisanje zbirke ni uspelo",
+    "catalogueCoverUpdated": "Naslovnica kataloga posodobljena",
+    "catalogueCoverUpdateFailed": "Posodabljanje naslovnice ni uspelo"
   }
 }

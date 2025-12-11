@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { OpenAPI, PhotosService, PublicService } from '@repo/sdk';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import { API_BASE_URL } from '../../../lib/api-client';
 import { uploadWithProgress } from '../utils/upload-helper';
 import type { Photo, UploadPhotoParams } from '../types';
@@ -40,6 +41,7 @@ export function usePublicPhotosQuery(
 }
 
 export function useUploadPhotoMutation() {
+  const { t } = useTranslation('gallery');
   const queryClient = useQueryClient();
 
   return useMutation<Photo, Error, UploadPhotoParams>({
@@ -88,12 +90,13 @@ export function useUploadPhotoMutation() {
       queryClient.setQueryData(['photos', photo.id], photo);
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Upload failed');
+      toast.error(error.message || t('toast.uploadFailed'));
     },
   });
 }
 
 export function useDeletePhotoMutation() {
+  const { t } = useTranslation('gallery');
   const queryClient = useQueryClient();
 
   return useMutation<void, Error, { id: string; collectionId: string }>({
@@ -115,10 +118,10 @@ export function useDeletePhotoMutation() {
         queryKey: ['catalogues'],
       });
 
-      toast.success('Photo deleted successfully');
+      toast.success(t('toast.photoDeletedSuccess'));
     },
     onError: (error: Error) => {
-      toast.error(error.message || 'Delete failed');
+      toast.error(error.message || t('toast.deleteFailed'));
     },
   });
 }

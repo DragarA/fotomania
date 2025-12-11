@@ -151,9 +151,12 @@ export class CollectionsService {
             throw new NotFoundException(`Collection with ID ${id} not found`);
         }
 
-        fs.rmdirSync(path.join(this.uploadRoot, 'collections', id), {
-            recursive: true,
-        });
+        const collectionPath = path.join(this.uploadRoot, 'collections', id);
+        if (fs.existsSync(collectionPath)) {
+            fs.rmdirSync(collectionPath, {
+                recursive: true,
+            });
+        }
 
         await this.photosService.removeAllForCollection(id);
 

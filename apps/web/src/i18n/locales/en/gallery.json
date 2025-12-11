@@ -135,6 +135,20 @@
     "photos": "photos",
     "locale": "en-US",
     "noPhotosFound": "No photos found",
-    "noFavouritedPhotos": "This session doesn't have any favorited photos."
+    "noFavouritedPhotos": "This session doesn't have any favorited photos.",
+    "close": "Close"
+  },
+  "toast": {
+    "uploadFailed": "Upload failed",
+    "photoDeletedSuccess": "Photo deleted successfully",
+    "deleteFailed": "Delete failed",
+    "collectionCreatedSuccess": "Collection created successfully!",
+    "collectionCreateFailed": "Failed to create collection",
+    "collectionUpdatedSuccess": "Collection updated successfully!",
+    "collectionUpdateFailed": "Failed to update collection",
+    "collectionDeletedSuccess": "Collection deleted successfully!",
+    "collectionDeleteFailed": "Failed to delete collection",
+    "catalogueCoverUpdated": "Catalogue cover updated",
+    "catalogueCoverUpdateFailed": "Failed to update cover"
   }
 }
