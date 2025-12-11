@@ -1,0 +1,27 @@
+{
+  "gallery": {
+    "title": "Photo Gallery",
+    "view_gallery": "View Gallery",
+    "loading": "Loading gallery...",
+    "not_found": "Gallery not found",
+    "not_found_message": "This link may be invalid or the gallery may have been removed",
+    "no_collections": "No collections available yet",
+    "no_photos": "No photos in this collection yet"
+  },
+  "favourites": {
+    "send_to_photographer": "Send to Photographer",
+    "no_favorites": "No favorite photos yet! Click the heart icon on photos to add them to your favorites.",
+    "save_title": "Save Your Favorites",
+    "save_description": "Enter your email to save {{count}} favorite photo(s). The photographer will be able to see which photos you selected.",
+    "email_label": "Email Address",
+    "email_placeholder": "your.email@example.com",
+    "save_button": "Save Favorites",
+    "saving": "Saving...",
+    "error": "Failed to save favourites. Please try again.",
+    "success_title": "Favorites Saved Successfully!",
+    "success_message": "Your selection has been saved and sent to the photographer.",
+    "success_email": "Email: {{email}}",
+    "success_count": "Photos saved: {{count}} photo(s)",
+    "success_followup": "The photographer will review your selected favorites. You may receive a follow-up email at **{{email}}** with further instructions."
+  }
+}

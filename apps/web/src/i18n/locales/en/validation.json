@@ -1,0 +1,32 @@
+{
+  "invalid_type": "Expected {{expected}}, received {{received}}",
+  "invalid_email": "Invalid email address",
+  "too_small": "Must be at least {{minimum}} characters",
+  "too_big": "Must be at most {{maximum}} characters",
+  "required": "This field is required",
+  "catalogue": {
+    "title": {
+      "required": "Title is required",
+      "max_length": "Title must be at most 100 characters"
+    },
+    "description": {
+      "max_length": "Description must be at most 500 characters"
+    },
+    "password": {
+      "requirements": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    }
+  },
+  "auth": {
+    "email": {
+      "required": "Email is required",
+      "invalid": "Invalid email format"
+    },
+    "password": {
+      "required": "Password is required",
+      "min_length": "Password must be at least 8 characters"
+    },
+    "name": {
+      "required": "Name is required"
+    }
+  }
+}

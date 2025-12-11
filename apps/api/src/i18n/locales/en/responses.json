@@ -1,0 +1,16 @@
+{
+  "auth": {
+    "login_success": "Login successful",
+    "register_success": "User registered successfully",
+    "logout_success": "Logout successful. Please remove the token from client storage."
+  },
+  "catalogue": {
+    "delete_success": "Catalogue deleted successfully"
+  },
+  "collection": {
+    "delete_success": "Collection deleted successfully"
+  },
+  "photo": {
+    "delete_success": "Photo deleted successfully"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "failed": "Validation failed",
+  "invalid_type": "Invalid type",
+  "too_small": "Too small",
+  "too_big": "Too big",
+  "invalid_email": "Invalid email address"
+}

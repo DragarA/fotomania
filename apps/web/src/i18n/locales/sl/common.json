@@ -1,0 +1,32 @@
+{
+  "nav": {
+    "home": "Domov",
+    "about": "O nas",
+    "catalogues": "Katalogi",
+    "sign_in": "Prijava",
+    "get_started": "Začni",
+    "logout": "Odjava",
+    "profile": "Profil"
+  },
+  "actions": {
+    "save": "Shrani",
+    "cancel": "Prekliči",
+    "delete": "Izbriši",
+    "edit": "Uredi",
+    "create": "Ustvari",
+    "close": "Zapri",
+    "loading": "Nalaganje...",
+    "saving": "Shranjevanje...",
+    "deleting": "Brisanje...",
+    "uploading": "Nalaganje..."
+  },
+  "general": {
+    "welcome": "Dobrodošli",
+    "back": "Nazaj",
+    "next": "Naprej",
+    "previous": "Nazaj",
+    "search": "Iskanje",
+    "filter": "Filter",
+    "sort": "Razvrsti"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "auth": {
+    "login_success": "Prijava uspešna",
+    "register_success": "Uporabnik uspešno registriran",
+    "logout_success": "Odjava uspešna. Prosimo odstranite žeton iz shrambe odjemalca."
+  },
+  "catalogue": {
+    "delete_success": "Katalog uspešno izbrisan"
+  },
+  "collection": {
+    "delete_success": "Zbirka uspešno izbrisana"
+  },
+  "photo": {
+    "delete_success": "Fotografija uspešno izbrisana"
+  }
+}

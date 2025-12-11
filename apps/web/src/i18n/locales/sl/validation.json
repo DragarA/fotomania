@@ -1,0 +1,32 @@
+{
+  "invalid_type": "Pričakovano {{expected}}, prejeto {{received}}",
+  "invalid_email": "Neveljaven e-poštni naslov",
+  "too_small": "Mora biti vsaj {{minimum}} znakov",
+  "too_big": "Lahko ima največ {{maximum}} znakov",
+  "required": "To polje je obvezno",
+  "catalogue": {
+    "title": {
+      "required": "Naslov je obvezen",
+      "max_length": "Naslov mora biti dolg največ 100 znakov"
+    },
+    "description": {
+      "max_length": "Opis mora biti dolg največ 500 znakov"
+    },
+    "password": {
+      "requirements": "Geslo mora vsebovati vsaj eno veliko črko, eno malo črko, eno številko in en poseben znak"
+    }
+  },
+  "auth": {
+    "email": {
+      "required": "E-poštni naslov je obvezen",
+      "invalid": "Neveljaven format e-poštnega naslova"
+    },
+    "password": {
+      "required": "Geslo je obvezno",
+      "min_length": "Geslo mora biti dolgo vsaj 8 znakov"
+    },
+    "name": {
+      "required": "Ime je obvezno"
+    }
+  }
+}

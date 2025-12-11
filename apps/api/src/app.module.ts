@@ -8,6 +8,7 @@ import { CataloguesModule } from './catalogues/catalogues.module';
 import { ClientSessionsModule } from './client-sessions/client-sessions.module';
 import { CollectionsModule } from './collections/collections.module';
 import { DbModule } from './common/db/db.module';
+import { I18nConfigModule } from './i18n/i18n.module';
 import { PhotosModule } from './photos/photos.module';
 import { PublicModule } from './public/public.module';
 import { UsersModule } from './users/users.module';
@@ -18,6 +19,7 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    I18nConfigModule,
     DbModule,
     AuthModule,
     UsersModule,

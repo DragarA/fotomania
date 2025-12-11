@@ -1,0 +1,18 @@
+{
+  "catalogue": {
+    "not_found": "Catalogue with ID {{id}} not found",
+    "forbidden": "You do not have permission to access this catalogue"
+  },
+  "collection": {
+    "not_found": "Collection with ID {{id}} not found",
+    "forbidden": "You do not have permission to access this collection"
+  },
+  "photo": {
+    "not_found": "Photo with ID {{id}} not found",
+    "forbidden": "You do not have permission to access this photo"
+  },
+  "auth": {
+    "invalid_credentials": "Invalid credentials",
+    "user_exists": "User already exists"
+  }
+}

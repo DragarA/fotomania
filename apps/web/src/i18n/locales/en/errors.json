@@ -1,0 +1,13 @@
+{
+  "general": {
+    "something_went_wrong": "Something went wrong",
+    "try_again": "Please try again",
+    "not_found": "Not found",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Forbidden"
+  },
+  "api": {
+    "network_error": "Network error. Please check your connection.",
+    "server_error": "Server error. Please try again later."
+  }
+}

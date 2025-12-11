@@ -1,0 +1,22 @@
+{
+  "catalogue": {
+    "list_title": "Your Catalogues",
+    "list_subtitle": "Manage the galleries that you share with your clients",
+    "create_button": "Create Catalogue",
+    "no_catalogues": "No catalogues yet",
+    "no_catalogues_message": "Create your first catalogue to start sharing photo galleries with clients",
+    "loading": "Loading catalogues...",
+    "error": "Failed to load catalogues",
+    "photos_count": "{{count}} photos",
+    "photos_count_plural": "{{count}} photos",
+    "photo_count": "{{count}} photo",
+    "delete_confirm": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone."
+  },
+  "collection": {
+    "create": "Create Collection",
+    "name_label": "Collection Name",
+    "no_collections": "No collections yet",
+    "create_first": "Create your first collection to get started",
+    "select_to_view": "Select a collection to view photos"
+  }
+}

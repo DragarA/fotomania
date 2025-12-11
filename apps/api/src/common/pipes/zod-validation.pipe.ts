@@ -1,11 +1,13 @@
-import {
-  PipeTransform,
-  BadRequestException,
-} from '@nestjs/common';
+import { PipeTransform, BadRequestException, Injectable, Optional } from '@nestjs/common';
 import { ZodType, ZodError } from 'zod';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 
+@Injectable()
 export class ZodValidationPipe implements PipeTransform {
-  constructor(private schema: ZodType) {}
+  constructor(
+    private schema: ZodType,
+    @Optional() private i18nService?: I18nService,
+  ) {}
 
   transform(value: unknown) {
     try {
@@ -13,12 +15,20 @@ export class ZodValidationPipe implements PipeTransform {
       return parsedValue;
     } catch (error) {
       if (error instanceof ZodError) {
+        const i18n = this.i18nService ? I18nContext.current() : null;
+
         const errorMessages = error.issues.map((issue) => {
           const path = issue.path.join('.');
-          return path ? `${path}: ${issue.message}` : issue.message;
+          const message = issue.message;
+          return path ? `${path}: ${message}` : message;
         });
+
+        const validationFailedMessage = i18n
+          ? i18n.t('validation.failed')
+          : 'Validation failed';
+
         throw new BadRequestException({
-          message: 'Validation failed',
+          message: validationFailedMessage,
           errors: errorMessages,
           details: error.issues,
         });

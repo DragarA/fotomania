@@ -1,0 +1,7 @@
+{
+  "failed": "Validacija ni uspela",
+  "invalid_type": "Neveljavna vrsta",
+  "too_small": "Premajhno",
+  "too_big": "Preveliko",
+  "invalid_email": "Neveljaven e-poštni naslov"
+}

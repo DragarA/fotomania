@@ -1,0 +1,18 @@
+{
+  "catalogue": {
+    "not_found": "Katalog z ID {{id}} ni najden",
+    "forbidden": "Nimate dovoljenja za dostop do tega kataloga"
+  },
+  "collection": {
+    "not_found": "Zbirka z ID {{id}} ni najdena",
+    "forbidden": "Nimate dovoljenja za dostop do te zbirke"
+  },
+  "photo": {
+    "not_found": "Fotografija z ID {{id}} ni najdena",
+    "forbidden": "Nimate dovoljenja za dostop do te fotografije"
+  },
+  "auth": {
+    "invalid_credentials": "Neveljavne poverilnice",
+    "user_exists": "Uporabnik že obstaja"
+  }
+}

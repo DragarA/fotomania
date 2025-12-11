@@ -1,0 +1,13 @@
+{
+  "general": {
+    "something_went_wrong": "Nekaj je šlo narobe",
+    "try_again": "Prosim poskusite znova",
+    "not_found": "Ni najdeno",
+    "unauthorized": "Neavtorizirano",
+    "forbidden": "Prepovedano"
+  },
+  "api": {
+    "network_error": "Napaka omrežja. Prosim preverite svojo povezavo.",
+    "server_error": "Napaka strežnika. Prosim poskusite kasneje."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "gallery": {
+    "title": "Fotografska galerija",
+    "view_gallery": "Oglej si galerijo",
+    "loading": "Nalaganje galerije...",
+    "not_found": "Galerija ni najdena",
+    "not_found_message": "Ta povezava je morda neveljavna ali pa je bila galerija odstranjena",
+    "no_collections": "Še ni zbirk",
+    "no_photos": "V tej zbirki še ni fotografij"
+  },
+  "favourites": {
+    "send_to_photographer": "Pošlji fotografu",
+    "no_favorites": "Še nimate priljubljenih fotografij! Kliknite ikono srca na fotografijah, da jih dodate med priljubljene.",
+    "save_title": "Shrani priljubljene",
+    "save_description": "Vnesite svoj e-poštni naslov za shranitev {{count}} priljubljenih fotografij. Fotograf bo lahko videl, katere fotografije ste izbrali.",
+    "email_label": "E-poštni naslov",
+    "email_placeholder": "vase.ime@example.com",
+    "save_button": "Shrani priljubljene",
+    "saving": "Shranjevanje...",
+    "error": "Napaka pri shranjevanju priljubljenih. Prosim poskusite znova.",
+    "success_title": "Priljubljene uspešno shranjene!",
+    "success_message": "Vaša izbira je bila shranjena in poslana fotografu.",
+    "success_email": "E-pošta: {{email}}",
+    "success_count": "Shranjenih fotografij: {{count}}",
+    "success_followup": "Fotograf bo pregledal vaše izbrane priljubljene fotografije. Morda boste prejeli e-pošto na **{{email}}** z nadaljnjimi navodili."
+  }
+}
