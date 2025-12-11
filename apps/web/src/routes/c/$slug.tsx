@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Heart, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 import {
   usePublicCatalogueQuery,
@@ -20,6 +21,7 @@ export const Route = createFileRoute('/c/$slug')({
 });
 
 function PublicCataloguePage() {
+  const { t } = useTranslation('public');
   const { slug } = Route.useParams();
   const [selectedCollectionId, setSelectedCollectionId] = useState<
     string | null
@@ -64,9 +66,7 @@ function PublicCataloguePage() {
   const handleSendToPhotographer = () => {
     const favoriteIds = getFavoriteIds();
     if (favoriteIds.length === 0) {
-      toast.info(
-        'No favorite photos yet! Click the heart icon on photos to add them to your favorites.'
-      );
+      toast.info(t('gallery.noFavoritesYet'));
     } else {
       setShowSaveModal(true);
     }
@@ -93,7 +93,7 @@ function PublicCataloguePage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="bg-white rounded-xl shadow p-8 text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading gallery...</p>
+          <p className="text-gray-600">{t('loading.gallery')}</p>
         </div>
       </div>
     );
@@ -105,11 +105,10 @@ function PublicCataloguePage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="bg-white rounded-xl shadow p-8 text-center max-w-md">
           <h1 className="text-2xl font-semibold text-gray-900 mb-3">
-            Gallery not found
+            {t('error.notFound.title')}
           </h1>
           <p className="text-gray-600">
-            {error?.message ||
-              'This link may be invalid or the gallery may have been removed.'}
+            {error?.message || t('error.notFound.message')}
           </p>
         </div>
       </div>
@@ -155,7 +154,7 @@ function PublicCataloguePage() {
         <div className="relative h-full flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center">
           <div className="max-w-4xl">
             <p className="text-sm font-semibold text-white/90 uppercase tracking-widest mb-4">
-              Photo Gallery
+              {t('hero.subtitle')}
             </p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 drop-shadow-lg">
               {catalogue.title}
@@ -175,7 +174,7 @@ function PublicCataloguePage() {
             aria-label="Scroll to gallery"
           >
             <span className="text-sm font-medium hidden sm:block">
-              View Gallery
+              {t('hero.viewGallery')}
             </span>
             <div className="w-10 h-10 rounded-full border-2 border-white/80 flex items-center justify-center group-hover:border-white animate-bounce">
               <ChevronDown className="w-6 h-6" />
@@ -201,7 +200,7 @@ function PublicCataloguePage() {
             </div>
           ) : (
             <div className="mb-8 text-center py-4">
-              <p className="text-gray-500">No collections available yet.</p>
+              <p className="text-gray-500">{t('gallery.noCollections')}</p>
             </div>
           )}
 
@@ -214,7 +213,7 @@ function PublicCataloguePage() {
               >
                 <Heart className="w-5 h-5 fill-red-500 text-red-500" />
                 <span className="text-sm font-medium text-gray-700">
-                  Send to Photographer
+                  {t('gallery.sendToPhotographer')}
                 </span>
               </button>
             </div>

@@ -1,27 +1,45 @@
 {
-  "gallery": {
-    "title": "Photo Gallery",
-    "view_gallery": "View Gallery",
-    "loading": "Loading gallery...",
-    "not_found": "Gallery not found",
-    "not_found_message": "This link may be invalid or the gallery may have been removed",
-    "no_collections": "No collections available yet",
-    "no_photos": "No photos in this collection yet"
+  "hero": {
+    "subtitle": "Photo Gallery",
+    "viewGallery": "View Gallery"
   },
-  "favourites": {
-    "send_to_photographer": "Send to Photographer",
-    "no_favorites": "No favorite photos yet! Click the heart icon on photos to add them to your favorites.",
-    "save_title": "Save Your Favorites",
-    "save_description": "Enter your email to save {{count}} favorite photo(s). The photographer will be able to see which photos you selected.",
-    "email_label": "Email Address",
-    "email_placeholder": "your.email@example.com",
-    "save_button": "Save Favorites",
-    "saving": "Saving...",
-    "error": "Failed to save favourites. Please try again.",
-    "success_title": "Favorites Saved Successfully!",
-    "success_message": "Your selection has been saved and sent to the photographer.",
-    "success_email": "Email: {{email}}",
-    "success_count": "Photos saved: {{count}} photo(s)",
-    "success_followup": "The photographer will review your selected favorites. You may receive a follow-up email at **{{email}}** with further instructions."
+  "loading": {
+    "gallery": "Loading gallery..."
+  },
+  "error": {
+    "notFound": {
+      "title": "Gallery not found",
+      "message": "This link may be invalid or the gallery may have been removed."
+    }
+  },
+  "gallery": {
+    "noCollections": "No collections available yet.",
+    "noPhotos": "No photos in this collection yet.",
+    "sendToPhotographer": "Send to Photographer",
+    "noFavoritesYet": "No favorite photos yet! Click the heart icon on photos to add them to your favorites."
+  },
+  "modal": {
+    "save": {
+      "title": "Save Your Favorites",
+      "description": "Enter your email to save {{count}} favorite {{photoText}}. The photographer will be able to see which photos you selected.",
+      "photo": "photo",
+      "photos": "photos",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "your.email@example.com",
+      "cancel": "Cancel",
+      "submit": "Save Favorites",
+      "saving": "Saving...",
+      "error": "Failed to save favourites. Please try again."
+    },
+    "success": {
+      "title": "Favorites Saved Successfully!",
+      "description": "Your selection has been saved and sent to the photographer.",
+      "emailLabel": "Email",
+      "photosSavedLabel": "Photos saved",
+      "photo": "photo",
+      "photos": "photos",
+      "followUp": "The photographer will review your selected favorites. You may receive a follow-up email at {{email}} with further instructions.",
+      "close": "Close"
+    }
   }
 }

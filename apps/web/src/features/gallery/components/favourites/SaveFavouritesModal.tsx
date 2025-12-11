@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 import {
   Dialog,
@@ -36,6 +37,7 @@ export function SaveFavouritesModal({
   favoritesCount,
   onSuccess,
 }: SaveFavouritesModalProps) {
+  const { t } = useTranslation('public');
   const addFavouritesMutation = useAddFavouritesMutation();
 
   const {
@@ -83,7 +85,7 @@ export function SaveFavouritesModal({
       onSuccess(data.email);
       reset();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save favourites. Please try again.');
+      toast.error(error.message || t('modal.save.error'));
     }
   };
 
@@ -99,11 +101,12 @@ export function SaveFavouritesModal({
       <DialogContent showCloseButton={!isSubmitting}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
-            <DialogTitle>Save Your Favorites</DialogTitle>
+            <DialogTitle>{t('modal.save.title')}</DialogTitle>
             <DialogDescription>
-              Enter your email to save {favoritesCount} favorite{' '}
-              {favoritesCount === 1 ? 'photo' : 'photos'}. The photographer will
-              be able to see which photos you selected.
+              {t('modal.save.description', {
+                count: favoritesCount,
+                photoText: favoritesCount === 1 ? t('modal.save.photo') : t('modal.save.photos')
+              })}
             </DialogDescription>
           </DialogHeader>
 
@@ -112,7 +115,7 @@ export function SaveFavouritesModal({
               htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Email Address
+              {t('modal.save.emailLabel')}
             </label>
             <input
               id="email"
@@ -124,7 +127,7 @@ export function SaveFavouritesModal({
                   ? 'border-red-500 focus:border-red-500 focus:ring-red-200'
                   : 'border-gray-200 focus:border-accent-500 focus:ring-accent-200'
               } disabled:opacity-50 disabled:cursor-not-allowed`}
-              placeholder="your.email@example.com"
+              placeholder={t('modal.save.emailPlaceholder')}
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -138,7 +141,7 @@ export function SaveFavouritesModal({
               disabled={isSubmitting}
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Cancel
+              {t('modal.save.cancel')}
             </button>
             <button
               type="submit"
@@ -148,10 +151,10 @@ export function SaveFavouritesModal({
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-                  Saving...
+                  {t('modal.save.saving')}
                 </>
               ) : (
-                'Save Favorites'
+                t('modal.save.submit')
               )}
             </button>
           </DialogFooter>
