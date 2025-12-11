@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { UploadingFile } from '../../types';
 
@@ -9,6 +10,7 @@ interface UploadQueueProps {
 }
 
 export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
+  const { t } = useTranslation('gallery');
   const [isExpanded, setIsExpanded] = useState(true);
 
   const uploadingCount = files.filter((f) => f.status === 'uploading').length;
@@ -32,8 +34,8 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
             <span className="text-lg">📤</span>
             <span className="font-medium text-gray-900">
               {uploadingCount > 0
-                ? `Uploading ${uploadingCount} of ${totalCount} files...`
-                : `${totalCount} file${totalCount === 1 ? '' : 's'} uploaded`}
+                ? t('uploadQueue.uploading', { current: uploadingCount, total: totalCount })
+                : t('uploadQueue.uploaded', { count: totalCount })}
             </span>
           </div>
           <span className="text-gray-500 text-xl">
@@ -78,7 +80,7 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
                           <button
                             onClick={() => onRemove(file.id)}
                             className="text-gray-400 hover:text-gray-600 text-lg leading-none cursor-pointer"
-                            title="Remove"
+                            title={t('uploadQueue.remove')}
                           >
                             ×
                           </button>
@@ -101,17 +103,17 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
 
                       {file.status === 'success' && (
                         <span className="text-xs text-green-600">
-                          Upload complete
+                          {t('uploadQueue.uploadComplete')}
                         </span>
                       )}
 
                       {file.status === 'error' && (
                         <div className="space-y-1">
                           <span className="text-xs text-red-600 block">
-                            {file.error || 'Upload failed'}
+                            {file.error || t('uploadQueue.uploadFailed')}
                           </span>
                           <button className="text-xs text-accent-600 hover:text-accent-700 font-medium cursor-pointer">
-                            Retry
+                            {t('uploadQueue.retry')}
                           </button>
                         </div>
                       )}
@@ -127,7 +129,7 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
                   onClick={onClear}
                   className="w-full text-sm font-medium text-accent-600 hover:text-accent-700 transition-colors cursor-pointer"
                 >
-                  Clear Completed
+                  {t('uploadQueue.clearCompleted')}
                 </button>
               </div>
             )}

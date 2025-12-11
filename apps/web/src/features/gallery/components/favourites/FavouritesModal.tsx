@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { API_BASE_URL } from '../../../../lib/api-client';
 import type { ClientFavouriteSession } from '../../hooks';
 import { useSessionFavouritesQuery } from '../../hooks';
@@ -17,6 +18,7 @@ export function FavouritesModal({
   onClose,
   onPhotoClick,
 }: FavouritesModalProps) {
+  const { t } = useTranslation('gallery');
   const { data: sessionData, isLoading } = useSessionFavouritesQuery(
     catalogueId,
     session?.sessionId || '',
@@ -41,8 +43,11 @@ export function FavouritesModal({
           <div>
             <h2 className="text-xl font-bold text-gray-900">{session.email}</h2>
             <p className="text-sm text-gray-500 mt-1">
-              Selected {session.photoCount} {session.photoCount === 1 ? 'photo' : 'photos'} on{' '}
-              {new Date(session.createdAt).toLocaleDateString('en-US', {
+              {t('favouritesModal.selected', {
+                count: session.photoCount,
+                photoText: session.photoCount === 1 ? t('favouritesModal.photo') : t('favouritesModal.photos'),
+              })}{' '}
+              {new Date(session.createdAt).toLocaleDateString(t('favouritesModal.locale'), {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -74,10 +79,10 @@ export function FavouritesModal({
             <div className="flex flex-col items-center justify-center py-16 px-6">
               <div className="text-6xl mb-4">📷</div>
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                No photos found
+                {t('favouritesModal.noPhotosFound')}
               </h3>
               <p className="text-gray-500 text-center max-w-md">
-                This session doesn't have any favorited photos.
+                {t('favouritesModal.noFavouritedPhotos')}
               </p>
             </div>
           ) : (

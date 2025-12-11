@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CollectionContextMenuProps {
   x: number;
@@ -15,6 +16,7 @@ export function CollectionContextMenu({
   onEdit,
   onDelete,
 }: CollectionContextMenuProps) {
+  const { t } = useTranslation('gallery');
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -54,7 +56,7 @@ export function CollectionContextMenu({
 
   const menuItems = [
     {
-      label: 'Edit',
+      label: t('collectionContextMenu.edit'),
       icon: (
         <svg
           className="w-4 h-4"
@@ -73,7 +75,7 @@ export function CollectionContextMenu({
       onClick: onEdit,
     },
     {
-      label: 'Delete',
+      label: t('collectionContextMenu.delete'),
       icon: (
         <svg
           className="w-4 h-4"

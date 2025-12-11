@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { API_BASE_URL } from '../../../../lib/api-client';
 import { PhotoContextMenu } from './PhotoContextMenu';
 
@@ -33,11 +34,13 @@ export function PhotoGrid({
   onPhotoDelete,
   onSetAsCover,
 }: PhotoGridProps) {
+  const { t } = useTranslation('gallery');
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
     photo: Photo;
   } | null>(null);
+
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -56,14 +59,14 @@ export function PhotoGrid({
       <div className="bg-white rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
         <div className="text-gray-400 text-6xl mb-4">📷</div>
         <h3 className="text-xl font-semibold text-gray-700 mb-2">
-          No photos yet
+          {t('photoGrid.noPhotosYet')}
         </h3>
         <p className="text-gray-500 mb-6">
-          Drag and drop images anywhere on this area to upload
+          {t('photoGrid.dragAndDrop')}
         </p>
         <div className="inline-flex items-center gap-2 text-sm text-gray-400">
           <span>💡</span>
-          <span>You can upload JPG, PNG, WebP or HEIC images</span>
+          <span>{t('photoGrid.uploadHint')}</span>
         </div>
       </div>
     );
@@ -107,7 +110,7 @@ export function PhotoGrid({
                   <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  Cover
+                  {t('photoGrid.cover')}
                 </div>
               )}
 

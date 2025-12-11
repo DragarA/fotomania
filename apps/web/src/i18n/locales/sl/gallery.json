@@ -29,10 +29,112 @@
     }
   },
   "collection": {
-    "create": "Ustvari zbirko",
-    "name_label": "Ime zbirke",
+    "createTitle": "Ustvari zbirko",
+    "editTitle": "Uredi zbirko",
+    "createDescription": "Ustvarite novo zbirko za organizacijo fotografij.",
+    "editDescription": "Posodobite ime zbirke.",
+    "nameLabel": "Ime zbirke",
+    "namePlaceholder": "Fotografije ceremonije",
+    "cancel": "Prekliči",
+    "create": "Ustvari",
+    "save": "Shrani",
+    "creating": "Ustvarjanje...",
+    "saving": "Shranjevanje...",
     "no_collections": "Še nimate zbirk",
     "create_first": "Ustvarite svojo prvo zbirko za začetek",
     "select_to_view": "Izberite zbirko za ogled fotografij"
+  },
+  "catalogueForm": {
+    "createTitle": "Ustvari katalog",
+    "editTitle": "Uredi katalog",
+    "createSubtitle": "Delite izbrane galerije s svojimi strankami",
+    "editSubtitle": "Posodobite podatke in nastavitve kataloga",
+    "titleLabel": "Naslov",
+    "titlePlaceholder": "Poročna poletna 2024",
+    "descriptionLabel": "Opis",
+    "descriptionPlaceholder": "Delite kratek opis za svoje stranke...",
+    "passwordLabel": "Geslo (neobvezno)",
+    "passwordPlaceholder": "Pustite prazno za obdržanje trenutnega gesla",
+    "createButton": "Ustvari katalog",
+    "saveChanges": "Shrani spremembe",
+    "createSuccess": "Katalog uspešno ustvarjen!",
+    "updateSuccess": "Katalog uspešno posodobljen!",
+    "createError": "Napaka pri ustvarjanju kataloga",
+    "updateError": "Napaka pri posodabljanju kataloga"
+  },
+  "sidebar": {
+    "linkCopied": "Povezava kopirana v odložišče",
+    "deleteConfirm": "Ali ste prepričani, da želite izbrisati \"{{title}}\"? Tega dejanja ni mogoče razveljaviti.",
+    "deleteSuccess": "Katalog uspešno izbrisan",
+    "deleteError": "Napaka pri brisanju kataloga",
+    "moreOptions": "Več možnosti",
+    "collectionsTab": "Zbirke",
+    "favouritesTab": "Priljubljene",
+    "collectionsTitle": "Zbirke",
+    "add": "Dodaj",
+    "photos": "fotografij",
+    "noCollections": "Še nimate zbirk",
+    "createFirstCollection": "Ustvari prvo zbirko"
+  },
+  "workspace": {
+    "invalidFile": "Neveljavna datoteka",
+    "deleteCollectionTitle": "Izbriši \"{{name}}\"?",
+    "deletePhotoTitle": "Izbriši fotografijo?",
+    "cannotBeUndone": "Tega dejanja ni mogoče razveljaviti.",
+    "catalogueNotFound": "Katalog ni najden"
+  },
+  "photoWorkspace": {
+    "selectCollection": "Izberite zbirko za ogled fotografij",
+    "createFirstCollection": "Ustvarite svojo prvo zbirko za začetek",
+    "dropImagesHere": "Spustite slike tukaj",
+    "uploadLimit": "Naložite do 20 slik naenkrat",
+    "supportedFormats": "Podprto: JPG, PNG, WebP, HEIC (največ 10MB vsaka)"
+  },
+  "photoGrid": {
+    "noPhotosYet": "Še ni fotografij",
+    "dragAndDrop": "Povlecite in spustite slike kamorkoli na to območje za nalaganje",
+    "uploadHint": "Naložite lahko slike JPG, PNG, WebP ali HEIC",
+    "cover": "Naslovnica"
+  },
+  "uploadQueue": {
+    "uploading": "Nalaganje {{current}} od {{total}} datotek...",
+    "uploaded": "{{count}} datoteka naložena",
+    "uploaded_other": "{{count}} datotek naloženih",
+    "remove": "Odstrani",
+    "uploadComplete": "Nalaganje dokončano",
+    "uploadFailed": "Nalaganje ni uspelo",
+    "retry": "Poskusi ponovno",
+    "clearCompleted": "Počisti dokončane"
+  },
+  "contextMenu": {
+    "editDetails": "Uredi podrobnosti",
+    "share": "Deli",
+    "delete": "Izbriši"
+  },
+  "photoContextMenu": {
+    "open": "Odpri",
+    "download": "Prenesi",
+    "setAsCover": "Nastavi kot naslovnico",
+    "currentCover": "Trenutna naslovnica",
+    "delete": "Izbriši"
+  },
+  "collectionContextMenu": {
+    "edit": "Uredi",
+    "delete": "Izbriši"
+  },
+  "favouritesView": {
+    "noFavouritesYet": "Še ni priljubljenih",
+    "clientsWillAppear": "Ko stranke izberejo svoje priljubljene fotografije, se bodo prikazale tukaj.",
+    "photo": "fotografija",
+    "photos": "fotografij",
+    "locale": "sl-SI"
+  },
+  "favouritesModal": {
+    "selected": "Izbrano {{count}} {{photoText}} dne",
+    "photo": "fotografija",
+    "photos": "fotografij",
+    "locale": "sl-SI",
+    "noPhotosFound": "Fotografije niso najdene",
+    "noFavouritedPhotos": "Ta seja nima nobenih priljubljenih fotografij."
   }
 }

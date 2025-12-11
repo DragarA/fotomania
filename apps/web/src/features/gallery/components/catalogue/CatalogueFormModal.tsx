@@ -1,4 +1,5 @@
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import { CatalogueForm } from './CatalogueForm';
 import {
   useCreateCatalogueMutation,
@@ -20,6 +21,7 @@ export function CatalogueFormModal({
   catalogueId,
   onSuccess,
 }: CatalogueFormModalProps) {
+  const { t } = useTranslation('gallery');
   const isEditMode = Boolean(catalogueId);
   const createMutation = useCreateCatalogueMutation();
   const updateMutation = useUpdateCatalogueMutation(catalogueId || '');
@@ -39,23 +41,23 @@ export function CatalogueFormModal({
 
       updateMutation.mutate(payload, {
         onSuccess: (updatedCatalogue) => {
-          toast.success('Catalogue updated successfully!');
+          toast.success(t('catalogueForm.updateSuccess'));
           onSuccess?.(updatedCatalogue.id);
           onClose();
         },
         onError: (error) => {
-          toast.error(error.message || 'Failed to update catalogue');
+          toast.error(error.message || t('catalogueForm.updateError'));
         },
       });
     } else {
       createMutation.mutate(values, {
         onSuccess: (newCatalogue) => {
-          toast.success('Catalogue created successfully!');
+          toast.success(t('catalogueForm.createSuccess'));
           onSuccess?.(newCatalogue.id);
           onClose();
         },
         onError: (error) => {
-          toast.error(error.message || 'Failed to create catalogue');
+          toast.error(error.message || t('catalogueForm.createError'));
         },
       });
     }
@@ -76,12 +78,12 @@ export function CatalogueFormModal({
         <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-gray-900">
-              {isEditMode ? 'Edit Catalogue' : 'Create Catalogue'}
+              {isEditMode ? t('catalogueForm.editTitle') : t('catalogueForm.createTitle')}
             </h2>
             <p className="text-sm text-gray-500 mt-1">
               {isEditMode
-                ? 'Update catalogue details and settings'
-                : 'Share curated galleries with your clients'}
+                ? t('catalogueForm.editSubtitle')
+                : t('catalogueForm.createSubtitle')}
             </p>
           </div>
           <button
@@ -107,7 +109,7 @@ export function CatalogueFormModal({
             </div>
           ) : mutation.isError ? (
             <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
-              {mutation.error?.message || `Unable to ${isEditMode ? 'update' : 'create'} catalogue.`}
+              {mutation.error?.message || t(isEditMode ? 'catalogueForm.updateError' : 'catalogueForm.createError')}
             </div>
           ) : null}
 
@@ -121,7 +123,7 @@ export function CatalogueFormModal({
                   }
                 : undefined
             }
-            submitLabel={isEditMode ? 'Save changes' : 'Create catalogue'}
+            submitLabel={isEditMode ? t('catalogueForm.saveChanges') : t('catalogueForm.createButton')}
             isSubmitting={mutation.isPending}
             onSubmit={handleSubmit}
           />

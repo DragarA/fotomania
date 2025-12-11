@@ -54,5 +54,45 @@
     "search": "Iskanje",
     "filter": "Filter",
     "sort": "Razvrsti"
+  },
+  "home": {
+    "hero": {
+      "title": "Zajemite. Organizirajte. Delite.",
+      "subtitle": "Ultimativna platforma za fotografe za shranjevanje, upravljanje in prikazovanje svojega dela.",
+      "getStarted": "Začni",
+      "watchDemo": "Oglej si predstavitev",
+      "goToProfile": "Pojdi na profil"
+    },
+    "features": {
+      "title": "Vse, kar potrebujete za upravljanje fotografskega poslovanja",
+      "subtitle": "Močna orodja, zasnovana posebej za profesionalne fotografe.",
+      "storage": {
+        "title": "Varna shramba v oblaku",
+        "description": "Varno shranjujte svoje fotografije v oblaku z neomejenim prostorom in samodejnimi varnostnimi kopijami."
+      },
+      "organization": {
+        "title": "Pametna organizacija",
+        "description": "Organizirajte svoje fotografije z oznakami, albumi in zbirkami. Takoj najdite, kar potrebujete."
+      },
+      "sharing": {
+        "title": "Enostavno deljenje",
+        "description": "Delite galerije s strankami prek lepih, prilagodljivih povezav. Prijava ni potrebna."
+      }
+    },
+    "stats": {
+      "photosStored": "Shranjenih fotografij",
+      "photographers": "Fotografov",
+      "galleriesCreated": "Ustvarjenih galerij",
+      "uptime": "Razpoložljivost"
+    },
+    "cta": {
+      "title": "Pripravljeni dvigniti svojo fotografijo na višjo raven?",
+      "subtitle": "Pridružite se tisočim fotografov, ki zaupajo svoje delo Fotomaniji",
+      "startTrial": "Začnite brezplačno preizkusno obdobje"
+    }
+  },
+  "confirmDialog": {
+    "delete": "Izbriši",
+    "cancel": "Prekliči"
   }
 }

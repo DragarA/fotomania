@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'react-i18next';
 import { catalogueCreateFormSchema, CatalogueCreateFormValues, type CatalogueFormValues } from '../../utils/validation';
 
 interface CatalogueFormProps {
@@ -15,6 +16,7 @@ export function CatalogueForm({
   isSubmitting,
   onSubmit,
 }: CatalogueFormProps) {
+  const { t } = useTranslation('gallery');
   const {
     register,
     handleSubmit,
@@ -37,7 +39,7 @@ export function CatalogueForm({
           className="block text-sm font-semibold text-gray-700 mb-2"
           htmlFor="title"
         >
-          Title
+          {t('catalogueForm.titleLabel')}
         </label>
         <input
           id="title"
@@ -47,7 +49,7 @@ export function CatalogueForm({
               ? 'border-red-500'
               : 'border-gray-200 focus:border-accent-500'
           }`}
-          placeholder="Summer Wedding 2024"
+          placeholder={t('catalogueForm.titlePlaceholder')}
         />
         {errors.title && (
           <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
@@ -60,7 +62,7 @@ export function CatalogueForm({
           className="block text-sm font-semibold text-gray-700 mb-2"
           htmlFor="description"
         >
-          Description
+          {t('catalogueForm.descriptionLabel')}
         </label>
         <textarea
           id="description"
@@ -70,7 +72,7 @@ export function CatalogueForm({
               ? 'border-red-500'
               : 'border-gray-200 focus:border-accent-500'
           }`}
-          placeholder="Share a short description for your clients..."
+          placeholder={t('catalogueForm.descriptionPlaceholder')}
         />
         {errors.description && (
           <p className="mt-1 text-sm text-red-600">
@@ -85,7 +87,7 @@ export function CatalogueForm({
           className="block text-sm font-semibold text-gray-700 mb-2"
           htmlFor="password"
         >
-          Password (optional)
+          {t('catalogueForm.passwordLabel')}
         </label>
         <input
           id="password"
@@ -96,7 +98,7 @@ export function CatalogueForm({
               ? 'border-red-500'
               : 'border-gray-200 focus:border-accent-500'
           }`}
-          placeholder="Leave blank to keep current password"
+          placeholder={t('catalogueForm.passwordPlaceholder')}
         />
         {errors.password && (
           <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>

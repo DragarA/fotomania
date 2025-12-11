@@ -29,10 +29,112 @@
     }
   },
   "collection": {
-    "create": "Create Collection",
-    "name_label": "Collection Name",
+    "createTitle": "Create Collection",
+    "editTitle": "Edit Collection",
+    "createDescription": "Create a new collection to organize your photos.",
+    "editDescription": "Update the collection name.",
+    "nameLabel": "Collection Name",
+    "namePlaceholder": "Ceremony Photos",
+    "cancel": "Cancel",
+    "create": "Create",
+    "save": "Save",
+    "creating": "Creating...",
+    "saving": "Saving...",
     "no_collections": "No collections yet",
     "create_first": "Create your first collection to get started",
     "select_to_view": "Select a collection to view photos"
+  },
+  "catalogueForm": {
+    "createTitle": "Create Catalogue",
+    "editTitle": "Edit Catalogue",
+    "createSubtitle": "Share curated galleries with your clients",
+    "editSubtitle": "Update catalogue details and settings",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Summer Wedding 2024",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Share a short description for your clients...",
+    "passwordLabel": "Password (optional)",
+    "passwordPlaceholder": "Leave blank to keep current password",
+    "createButton": "Create catalogue",
+    "saveChanges": "Save changes",
+    "createSuccess": "Catalogue created successfully!",
+    "updateSuccess": "Catalogue updated successfully!",
+    "createError": "Failed to create catalogue",
+    "updateError": "Failed to update catalogue"
+  },
+  "sidebar": {
+    "linkCopied": "Link copied to clipboard",
+    "deleteConfirm": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+    "deleteSuccess": "Catalogue deleted successfully",
+    "deleteError": "Failed to delete catalogue",
+    "moreOptions": "More options",
+    "collectionsTab": "Collections",
+    "favouritesTab": "Favourites",
+    "collectionsTitle": "Collections",
+    "add": "Add",
+    "photos": "photos",
+    "noCollections": "No collections yet",
+    "createFirstCollection": "Create First Collection"
+  },
+  "workspace": {
+    "invalidFile": "Invalid file",
+    "deleteCollectionTitle": "Delete \"{{name}}\"?",
+    "deletePhotoTitle": "Delete photo?",
+    "cannotBeUndone": "This action cannot be undone.",
+    "catalogueNotFound": "Catalogue not found"
+  },
+  "photoWorkspace": {
+    "selectCollection": "Select a collection to view photos",
+    "createFirstCollection": "Create your first collection to get started",
+    "dropImagesHere": "Drop images here",
+    "uploadLimit": "Upload up to 20 images at once",
+    "supportedFormats": "Supported: JPG, PNG, WebP, HEIC (max 10MB each)"
+  },
+  "photoGrid": {
+    "noPhotosYet": "No photos yet",
+    "dragAndDrop": "Drag and drop images anywhere on this area to upload",
+    "uploadHint": "You can upload JPG, PNG, WebP or HEIC images", 
+    "cover": "Cover"
+  },
+  "uploadQueue": {
+    "uploading": "Uploading {{current}} of {{total}} files...",
+    "uploaded": "{{count}} file uploaded",
+    "uploaded_other": "{{count}} files uploaded",
+    "remove": "Remove",
+    "uploadComplete": "Upload complete",
+    "uploadFailed": "Upload failed",
+    "retry": "Retry",
+    "clearCompleted": "Clear Completed"
+  },
+  "contextMenu": {
+    "editDetails": "Edit Details",
+    "share": "Share",
+    "delete": "Delete"
+  },
+  "photoContextMenu": {
+    "open": "Open",
+    "download": "Download",
+    "setAsCover": "Set as Cover",
+    "currentCover": "Current Cover",
+    "delete": "Delete"
+  },
+  "collectionContextMenu": {
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "favouritesView": {
+    "noFavouritesYet": "No favorites yet",
+    "clientsWillAppear": "When clients select their favorite photos, they'll appear here.",
+    "photo": "photo",
+    "photos": "photos",
+    "locale": "en-US"
+  },
+  "favouritesModal": {
+    "selected": "Selected {{count}} {{photoText}} on",
+    "photo": "photo",
+    "photos": "photos",
+    "locale": "en-US",
+    "noPhotosFound": "No photos found",
+    "noFavouritedPhotos": "This session doesn't have any favorited photos."
   }
 }

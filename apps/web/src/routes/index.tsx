@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../features/auth/hooks';
 
 export const Route = createFileRoute('/')({
@@ -6,6 +7,7 @@ export const Route = createFileRoute('/')({
 });
 
 function HomeComponent() {
+  const { t } = useTranslation('common');
   const { user } = useAuth();
 
   return (
@@ -15,11 +17,10 @@ function HomeComponent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900">
-              Capture. Organize. Share.
+              {t('home.hero.title')}
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-gray-600 max-w-3xl mx-auto">
-              The ultimate platform for photographers to store, manage, and showcase
-              their work beautifully.
+              {t('home.hero.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {user ? (
@@ -27,7 +28,7 @@ function HomeComponent() {
                   to="/profile"
                   className="inline-block px-8 py-4 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors"
                 >
-                  Go to Profile
+                  {t('home.hero.goToProfile')}
                 </Link>
               ) : (
                 <>
@@ -35,10 +36,10 @@ function HomeComponent() {
                     to="/login"
                     className="inline-block px-8 py-4 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors"
                   >
-                    Get Started Free
+                    {t('home.hero.getStarted')}
                   </Link>
                   <button className="inline-block px-8 py-4 bg-white border-2 border-accent-500 text-accent-600 font-semibold rounded-lg hover:bg-accent-50 transition-colors cursor-pointer">
-                    Watch Demo
+                    {t('home.hero.watchDemo')}
                   </button>
                 </>
               )}
@@ -52,11 +53,10 @@ function HomeComponent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Everything you need to manage your photos
+              {t('home.features.title')}
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Powerful tools designed specifically for professional photographers and
-              enthusiasts
+              {t('home.features.subtitle')}
             </p>
           </div>
 
@@ -79,11 +79,10 @@ function HomeComponent() {
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                Unlimited Storage
+                {t('home.features.storage.title')}
               </h3>
               <p className="text-gray-600">
-                Store all your high-resolution photos without worrying about space
-                limits
+                {t('home.features.storage.description')}
               </p>
             </div>
 
@@ -105,10 +104,10 @@ function HomeComponent() {
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                Smart Organization
+                {t('home.features.organization.title')}
               </h3>
               <p className="text-gray-600">
-                AI-powered tagging and smart albums make finding photos effortless
+                {t('home.features.organization.description')}
               </p>
             </div>
 
@@ -130,11 +129,10 @@ function HomeComponent() {
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                Easy Sharing
+                {t('home.features.sharing.title')}
               </h3>
               <p className="text-gray-600">
-                Share galleries with clients and get feedback with built-in
-                collaboration tools
+                {t('home.features.sharing.description')}
               </p>
             </div>
           </div>
@@ -149,25 +147,25 @@ function HomeComponent() {
               <div className="text-4xl md:text-5xl font-bold text-accent-600 mb-2">
                 1M+
               </div>
-              <div className="text-gray-600 font-medium">Photos Stored</div>
+              <div className="text-gray-600 font-medium">{t('home.stats.photosStored')}</div>
             </div>
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold text-accent-600 mb-2">
                 50K+
               </div>
-              <div className="text-gray-600 font-medium">Photographers</div>
+              <div className="text-gray-600 font-medium">{t('home.stats.photographers')}</div>
             </div>
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold text-accent-600 mb-2">
                 100K+
               </div>
-              <div className="text-gray-600 font-medium">Galleries Created</div>
+              <div className="text-gray-600 font-medium">{t('home.stats.galleriesCreated')}</div>
             </div>
             <div className="text-center">
               <div className="text-4xl md:text-5xl font-bold text-accent-600 mb-2">
                 99.9%
               </div>
-              <div className="text-gray-600 font-medium">Uptime</div>
+              <div className="text-gray-600 font-medium">{t('home.stats.uptime')}</div>
             </div>
           </div>
         </div>
@@ -177,17 +175,17 @@ function HomeComponent() {
       <section className="py-20 bg-accent-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold mb-6 text-gray-900">
-            Ready to elevate your photography?
+            {t('home.cta.title')}
           </h2>
           <p className="text-xl mb-8 text-gray-600">
-            Join thousands of photographers who trust Fotomania with their work
+            {t('home.cta.subtitle')}
           </p>
           {!user && (
             <Link
               to="/login"
               className="inline-block px-8 py-4 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors"
             >
-              Start Your Free Trial
+              {t('home.cta.startTrial')}
             </Link>
           )}
         </div>

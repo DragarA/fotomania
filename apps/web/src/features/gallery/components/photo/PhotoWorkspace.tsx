@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { PhotoGrid } from './PhotoGrid';
 import type { Collection, Photo } from '../../types';
 
@@ -48,6 +49,8 @@ export function PhotoWorkspace({
   onPhotoDelete,
   onSetAsCover,
 }: PhotoWorkspaceProps) {
+  const { t } = useTranslation('gallery');
+
   return (
     <main
       {...dropzoneRootProps}
@@ -73,10 +76,10 @@ export function PhotoWorkspace({
       ) : (
         <div className="flex items-center justify-center h-full">
           <div className="text-center text-gray-500">
-            <p className="text-xl">Select a collection to view photos</p>
+            <p className="text-xl">{t('photoWorkspace.selectCollection')}</p>
             {collections && collections.length === 0 && (
               <p className="text-sm mt-2">
-                Create your first collection to get started
+                {t('photoWorkspace.createFirstCollection')}
               </p>
             )}
           </div>
@@ -89,11 +92,11 @@ export function PhotoWorkspace({
           <div className="bg-white rounded-2xl p-12 shadow-2xl text-center">
             <div className="text-6xl mb-4">📤</div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              Drop images here
+              {t('photoWorkspace.dropImagesHere')}
             </h3>
-            <p className="text-gray-600">Upload up to 20 images at once</p>
+            <p className="text-gray-600">{t('photoWorkspace.uploadLimit')}</p>
             <p className="text-sm text-gray-500 mt-2">
-              Supported: JPG, PNG, WebP, HEIC (max 10MB each)
+              {t('photoWorkspace.supportedFormats')}
             </p>
           </div>
         </div>

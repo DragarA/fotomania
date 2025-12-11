@@ -1,5 +1,6 @@
 import { toast } from 'sonner';
 import { useDropzone } from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
 
 import {
   useCatalogueQuery,
@@ -25,6 +26,7 @@ interface GalleryWorkspaceProps {
 }
 
 export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
+  const { t } = useTranslation('gallery');
   const { confirmDelete } = useConfirmDialog();
 
   // Data queries
@@ -73,7 +75,7 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
     onDrop: (acceptedFiles, rejectedFiles) => {
       if (rejectedFiles.length > 0) {
         rejectedFiles.forEach((rejected) => {
-          const reason = rejected.errors[0]?.message || 'Invalid file';
+          const reason = rejected.errors[0]?.message || t('workspace.invalidFile');
           toast.error(`${rejected.file.name}: ${reason}`);
         });
       }
@@ -88,8 +90,8 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
   // Handlers
   const handleDeleteCollection = (collectionId: string, collectionName: string) => {
     confirmDelete({
-      title: `Delete "${collectionName}"?`,
-      description: 'This action cannot be undone.',
+      title: t('workspace.deleteCollectionTitle', { name: collectionName }),
+      description: t('workspace.cannotBeUndone'),
       onConfirm: () => {
         deleteMutation.mutate(
           { id: collectionId, catalogueId },
@@ -101,8 +103,8 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
 
   const handleDeletePhoto = (photo: any) => {
     confirmDelete({
-      title: 'Delete photo?',
-      description: `${photo.originalFileName}\nThis action cannot be undone.`,
+      title: t('workspace.deletePhotoTitle'),
+      description: `${photo.originalFileName}\n${t('workspace.cannotBeUndone')}`,
       onConfirm: () => {
         deletePhotoMutation.mutate({
           id: photo.id,
@@ -134,7 +136,7 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
   }
 
   if (!catalogue) {
-    return <div>Catalogue not found</div>;
+    return <div>{t('workspace.catalogueNotFound')}</div>;
   }
 
   return (

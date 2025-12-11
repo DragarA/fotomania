@@ -54,5 +54,45 @@
     "search": "Search",
     "filter": "Filter",
     "sort": "Sort"
+  },
+  "home": {
+    "hero": {
+      "title": "Capture. Organize. Share.",
+      "subtitle": "The ultimate platform for photographers to store, manage, and showcase their work beautifully.",
+      "getStarted": "Get Started",
+      "watchDemo": "Watch Demo",
+      "goToProfile": "Go to Profile"
+    },
+    "features": {
+      "title": "Everything you need to manage your photography business",
+      "subtitle": "Powerful tools designed specifically for professional photographers.",
+      "storage": {
+        "title": "Secure Cloud Storage",
+        "description": "Store your photos safely in the cloud with unlimited storage space and automatic backups."
+      },
+      "organization": {
+        "title": "Smart Organization",
+        "description": "Organize your photos with tags, albums, and collections. Find what you need instantly."
+      },
+      "sharing": {
+        "title": "Easy Sharing",
+        "description": "Share galleries with clients through beautiful, customizable links. No sign-up required."
+      }
+    },
+    "stats": {
+      "photosStored": "Photos Stored",
+      "photographers": "Photographers",
+      "galleriesCreated": "Galleries Created",
+      "uptime": "Uptime"
+    },
+    "cta": {
+      "title": "Ready to elevate your photography?",
+      "subtitle": "Join thousands of photographers who trust Fotomania with their work",
+      "startTrial": "Start Your Free Trial"
+    }
+  },
+  "confirmDialog": {
+    "delete": "Delete",
+    "cancel": "Cancel"
   }
 }

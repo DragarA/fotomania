@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface PhotoContextMenuProps {
   x: number;
@@ -21,6 +22,7 @@ export function PhotoContextMenu({
   onSetAsCover,
   isCurrentCover,
 }: PhotoContextMenuProps) {
+  const { t } = useTranslation('gallery');
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export function PhotoContextMenu({
 
   const menuItems = [
     {
-      label: 'Open',
+      label: t('photoContextMenu.open'),
       icon: (
         <svg
           className="w-4 h-4 cursor-pointer"
@@ -85,7 +87,7 @@ export function PhotoContextMenu({
       onClick: onOpen,
     },
     {
-      label: 'Download',
+      label: t('photoContextMenu.download'),
       icon: (
         <svg
           className="w-4 h-4 cursor-pointer"
@@ -104,7 +106,7 @@ export function PhotoContextMenu({
       onClick: onDownload,
     },
     {
-      label: isCurrentCover ? 'Current Cover' : 'Set as Cover',
+      label: isCurrentCover ? t('photoContextMenu.currentCover') : t('photoContextMenu.setAsCover'),
       icon: (
         <svg
           className="w-4 h-4"
@@ -124,7 +126,7 @@ export function PhotoContextMenu({
       disabled: isCurrentCover || !onSetAsCover,
     },
     {
-      label: 'Delete',
+      label: t('photoContextMenu.delete'),
       icon: (
         <svg
           className="w-4 h-4 cursor-pointer"

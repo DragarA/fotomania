@@ -1,4 +1,5 @@
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 interface ConfirmDialogOptions {
   title: string;
@@ -10,11 +11,13 @@ interface ConfirmDialogOptions {
 }
 
 export function useConfirmDialog() {
+  const { t } = useTranslation('common');
+
   const confirm = ({
     title,
     description,
-    confirmLabel = 'Delete',
-    cancelLabel = 'Cancel',
+    confirmLabel = t('confirmDialog.delete'),
+    cancelLabel = t('confirmDialog.cancel'),
     onConfirm,
     onCancel,
   }: ConfirmDialogOptions) => {
@@ -52,7 +55,7 @@ export function useConfirmDialog() {
   };
 
   const confirmDelete = (options: Omit<ConfirmDialogOptions, 'confirmLabel'>) => {
-    confirm({ ...options, confirmLabel: 'Delete' });
+    confirm({ ...options, confirmLabel: t('confirmDialog.delete') });
   };
 
   return { confirm, confirmDelete };

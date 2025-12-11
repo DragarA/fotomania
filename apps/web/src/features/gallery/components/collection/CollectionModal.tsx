@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'react-i18next';
 
 import {
   Dialog,
@@ -38,6 +39,7 @@ export function CollectionModal({
   catalogueId,
   initialData,
 }: CollectionModalProps) {
+  const { t } = useTranslation('gallery');
   const createMutation = useCreateCollectionMutation();
   const updateMutation = useUpdateCollectionMutation();
 
@@ -97,12 +99,12 @@ export function CollectionModal({
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>
-              {mode === 'create' ? 'Create Collection' : 'Edit Collection'}
+              {mode === 'create' ? t('collection.createTitle') : t('collection.editTitle')}
             </DialogTitle>
             <DialogDescription>
               {mode === 'create'
-                ? 'Create a new collection to organize your photos.'
-                : 'Update the collection name.'}
+                ? t('collection.createDescription')
+                : t('collection.editDescription')}
             </DialogDescription>
           </DialogHeader>
 
@@ -111,7 +113,7 @@ export function CollectionModal({
               htmlFor="name"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Collection Name
+              {t('collection.nameLabel')}
             </label>
             <input
               id="name"
@@ -122,7 +124,7 @@ export function CollectionModal({
                   ? 'border-red-500 focus:border-red-500 focus:ring-red-200'
                   : 'border-gray-200 focus:border-accent-500 focus:ring-accent-200'
               } disabled:opacity-50 disabled:cursor-not-allowed`}
-              placeholder="Ceremony Photos"
+              placeholder={t('collection.namePlaceholder')}
             />
             {errors.name && (
               <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
@@ -136,7 +138,7 @@ export function CollectionModal({
               disabled={isSubmitting}
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Cancel
+              {t('collection.cancel')}
             </button>
             <button
               type="submit"
@@ -146,12 +148,12 @@ export function CollectionModal({
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-                  {mode === 'create' ? 'Creating...' : 'Saving...'}
+                  {mode === 'create' ? t('collection.creating') : t('collection.saving')}
                 </>
               ) : mode === 'create' ? (
-                'Create'
+                t('collection.create')
               ) : (
-                'Save'
+                t('collection.save')
               )}
             </button>
           </DialogFooter>

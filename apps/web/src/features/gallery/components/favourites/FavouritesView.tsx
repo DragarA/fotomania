@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { ClientFavouriteSession } from '../../hooks';
 
 interface FavouritesViewProps {
@@ -11,6 +12,7 @@ export function FavouritesView({
   isLoading,
   onSessionClick,
 }: FavouritesViewProps) {
+  const { t } = useTranslation('gallery');
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -24,10 +26,10 @@ export function FavouritesView({
       <div className="flex flex-col items-center justify-center py-16 px-6">
         <div className="text-6xl mb-4">❤️</div>
         <h3 className="text-xl font-semibold text-gray-700 mb-2">
-          No favorites yet
+          {t('favouritesView.noFavouritesYet')}
         </h3>
         <p className="text-gray-500 text-center max-w-md">
-          When clients select their favorite photos, they'll appear here.
+          {t('favouritesView.clientsWillAppear')}
         </p>
       </div>
     );
@@ -47,8 +49,8 @@ export function FavouritesView({
                 {session.email}
               </p>
               <p className="text-sm text-gray-500 mt-1">
-                {session.photoCount} {session.photoCount === 1 ? 'photo' : 'photos'} •{' '}
-                {new Date(session.createdAt).toLocaleDateString('en-US', {
+                {session.photoCount} {session.photoCount === 1 ? t('favouritesView.photo') : t('favouritesView.photos')} •{' '}
+                {new Date(session.createdAt).toLocaleDateString(t('favouritesView.locale'), {
                   month: 'short',
                   day: 'numeric',
                   year: 'numeric',

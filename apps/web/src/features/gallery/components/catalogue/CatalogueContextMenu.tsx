@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CatalogueContextMenuProps {
   x: number;
@@ -17,6 +18,7 @@ export function CatalogueContextMenu({
   onShare,
   onDelete,
 }: CatalogueContextMenuProps) {
+  const { t } = useTranslation('gallery');
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -56,7 +58,7 @@ export function CatalogueContextMenu({
 
   const menuItems = [
     {
-      label: 'Edit Details',
+      label: t('contextMenu.editDetails'),
       icon: (
         <svg
           className="w-4 h-4"
@@ -75,7 +77,7 @@ export function CatalogueContextMenu({
       onClick: onEdit,
     },
     {
-      label: 'Share',
+      label: t('contextMenu.share'),
       icon: (
         <svg
           className="w-4 h-4"
@@ -94,7 +96,7 @@ export function CatalogueContextMenu({
       onClick: onShare,
     },
     {
-      label: 'Delete',
+      label: t('contextMenu.delete'),
       icon: (
         <svg
           className="w-4 h-4"

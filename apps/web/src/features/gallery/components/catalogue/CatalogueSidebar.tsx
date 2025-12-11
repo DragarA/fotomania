@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 import type { Catalogue, Collection, ClientFavouriteSession } from '../../types';
 import { FavouritesView } from '../favourites/FavouritesView';
 import { FavouritesModal } from '../favourites/FavouritesModal';
@@ -38,6 +39,7 @@ export function CatalogueSidebar({
   favouritesLoading,
   onFavouritePhotoClick,
 }: CatalogueSidebarProps) {
+  const { t } = useTranslation('gallery');
   const navigate = useNavigate();
   const deleteCatalogueMutation = useDeleteCatalogueMutation();
   const [activeTab, setActiveTab] = useState<TabType>('collections');
@@ -49,7 +51,7 @@ export function CatalogueSidebar({
   const copyPublicUrl = () => {
     const fullUrl = `${window.location.origin}/c/${catalogue.publicUrlSlug}`;
     navigator.clipboard.writeText(fullUrl);
-    toast.success('Link copied to clipboard');
+    toast.success(t('sidebar.linkCopied'));
   };
 
   const handleSessionClick = (session: ClientFavouriteSession) => {
@@ -72,14 +74,14 @@ export function CatalogueSidebar({
   };
 
   const handleDelete = () => {
-    if (window.confirm(`Are you sure you want to delete "${catalogue.title}"? This action cannot be undone.`)) {
+    if (window.confirm(t('sidebar.deleteConfirm', { title: catalogue.title }))) {
       deleteCatalogueMutation.mutate(catalogueId, {
         onSuccess: () => {
-          toast.success('Catalogue deleted successfully');
+          toast.success(t('sidebar.deleteSuccess'));
           navigate({ to: '/catalogues' });
         },
         onError: (error) => {
-          toast.error(error.message || 'Failed to delete catalogue');
+          toast.error(error.message || t('sidebar.deleteError'));
         },
       });
     }
@@ -96,7 +98,7 @@ export function CatalogueSidebar({
           <button
             onClick={handleContextMenu}
             className="p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors cursor-pointer"
-            title="More options"
+            title={t('sidebar.moreOptions')}
           >
             <svg
               className="w-5 h-5"
@@ -125,7 +127,7 @@ export function CatalogueSidebar({
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
-              <span>Collections</span>
+              <span>{t('sidebar.collectionsTab')}</span>
             </div>
           </button>
           <button
@@ -140,7 +142,7 @@ export function CatalogueSidebar({
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
-              <span>Favourites</span>
+              <span>{t('sidebar.favouritesTab')}</span>
             </div>
           </button>
         </div>
@@ -152,12 +154,12 @@ export function CatalogueSidebar({
           // EXISTING COLLECTIONS VIEW
           <>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold text-gray-900">Collections</h2>
+              <h2 className="text-lg font-semibold text-gray-900">{t('sidebar.collectionsTitle')}</h2>
               <button
                 onClick={onCreateCollection}
                 className="text-accent-600 hover:text-accent-700 text-sm font-medium cursor-pointer"
               >
-                + Add
+                + {t('sidebar.add')}
               </button>
             </div>
 
@@ -183,7 +185,7 @@ export function CatalogueSidebar({
                           {collection.name}
                         </p>
                         <p className="text-sm text-gray-500">
-                          {collection.photoCount} photos
+                          {collection.photoCount} {t('sidebar.photos')}
                         </p>
                       </div>
                       <button
@@ -192,7 +194,7 @@ export function CatalogueSidebar({
                           onCollectionContextMenu(e, collection);
                         }}
                         className="p-1 text-gray-600 hover:text-gray-900 cursor-pointer"
-                        title="More options"
+                        title={t('sidebar.moreOptions')}
                       >
                         <svg
                           className="w-5 h-5"
@@ -208,12 +210,12 @@ export function CatalogueSidebar({
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-500 mb-4">No collections yet</p>
+                <p className="text-gray-500 mb-4">{t('sidebar.noCollections')}</p>
                 <button
                   onClick={onCreateCollection}
                   className="px-4 py-2 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-all cursor-pointer"
                 >
-                  Create First Collection
+                  {t('sidebar.createFirstCollection')}
                 </button>
               </div>
             )}
