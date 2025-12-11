@@ -1,4 +1,5 @@
 import { Link, createFileRoute, redirect } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 export const Route = createFileRoute('/profile')({
   beforeLoad: ({ context }) => {
@@ -15,6 +16,7 @@ export const Route = createFileRoute('/profile')({
 });
 
 function ProfilePage() {
+  const { t } = useTranslation('gallery');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   return (
@@ -27,15 +29,15 @@ function ProfilePage() {
               {user.name?.charAt(0).toUpperCase() || 'U'}
             </div>
             <div>
-              <h1 className="text-3xl font-bold">{user.name || 'User'}</h1>
-              <p className="text-indigo-100">{user.email || 'No email'}</p>
+              <h1 className="text-3xl font-bold">{user.name || t('profile.user')}</h1>
+              <p className="text-indigo-100">{user.email || t('profile.noEmail')}</p>
             </div>
           </div>
         </div>
 
         {/* Profile Information */}
         <div className="p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Information</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('profile.title')}</h2>
 
           <div className="space-y-6">
             {/* Account Details */}
@@ -58,8 +60,8 @@ function ProfilePage() {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-sm font-semibold text-gray-700 mb-1">Full Name</h3>
-                    <p className="text-lg text-gray-900">{user.name || 'Not provided'}</p>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-1">{t('profile.fullName')}</h3>
+                    <p className="text-lg text-gray-900">{user.name || t('profile.notProvided')}</p>
                   </div>
                 </div>
               </div>
@@ -82,8 +84,8 @@ function ProfilePage() {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-sm font-semibold text-gray-700 mb-1">Email Address</h3>
-                    <p className="text-lg text-gray-900">{user.email || 'Not provided'}</p>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-1">{t('profile.emailAddress')}</h3>
+                    <p className="text-lg text-gray-900">{user.email || t('profile.notProvided')}</p>
                   </div>
                 </div>
               </div>
@@ -107,7 +109,7 @@ function ProfilePage() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-sm font-semibold text-gray-700 mb-1">
-                      Email Verification
+                      {t('profile.emailVerification')}
                     </h3>
                     <div className="flex items-center space-x-2">
                       <span
@@ -117,7 +119,7 @@ function ProfilePage() {
                             : 'bg-yellow-100 text-yellow-800'
                         }`}
                       >
-                        {user.emailVerified ? 'Verified' : 'Not Verified'}
+                        {user.emailVerified ? t('profile.verified') : t('profile.notVerified')}
                       </span>
                     </div>
                   </div>
@@ -142,7 +144,7 @@ function ProfilePage() {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-sm font-semibold text-gray-700 mb-1">User ID</h3>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-1">{t('profile.userId')}</h3>
                     <p className="text-sm text-gray-600 font-mono break-all">
                       {user.id || 'N/A'}
                     </p>
@@ -153,7 +155,7 @@ function ProfilePage() {
 
             {/* Account Actions */}
             <div className="border-t border-gray-200 pt-6 mt-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">{t('profile.quickActions')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Link
                   to="/catalogues"
@@ -172,7 +174,7 @@ function ProfilePage() {
                       d="M3 7a2 2 0 012-2h4l2 2h6a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"
                     />
                   </svg>
-                  <span className="font-medium text-gray-700">Manage catalogues</span>
+                  <span className="font-medium text-gray-700">{t('profile.manageCatalogues')}</span>
                 </Link>
 
                 <Link
@@ -192,7 +194,7 @@ function ProfilePage() {
                       d="M12 4v16m8-8H4"
                     />
                   </svg>
-                  <span className="font-medium text-gray-700">New catalogue</span>
+                  <span className="font-medium text-gray-700">{t('profile.newCatalogue')}</span>
                 </Link>
 
                 <button className="flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-lg hover:border-accent-500 hover:bg-indigo-50 transition-colors cursor-pointer">
@@ -215,7 +217,7 @@ function ProfilePage() {
                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
-                  <span className="font-medium text-gray-700">Account Settings</span>
+                  <span className="font-medium text-gray-700">{t('profile.accountSettings')}</span>
                 </button>
               </div>
             </div>

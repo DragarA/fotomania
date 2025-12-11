@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 import { requireAuth } from '../../features/auth/guards';
 import { useCataloguesQuery } from '../../features/gallery/hooks';
 import { API_BASE_URL } from '../../lib/api-client';
@@ -11,6 +12,7 @@ export const Route = createFileRoute('/catalogues/')({
 });
 
 function CataloguesPage() {
+  const { t } = useTranslation('gallery');
   const navigate = useNavigate();
   const { data, isLoading, isError, error } = useCataloguesQuery();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -23,27 +25,27 @@ function CataloguesPage() {
     <div className="max-w-6xl mx-auto px-4 py-10">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Your Catalogues</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t('catalogues.title')}</h1>
           <p className="text-gray-600 mt-2">
-            Manage the galleries that you share with your clients.
+            {t('catalogues.subtitle')}
           </p>
         </div>
         <button
           onClick={() => setIsCreateModalOpen(true)}
           className="inline-flex items-center justify-center px-4 py-3 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors cursor-pointer"
         >
-          + Create Catalogue
+          + {t('catalogues.createButton')}
         </button>
       </div>
 
       {isLoading ? (
         <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-accent-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading catalogues...</p>
+          <p className="text-gray-600">{t('catalogues.loading')}</p>
         </div>
       ) : isError ? (
         <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
-          {error?.message || 'Failed to load catalogues'}
+          {error?.message || t('catalogues.error')}
         </div>
       ) : data && data.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -88,7 +90,7 @@ function CataloguesPage() {
                 </h2>
 
                 <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                  {catalogue.description || 'No description provided.'}
+                  {catalogue.description || t('catalogues.noDescription')}
                 </p>
 
                 <div className="flex items-center text-sm text-gray-500">
@@ -105,7 +107,7 @@ function CataloguesPage() {
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
-                  {catalogue.photoCount || 0} photos
+                  {catalogue.photoCount || 0} {t('catalogues.photos')}
                 </div>
               </div>
             </Link>
@@ -114,16 +116,16 @@ function CataloguesPage() {
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
           <h2 className="text-2xl font-semibold text-gray-900 mb-3">
-            No catalogues yet
+            {t('catalogues.empty.title')}
           </h2>
           <p className="text-gray-600 mb-6">
-            Create your first catalogue to start sharing photo galleries with clients.
+            {t('catalogues.empty.message')}
           </p>
           <button
             onClick={() => setIsCreateModalOpen(true)}
             className="inline-flex items-center px-5 py-3 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors cursor-pointer"
           >
-            Create Catalogue
+            {t('catalogues.createButton')}
           </button>
         </div>
       )}

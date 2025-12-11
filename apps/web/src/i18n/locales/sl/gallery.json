@@ -1,16 +1,32 @@
 {
-  "catalogue": {
-    "list_title": "Vaši katalogi",
-    "list_subtitle": "Upravljajte galerije, ki jih delite s svojimi strankami",
-    "create_button": "Ustvari katalog",
-    "no_catalogues": "Še nimate katalogov",
-    "no_catalogues_message": "Ustvarite svoj prvi katalog za deljenje fotografskih galerij s strankami",
+  "profile": {
+    "title": "Informacije o profilu",
+    "user": "Uporabnik",
+    "noEmail": "Brez e-pošte",
+    "fullName": "Polno ime",
+    "emailAddress": "E-poštni naslov",
+    "emailVerification": "Preverjanje e-pošte",
+    "verified": "Potrjeno",
+    "notVerified": "Ni potrjeno",
+    "userId": "ID uporabnika",
+    "notProvided": "Ni na voljo",
+    "quickActions": "Hitre akcije",
+    "manageCatalogues": "Upravljaj kataloge",
+    "newCatalogue": "Nov katalog",
+    "accountSettings": "Nastavitve računa"
+  },
+  "catalogues": {
+    "title": "Vaši katalogi",
+    "subtitle": "Upravljajte galerije, ki jih delite s svojimi strankami.",
+    "createButton": "Ustvari katalog",
     "loading": "Nalaganje katalogov...",
     "error": "Napaka pri nalaganju katalogov",
-    "photos_count": "{{count}} fotografij",
-    "photos_count_plural": "{{count}} fotografij",
-    "photo_count": "{{count}} fotografija",
-    "delete_confirm": "Ali ste prepričani, da želite izbrisati \"{{title}}\"? Tega dejanja ni mogoče razveljaviti."
+    "noDescription": "Brez opisa.",
+    "photos": "fotografij",
+    "empty": {
+      "title": "Še nimate katalogov",
+      "message": "Ustvarite svoj prvi katalog za deljenje fotografskih galerij s strankami."
+    }
   },
   "collection": {
     "create": "Ustvari zbirko",

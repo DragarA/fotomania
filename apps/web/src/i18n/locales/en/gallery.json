@@ -1,16 +1,32 @@
 {
-  "catalogue": {
-    "list_title": "Your Catalogues",
-    "list_subtitle": "Manage the galleries that you share with your clients",
-    "create_button": "Create Catalogue",
-    "no_catalogues": "No catalogues yet",
-    "no_catalogues_message": "Create your first catalogue to start sharing photo galleries with clients",
+  "profile": {
+    "title": "Profile Information",
+    "user": "User",
+    "noEmail": "No email",
+    "fullName": "Full Name",
+    "emailAddress": "Email Address",
+    "emailVerification": "Email Verification",
+    "verified": "Verified",
+    "notVerified": "Not Verified",
+    "userId": "User ID",
+    "notProvided": "Not provided",
+    "quickActions": "Quick Actions",
+    "manageCatalogues": "Manage catalogues",
+    "newCatalogue": "New catalogue",
+    "accountSettings": "Account Settings"
+  },
+  "catalogues": {
+    "title": "Your Catalogues",
+    "subtitle": "Manage the galleries that you share with your clients.",
+    "createButton": "Create Catalogue",
     "loading": "Loading catalogues...",
     "error": "Failed to load catalogues",
-    "photos_count": "{{count}} photos",
-    "photos_count_plural": "{{count}} photos",
-    "photo_count": "{{count}} photo",
-    "delete_confirm": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone."
+    "noDescription": "No description provided.",
+    "photos": "photos",
+    "empty": {
+      "title": "No catalogues yet",
+      "message": "Create your first catalogue to start sharing photo galleries with clients."
+    }
   },
   "collection": {
     "create": "Create Collection",
