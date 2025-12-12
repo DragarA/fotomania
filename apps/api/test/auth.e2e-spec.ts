@@ -2,9 +2,9 @@ import { INestApplication } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import request from 'supertest';
 
+import { setupE2ETest, teardownE2ETest } from './setup-e2e';
 import { MockDrizzleDB, resetDrizzleMock } from './utils/drizzle-mock.factory';
 import { TestDataFactory } from './utils/test-data.factory';
-import { setupE2ETest, teardownE2ETest } from './setup-e2e';
 
 // Mock bcrypt
 jest.mock('bcrypt');

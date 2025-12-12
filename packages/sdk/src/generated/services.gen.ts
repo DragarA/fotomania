@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CataloguesControllerGetCatalogueFavouritesData, CataloguesControllerGetCatalogueFavouritesResponse, ClientSessionsControllerGetCatalogueFavouritesData, ClientSessionsControllerGetCatalogueFavouritesResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse, PublicControllerAddFavouritesData, PublicControllerAddFavouritesResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CataloguesControllerGetCatalogueFavouritesData, CataloguesControllerGetCatalogueFavouritesResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, ClientSessionsControllerGetCatalogueFavouritesData, ClientSessionsControllerGetCatalogueFavouritesResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse, PublicControllerAddFavouritesData, PublicControllerAddFavouritesResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -324,32 +324,6 @@ export class CataloguesService {
     
 }
 
-export class ClientSessionsService {
-    /**
-     * Get all client favourites for a catalogue
-     * @param data The data for the request.
-     * @param data.catalogueId Catalogue ID
-     * @param data.sessionId
-     * @returns ClientSessionFavouritesResDto Returns all client sessions with their favourites
-     * @throws ApiError
-     */
-    public static clientSessionsControllerGetCatalogueFavourites(data: ClientSessionsControllerGetCatalogueFavouritesData): CancelablePromise<ClientSessionsControllerGetCatalogueFavouritesResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/client-sessions/{catalogueId}/favourites/{sessionId}',
-            path: {
-                catalogueId: data.catalogueId,
-                sessionId: data.sessionId
-            },
-            errors: {
-                403: 'Forbidden',
-                404: 'Catalogue not found'
-            }
-        });
-    }
-    
-}
-
 export class CollectionsService {
     /**
      * Create a new collection
@@ -546,6 +520,32 @@ export class PhotosService {
             errors: {
                 403: 'Forbidden',
                 404: 'Photo not found'
+            }
+        });
+    }
+    
+}
+
+export class ClientSessionsService {
+    /**
+     * Get all client favourites for a catalogue
+     * @param data The data for the request.
+     * @param data.catalogueId Catalogue ID
+     * @param data.sessionId
+     * @returns ClientSessionFavouritesResDto Returns all client sessions with their favourites
+     * @throws ApiError
+     */
+    public static clientSessionsControllerGetCatalogueFavourites(data: ClientSessionsControllerGetCatalogueFavouritesData): CancelablePromise<ClientSessionsControllerGetCatalogueFavouritesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/client-sessions/{catalogueId}/favourites/{sessionId}',
+            path: {
+                catalogueId: data.catalogueId,
+                sessionId: data.sessionId
+            },
+            errors: {
+                403: 'Forbidden',
+                404: 'Catalogue not found'
             }
         });
     }

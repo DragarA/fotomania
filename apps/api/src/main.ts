@@ -1,62 +1,64 @@
-import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
+
+import { Logger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+    const logger = new Logger('Bootstrap');
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  console.log('resolve', resolve('./uploads'))
-  // Serve static files from uploads directory
-  app.useStaticAssets(resolve('./uploads'), {
-    prefix: '/uploads',
-  });
+    // Serve static files from uploads directory
+    app.useStaticAssets(resolve('./uploads'), {
+        prefix: '/uploads',
+    });
 
-  // Enable CORS for frontend
-  app.enableCors({
-    origin: ['http://localhost:5173'],
-    credentials: true,
-  });
+    // Enable CORS for frontend
+    app.enableCors({
+        origin: ['http://localhost:5173'],
+        credentials: true,
+    });
 
-  // Swagger/OpenAPI configuration
-  const config = new DocumentBuilder()
-    .setTitle('Fotomania API')
-    .setDescription('The Fotomania API documentation')
-    .setVersion('1.0')
-    .addTag('app')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        name: 'JWT',
-        description: 'Enter JWT token',
-        in: 'header',
-      },
-      'JWT-auth'
-    )
-    .build();
+    // Swagger/OpenAPI configuration
+    const config = new DocumentBuilder()
+        .setTitle('Fotomania API')
+        .setDescription('The Fotomania API documentation')
+        .setVersion('1.0')
+        .addTag('app')
+        .addBearerAuth(
+            {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+                name: 'JWT',
+                description: 'Enter JWT token',
+                in: 'header',
+            },
+            'JWT-auth'
+        )
+        .build();
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-docs', app, document);
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api-docs', app, document);
 
-  // Write OpenAPI spec to file on startup
-  const openApiPath = resolve(__dirname, '../openapi.json');
-  writeFileSync(openApiPath, JSON.stringify(document, null, 2));
-  console.log(`✅ OpenAPI spec written to: ${openApiPath}`);
+    // Write OpenAPI spec to file on startup
+    const openApiPath = resolve(__dirname, '../openapi.json');
+    writeFileSync(openApiPath, JSON.stringify(document, null, 2));
+    logger.log(`✅ OpenAPI spec written to: ${openApiPath}`);
 
-  // Expose OpenAPI spec as JSON endpoint
-  app.getHttpAdapter().get('/api-json', (_req: any, res: any) => {
-    res.json(document);
-  });
+    // Expose OpenAPI spec as JSON endpoint
+    app.getHttpAdapter().get('/api-json', (_req: any, res: any) => {
+        res.json(document);
+    });
 
-  await app.listen(3000);
-  console.log('Application is running on: http://localhost:3000');
-  console.log('API Documentation: http://localhost:3000/api-docs');
-  console.log('OpenAPI JSON: http://localhost:3000/api-json');
+    await app.listen(3000);
+    logger.log('Application is running on: http://localhost:3000');
+    logger.log('API Documentation: http://localhost:3000/api-docs');
+    logger.log('OpenAPI JSON: http://localhost:3000/api-json');
 }
 
 bootstrap();

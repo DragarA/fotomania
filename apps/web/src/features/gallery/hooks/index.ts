@@ -7,30 +7,30 @@
 
 // Catalogue hooks
 export {
-  useCataloguesQuery,
-  useCatalogueQuery,
-  usePublicCatalogueQuery,
-  useCreateCatalogueMutation,
-  useUpdateCatalogueMutation,
-  useDeleteCatalogueMutation,
-  useSetCatalogueCoverMutation,
+    useCataloguesQuery,
+    useCatalogueQuery,
+    usePublicCatalogueQuery,
+    useCreateCatalogueMutation,
+    useUpdateCatalogueMutation,
+    useDeleteCatalogueMutation,
+    useSetCatalogueCoverMutation,
 } from './useCatalogues';
 
 // Collection hooks
 export {
-  useCollectionsQuery,
-  useCollectionQuery,
-  useCreateCollectionMutation,
-  useUpdateCollectionMutation,
-  useDeleteCollectionMutation,
+    useCollectionsQuery,
+    useCollectionQuery,
+    useCreateCollectionMutation,
+    useUpdateCollectionMutation,
+    useDeleteCollectionMutation,
 } from './useCollections';
 
 // Photo hooks
 export {
-  usePhotosQuery,
-  usePublicPhotosQuery,
-  useUploadPhotoMutation,
-  useDeletePhotoMutation,
+    usePhotosQuery,
+    usePublicPhotosQuery,
+    useUploadPhotoMutation,
+    useDeletePhotoMutation,
 } from './usePhotos';
 
 // Photo upload management hook

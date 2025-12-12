@@ -2,8 +2,9 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AppModule } from '../src/app.module';
-import { createDrizzleMock } from './utils/drizzle-mock.factory';
 import { DRIZZLE } from '../src/common/db/drizzle';
+
+import { createDrizzleMock } from './utils/drizzle-mock.factory';
 
 /**
  * Setup function for e2e tests

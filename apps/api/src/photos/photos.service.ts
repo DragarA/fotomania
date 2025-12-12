@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
 import {
     ForbiddenException,
     Inject,
@@ -5,14 +8,12 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { and, eq, isNotNull } from 'drizzle-orm';
-import * as path from 'path';
-import * as fs from 'fs';
 import sharp from 'sharp';
 
+import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
 import { catalogue } from '../common/db/schema/catalogues.schema';
 import { collection } from '../common/db/schema/collections.schema';
 import { photo } from '../common/db/schema/photos.schema';
-import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
 
 @Injectable()
 export class PhotosService {
@@ -63,8 +64,6 @@ export class PhotosService {
                 `Collection ID ${collectionId} not found under public slug ${slug}`
             );
         }
-
-        console.log('Existing Collection:', existingCollection.collection.id);
 
         return await this.db
             .select()
@@ -155,7 +154,7 @@ export class PhotosService {
                     )
                 )
                 .limit(1);
-            if(!coverPhoto) {
+            if (!coverPhoto) {
                 await this.reassignCatalogueCover(
                     catalogueWithCover.catalogue.id
                 );
@@ -212,8 +211,6 @@ export class PhotosService {
             'collections',
             collectionId
         );
-
-        console.log('collectionPath', collectionPath);
 
         if (!fs.existsSync(collectionPath)) {
             fs.mkdirSync(collectionPath, { recursive: true });
@@ -274,8 +271,6 @@ export class PhotosService {
             createdAt: now,
             updatedAt: now,
         };
-
-        console.log(photoData);
 
         const [newPhoto] = await this.db
             .insert(photo)

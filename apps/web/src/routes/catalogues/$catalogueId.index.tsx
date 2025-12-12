@@ -4,12 +4,12 @@ import { requireAuth } from '../../features/auth/guards';
 import { GalleryWorkspace } from '../../features/gallery/components/workspace/GalleryWorkspace';
 
 export const Route = createFileRoute('/catalogues/$catalogueId/')({
-  beforeLoad: requireAuth,
-  component: CatalogueDetailPage,
+    beforeLoad: requireAuth,
+    component: CatalogueDetailPage,
 });
 
 function CatalogueDetailPage() {
-  const { catalogueId } = Route.useParams();
+    const { catalogueId } = Route.useParams();
 
-  return <GalleryWorkspace catalogueId={catalogueId} />;
+    return <GalleryWorkspace catalogueId={catalogueId} />;
 }

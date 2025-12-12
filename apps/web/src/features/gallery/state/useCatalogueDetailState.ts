@@ -1,103 +1,108 @@
 import { useEffect, useState } from 'react';
+
 import type { Collection } from '../types';
 
 interface ModalState {
-  isOpen: boolean;
-  mode: 'create' | 'edit';
-  initialData?: any;
+    isOpen: boolean;
+    mode: 'create' | 'edit';
+    initialData?: any;
 }
 
 interface ContextMenuState {
-  x: number;
-  y: number;
-  collection: any;
+    x: number;
+    y: number;
+    collection: any;
 }
 
 interface Photo {
-  id: string;
-  originalFileName: string;
-  storagePath: string;
-  mimeType: string;
-  width?: number;
-  height?: number;
-  size?: number;
-  collectionId: string;
-  thumbnailPath?: string;
+    id: string;
+    originalFileName: string;
+    storagePath: string;
+    mimeType: string;
+    width?: number;
+    height?: number;
+    size?: number;
+    collectionId: string;
+    thumbnailPath?: string;
 }
 
 export function useCatalogueDetailState(collections: Collection[] | undefined) {
-  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
-  const [modalState, setModalState] = useState<ModalState>({
-    isOpen: false,
-    mode: 'create',
-  });
-  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
-  const [collectionContextMenu, setCollectionContextMenu] = useState<ContextMenuState | null>(null);
-
-  // Auto-select first collection when collections load
-  useEffect(() => {
-    if (collections && collections.length > 0 && !selectedCollectionId) {
-      setSelectedCollectionId(collections[0]!.id);
-    }
-  }, [collections, selectedCollectionId]);
-
-  const selectedCollection = collections?.find((c) => c.id === selectedCollectionId);
-
-  const openCreateModal = () => {
-    setModalState({ isOpen: true, mode: 'create' });
-  };
-
-  const openEditModal = (collection: any) => {
-    setModalState({
-      isOpen: true,
-      mode: 'edit',
-      initialData: collection,
+    const [selectedCollectionId, setSelectedCollectionId] = useState<
+        string | null
+    >(null);
+    const [modalState, setModalState] = useState<ModalState>({
+        isOpen: false,
+        mode: 'create',
     });
-  };
+    const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+    const [collectionContextMenu, setCollectionContextMenu] =
+        useState<ContextMenuState | null>(null);
 
-  const closeModal = (createdCollectionId?: string) => {
-    setModalState((prev) => ({ ...prev, isOpen: false }));
-    // Switch to the newly created collection
-    if (createdCollectionId && modalState.mode === 'create') {
-      setSelectedCollectionId(createdCollectionId);
-    }
-  };
+    // Auto-select first collection when collections load
+    useEffect(() => {
+        if (collections && collections.length > 0 && !selectedCollectionId) {
+            setSelectedCollectionId(collections[0]!.id);
+        }
+    }, [collections, selectedCollectionId]);
 
-  const openContextMenu = (x: number, y: number, collection: any) => {
-    setCollectionContextMenu({ x, y, collection });
-  };
+    const selectedCollection = collections?.find(
+        (c) => c.id === selectedCollectionId
+    );
 
-  const closeContextMenu = () => {
-    setCollectionContextMenu(null);
-  };
+    const openCreateModal = () => {
+        setModalState({ isOpen: true, mode: 'create' });
+    };
 
-  const clearSelectedCollectionIfDeleted = (deletedCollectionId: string) => {
-    if (selectedCollectionId === deletedCollectionId) {
-      setSelectedCollectionId(null);
-    }
-  };
+    const openEditModal = (collection: any) => {
+        setModalState({
+            isOpen: true,
+            mode: 'edit',
+            initialData: collection,
+        });
+    };
 
-  return {
-    // Collection selection
-    selectedCollectionId,
-    setSelectedCollectionId,
-    selectedCollection,
-    clearSelectedCollectionIfDeleted,
+    const closeModal = (createdCollectionId?: string) => {
+        setModalState((prev) => ({ ...prev, isOpen: false }));
+        // Switch to the newly created collection
+        if (createdCollectionId && modalState.mode === 'create') {
+            setSelectedCollectionId(createdCollectionId);
+        }
+    };
 
-    // Modal state
-    modalState,
-    openCreateModal,
-    openEditModal,
-    closeModal,
+    const openContextMenu = (x: number, y: number, collection: any) => {
+        setCollectionContextMenu({ x, y, collection });
+    };
 
-    // Context menu
-    collectionContextMenu,
-    openContextMenu,
-    closeContextMenu,
+    const closeContextMenu = () => {
+        setCollectionContextMenu(null);
+    };
 
-    // Photo lightbox
-    selectedPhoto,
-    setSelectedPhoto,
-  };
+    const clearSelectedCollectionIfDeleted = (deletedCollectionId: string) => {
+        if (selectedCollectionId === deletedCollectionId) {
+            setSelectedCollectionId(null);
+        }
+    };
+
+    return {
+        // Collection selection
+        selectedCollectionId,
+        setSelectedCollectionId,
+        selectedCollection,
+        clearSelectedCollectionIfDeleted,
+
+        // Modal state
+        modalState,
+        openCreateModal,
+        openEditModal,
+        closeModal,
+
+        // Context menu
+        collectionContextMenu,
+        openContextMenu,
+        closeContextMenu,
+
+        // Photo lightbox
+        selectedPhoto,
+        setSelectedPhoto,
+    };
 }
-

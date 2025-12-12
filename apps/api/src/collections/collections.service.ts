@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
 import {
     Injectable,
     NotFoundException,
@@ -5,15 +8,16 @@ import {
 } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { eq, and, sql } from 'drizzle-orm';
+
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
-import { collection } from '../common/db/schema/collections.schema';
 import { catalogue } from '../common/db/schema/catalogues.schema';
+import { collection } from '../common/db/schema/collections.schema';
 import { photo } from '../common/db/schema/photos.schema';
+import { PhotosService } from '../photos/photos.service';
+
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
-import * as fs from 'fs';
-import * as path from 'path';
-import { PhotosService } from '../photos/photos.service';
+
 @Injectable()
 export class CollectionsService {
     private uploadRoot = path.resolve('./uploads');

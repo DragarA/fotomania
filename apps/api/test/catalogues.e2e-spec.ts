@@ -2,13 +2,16 @@ import { INestApplication, ExecutionContext } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 
-import { MockDrizzleDB, resetDrizzleMock } from './utils/drizzle-mock.factory';
-import { TestDataFactory } from './utils/test-data.factory';
-import { teardownE2ETest } from './setup-e2e';
 import { AppModule } from '../src/app.module';
-import { DRIZZLE } from '../src/common/db/drizzle';
-import { createDrizzleMock } from './utils/drizzle-mock.factory';
 import { JwtAuthGuard } from '../src/common/auth/guards/jwt-auth.guard';
+import { DRIZZLE } from '../src/common/db/drizzle';
+
+import { teardownE2ETest } from './setup-e2e';
+import { MockDrizzleDB, resetDrizzleMock } from './utils/drizzle-mock.factory';
+import { createDrizzleMock } from './utils/drizzle-mock.factory';
+import { TestDataFactory } from './utils/test-data.factory';
+
+
 
 describe('CataloguesController (e2e)', () => {
   let app: INestApplication;

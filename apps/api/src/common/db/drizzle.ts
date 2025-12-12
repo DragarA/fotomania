@@ -6,11 +6,11 @@ import * as schema from './schema';
 export const DRIZZLE = Symbol('DRIZZLE');
 
 export const createDrizzleConnection = (connectionString: string) => {
-  const pool = new Pool({
-    connectionString,
-  });
+    const pool = new Pool({
+        connectionString,
+    });
 
-  return drizzle(pool, { schema });
+    return drizzle(pool, { schema });
 };
 
 export type DrizzleDB = ReturnType<typeof createDrizzleConnection>;

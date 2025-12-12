@@ -2,11 +2,12 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 
-import { MockDrizzleDB, resetDrizzleMock, createDrizzleMock } from './utils/drizzle-mock.factory';
-import { TestDataFactory } from './utils/test-data.factory';
-import { teardownE2ETest } from './setup-e2e';
 import { AppModule } from '../src/app.module';
 import { DRIZZLE } from '../src/common/db/drizzle';
+
+import { teardownE2ETest } from './setup-e2e';
+import { MockDrizzleDB, resetDrizzleMock, createDrizzleMock } from './utils/drizzle-mock.factory';
+import { TestDataFactory } from './utils/test-data.factory';
 
 describe('PublicController (e2e)', () => {
   let app: INestApplication;

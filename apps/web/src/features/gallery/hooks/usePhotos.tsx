@@ -1,127 +1,130 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { OpenAPI, PhotosService, PublicService } from '@repo/sdk';
-import { toast } from 'sonner';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+
 import { API_BASE_URL } from '../../../lib/api-client';
-import { uploadWithProgress } from '../utils/upload-helper';
 import type { Photo, UploadPhotoParams } from '../types';
+import { uploadWithProgress } from '../utils/upload-helper';
 
 export function usePhotosQuery(collectionId: string | null) {
-  return useQuery({
-    queryKey: ['photos', collectionId],
-    queryFn: async () => {
-      if (!collectionId) {
-        return [];
-      }
-      return await PhotosService.photosControllerFindAll({
-        collectionId,
-      });
-    },
-    enabled: !!collectionId,
-  });
+    return useQuery({
+        queryKey: ['photos', collectionId],
+        queryFn: async () => {
+            if (!collectionId) {
+                return [];
+            }
+            return await PhotosService.photosControllerFindAll({
+                collectionId,
+            });
+        },
+        enabled: !!collectionId,
+    });
 }
 
 export function usePublicPhotosQuery(
-  slug: string,
-  collectionId: string | null
+    slug: string,
+    collectionId: string | null
 ) {
-  return useQuery({
-    queryKey: ['photos', 'public', slug, collectionId],
-    queryFn: async () => {
-      if (!collectionId) {
-        return [];
-      }
-      return await PublicService.publicControllerFindCollectionPhotosBySlug({
-        slug,
-        collectionId,
-      });
-    },
-    enabled: Boolean(slug) && Boolean(collectionId),
-  });
+    return useQuery({
+        queryKey: ['photos', 'public', slug, collectionId],
+        queryFn: async () => {
+            if (!collectionId) {
+                return [];
+            }
+            return await PublicService.publicControllerFindCollectionPhotosBySlug(
+                {
+                    slug,
+                    collectionId,
+                }
+            );
+        },
+        enabled: Boolean(slug) && Boolean(collectionId),
+    });
 }
 
 export function useUploadPhotoMutation() {
-  const { t } = useTranslation('gallery');
-  const queryClient = useQueryClient();
+    const { t } = useTranslation('gallery');
+    const queryClient = useQueryClient();
 
-  return useMutation<Photo, Error, UploadPhotoParams>({
-    mutationFn: async ({
-      file,
-      collectionId,
-      onProgress,
-    }: UploadPhotoParams) => {
-      const formData = new FormData();
-      formData.append('file', file);
+    return useMutation<Photo, Error, UploadPhotoParams>({
+        mutationFn: async ({
+            file,
+            collectionId,
+            onProgress,
+        }: UploadPhotoParams) => {
+            const formData = new FormData();
+            formData.append('file', file);
 
-      // Get token from SDK configuration
-      let token = '';
-      if (typeof OpenAPI.TOKEN === 'function') {
-        const result = await OpenAPI.TOKEN({} as any);
-        token = result || '';
-      } else {
-        token = OpenAPI.TOKEN || '';
-      }
+            // Get token from SDK configuration
+            let token = '';
+            if (typeof OpenAPI.TOKEN === 'function') {
+                const result = await OpenAPI.TOKEN({} as any);
+                token = result || '';
+            } else {
+                token = OpenAPI.TOKEN || '';
+            }
 
-      const data = await uploadWithProgress(
-        `${API_BASE_URL}/photos/upload/${collectionId}`,
-        formData,
-        token,
-        onProgress || (() => {})
-      );
+            const data = await uploadWithProgress(
+                `${API_BASE_URL}/photos/upload/${collectionId}`,
+                formData,
+                token,
+                onProgress || (() => {})
+            );
 
-      return data as Photo;
-    },
-    onSuccess: (photo, { collectionId }) => {
-      // Invalidate photos query for this collection
-      queryClient.invalidateQueries({
-        queryKey: ['photos', collectionId],
-      });
+            return data as Photo;
+        },
+        onSuccess: (photo, { collectionId }) => {
+            // Invalidate photos query for this collection
+            queryClient.invalidateQueries({
+                queryKey: ['photos', collectionId],
+            });
 
-      // Invalidate collections query to update photo counts
-      queryClient.invalidateQueries({
-        queryKey: ['collections'],
-      });
+            // Invalidate collections query to update photo counts
+            queryClient.invalidateQueries({
+                queryKey: ['collections'],
+            });
 
-      queryClient.invalidateQueries({
-        queryKey: ['catalogues'],
-      });
+            queryClient.invalidateQueries({
+                queryKey: ['catalogues'],
+            });
 
-      // Optionally cache the individual photo
-      queryClient.setQueryData(['photos', photo.id], photo);
-    },
-    onError: (error: Error) => {
-      toast.error(error.message || t('toast.uploadFailed'));
-    },
-  });
+            // Optionally cache the individual photo
+            queryClient.setQueryData(['photos', photo.id], photo);
+        },
+        onError: (error: Error) => {
+            toast.error(error.message || t('toast.uploadFailed'));
+        },
+    });
 }
 
 export function useDeletePhotoMutation() {
-  const { t } = useTranslation('gallery');
-  const queryClient = useQueryClient();
+    const { t } = useTranslation('gallery');
+    const queryClient = useQueryClient();
 
-  return useMutation<void, Error, { id: string; collectionId: string }>({
-    mutationFn: async ({ id }) => {
-      await PhotosService.photosControllerRemove({ id });
-    },
-    onSuccess: (_, { collectionId }) => {
-      // Invalidate photos query for this collection
-      queryClient.invalidateQueries({
-        queryKey: ['photos', collectionId],
-      });
+    return useMutation<void, Error, { id: string; collectionId: string }>({
+        mutationFn: async ({ id }) => {
+            await PhotosService.photosControllerRemove({ id });
+        },
+        onSuccess: (_, { collectionId }) => {
+            // Invalidate photos query for this collection
+            queryClient.invalidateQueries({
+                queryKey: ['photos', collectionId],
+            });
 
-      // Invalidate collections query to update photo counts
-      queryClient.invalidateQueries({
-        queryKey: ['collections'],
-      });
+            // Invalidate collections query to update photo counts
+            queryClient.invalidateQueries({
+                queryKey: ['collections'],
+            });
 
-      queryClient.invalidateQueries({
-        queryKey: ['catalogues'],
-      });
+            queryClient.invalidateQueries({
+                queryKey: ['catalogues'],
+            });
 
-      toast.success(t('toast.photoDeletedSuccess'));
-    },
-    onError: (error: Error) => {
-      toast.error(error.message || t('toast.deleteFailed'));
-    },
-  });
+            toast.success(t('toast.photoDeletedSuccess'));
+        },
+        onError: (error: Error) => {
+            toast.error(error.message || t('toast.deleteFailed'));
+        },
+    });
 }

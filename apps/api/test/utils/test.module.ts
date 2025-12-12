@@ -1,8 +1,9 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { createDrizzleMock } from './drizzle-mock.factory';
 import { DRIZZLE } from '../../src/common/db/drizzle';
+
+import { createDrizzleMock } from './drizzle-mock.factory';
 
 /**
  * Test module that provides a mocked Drizzle instance

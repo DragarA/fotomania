@@ -2,21 +2,22 @@ import {
     Injectable,
     NotFoundException,
     ForbiddenException,
+    Inject,
 } from '@nestjs/common';
-import { Inject } from '@nestjs/common';
 import { eq, and, count, gt } from 'drizzle-orm';
+import { v4 as uuid } from 'uuid';
+
+import { CollectionsService } from '../collections/collections.service';
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
 import { catalogue } from '../common/db/schema/catalogues.schema';
-import { CreateCatalogueDto } from './dto/create-catalogue.dto';
-import { UpdateCatalogueDto } from './dto/update-catalogue.dto';
-import { v4 as uuid } from 'uuid';
+import { clientFavourite } from '../common/db/schema/client-favourite.schema';
+import { clientSession } from '../common/db/schema/client-session.schema';
 import { collection } from '../common/db/schema/collections.schema';
 import { photo } from '../common/db/schema/photos.schema';
-import { clientSession } from '../common/db/schema/client-session.schema';
-import { clientFavourite } from '../common/db/schema/client-favourite.schema';
+
 import { ClientFavouritesResDto } from './dto/client-favourites-res.dto';
-import { create } from 'domain';
-import { CollectionsService } from '../collections/collections.service';
+import { CreateCatalogueDto } from './dto/create-catalogue.dto';
+import { UpdateCatalogueDto } from './dto/update-catalogue.dto';
 
 @Injectable()
 export class CataloguesService {

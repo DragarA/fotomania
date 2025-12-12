@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { PhotoResDto } from '../../photos/dto/photo-res.dto';
 
 interface ClientFavouritesData {
@@ -20,7 +21,7 @@ export class ClientSessionFavouritesResDto {
 
     @ApiProperty({
         description: 'Array of favorited photos',
-        type: [PhotoResDto]
+        type: [PhotoResDto],
     })
     photos!: PhotoResDto[];
 
@@ -29,7 +30,7 @@ export class ClientSessionFavouritesResDto {
         this.sessionId = sessionId;
         this.email = email;
         this.createdAt = createdAt;
-        this.photos = photos.map(photo => ({
+        this.photos = photos.map((photo) => ({
             collectionId: photo.collectionId,
             height: photo.height,
             id: photo.id,

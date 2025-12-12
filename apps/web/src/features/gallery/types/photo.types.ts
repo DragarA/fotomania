@@ -3,15 +3,15 @@
  * Represents an uploaded photo in a collection
  */
 export interface Photo {
-  id: string;
-  originalFileName: string;
-  storagePath: string;
-  mimeType: string;
-  width?: number;
-  height?: number;
-  size?: number;
-  collectionId: string;
-  thumbnailPath?: string;
+    id: string;
+    originalFileName: string;
+    storagePath: string;
+    mimeType: string;
+    width?: number;
+    height?: number;
+    size?: number;
+    collectionId: string;
+    thumbnailPath?: string;
 }
 
 /**
@@ -23,19 +23,19 @@ export type UploadStatus = 'pending' | 'uploading' | 'success' | 'error';
  * Represents a file being uploaded with progress tracking
  */
 export interface UploadingFile {
-  id: string;
-  file: File;
-  preview: string;
-  progress: number;
-  status: UploadStatus;
-  error?: string;
+    id: string;
+    file: File;
+    preview: string;
+    progress: number;
+    status: UploadStatus;
+    error?: string;
 }
 
 /**
  * Parameters for uploading a photo
  */
 export interface UploadPhotoParams {
-  file: File;
-  collectionId: string;
-  onProgress?: (progress: number) => void;
+    file: File;
+    collectionId: string;
+    onProgress?: (progress: number) => void;
 }

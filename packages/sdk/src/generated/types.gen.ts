@@ -124,6 +124,51 @@ export type ClientFavouritesResDto = {
     photoCount: number;
 };
 
+export type CreateCollectionDtoClass = {
+    /**
+     * Collection name
+     */
+    name: string;
+    /**
+     * ID of the catalogue this collection belongs to
+     */
+    catalogueId: string;
+};
+
+export type CollectionResDto = {
+    /**
+     * Unique identifier for the collection
+     */
+    id: string;
+    /**
+     * Name of the collection
+     */
+    name: string;
+    /**
+     * ID of the catalogue this collection belongs to
+     */
+    catalogueId: string;
+    /**
+     * Timestamp when the collection was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the collection was last updated
+     */
+    updatedAt: string;
+    /**
+     * Number of photos in the collection
+     */
+    photoCount: number;
+};
+
+export type UpdateCollectionDtoClass = {
+    /**
+     * Collection name
+     */
+    name?: string;
+};
+
 export type PhotoResDto = {
     /**
      * Unique identifier for the photo
@@ -180,51 +225,6 @@ export type ClientSessionFavouritesResDto = {
      * Array of favorited photos
      */
     photos: Array<PhotoResDto>;
-};
-
-export type CreateCollectionDtoClass = {
-    /**
-     * Collection name
-     */
-    name: string;
-    /**
-     * ID of the catalogue this collection belongs to
-     */
-    catalogueId: string;
-};
-
-export type CollectionResDto = {
-    /**
-     * Unique identifier for the collection
-     */
-    id: string;
-    /**
-     * Name of the collection
-     */
-    name: string;
-    /**
-     * ID of the catalogue this collection belongs to
-     */
-    catalogueId: string;
-    /**
-     * Timestamp when the collection was created
-     */
-    createdAt: string;
-    /**
-     * Timestamp when the collection was last updated
-     */
-    updatedAt: string;
-    /**
-     * Number of photos in the collection
-     */
-    photoCount: number;
-};
-
-export type UpdateCollectionDtoClass = {
-    /**
-     * Collection name
-     */
-    name?: string;
 };
 
 export type CollectionPublicResDto = {
@@ -452,16 +452,6 @@ export type CataloguesControllerGetCatalogueFavouritesData = {
 
 export type CataloguesControllerGetCatalogueFavouritesResponse = Array<ClientFavouritesResDto>;
 
-export type ClientSessionsControllerGetCatalogueFavouritesData = {
-    /**
-     * Catalogue ID
-     */
-    catalogueId: string;
-    sessionId: string;
-};
-
-export type ClientSessionsControllerGetCatalogueFavouritesResponse = ClientSessionFavouritesResDto;
-
 export type CollectionsControllerCreateData = {
     requestBody: CreateCollectionDtoClass;
 };
@@ -543,6 +533,16 @@ export type PhotosControllerRemoveData = {
 };
 
 export type PhotosControllerRemoveResponse = unknown;
+
+export type ClientSessionsControllerGetCatalogueFavouritesData = {
+    /**
+     * Catalogue ID
+     */
+    catalogueId: string;
+    sessionId: string;
+};
+
+export type ClientSessionsControllerGetCatalogueFavouritesResponse = ClientSessionFavouritesResDto;
 
 export type PublicControllerFindBySlugData = {
     /**
@@ -802,25 +802,6 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/client-sessions/{catalogueId}/favourites/{sessionId}': {
-        get: {
-            req: ClientSessionsControllerGetCatalogueFavouritesData;
-            res: {
-                /**
-                 * Returns all client sessions with their favourites
-                 */
-                200: ClientSessionFavouritesResDto;
-                /**
-                 * Forbidden
-                 */
-                403: unknown;
-                /**
-                 * Catalogue not found
-                 */
-                404: unknown;
-            };
-        };
-    };
     '/collections': {
         post: {
             req: CollectionsControllerCreateData;
@@ -987,6 +968,25 @@ export type $OpenApiTs = {
                 403: unknown;
                 /**
                  * Photo not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/client-sessions/{catalogueId}/favourites/{sessionId}': {
+        get: {
+            req: ClientSessionsControllerGetCatalogueFavouritesData;
+            res: {
+                /**
+                 * Returns all client sessions with their favourites
+                 */
+                200: ClientSessionFavouritesResDto;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Catalogue not found
                  */
                 404: unknown;
             };

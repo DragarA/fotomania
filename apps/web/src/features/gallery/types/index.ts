@@ -5,22 +5,15 @@
  * related to catalogues, collections, and photos.
  */
 
-export type {
-  Catalogue,
-  DeleteCatalogueResponse,
-} from './catalogue.types';
+export type { Catalogue, DeleteCatalogueResponse } from './catalogue.types';
+
+export type { Collection } from './collection.types';
 
 export type {
-  Collection,
-} from './collection.types';
-
-export type {
-  Photo,
-  UploadStatus,
-  UploadingFile,
-  UploadPhotoParams,
+    Photo,
+    UploadStatus,
+    UploadingFile,
+    UploadPhotoParams,
 } from './photo.types';
 
-export type {
-  ClientFavouriteSession,
-} from '../hooks/useCatalogueFavourites';
+export type { ClientFavouriteSession } from '../hooks/useCatalogueFavourites';
