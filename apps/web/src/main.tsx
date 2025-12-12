@@ -1,7 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider } from '@tanstack/react-router';
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import { Toaster } from 'sonner';
@@ -15,6 +14,16 @@ import './i18n/types'; // Import for type augmentation
 import './lib/api-client'; // Initialize API configuration
 import './index.css'; // Tailwind CSS
 
+// Lazy load DevTools only in development
+const ReactQueryDevtools =
+    import.meta.env.MODE === 'development'
+        ? lazy(() =>
+              import('@tanstack/react-query-devtools').then((res) => ({
+                  default: res.ReactQueryDevtools,
+              }))
+          )
+        : () => null;
+
 // Initialize Zod i18n error map
 initializeZodI18n();
 
@@ -25,7 +34,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 <AuthProvider>
                     <RouterProvider router={router} />
                     <Toaster position="top-right" richColors />
-                    <ReactQueryDevtools initialIsOpen={false} />
+                    {import.meta.env.MODE === 'development' && (
+                        <Suspense fallback={null}>
+                            <ReactQueryDevtools initialIsOpen={false} />
+                        </Suspense>
+                    )}
                 </AuthProvider>
             </QueryClientProvider>
         </I18nextProvider>

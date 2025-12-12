@@ -1,8 +1,18 @@
+import { lazy, Suspense } from 'react';
 import { Outlet, useRouterState } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 
 import { Footer } from './Footer';
 import { Navigation } from './Navigation';
+
+// Lazy load DevTools only in development
+const TanStackRouterDevtools =
+    import.meta.env.MODE === 'development'
+        ? lazy(() =>
+              import('@tanstack/router-devtools').then((res) => ({
+                  default: res.TanStackRouterDevtools,
+              }))
+          )
+        : () => null;
 
 export function AppLayout() {
     const { pathname } = useRouterState({
@@ -17,7 +27,11 @@ export function AppLayout() {
                 <Outlet />
             </main>
             {!isPublicGallery && <Footer />}
-            <TanStackRouterDevtools position="bottom-right" />
+            {import.meta.env.MODE === 'development' && (
+                <Suspense fallback={null}>
+                    <TanStackRouterDevtools position="bottom-right" />
+                </Suspense>
+            )}
         </>
     );
 }

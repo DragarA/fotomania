@@ -1,8 +1,10 @@
 import * as fs from 'fs';
+import { promises as fsPromises } from 'fs';
 import * as path from 'path';
 
 import {
     Injectable,
+    Logger,
     NotFoundException,
     ForbiddenException,
 } from '@nestjs/common';
@@ -20,6 +22,7 @@ import { UpdateCollectionDto } from './dto/update-collection.dto';
 
 @Injectable()
 export class CollectionsService {
+    private readonly logger = new Logger(CollectionsService.name);
     private uploadRoot = path.resolve('./uploads');
 
     constructor(
@@ -172,11 +175,20 @@ export class CollectionsService {
         id: string,
         dbInstance: DbInstance
     ) {
+        // Delete collection directory with error handling
         const collectionPath = path.join(this.uploadRoot, 'collections', id);
-        if (fs.existsSync(collectionPath)) {
-            fs.rmdirSync(collectionPath, {
-                recursive: true,
-            });
+        try {
+            await fsPromises.access(collectionPath);
+            try {
+                await fsPromises.rm(collectionPath, { recursive: true });
+            } catch (error) {
+                this.logger.error(
+                    `Failed to remove collection directory: ${collectionPath}`,
+                    error
+                );
+            }
+        } catch {
+            // Directory doesn't exist, no need to log
         }
 
         await this.photosService.removeAllForCollection(id, dbInstance);

@@ -1,10 +1,12 @@
 import * as fs from 'fs';
+import { promises as fsPromises } from 'fs';
 import * as path from 'path';
 
 import {
     ForbiddenException,
     Inject,
     Injectable,
+    Logger,
     NotFoundException,
 } from '@nestjs/common';
 import { and, eq, isNotNull } from 'drizzle-orm';
@@ -17,6 +19,7 @@ import { photo } from '../common/db/schema/photos.schema';
 
 @Injectable()
 export class PhotosService {
+    private readonly logger = new Logger(PhotosService.name);
     private uploadRoot = path.resolve('./uploads');
     constructor(@Inject(DRIZZLE) private readonly db: DrizzleDB) {}
 
@@ -104,22 +107,56 @@ export class PhotosService {
                 )
             );
 
-        // 3. Delete physical files
-        const collectionPath = path.dirname(
-            path.join(this.uploadRoot, result.storagePath)
-        );
-        fs.unlinkSync(path.join(this.uploadRoot, result.storagePath));
+        // 3. Delete physical files (with error handling)
+        try {
+            const collectionPath = path.dirname(
+                path.join(this.uploadRoot, result.storagePath)
+            );
 
-        if (result.thumbnailPath) {
-            fs.unlinkSync(path.join(this.uploadRoot, result.thumbnailPath));
+            // Delete original file
+            try {
+                await fsPromises.unlink(path.join(this.uploadRoot, result.storagePath));
+            } catch (error) {
+                this.logger.error(
+                    `Failed to delete photo file: ${result.storagePath}`,
+                    error
+                );
+            }
+
+            // Delete thumbnail if exists
+            if (result.thumbnailPath) {
+                try {
+                    await fsPromises.unlink(
+                        path.join(this.uploadRoot, result.thumbnailPath)
+                    );
+                } catch (error) {
+                    this.logger.error(
+                        `Failed to delete thumbnail file: ${result.thumbnailPath}`,
+                        error
+                    );
+                }
+            }
+
+            // Clean up empty directory
+            try {
+                const files = await fsPromises.readdir(collectionPath);
+                if (files.length === 0) {
+                    await fsPromises.rmdir(collectionPath);
+                }
+            } catch (error) {
+                this.logger.error(
+                    `Failed to remove empty directory: ${collectionPath}`,
+                    error
+                );
+            }
+        } catch (error) {
+            this.logger.error(
+                `Error during file cleanup for photo ${id}. Continuing with database cleanup.`,
+                error
+            );
         }
 
-        // If after deleting the directory is empty, remove it
-        if (fs.readdirSync(collectionPath).length === 0) {
-            fs.rmdirSync(collectionPath);
-        }
-
-        // 4. Delete photo from database
+        // 4. Delete photo from database (always executes even if file deletion fails)
         await this.db.delete(photo).where(eq(photo.id, id));
 
         // 5. If photo was catalogue cover, auto-select next photo
@@ -223,8 +260,19 @@ export class PhotosService {
             collectionId
         );
 
-        if (!fs.existsSync(collectionPath)) {
-            fs.mkdirSync(collectionPath, { recursive: true });
+        // Ensure collection directory exists
+        try {
+            await fsPromises.access(collectionPath);
+        } catch {
+            try {
+                await fsPromises.mkdir(collectionPath, { recursive: true });
+            } catch (error) {
+                this.logger.error(
+                    `Failed to create collection directory: ${collectionPath}`,
+                    error
+                );
+                throw new Error('Failed to create upload directory');
+            }
         }
 
         // 2. Create photo record
@@ -259,7 +307,14 @@ export class PhotosService {
             .jpeg({ quality: 80 })
             .toFile(thumbnailPath);
 
-        const stats = fs.statSync(filePath);
+        let fileSize: number;
+        try {
+            const stats = await fsPromises.stat(filePath);
+            fileSize = stats.size;
+        } catch (error) {
+            this.logger.error(`Failed to read file stats for: ${filePath}`, error);
+            fileSize = file.size; // Fallback to original file size
+        }
 
         const relativeOriginalPath = path
             .relative(this.uploadRoot, filePath)
@@ -274,7 +329,7 @@ export class PhotosService {
             originalFileName: file.originalname,
             storagePath: relativeOriginalPath,
             mimeType: file.mimetype,
-            size: stats.size,
+            size: fileSize,
             collectionId,
             thumbnailPath: relativeThumbPath, // Future: generate thumbnail
             width: originalMetadata.width || null,
