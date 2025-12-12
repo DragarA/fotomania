@@ -91,20 +91,20 @@ export class AuthService {
 
     generateAccessToken(userId: string, email: string): string {
         const payload = { sub: userId, email };
+        const secret = this.configService.get<string>('JWT_SECRET');
+
         return this.jwtService.sign(payload, {
-            secret:
-                this.configService.get<string>('JWT_SECRET') ||
-                'your-secret-key-change-in-production',
+            secret,
             expiresIn: '7d', // 7 days
         });
     }
 
     generateRefreshToken(userId: string, email: string): string {
         const payload = { sub: userId, email };
+        const secret = this.configService.get<string>('JWT_REFRESH_SECRET');
+
         return this.jwtService.sign(payload, {
-            secret:
-                this.configService.get<string>('JWT_REFRESH_SECRET') ||
-                'your-refresh-secret-change-in-production',
+            secret,
             expiresIn: '30d', // 30 days
         });
     }
@@ -123,6 +123,55 @@ export class AuthService {
                 emailVerified: user.emailVerified,
             },
         };
+    }
+
+    async refreshAccessToken(refreshToken: string) {
+        const secret = this.configService.get<string>('JWT_REFRESH_SECRET');
+
+        if (!secret) {
+            throw new Error(
+                'JWT_REFRESH_SECRET is not configured. Please set JWT_REFRESH_SECRET in your environment variables.'
+            );
+        }
+
+        try {
+            const payload = this.jwtService.verify(refreshToken, {
+                secret,
+            });
+
+            // Fetch the user to ensure they still exist
+            const [foundUser] = await this.db
+                .select()
+                .from(user)
+                .where(eq(user.id, payload.sub));
+
+            if (!foundUser) {
+                throw new Error('User not found');
+            }
+
+            // Generate new tokens
+            const newAccessToken = this.generateAccessToken(
+                foundUser.id,
+                foundUser.email
+            );
+            const newRefreshToken = this.generateRefreshToken(
+                foundUser.id,
+                foundUser.email
+            );
+
+            return {
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+                user: {
+                    id: foundUser.id,
+                    email: foundUser.email,
+                    name: foundUser.name,
+                    emailVerified: foundUser.emailVerified,
+                },
+            };
+        } catch (error) {
+            throw new Error('Invalid refresh token');
+        }
     }
 
     async findUserById(id: string) {

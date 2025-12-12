@@ -34,6 +34,18 @@ export const $AuthLoginDtoClass = {
     required: ['email', 'password']
 } as const;
 
+export const $AuthRefreshDtoClass = {
+    type: 'object',
+    properties: {
+        refreshToken: {
+            type: 'string',
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+            description: 'Refresh token'
+        }
+    },
+    required: ['refreshToken']
+} as const;
+
 export const $CreateCatalogueDtoClass = {
     type: 'object',
     properties: {

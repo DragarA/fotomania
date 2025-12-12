@@ -1,5 +1,8 @@
-import { lazy, Suspense } from 'react';
 import { Outlet, useRouterState } from '@tanstack/react-router';
+import { lazy, Suspense } from 'react';
+
+
+import ErrorBoundary from '../common/ErrorBoundary';
 
 import { Footer } from './Footer';
 import { Navigation } from './Navigation';
@@ -24,7 +27,9 @@ export function AppLayout() {
         <>
             {!isPublicGallery && <Navigation />}
             <main className="min-h-screen">
-                <Outlet />
+                <ErrorBoundary>
+                    <Outlet />
+                </ErrorBoundary>
             </main>
             {!isPublicGallery && <Footer />}
             {import.meta.env.MODE === 'development' && (

@@ -8,6 +8,14 @@
   },
   "api": {
     "network_error": "Napaka omrežja. Prosim preverite svojo povezavo.",
-    "server_error": "Napaka strežnika. Prosim poskusite kasneje."
+    "server_error": "Napaka strežnika. Prosim poskusite későbbi."
+  },
+  "boundary": {
+    "title": "Ups! Nekaj je šlo narobe",
+    "message": "Naleteli smo na nepričakovano napako. Prosim poskusite znova ali se vrnite na domačo stran.",
+    "tryAgain": "Poskusi znova",
+    "goHome": "Pojdi domov",
+    "errorDetails": "Podrobnosti napake",
+    "stackTrace": "Sledenje napake"
   }
 }

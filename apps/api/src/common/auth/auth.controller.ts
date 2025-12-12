@@ -27,6 +27,11 @@ import {
     authLoginSchema,
 } from './dto/auth-login.dto';
 import {
+    AuthRefreshDto,
+    AuthRefreshDtoClass,
+    authRefreshSchema,
+} from './dto/auth-refresh.dto';
+import {
     AuthRegisterDto,
     AuthRegisterDtoClass,
     authRegisterSchema,
@@ -87,6 +92,24 @@ export class AuthController {
         return {
             message:
                 'Logout successful. Please remove the token from client storage.',
+        };
+    }
+
+    @Post('refresh')
+    @HttpCode(200)
+    @ApiOperation({ summary: 'Refresh access token using refresh token' })
+    @ApiBody({ type: AuthRefreshDtoClass })
+    @ApiResponse({ status: 200, description: 'Tokens refreshed successfully' })
+    @ApiResponse({ status: 401, description: 'Invalid refresh token' })
+    async refresh(
+        @Body(new ZodValidationPipe(authRefreshSchema)) dto: AuthRefreshDto
+    ) {
+        const tokens = await this.authService.refreshAccessToken(
+            dto.refreshToken
+        );
+        return {
+            message: 'Tokens refreshed successfully',
+            ...tokens,
         };
     }
 

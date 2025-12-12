@@ -12,12 +12,14 @@ import { I18nConfigModule } from './i18n/i18n.module';
 import { PhotosModule } from './photos/photos.module';
 import { PublicModule } from './public/public.module';
 import { UsersModule } from './users/users.module';
+import { validateEnv } from './config/env.validation';
 
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: '.env',
+            validate: validateEnv,
         }),
         I18nConfigModule,
         DbModule,

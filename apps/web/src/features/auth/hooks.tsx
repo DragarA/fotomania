@@ -24,6 +24,7 @@ interface AuthContextType {
     isLoading: boolean;
     login: (accessToken: string, refreshToken: string, user: User) => void;
     logout: () => void;
+    refreshAccessToken: () => Promise<boolean>;
 }
 
 interface LoginData {
@@ -98,6 +99,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('accessToken', newAccessToken);
         localStorage.setItem('refreshToken', newRefreshToken);
         localStorage.setItem('user', JSON.stringify(newUser));
+
+        // Calculate and store token expiry (7 days from now based on backend)
+        const expiryTime = Date.now() + 7 * 24 * 60 * 60 * 1000;
+        localStorage.setItem('tokenExpiry', expiryTime.toString());
     };
 
     const logout = () => {
@@ -109,6 +114,46 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
+        localStorage.removeItem('tokenExpiry');
+    };
+
+    const refreshAccessToken = async (): Promise<boolean> => {
+        const storedRefreshToken = localStorage.getItem('refreshToken');
+
+        if (!storedRefreshToken) {
+            logout();
+            return false;
+        }
+
+        try {
+            const response = await AuthService.authControllerRefresh({
+                requestBody: {
+                    refreshToken: storedRefreshToken,
+                },
+            });
+
+            const data = response as AuthResponse;
+
+            // Update state with new tokens
+            setAccessToken(data.accessToken);
+            setRefreshToken(data.refreshToken);
+            setUser(data.user);
+
+            // Update localStorage
+            localStorage.setItem('accessToken', data.accessToken);
+            localStorage.setItem('refreshToken', data.refreshToken);
+            localStorage.setItem('user', JSON.stringify(data.user));
+
+            // Calculate and store token expiry (7 days from now based on backend)
+            const expiryTime = Date.now() + 7 * 24 * 60 * 60 * 1000;
+            localStorage.setItem('tokenExpiry', expiryTime.toString());
+
+            return true;
+        } catch (error) {
+            console.error('Token refresh failed:', error);
+            logout();
+            return false;
+        }
     };
 
     return (
@@ -120,6 +165,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 isLoading,
                 login,
                 logout,
+                refreshAccessToken,
             }}
         >
             {children}

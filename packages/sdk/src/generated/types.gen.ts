@@ -26,6 +26,13 @@ export type AuthLoginDtoClass = {
     password: string;
 };
 
+export type AuthRefreshDtoClass = {
+    /**
+     * Refresh token
+     */
+    refreshToken: string;
+};
+
 export type CreateCatalogueDtoClass = {
     /**
      * Catalogue title
@@ -368,6 +375,12 @@ export type AuthControllerLoginResponse = unknown;
 
 export type AuthControllerLogoutResponse = unknown;
 
+export type AuthControllerRefreshData = {
+    requestBody: AuthRefreshDtoClass;
+};
+
+export type AuthControllerRefreshResponse = unknown;
+
 export type AuthControllerGoogleAuthResponse = unknown;
 
 export type AuthControllerGoogleAuthRedirectResponse = unknown;
@@ -626,6 +639,21 @@ export type $OpenApiTs = {
                  * Logout successful
                  */
                 200: unknown;
+            };
+        };
+    };
+    '/auth/refresh': {
+        post: {
+            req: AuthControllerRefreshData;
+            res: {
+                /**
+                 * Tokens refreshed successfully
+                 */
+                200: unknown;
+                /**
+                 * Invalid refresh token
+                 */
+                401: unknown;
             };
         };
     };

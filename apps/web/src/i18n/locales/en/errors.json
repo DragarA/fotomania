@@ -9,5 +9,13 @@
   "api": {
     "network_error": "Network error. Please check your connection.",
     "server_error": "Server error. Please try again later."
+  },
+  "boundary": {
+    "title": "Oops! Something went wrong",
+    "message": "We encountered an unexpected error. Please try again or return to the home page.",
+    "tryAgain": "Try Again",
+    "goHome": "Go to Home",
+    "errorDetails": "Error Details",
+    "stackTrace": "Stack Trace"
   }
 }
