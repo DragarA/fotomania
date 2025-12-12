@@ -2,20 +2,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { API_BASE_URL } from '../../../../lib/api-client';
+import type { Photo } from '../../types';
 
 import { PhotoContextMenu } from './PhotoContextMenu';
-
-interface Photo {
-    id: string;
-    originalFileName: string;
-    storagePath: string;
-    mimeType: string;
-    width?: number;
-    height?: number;
-    size?: number;
-    collectionId: string;
-    thumbnailPath?: string;
-}
 
 interface PhotoGridProps {
     photos: Photo[];

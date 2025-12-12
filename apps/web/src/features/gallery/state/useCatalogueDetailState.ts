@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import type { Collection } from '../types';
+import type { Collection, Photo } from '../types';
 
 interface ModalState {
     isOpen: boolean;
@@ -12,18 +12,6 @@ interface ContextMenuState {
     x: number;
     y: number;
     collection: any;
-}
-
-interface Photo {
-    id: string;
-    originalFileName: string;
-    storagePath: string;
-    mimeType: string;
-    width?: number;
-    height?: number;
-    size?: number;
-    collectionId: string;
-    thumbnailPath?: string;
 }
 
 export function useCatalogueDetailState(collections: Collection[] | undefined) {

@@ -1,18 +1,16 @@
+import type { CollectionPhotoPublicResDto, PhotoResDto } from '@repo/sdk';
+
 /**
- * Photo entity type (based on database schema)
- * Represents an uploaded photo in a collection
+ * Photo entity type (based on API response)
+ * Re-exported from SDK for consistency across the app
  */
-export interface Photo {
-    id: string;
-    originalFileName: string;
-    storagePath: string;
-    mimeType: string;
-    width?: number;
-    height?: number;
-    size?: number;
-    collectionId: string;
-    thumbnailPath?: string;
-}
+export type Photo = PhotoResDto;
+
+/**
+ * Public photo type with timestamps (used in public galleries)
+ * Re-exported from SDK for consistency across the app
+ */
+export type PublicPhoto = CollectionPhotoPublicResDto;
 
 /**
  * Upload status for photo uploads

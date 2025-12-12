@@ -1,24 +1,12 @@
 import { Heart } from 'lucide-react';
 
 import { API_BASE_URL } from '../../../../lib/api-client';
-
-interface Photo {
-    id: string;
-    originalFileName: string;
-    storagePath: string;
-    thumbnailPath?: string | null | { [key: string]: unknown };
-    mimeType: string;
-    width?: number | null | { [key: string]: unknown };
-    height?: number | null | { [key: string]: unknown };
-    size?: number | null | { [key: string]: unknown };
-    createdAt: string;
-    updatedAt: string;
-}
+import type { PublicPhoto } from '../../types';
 
 interface PublicPhotoGridProps {
-    photos: Photo[];
+    photos: PublicPhoto[];
     isLoading: boolean;
-    onPhotoClick?: (photo: Photo) => void;
+    onPhotoClick?: (photo: PublicPhoto) => void;
     onToggleFavorite?: (photoId: string) => void;
     isFavorite?: (photoId: string) => boolean;
 }

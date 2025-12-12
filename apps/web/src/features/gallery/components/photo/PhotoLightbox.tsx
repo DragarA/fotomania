@@ -2,18 +2,7 @@ import { Heart } from 'lucide-react';
 import { useEffect } from 'react';
 
 import { API_BASE_URL } from '../../../../lib/api-client';
-
-interface Photo {
-    id: string;
-    originalFileName: string;
-    storagePath: string;
-    mimeType: string;
-    width?: number;
-    height?: number;
-    size?: number;
-    collectionId: string;
-    thumbnailPath?: string;
-}
+import type { Photo } from '../../types';
 
 interface PhotoLightboxProps {
     photo: Photo;
@@ -38,10 +27,6 @@ export function PhotoLightbox({
     const hasPrevious = currentIndex > 0;
     const hasNext = currentIndex < photos.length - 1;
     const isPhotoFavorite = isFavorite?.(photo.id) ?? false;
-
-    // Determine if photo is vertical (portrait orientation)
-    const isVertical =
-        photo.height && photo.width && photo.height > photo.width;
 
     // Keyboard navigation
     useEffect(() => {
@@ -173,27 +158,11 @@ export function PhotoLightbox({
                 className="relative w-full h-full flex items-center justify-center p-4 sm:p-8 md:p-16"
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Blurred Background for Vertical Images */}
-                {isVertical && (
-                    <div className="absolute inset-0 overflow-hidden">
-                        <img
-                            src={`${API_BASE_URL}/uploads/${photo.storagePath}`}
-                            alt=""
-                            className="w-full h-full object-cover blur-3xl scale-110 opacity-40"
-                            aria-hidden="true"
-                        />
-                    </div>
-                )}
-
                 <div className="relative max-w-full max-h-full flex items-center justify-center">
                     <img
                         src={`${API_BASE_URL}/uploads/${photo.storagePath}`}
                         alt={photo.originalFileName}
-                        className={`w-auto h-auto object-contain ${
-                            isVertical
-                                ? 'max-h-[calc(100vh-4rem)] max-w-[90vw]'
-                                : 'max-w-full max-h-[calc(100vh-8rem)] sm:max-h-[calc(100vh-10rem)]'
-                        }`}
+                        className="w-auto h-auto object-contain max-w-full max-h-[calc(100vh-8rem)] sm:max-h-[calc(100vh-10rem)]"
                     />
 
                     {/* Photo info */}

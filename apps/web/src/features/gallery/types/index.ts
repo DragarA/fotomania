@@ -11,6 +11,7 @@ export type { Collection } from './collection.types';
 
 export type {
     Photo,
+    PublicPhoto,
     UploadStatus,
     UploadingFile,
     UploadPhotoParams,
