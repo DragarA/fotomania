@@ -169,34 +169,60 @@ describe('CataloguesController (e2e)', () => {
     });
   });
 
-  describe('GET /catalogues/slug/:slug', () => {
+  describe('GET /public/catalogue/:slug', () => {
     it('should return a catalogue by public slug (no auth required)', async () => {
       const mockCatalogue = TestDataFactory.createCatalogue({
         publicUrlSlug: 'test-slug',
       });
+      const mockCollection = TestDataFactory.createCollection({
+        catalogueId: mockCatalogue.id,
+      });
 
+      // Mock findPublicBySlug query
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([mockCatalogue]),
+          leftJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([
+              { catalogue: mockCatalogue, collection: mockCollection },
+            ]),
+          }),
+        }),
+      } as any);
+
+      // Mock collections with photos query
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockReturnValue({
+              having: jest.fn().mockReturnValue({
+                groupBy: jest.fn().mockResolvedValue([
+                  { collection: mockCollection },
+                ]),
+              }),
+            }),
+          }),
         }),
       } as any);
 
       const response = await request(app.getHttpServer())
-        .get('/catalogues/slug/test-slug')
+        .get('/public/catalogue/test-slug')
         .expect(200);
 
       expect(response.body.publicUrlSlug).toBe('test-slug');
+      expect(response.body.collections).toBeDefined();
     });
 
     it('should return 404 when slug not found', async () => {
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]),
+          leftJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([]),
+          }),
         }),
       } as any);
 
       await request(app.getHttpServer())
-        .get('/catalogues/slug/non-existent')
+        .get('/public/catalogue/non-existent')
         .expect(404);
     });
   });
@@ -262,15 +288,27 @@ describe('CataloguesController (e2e)', () => {
         ownerId: testUser.id,
       });
 
+      // Mock findOne
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           where: jest.fn().mockResolvedValue([mockCatalogue]),
         }),
       } as any);
 
-      mockDb.delete.mockReturnValueOnce({
-        where: jest.fn().mockResolvedValue(undefined),
-      } as any);
+      // Mock transaction
+      mockDb.transaction.mockImplementation(async (callback: any) => {
+        const mockTx = {
+          select: jest.fn().mockReturnValue({
+            from: jest.fn().mockReturnValue({
+              where: jest.fn().mockResolvedValue([]),
+            }),
+          }),
+          delete: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue(undefined),
+          }),
+        };
+        return callback(mockTx);
+      });
 
       const response = await request(app.getHttpServer())
         .delete('/catalogues/catalogue-123')

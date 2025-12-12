@@ -175,11 +175,31 @@ describe('PhotosController (e2e)', () => {
   describe('DELETE /photos/:id', () => {
     it('should delete a photo', async () => {
       const photoId = 'photo-123';
+      const fs = require('fs');
+      const path = require('path');
 
-      const mockPhoto = TestDataFactory.createPhoto({ id: photoId });
+      // Create temp file for deletion test
+      const testDir = path.resolve('./uploads/collections/test-collection');
+      const testFile = path.join(testDir, 'photo.jpg');
+
+      // Ensure directory and file exist
+      if (!fs.existsSync(testDir)) {
+        fs.mkdirSync(testDir, { recursive: true });
+      }
+      fs.writeFileSync(testFile, 'test');
+
+      // Use paths that match the created files
+      const mockPhoto = TestDataFactory.createPhoto({
+        id: photoId,
+        storagePath: 'collections/test-collection/photo.jpg',
+        thumbnailPath: null, // Avoid thumbnail deletion errors
+      });
       const mockCatalogue = TestDataFactory.createCatalogue({
         ownerId: testUser.id,
+        coverImage: null, // Ensure this photo isn't the cover
       });
+
+      // Mock findOne
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           innerJoin: jest.fn().mockReturnValue({
@@ -192,6 +212,16 @@ describe('PhotosController (e2e)', () => {
         }),
       } as any);
 
+      // Mock catalogue cover check (photo is not a cover)
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([]),
+          }),
+        }),
+      } as any);
+
+      // Mock delete
       mockDb.delete.mockReturnValueOnce({
         where: jest.fn().mockResolvedValue(undefined),
       } as any);
@@ -202,6 +232,11 @@ describe('PhotosController (e2e)', () => {
         .expect(200);
 
       expect(response.body.message).toBe('Photo deleted successfully');
+
+      // Cleanup - directory should be removed by the service
+      if (fs.existsSync(testDir)) {
+        fs.rmdirSync(testDir, { recursive: true });
+      }
     });
 
     it('should return 404 when photo not found', async () => {

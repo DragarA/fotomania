@@ -169,6 +169,67 @@ describe('PublicController (e2e)', () => {
 
   describe('POST /public/catalogue/:slug/favourites', () => {
     it('should add favourites successfully', async () => {
+      const mockCatalogue = TestDataFactory.createCatalogue({
+        publicUrlSlug: 'wedding-2024',
+      });
+
+      // Mock catalogue lookup
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          leftJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              where: jest.fn().mockResolvedValue([
+                { id: mockCatalogue.id },
+              ]),
+            }),
+          }),
+        }),
+      } as any);
+
+      // Mock photo count validation
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          leftJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockReturnValue({
+              groupBy: jest.fn().mockResolvedValue([{ photoCount: 3 }]),
+            }),
+          }),
+        }),
+      } as any);
+
+      // Mock existing session lookup (no existing session)
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          where: jest.fn().mockReturnValue({
+            limit: jest.fn().mockResolvedValue([]),
+          }),
+        }),
+      } as any);
+
+      // Mock session insert
+      const mockSession = {
+        id: 'session-123',
+        email: 'test@example.com',
+        catalogueId: mockCatalogue.id,
+      };
+      mockDb.insert.mockReturnValueOnce({
+        values: jest.fn().mockReturnValue({
+          returning: jest.fn().mockReturnValue({
+            then: jest.fn().mockResolvedValue(mockSession),
+          }),
+        }),
+      } as any);
+
+      // Mock delete existing favourites
+      mockDb.delete.mockReturnValueOnce({
+        where: jest.fn().mockResolvedValue(undefined),
+      } as any);
+
+      // Mock favourites insert
+      mockDb.insert.mockReturnValueOnce({
+        values: jest.fn().mockResolvedValue(undefined),
+      } as any);
+
       const response = await request(app.getHttpServer())
         .post('/public/catalogue/wedding-2024/favourites')
         .send({
