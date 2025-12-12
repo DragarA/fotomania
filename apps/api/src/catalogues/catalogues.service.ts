@@ -147,9 +147,11 @@ export class CataloguesService {
             );
         }
 
-        await this.collectionsService.removeAllForCatalogue(id);
-
-        await this.db.delete(catalogue).where(eq(catalogue.id, id));
+        // Use transaction to ensure atomicity of cascade delete
+        await this.db.transaction(async (tx) => {
+            await this.collectionsService.removeAllForCatalogue(id, tx);
+            await tx.delete(catalogue).where(eq(catalogue.id, id));
+        });
 
         return { message: 'Catalogue deleted successfully' };
     }

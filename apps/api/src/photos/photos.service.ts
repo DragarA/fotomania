@@ -10,7 +10,7 @@ import {
 import { and, eq, isNotNull } from 'drizzle-orm';
 import sharp from 'sharp';
 
-import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
+import { DRIZZLE, type DbInstance, type DrizzleDB } from '../common/db/drizzle';
 import { catalogue } from '../common/db/schema/catalogues.schema';
 import { collection } from '../common/db/schema/collections.schema';
 import { photo } from '../common/db/schema/photos.schema';
@@ -130,10 +130,15 @@ export class PhotosService {
         return { message: 'Photo deleted successfully' };
     }
 
-    async removeAllForCollection(collectionId: string) {
-        await this.db.delete(photo).where(eq(photo.collectionId, collectionId));
+    async removeAllForCollection(
+        collectionId: string,
+        dbInstance?: DbInstance
+    ) {
+        const db = dbInstance || this.db;
 
-        const [catalogueWithCover] = await this.db
+        await db.delete(photo).where(eq(photo.collectionId, collectionId));
+
+        const [catalogueWithCover] = await db
             .select({ catalogue, collection })
             .from(collection)
             .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
@@ -144,7 +149,7 @@ export class PhotosService {
                 )
             );
         if (catalogueWithCover) {
-            const [coverPhoto] = await this.db
+            const [coverPhoto] = await db
                 .select()
                 .from(photo)
                 .where(
@@ -156,15 +161,21 @@ export class PhotosService {
                 .limit(1);
             if (!coverPhoto) {
                 await this.reassignCatalogueCover(
-                    catalogueWithCover.catalogue.id
+                    catalogueWithCover.catalogue.id,
+                    db
                 );
             }
         }
     }
 
-    private async reassignCatalogueCover(catalogueId: string) {
+    private async reassignCatalogueCover(
+        catalogueId: string,
+        dbInstance?: DbInstance
+    ) {
+        const db = dbInstance || this.db;
+
         // Find next available photo (oldest first for consistency)
-        const [nextPhoto] = await this.db
+        const [nextPhoto] = await db
             .select()
             .from(photo)
             .innerJoin(collection, eq(photo.collectionId, collection.id))
@@ -173,7 +184,7 @@ export class PhotosService {
             .limit(1);
 
         // Update catalogue cover (null if no photos remain)
-        await this.db
+        await db
             .update(catalogue)
             .set({
                 coverImage: nextPhoto ? nextPhoto.photo.storagePath : null,

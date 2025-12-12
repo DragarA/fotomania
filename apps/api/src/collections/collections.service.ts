@@ -9,7 +9,7 @@ import {
 import { Inject } from '@nestjs/common';
 import { eq, and, sql } from 'drizzle-orm';
 
-import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
+import { DRIZZLE, type DbInstance, type DrizzleDB } from '../common/db/drizzle';
 import { catalogue } from '../common/db/schema/catalogues.schema';
 import { collection } from '../common/db/schema/collections.schema';
 import { photo } from '../common/db/schema/photos.schema';
@@ -136,14 +136,19 @@ export class CollectionsService {
         return updated;
     }
 
-    async removeAllForCatalogue(catalogueId: string) {
-        const collections = await this.db
+    async removeAllForCatalogue(
+        catalogueId: string,
+        tx?: DbInstance
+    ) {
+        const dbInstance = tx || this.db;
+
+        const collections = await dbInstance
             .select()
             .from(collection)
             .where(eq(collection.catalogueId, catalogueId));
 
         for (const coll of collections) {
-            await this.remove(coll.id, coll.catalogueId);
+            await this.removeCollection(coll.id, dbInstance);
         }
     }
 
@@ -155,6 +160,18 @@ export class CollectionsService {
             throw new NotFoundException(`Collection with ID ${id} not found`);
         }
 
+        // Use transaction to ensure atomicity of cascade delete
+        await this.db.transaction(async (tx) => {
+            await this.removeCollection(id, tx);
+        });
+
+        return { message: 'Collection deleted successfully' };
+    }
+
+    private async removeCollection(
+        id: string,
+        dbInstance: DbInstance
+    ) {
         const collectionPath = path.join(this.uploadRoot, 'collections', id);
         if (fs.existsSync(collectionPath)) {
             fs.rmdirSync(collectionPath, {
@@ -162,10 +179,8 @@ export class CollectionsService {
             });
         }
 
-        await this.photosService.removeAllForCollection(id);
+        await this.photosService.removeAllForCollection(id, dbInstance);
 
-        await this.db.delete(collection).where(eq(collection.id, id));
-
-        return { message: 'Collection deleted successfully' };
+        await dbInstance.delete(collection).where(eq(collection.id, id));
     }
 }

@@ -5,13 +5,13 @@ import type { Collection, Photo } from '../types';
 interface ModalState {
     isOpen: boolean;
     mode: 'create' | 'edit';
-    initialData?: any;
+    initialData?: Collection;
 }
 
 interface ContextMenuState {
     x: number;
     y: number;
-    collection: any;
+    collection: Collection;
 }
 
 export function useCatalogueDetailState(collections: Collection[] | undefined) {
@@ -41,7 +41,7 @@ export function useCatalogueDetailState(collections: Collection[] | undefined) {
         setModalState({ isOpen: true, mode: 'create' });
     };
 
-    const openEditModal = (collection: any) => {
+    const openEditModal = (collection: Collection) => {
         setModalState({
             isOpen: true,
             mode: 'edit',
@@ -57,7 +57,7 @@ export function useCatalogueDetailState(collections: Collection[] | undefined) {
         }
     };
 
-    const openContextMenu = (x: number, y: number, collection: any) => {
+    const openContextMenu = (x: number, y: number, collection: Collection) => {
         setCollectionContextMenu({ x, y, collection });
     };
 

@@ -14,3 +14,6 @@ export const createDrizzleConnection = (connectionString: string) => {
 };
 
 export type DrizzleDB = ReturnType<typeof createDrizzleConnection>;
+
+// Re-export common types
+export type { DbInstance } from './types';
