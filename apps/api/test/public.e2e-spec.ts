@@ -126,7 +126,7 @@ describe('PublicController (e2e)', () => {
       // First select - verify collection and catalogue
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
-          leftJoin: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
             where: jest.fn().mockResolvedValue([
               { collection: mockCollection, catalogue: mockCatalogue },
             ]),
@@ -155,7 +155,7 @@ describe('PublicController (e2e)', () => {
     it('should return 404 when collection not found', async () => {
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
-          leftJoin: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
             where: jest.fn().mockResolvedValue([]),
           }),
         }),
