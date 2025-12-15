@@ -80,7 +80,7 @@ export function PhotoGrid({
                     return (
                         <div
                             key={photo.id}
-                            className={`group relative aspect-square bg-gray-100 rounded-lg overflow-hidden transition-all ${
+                            className={`group relative aspect-square bg-gray-100 rounded-lg overflow-hidden transition-all flex items-center justify-center ${
                                 isMenuOpen
                                     ? 'ring-2 ring-indigo-500'
                                     : 'hover:ring-2 hover:ring-indigo-500'
@@ -89,7 +89,7 @@ export function PhotoGrid({
                             <img
                                 src={`${API_BASE_URL}/uploads/${photo.thumbnailPath}`}
                                 alt={photo.originalFileName}
-                                className="w-full h-full object-cover cursor-pointer"
+                                className="w-full h-full object-contain cursor-pointer"
                                 loading="lazy"
                                 onClick={() => onPhotoClick?.(photo)}
                             />

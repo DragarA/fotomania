@@ -50,7 +50,7 @@ export function PublicPhotoGrid({
                 return (
                     <div
                         key={photo.id}
-                        className="group relative aspect-square bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-indigo-500 transition-all"
+                        className="group relative aspect-square bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-indigo-500 transition-all flex items-center justify-center"
                     >
                         <img
                             src={`${API_BASE_URL}/uploads/${
@@ -60,7 +60,7 @@ export function PublicPhotoGrid({
                                     : photo.storagePath
                             }`}
                             alt={photo.originalFileName}
-                            className="w-full h-full object-cover cursor-pointer"
+                            className="w-full h-full object-contain cursor-pointer"
                             loading="lazy"
                             onClick={() => onPhotoClick?.(photo)}
                         />
