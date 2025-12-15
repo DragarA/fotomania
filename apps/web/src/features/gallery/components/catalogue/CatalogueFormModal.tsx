@@ -41,7 +41,6 @@ export function CatalogueFormModal({
             const payload = {
                 title: values.title,
                 description: values.description || undefined,
-                password: values.password || undefined,
             };
 
             updateMutation.mutate(payload, {
@@ -140,7 +139,6 @@ export function CatalogueFormModal({
                                 ? {
                                       title: catalogue.title,
                                       description: catalogue.description ?? '',
-                                      password: catalogue.password ?? '',
                                   }
                                 : undefined
                         }

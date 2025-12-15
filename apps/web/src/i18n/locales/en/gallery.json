@@ -74,7 +74,8 @@
     "add": "Add",
     "photos": "photos",
     "noCollections": "No collections yet",
-    "createFirstCollection": "Create First Collection"
+    "createFirstCollection": "Create First Collection", 
+    "backToCatalogues": "Back to Catalogues"
   },
   "workspace": {
     "invalidFile": "Invalid file",

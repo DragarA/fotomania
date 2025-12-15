@@ -1,4 +1,5 @@
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { Archive, Heart, MoreVertical, ChevronLeft } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -109,6 +110,12 @@ export function CatalogueSidebar({
             {/* Header with catalogue info and actions */}
             <div className="p-6 border-b border-gray-200">
                 <div className="flex items-start justify-between mb-2">
+                    <Link
+                        to="/catalogues"
+                        className="mr-2 text-gray-400 hover:text-gray-900 rounded transition-colors cursor-pointer"
+                    >
+                        <ChevronLeft className="w-10 h-10" />
+                    </Link>
                     <h1 className="text-2xl font-bold text-gray-900 flex-1">
                         {catalogue.title}
                     </h1>
@@ -117,13 +124,7 @@ export function CatalogueSidebar({
                         className="p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors cursor-pointer"
                         title={t('sidebar.moreOptions')}
                     >
-                        <svg
-                            className="w-5 h-5"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                        </svg>
+                        <MoreVertical className="w-5 h-5" />
                     </button>
                 </div>
                 {catalogue.description && (
@@ -143,19 +144,7 @@ export function CatalogueSidebar({
                         }`}
                     >
                         <div className="flex items-center justify-center gap-2">
-                            <svg
-                                className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                                />
-                            </svg>
+                            <Archive className="w-5 h-5" />
                             <span>{t('sidebar.collectionsTab')}</span>
                         </div>
                     </button>
@@ -168,19 +157,7 @@ export function CatalogueSidebar({
                         }`}
                     >
                         <div className="flex items-center justify-center gap-2">
-                            <svg
-                                className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                />
-                            </svg>
+                            <Heart className="w-5 h-5" />
                             <span>{t('sidebar.favouritesTab')}</span>
                         </div>
                     </button>
@@ -244,13 +221,7 @@ export function CatalogueSidebar({
                                                 className="p-1 text-gray-600 hover:text-gray-900 cursor-pointer"
                                                 title={t('sidebar.moreOptions')}
                                             >
-                                                <svg
-                                                    className="w-5 h-5"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-                                                </svg>
+                                                <MoreVertical className="w-5 h-5" />
                                             </button>
                                         </div>
                                     </div>

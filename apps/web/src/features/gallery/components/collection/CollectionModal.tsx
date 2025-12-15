@@ -19,17 +19,14 @@ import {
     collectionFormSchema,
     type CollectionFormValues,
 } from '../../utils/validation';
+import { Collection } from '../../types';
 
 interface CollectionModalProps {
     isOpen: boolean;
     onClose: (createdCollectionId?: string) => void;
     mode: 'create' | 'edit';
     catalogueId: string;
-    initialData?: {
-        id: string;
-        name: string;
-        catalogueId: string;
-    };
+    initialData?: Collection;
 }
 
 export function CollectionModal({

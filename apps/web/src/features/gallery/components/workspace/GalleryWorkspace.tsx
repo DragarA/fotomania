@@ -14,6 +14,7 @@ import {
     useCatalogueFavouritesQuery,
 } from '../../hooks';
 import { useCatalogueDetailState } from '../../state/useCatalogueDetailState';
+import type { Collection, Photo } from '../../types';
 import { CatalogueSidebar } from '../catalogue/CatalogueSidebar';
 import { CollectionContextMenu } from '../collection/CollectionContextMenu';
 import { CollectionModal } from '../collection/CollectionModal';
@@ -115,7 +116,7 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
         });
     };
 
-    const handleDeletePhoto = (photo: any) => {
+    const handleDeletePhoto = (photo: Photo) => {
         confirmDelete({
             title: t('workspace.deletePhotoTitle'),
             description: `${photo.originalFileName}\n${t('workspace.cannotBeUndone')}`,
@@ -131,13 +132,13 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
         });
     };
 
-    const handleSetAsCover = (photo: any) => {
+    const handleSetAsCover = (photo: Photo) => {
         setCoverMutation.mutate({ catalogueId, photoId: photo.id });
     };
 
     const handleCollectionContextMenu = (
         e: React.MouseEvent,
-        collection: any
+        collection: Collection
     ) => {
         const rect = e.currentTarget.getBoundingClientRect();
         openContextMenu(rect.left, rect.bottom + 4, collection);

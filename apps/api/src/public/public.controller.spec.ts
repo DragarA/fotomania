@@ -7,6 +7,7 @@ import { ClientSessionsService } from '../client-sessions/client-sessions.servic
 import { PhotosService } from '../photos/photos.service';
 
 import { PublicController } from './public.controller';
+import { stat } from 'fs';
 
 describe('PublicController', () => {
     let controller: PublicController;

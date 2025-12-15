@@ -31,7 +31,6 @@ export function CatalogueForm({
         defaultValues: {
             title: '',
             description: '',
-            password: '',
             ...initialValues,
         },
     });
@@ -84,32 +83,6 @@ export function CatalogueForm({
                 {errors.description && (
                     <p className="mt-1 text-sm text-red-600">
                         {errors.description.message}
-                    </p>
-                )}
-            </div>
-
-            {/* Password Field */}
-            <div>
-                <label
-                    className="block text-sm font-semibold text-gray-700 mb-2"
-                    htmlFor="password"
-                >
-                    {t('catalogueForm.passwordLabel')}
-                </label>
-                <input
-                    id="password"
-                    type="password"
-                    {...register('password')}
-                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
-                        errors.password
-                            ? 'border-red-500'
-                            : 'border-gray-200 focus:border-accent-500'
-                    }`}
-                    placeholder={t('catalogueForm.passwordPlaceholder')}
-                />
-                {errors.password && (
-                    <p className="mt-1 text-sm text-red-600">
-                        {errors.password.message}
                     </p>
                 )}
             </div>

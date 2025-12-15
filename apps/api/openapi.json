@@ -450,6 +450,59 @@
         ]
       }
     },
+    "/catalogues/{id}/status": {
+      "patch": {
+        "operationId": "CataloguesController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCatalogueStatusDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Catalogue updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Update a catalogue status",
+        "tags": [
+          "catalogues"
+        ]
+      }
+    },
     "/catalogues/{catalogueId}/cover/{photoId}": {
       "patch": {
         "operationId": "CataloguesController_setCover",
@@ -1222,11 +1275,6 @@
             "type": "string",
             "description": "Catalogue description",
             "example": "Beautiful moments from our summer wedding"
-          },
-          "password": {
-            "type": "string",
-            "description": "Password for protected catalogue",
-            "example": "secret123"
           }
         },
         "required": [
@@ -1282,6 +1330,16 @@
             "type": "number",
             "description": "Number of photos in the catalogue",
             "example": 150
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the catalogue",
+            "example": "published"
+          },
+          "isProtected": {
+            "type": "boolean",
+            "description": "Indicates if the catalogue is password protected",
+            "example": false
           }
         },
         "required": [
@@ -1291,7 +1349,9 @@
           "ownerId",
           "createdAt",
           "updatedAt",
-          "photoCount"
+          "photoCount",
+          "status",
+          "isProtected"
         ]
       },
       "UpdateCatalogueDtoClass": {
@@ -1307,11 +1367,6 @@
             "description": "Catalogue description",
             "example": "Beautiful moments from our summer wedding"
           },
-          "password": {
-            "type": "string",
-            "description": "Password for protected catalogue",
-            "example": "secret123"
-          },
           "coverImage": {
             "type": "object",
             "description": "Catalogue cover image path",
@@ -1319,6 +1374,24 @@
             "example": "collections/abc123/thumb_photo456.jpg"
           }
         }
+      },
+      "UpdateCatalogueStatusDtoClass": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of the catalogue",
+            "example": "draft"
+          },
+          "password": {
+            "type": "string",
+            "description": "Catalogue password for public access",
+            "example": "secret123!"
+          }
+        },
+        "required": [
+          "status"
+        ]
       },
       "ClientFavouritesResDto": {
         "type": "object",

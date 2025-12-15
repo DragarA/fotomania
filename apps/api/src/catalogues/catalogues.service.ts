@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { eq, and, count, gt } from 'drizzle-orm';
 import { v4 as uuid } from 'uuid';
+import * as bcrypt from 'bcrypt';
 
 import { CollectionsService } from '../collections/collections.service';
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
@@ -18,6 +19,7 @@ import { photo } from '../common/db/schema/photos.schema';
 import { ClientFavouritesResDto } from './dto/client-favourites-res.dto';
 import { CreateCatalogueDto } from './dto/create-catalogue.dto';
 import { UpdateCatalogueDto } from './dto/update-catalogue.dto';
+import { UpdateCatalogueStatusDto } from './dto/update-catalogue-status.dto';
 
 @Injectable()
 export class CataloguesService {
@@ -125,6 +127,38 @@ export class CataloguesService {
             .update(catalogue)
             .set({
                 ...updateCatalogueDto,
+                updatedAt: new Date(),
+            })
+            .where(eq(catalogue.id, id))
+            .returning();
+
+        return updated;
+    }
+
+    async updateStatus(
+        id: string,
+        updateCatalogueDto: UpdateCatalogueStatusDto,
+        ownerId: string
+    ) {
+        // First check if catalogue exists and user owns it
+        const existing = await this.findOne(id, ownerId);
+
+        if (existing.ownerId !== ownerId) {
+            throw new ForbiddenException(
+                'You do not have permission to edit this catalogue'
+            );
+        }
+
+        let passwordHash;
+        if (updateCatalogueDto.password) {
+            passwordHash = await bcrypt.hash(updateCatalogueDto.password, 10);
+        }
+
+        const [updated] = await this.db
+            .update(catalogue)
+            .set({
+                ...updateCatalogueDto,
+                password: passwordHash,
                 updatedAt: new Date(),
             })
             .where(eq(catalogue.id, id))

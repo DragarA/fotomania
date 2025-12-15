@@ -58,11 +58,6 @@ export const $CreateCatalogueDtoClass = {
             type: 'string',
             description: 'Catalogue description',
             example: 'Beautiful moments from our summer wedding'
-        },
-        password: {
-            type: 'string',
-            description: 'Password for protected catalogue',
-            example: 'secret123'
         }
     },
     required: ['title']
@@ -117,9 +112,19 @@ export const $CatalogueResDto = {
             type: 'number',
             description: 'Number of photos in the catalogue',
             example: 150
+        },
+        status: {
+            type: 'string',
+            description: 'Status of the catalogue',
+            example: 'published'
+        },
+        isProtected: {
+            type: 'boolean',
+            description: 'Indicates if the catalogue is password protected',
+            example: false
         }
     },
-    required: ['id', 'title', 'publicUrlSlug', 'ownerId', 'createdAt', 'updatedAt', 'photoCount']
+    required: ['id', 'title', 'publicUrlSlug', 'ownerId', 'createdAt', 'updatedAt', 'photoCount', 'status', 'isProtected']
 } as const;
 
 export const $UpdateCatalogueDtoClass = {
@@ -135,11 +140,6 @@ export const $UpdateCatalogueDtoClass = {
             description: 'Catalogue description',
             example: 'Beautiful moments from our summer wedding'
         },
-        password: {
-            type: 'string',
-            description: 'Password for protected catalogue',
-            example: 'secret123'
-        },
         coverImage: {
             type: 'object',
             description: 'Catalogue cover image path',
@@ -147,6 +147,23 @@ export const $UpdateCatalogueDtoClass = {
             example: 'collections/abc123/thumb_photo456.jpg'
         }
     }
+} as const;
+
+export const $UpdateCatalogueStatusDtoClass = {
+    type: 'object',
+    properties: {
+        status: {
+            type: 'string',
+            description: 'Status of the catalogue',
+            example: 'draft'
+        },
+        password: {
+            type: 'string',
+            description: 'Catalogue password for public access',
+            example: 'secret123!'
+        }
+    },
+    required: ['status']
 } as const;
 
 export const $ClientFavouritesResDto = {

@@ -57,8 +57,21 @@ export class CatalogueResDto {
     })
     photoCount!: number;
 
-    constructor(data: { catalogue: any; photoCount: any }) {
+    @ApiProperty({
+        description: 'Status of the catalogue',
+        example: 'published',
+    })
+    status!: 'draft' | 'published' | 'deleted';
+
+    @ApiProperty({
+        description: 'Indicates if the catalogue is password protected',
+        example: false,
+    })
+    isProtected!: boolean;
+
+    constructor(data: { catalogue: any; photoCount?: any }) {
         Object.assign(this, data.catalogue);
         this.photoCount = data.photoCount;
+        this.isProtected = !!data.catalogue.password;
     }
 }

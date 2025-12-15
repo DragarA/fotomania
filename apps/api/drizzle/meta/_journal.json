@@ -43,6 +43,13 @@
       "when": 1765392707528,
       "tag": "0005_fixed_brood",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1765781232567,
+      "tag": "0006_plain_ego",
+      "breakpoints": true
     }
   ]
 }

@@ -47,6 +47,8 @@ export class ClientSessionsService {
             )
             .groupBy(collection.catalogueId);
 
+        console.log('DB:', result, 'Provided:', photoIds);
+
         if (result?.photoCount !== photoIds.length) {
             throw new BadRequestException(
                 `Provided photo IDs do not belong to the catalogue with slug ${slug}`

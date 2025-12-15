@@ -8,7 +8,6 @@ export const updateCatalogueSchema = z.object({
         .max(255, 'Title is too long')
         .optional(),
     description: z.string().optional(),
-    password: z.string().optional().nullable(),
     coverImage: z.string().nullable().optional(),
 });
 
@@ -29,13 +28,6 @@ export class UpdateCatalogueDtoClass {
         example: 'Beautiful moments from our summer wedding',
     })
     description?: string;
-
-    @ApiProperty({
-        description: 'Password for protected catalogue',
-        required: false,
-        example: 'secret123',
-    })
-    password?: string;
 
     @ApiProperty({
         description: 'Catalogue cover image path',

@@ -21,13 +21,7 @@ export const catalogueFormSchema = z.object({
             'Slug can only contain lowercase letters, numbers, and hyphens'
         ),
 
-    coverImage: z.url('Must be a valid URL').optional().or(z.literal('')),
-
-    password: z
-        .string()
-        .min(6, 'Password must be at least 6 characters')
-        .optional()
-        .or(z.literal('')),
+    coverImage: z.url('Must be a valid URL').optional().or(z.literal(''))
 });
 
 export type CatalogueFormValues = z.infer<typeof catalogueFormSchema>;

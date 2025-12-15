@@ -2,6 +2,9 @@
  * Test data factories for creating consistent test fixtures
  */
 
+import { stat } from "fs";
+import { catalogueStatusEnum } from "../../src/common/db/schema";
+
 export const TestDataFactory = {
   /**
    * Create a test user
@@ -93,6 +96,7 @@ export const TestDataFactory = {
     ownerId: 'test-user-id-1',
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
+    status: catalogueStatusEnum.enumValues[0],
     ...overrides,
   }),
 

@@ -35,6 +35,7 @@ import {
     UpdateCatalogueDtoClass,
     updateCatalogueSchema,
 } from './dto/update-catalogue.dto';
+import { UpdateCatalogueStatusDto, UpdateCatalogueStatusDtoClass, updateCatalogueStatusSchema } from './dto/update-catalogue-status.dto';
 
 @ApiTags('catalogues')
 @Controller('catalogues')
@@ -88,8 +89,9 @@ export class CataloguesController {
         type: CatalogueResDto,
     })
     @ApiResponse({ status: 404, description: 'Catalogue not found' })
-    findOne(@Param('id') id: string, @User() user: UserEntity) {
-        return this.cataloguesService.findOne(id, user.id);
+    async findOne(@Param('id') id: string, @User() user: UserEntity) {
+        const catalogue = await this.cataloguesService.findOne(id, user.id);
+        new CatalogueResDto({ catalogue })
     }
 
     @Patch(':id')
@@ -105,13 +107,37 @@ export class CataloguesController {
     })
     @ApiResponse({ status: 404, description: 'Catalogue not found' })
     @ApiResponse({ status: 403, description: 'Forbidden' })
-    update(
+    async update(
         @Param('id') id: string,
         @Body(new ZodValidationPipe(updateCatalogueSchema))
         dto: UpdateCatalogueDto,
         @User() user: UserEntity
     ) {
-        return this.cataloguesService.update(id, dto, user.id);
+        const catalogue = await this.cataloguesService.update(id, dto, user.id);
+        return new CatalogueResDto({ catalogue });
+    }
+
+    @Patch(':id/status')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    @ApiOperation({ summary: 'Update a catalogue status' })
+    @ApiParam({ name: 'id', description: 'Catalogue ID' })
+    @ApiBody({ type: UpdateCatalogueStatusDtoClass })
+    @ApiResponse({
+        status: 200,
+        description: 'Catalogue updated successfully',
+        type: CatalogueResDto,
+    })
+    @ApiResponse({ status: 404, description: 'Catalogue not found' })
+    @ApiResponse({ status: 403, description: 'Forbidden' })
+    async updateStatus(
+        @Param('id') id: string,
+        @Body(new ZodValidationPipe(updateCatalogueStatusSchema))
+        dto: UpdateCatalogueStatusDto,
+        @User() user: UserEntity
+    ) {
+        const catalogue = await this.cataloguesService.updateStatus(id, dto, user.id);
+        return new CatalogueResDto({ catalogue });
     }
 
     @Patch(':catalogueId/cover/:photoId')

@@ -42,10 +42,6 @@ export type CreateCatalogueDtoClass = {
      * Catalogue description
      */
     description?: string;
-    /**
-     * Password for protected catalogue
-     */
-    password?: string;
 };
 
 export type CatalogueResDto = {
@@ -89,6 +85,14 @@ export type CatalogueResDto = {
      * Number of photos in the catalogue
      */
     photoCount: number;
+    /**
+     * Status of the catalogue
+     */
+    status: string;
+    /**
+     * Indicates if the catalogue is password protected
+     */
+    isProtected: boolean;
 };
 
 export type UpdateCatalogueDtoClass = {
@@ -101,15 +105,22 @@ export type UpdateCatalogueDtoClass = {
      */
     description?: string;
     /**
-     * Password for protected catalogue
-     */
-    password?: string;
-    /**
      * Catalogue cover image path
      */
     coverImage?: {
         [key: string]: unknown;
     } | null;
+};
+
+export type UpdateCatalogueStatusDtoClass = {
+    /**
+     * Status of the catalogue
+     */
+    status: string;
+    /**
+     * Catalogue password for public access
+     */
+    password?: string;
 };
 
 export type ClientFavouritesResDto = {
@@ -442,6 +453,16 @@ export type CataloguesControllerRemoveData = {
 };
 
 export type CataloguesControllerRemoveResponse = unknown;
+
+export type CataloguesControllerUpdateStatusData = {
+    /**
+     * Catalogue ID
+     */
+    id: string;
+    requestBody: UpdateCatalogueStatusDtoClass;
+};
+
+export type CataloguesControllerUpdateStatusResponse = CatalogueResDto;
 
 export type CataloguesControllerSetCoverData = {
     /**
@@ -781,6 +802,25 @@ export type $OpenApiTs = {
                  * Catalogue deleted successfully
                  */
                 200: unknown;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Catalogue not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/catalogues/{id}/status': {
+        patch: {
+            req: CataloguesControllerUpdateStatusData;
+            res: {
+                /**
+                 * Catalogue updated successfully
+                 */
+                200: CatalogueResDto;
                 /**
                  * Forbidden
                  */

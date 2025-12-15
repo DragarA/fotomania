@@ -74,7 +74,8 @@
     "add": "Dodaj",
     "photos": "fotografij",
     "noCollections": "Še nimate zbirk",
-    "createFirstCollection": "Ustvari prvo zbirko"
+    "createFirstCollection": "Ustvari prvo zbirko",
+    "backToCatalogues": "Nazaj na kataloge"
   },
   "workspace": {
     "invalidFile": "Neveljavna datoteka",

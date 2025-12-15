@@ -56,7 +56,7 @@ export function PhotoWorkspace({
     return (
         <main
             {...dropzoneRootProps}
-            className="flex-1 bg-gray-50 overflow-y-auto relative cursor-pointer"
+            className="flex-1 bg-gray-50 overflow-y-auto relative"
         >
             <input {...dropzoneInputProps} />
 
