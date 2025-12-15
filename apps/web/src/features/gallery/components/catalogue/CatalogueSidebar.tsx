@@ -1,10 +1,26 @@
 import { Link, useNavigate } from '@tanstack/react-router';
-import { Archive, Heart, MoreVertical, ChevronLeft } from 'lucide-react';
+import {
+    Archive,
+    ChevronLeft,
+    Eye,
+    EyeOff,
+    Heart,
+    LockOpen,
+    Lock,
+    MoreVertical,
+    Share,
+} from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { useDeleteCatalogueMutation } from '../../hooks';
+import { Button } from '@/components/ui/button';
+import { Tooltip } from '@/components/ui/tooltip';
+
+import {
+    useDeleteCatalogueMutation,
+    useUpdateCatalogueStatusMutation,
+} from '../../hooks';
 import type {
     Catalogue,
     Collection,
@@ -15,6 +31,7 @@ import { FavouritesView } from '../favourites/FavouritesView';
 
 import { CatalogueContextMenu } from './CatalogueContextMenu';
 import { CatalogueFormModal } from './CatalogueFormModal';
+import { PasswordModal } from './PasswordModal';
 
 type TabType = 'collections' | 'favourites';
 
@@ -52,11 +69,13 @@ export function CatalogueSidebar({
     const { t } = useTranslation('gallery');
     const navigate = useNavigate();
     const deleteCatalogueMutation = useDeleteCatalogueMutation();
+    const updateStatusMutation = useUpdateCatalogueStatusMutation(catalogueId);
     const [activeTab, setActiveTab] = useState<TabType>('collections');
     const [selectedSession, setSelectedSession] =
         useState<ClientFavouriteSession | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [contextMenu, setContextMenu] = useState<{
         x: number;
         y: number;
@@ -105,6 +124,30 @@ export function CatalogueSidebar({
         }
     };
 
+    const toggleStatus = () => {
+        const newStatus =
+            catalogue.status === 'published' ? 'draft' : 'published';
+        updateStatusMutation.mutate(
+            { status: newStatus },
+            {
+                onSuccess: () => {
+                    toast.success(
+                        t(
+                            newStatus === 'published'
+                                ? 'sidebar.publishSuccess'
+                                : 'sidebar.unpublishSuccess'
+                        )
+                    );
+                },
+                onError: (error) => {
+                    toast.error(
+                        error.message || t('sidebar.statusUpdateError')
+                    );
+                },
+            }
+        );
+    };
+
     return (
         <aside className="w-80 bg-white border-r border-gray-200 flex flex-col">
             {/* Header with catalogue info and actions */}
@@ -119,18 +162,86 @@ export function CatalogueSidebar({
                     <h1 className="text-2xl font-bold text-gray-900 flex-1">
                         {catalogue.title}
                     </h1>
-                    <button
-                        onClick={handleContextMenu}
-                        className="p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors cursor-pointer"
-                        title={t('sidebar.moreOptions')}
-                    >
-                        <MoreVertical className="w-5 h-5" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={handleContextMenu}
+                            className="p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors cursor-pointer"
+                            title={t('sidebar.moreOptions')}
+                        >
+                            <MoreVertical className="w-5 h-5" />
+                        </button>
+                    </div>
                 </div>
                 {catalogue.description && (
                     <p className="text-gray-600 text-sm mb-4">
                         {catalogue.description}
                     </p>
+                )}
+
+                {/* Status Button */}
+                <div className="mb-4">
+                    <button
+                        onClick={toggleStatus}
+                        disabled={updateStatusMutation.isPending}
+                        className={`w-full h-10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm font-medium ${
+                            catalogue.status === 'published'
+                                ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                                : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                        }`}
+                    >
+                        {catalogue.status === 'draft' ? (
+                            <>
+                                <EyeOff className="w-4 h-4" />
+                                {t('sidebar.draft')}
+                            </>
+                        ) : (
+                            <>
+                                <Eye className="w-4 h-4" />
+                                {t('sidebar.published')}
+                            </>
+                        )}
+                    </button>
+                </div>
+
+                {/* Action buttons for published catalogues */}
+                {catalogue.status === 'published' && (
+                    <div className="flex gap-2 mb-4">
+                        <Button
+                            onClick={copyPublicUrl}
+                            variant="outline"
+                            size="sm"
+                            className="flex-1"
+                        >
+                            <Share className="w-4 h-4 mr-2" />
+                            {t('sidebar.share')}
+                        </Button>
+
+                        <Tooltip
+                            content={t(
+                                catalogue.isProtected
+                                    ? 'sidebar.catalogueProtected'
+                                    : 'sidebar.addPasswordTooltip'
+                            )}
+                        >
+                            <Button
+                                onClick={() => setIsPasswordModalOpen(true)}
+                                variant="outline"
+                                size="sm"
+                                className={`flex-1 ${catalogue.isProtected ? 'bg-green-100' : 'bg-red-100'}`}
+                            >
+                                {catalogue.isProtected ? (
+                                    <Lock className="w-4 h-4 mr-2" />
+                                ) : (
+                                    <LockOpen className="w-4 h-4 mr-2" />
+                                )}
+                                {t(
+                                    catalogue.isProtected
+                                        ? 'sidebar.protected'
+                                        : 'sidebar.addPassword'
+                                )}
+                            </Button>
+                        </Tooltip>
+                    </div>
                 )}
 
                 {/* Tab Navigation */}
@@ -277,6 +388,14 @@ export function CatalogueSidebar({
                 isOpen={isEditModalOpen}
                 onClose={() => setIsEditModalOpen(false)}
                 catalogueId={catalogueId}
+            />
+
+            {/* Password Modal */}
+            <PasswordModal
+                isOpen={isPasswordModalOpen}
+                onClose={() => setIsPasswordModalOpen(false)}
+                catalogueId={catalogueId}
+                isProtected={catalogue.isProtected}
             />
         </aside>
     );

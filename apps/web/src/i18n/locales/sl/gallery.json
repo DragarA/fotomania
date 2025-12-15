@@ -75,7 +75,17 @@
     "photos": "fotografij",
     "noCollections": "Še nimate zbirk",
     "createFirstCollection": "Ustvari prvo zbirko",
-    "backToCatalogues": "Nazaj na kataloge"
+    "backToCatalogues": "Nazaj na kataloge",
+    "published": "Objavljeno",
+    "draft": "Osnutek",
+    "publishSuccess": "Katalog uspešno objavljen",
+    "unpublishSuccess": "Katalog umaknjen iz objave",
+    "statusUpdateError": "Posodobitev statusa ni uspela",
+    "share": "Deli",
+    "protected": "Zaščiteno",
+    "addPassword": "Dodaj geslo",
+    "catalogueProtected": "Katalog je zaščiten z geslom",
+    "addPasswordTooltip": "Dodaj zaščito z geslom"
   },
   "workspace": {
     "invalidFile": "Neveljavna datoteka",
@@ -151,5 +161,30 @@
     "collectionDeleteFailed": "Brisanje zbirke ni uspelo",
     "catalogueCoverUpdated": "Naslovnica kataloga posodobljena",
     "catalogueCoverUpdateFailed": "Posodabljanje naslovnice ni uspelo"
+  },
+  "passwordModal": {
+    "manageTitle": "Upravljanje gesla",
+    "manageDescription": "Dodaj, spremeni ali odstrani zaščito z geslom",
+    "addTitle": "Dodaj geslo",
+    "changeTitle": "Spremeni geslo",
+    "removeTitle": "Odstrani geslo",
+    "addDescription": "Zaščitite svoj katalog z geslom",
+    "changeDescription": "Posodobite geslo kataloga",
+    "removeDescription": "Odstranite zaščito z geslom iz tega kataloga. Vsak s povezavo bo lahko dostopal do njega.",
+    "passwordLabel": "Geslo",
+    "passwordPlaceholder": "Vnesite geslo",
+    "newPasswordLabel": "Novo geslo",
+    "newPasswordPlaceholder": "Vnesite novo geslo",
+    "addButton": "Dodaj geslo",
+    "changeButton": "Spremeni geslo",
+    "removeButton": "Odstrani geslo",
+    "changePasswordLink": "Spremeni geslo",
+    "removePasswordLink": "Odstrani geslo",
+    "backToOptions": "Nazaj",
+    "cancel": "Prekliči",
+    "addSuccess": "Geslo uspešno dodano",
+    "changeSuccess": "Geslo uspešno spremenjeno",
+    "removeSuccess": "Geslo uspešno odstranjeno",
+    "updateError": "Posodabljanje gesla ni uspelo"
   }
 }

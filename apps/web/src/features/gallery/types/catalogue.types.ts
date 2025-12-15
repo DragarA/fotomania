@@ -13,6 +13,8 @@ export interface Catalogue {
     createdAt: string;
     updatedAt: string;
     photoCount?: number;
+    status: 'draft' | 'published';
+    isProtected: boolean;
 }
 
 /**

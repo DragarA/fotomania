@@ -80,7 +80,7 @@ export class CataloguesService {
             .select()
             .from(catalogue)
             .leftJoin(collection, eq(catalogue.id, collection.catalogueId))
-            .where(eq(catalogue.publicUrlSlug, slug));
+            .where(and(eq(catalogue.publicUrlSlug, slug), eq(catalogue.status, 'published')));
 
         if (!catalogueResult) {
             throw new NotFoundException(
@@ -149,7 +149,7 @@ export class CataloguesService {
             );
         }
 
-        let passwordHash;
+        let passwordHash = null;
         if (updateCatalogueDto.password) {
             passwordHash = await bcrypt.hash(updateCatalogueDto.password, 10);
         }

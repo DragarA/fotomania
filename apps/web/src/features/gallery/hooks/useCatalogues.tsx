@@ -149,3 +149,23 @@ export function useSetCatalogueCoverMutation() {
         },
     });
 }
+
+export function useUpdateCatalogueStatusMutation(catalogueId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation<
+        Catalogue,
+        Error,
+        { status: string; password?: string }
+    >({
+        mutationFn: (data) =>
+            CataloguesService.cataloguesControllerUpdateStatus({
+                id: catalogueId,
+                requestBody: data,
+            }) as Promise<Catalogue>,
+        onSuccess: (catalogue) => {
+            queryClient.invalidateQueries({ queryKey: ['catalogues'] });
+            queryClient.setQueryData(['catalogues', catalogue.id], catalogue);
+        },
+    });
+}

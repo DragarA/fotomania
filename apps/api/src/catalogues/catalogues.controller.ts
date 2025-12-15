@@ -91,7 +91,7 @@ export class CataloguesController {
     @ApiResponse({ status: 404, description: 'Catalogue not found' })
     async findOne(@Param('id') id: string, @User() user: UserEntity) {
         const catalogue = await this.cataloguesService.findOne(id, user.id);
-        new CatalogueResDto({ catalogue })
+        return new CatalogueResDto({ catalogue })
     }
 
     @Patch(':id')

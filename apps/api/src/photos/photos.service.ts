@@ -54,10 +54,11 @@ export class PhotosService {
         const [existingCollection] = await this.db
             .select()
             .from(collection)
-            .leftJoin(catalogue, eq(collection.catalogueId, catalogue.id))
+            .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
             .where(
                 and(
                     eq(catalogue.publicUrlSlug, slug),
+                    eq(catalogue.status, 'published'),
                     eq(collection.id, collectionId)
                 )
             );

@@ -74,8 +74,18 @@
     "add": "Add",
     "photos": "photos",
     "noCollections": "No collections yet",
-    "createFirstCollection": "Create First Collection", 
-    "backToCatalogues": "Back to Catalogues"
+    "createFirstCollection": "Create First Collection",
+    "backToCatalogues": "Back to Catalogues",
+    "published": "Published",
+    "draft": "Draft",
+    "publishSuccess": "Catalogue published successfully",
+    "unpublishSuccess": "Catalogue unpublished successfully",
+    "statusUpdateError": "Failed to update status",
+    "share": "Share",
+    "protected": "Protected",
+    "addPassword": "Add Password",
+    "catalogueProtected": "Catalogue is password protected",
+    "addPasswordTooltip": "Add password protection"
   },
   "workspace": {
     "invalidFile": "Invalid file",
@@ -151,5 +161,30 @@
     "collectionDeleteFailed": "Failed to delete collection",
     "catalogueCoverUpdated": "Catalogue cover updated",
     "catalogueCoverUpdateFailed": "Failed to update cover"
+  },
+  "passwordModal": {
+    "manageTitle": "Manage Password",
+    "manageDescription": "Add, change, or remove password protection",
+    "addTitle": "Add Password",
+    "changeTitle": "Change Password",
+    "removeTitle": "Remove Password",
+    "addDescription": "Protect your catalogue with a password",
+    "changeDescription": "Update the catalogue password",
+    "removeDescription": "Remove password protection from this catalogue. Anyone with the link will be able to access it.",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter password",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "addButton": "Add Password",
+    "changeButton": "Change Password",
+    "removeButton": "Remove Password",
+    "changePasswordLink": "Change Password",
+    "removePasswordLink": "Remove Password",
+    "backToOptions": "Back",
+    "cancel": "Cancel",
+    "addSuccess": "Password added successfully",
+    "changeSuccess": "Password changed successfully",
+    "removeSuccess": "Password removed successfully",
+    "updateError": "Failed to update password"
   }
 }
