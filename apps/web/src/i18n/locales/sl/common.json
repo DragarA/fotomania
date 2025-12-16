@@ -7,7 +7,8 @@
     "getStarted": "Začni",
     "logout": "Odjava",
     "loggingOut": "Odjavljanje...",
-    "profile": "Profil"
+    "profile": "Profil",
+    "viewProfile": "Ogled profila"
   },
   "common": {
     "loading": "Nalaganje..."

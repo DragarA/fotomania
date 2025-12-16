@@ -42,9 +42,9 @@ export function LanguageSwitcher() {
                 aria-label="Change language"
             >
                 <span className="text-xl">{currentLanguage!.flag}</span>
-                <span className="hidden sm:inline text-sm font-medium text-gray-700">
+                {/* <span className="hidden sm:inline text-sm font-medium text-gray-700">
                     {currentLanguage!.name}
-                </span>
+                </span> */}
                 <svg
                     className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
                     fill="none"
@@ -61,7 +61,7 @@ export function LanguageSwitcher() {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-100">
                     {languages.map((language) => (
                         <button
                             key={language.code}
