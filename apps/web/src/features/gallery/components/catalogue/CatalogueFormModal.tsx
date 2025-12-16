@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -36,6 +37,8 @@ export function CatalogueFormModal({
 
     if (!isOpen) return null;
 
+    if (typeof document === 'undefined') return null;
+
     const handleSubmit = (values: CatalogueCreateFormValues) => {
         if (isEditMode && catalogueId) {
             const payload = {
@@ -73,24 +76,27 @@ export function CatalogueFormModal({
 
     const mutation = isEditMode ? updateMutation : createMutation;
 
-    return (
+    return createPortal(
         <div
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[1000] flex items-center justify-center bg-[rgba(6,5,4,0.65)] px-4 py-6 backdrop-blur"
             onClick={onClose}
         >
             <div
-                className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+                className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded border border-white/15 bg-white/90 shadow-[0_65px_140px_-100px_rgba(0,0,0,0.95)]"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                    <div>
-                        <h2 className="text-xl font-bold text-gray-900">
+                <div className="flex items-center justify-between border-b border-black/5 px-8 py-6">
+                    <div className="space-y-2">
+                        <p className="text-[0.6rem] uppercase tracking-[0.45em] text-stone-400">
+                            {t('catalogueForm.titleLabel')}
+                        </p>
+                        <h2 className="text-2xl font-light tracking-[0.02em] text-stone-800">
                             {isEditMode
                                 ? t('catalogueForm.editTitle')
                                 : t('catalogueForm.createTitle')}
                         </h2>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm text-stone-500">
                             {isEditMode
                                 ? t('catalogueForm.editSubtitle')
                                 : t('catalogueForm.createSubtitle')}
@@ -98,10 +104,10 @@ export function CatalogueFormModal({
                     </div>
                     <button
                         onClick={onClose}
-                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                        className="rounded-full border border-black/10 p-2 text-stone-400 transition hover:-translate-y-0.5 hover:text-stone-700"
                     >
                         <svg
-                            className="w-6 h-6"
+                            className="h-5 w-5"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -109,7 +115,7 @@ export function CatalogueFormModal({
                             <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                strokeWidth={2}
+                                strokeWidth={1.5}
                                 d="M6 18L18 6M6 6l12 12"
                             />
                         </svg>
@@ -117,13 +123,13 @@ export function CatalogueFormModal({
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-6">
+                <div className="flex-1 overflow-y-auto px-8 py-6">
                     {isEditMode && isLoading ? (
                         <div className="flex items-center justify-center py-12">
-                            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+                            <div className="h-10 w-10 animate-spin rounded-full border border-stone-200 border-t-stone-700" />
                         </div>
                     ) : mutation.isError ? (
-                        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg mb-6">
+                        <div className="mb-6 rounded border border-red-200 bg-red-50/80 px-4 py-3 text-sm uppercase tracking-[0.3em] text-red-700">
                             {mutation.error?.message ||
                                 t(
                                     isEditMode
@@ -152,6 +158,7 @@ export function CatalogueFormModal({
                     />
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

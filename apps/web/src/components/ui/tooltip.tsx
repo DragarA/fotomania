@@ -10,7 +10,7 @@ interface TooltipProps {
 
 export function Tooltip({ children, content, className }: TooltipProps) {
     return (
-        <div className="relative group inline-block">
+        <div className="relative group w-full">
             {children}
             <div
                 className={cn(

@@ -12,20 +12,19 @@ export function CollectionTabs({
     onSelectCollection,
 }: CollectionTabsProps) {
     return (
-        <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6" aria-label="Collections">
+        <div className="border-b border-black/10">
+            <nav className="flex flex-wrap gap-6 px-6" aria-label="Collections">
                 {collections.map((collection) => (
                     <button
                         key={collection.id}
                         onClick={() => onSelectCollection(collection.id)}
                         className={`
-              py-4 px-1 border-b-2 font-medium text-sm transition-colors whitespace-nowrap
+              pb-3 text-xs uppercase tracking-[0.4em] transition-all duration-500 whitespace-nowrap border-b-2
               ${
                   selectedCollectionId === collection.id
-                      ? 'border-indigo-500 text-indigo-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }
-            `}
+                      ? 'border-stone-800 text-stone-800'
+                      : 'border-transparent text-stone-400 hover:text-stone-600 hover:border-stone-300'
+              }`}
                     >
                         {collection.name}
                     </button>

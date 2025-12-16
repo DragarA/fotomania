@@ -141,6 +141,11 @@
     "locale": "sl-SI"
   },
   "favouritesModal": {
+    "title": "Priljubljene stranke",
+    "emailLabel": "E-pošta",
+    "submittedLabel": "Oddano",
+    "favouritePhotos": "{{count}} priljubljena fotografija",
+    "favouritePhotos_other": "{{count}} priljubljenih fotografij",
     "selected": "Izbrano {{count}} {{photoText}} dne",
     "photo": "fotografija",
     "photos": "fotografij",

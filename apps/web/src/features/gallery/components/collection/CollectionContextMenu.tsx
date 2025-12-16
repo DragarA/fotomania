@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { createPortal } from 'react-dom';
 
 interface CollectionContextMenuProps {
     x: number;
@@ -18,6 +19,7 @@ export function CollectionContextMenu({
 }: CollectionContextMenuProps) {
     const { t } = useTranslation('gallery');
     const menuRef = useRef<HTMLDivElement>(null);
+    const [coords, setCoords] = useState({ left: x, top: y });
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -48,13 +50,18 @@ export function CollectionContextMenu({
     useEffect(() => {
         if (menuRef.current) {
             const rect = menuRef.current.getBoundingClientRect();
-            const adjustedX =
-                x + rect.width > window.innerWidth ? x - rect.width : x;
-            const adjustedY =
-                y + rect.height > window.innerHeight ? y - rect.height : y;
-
-            menuRef.current.style.left = `${adjustedX}px`;
-            menuRef.current.style.top = `${adjustedY}px`;
+            const padding = 16;
+            let left = x;
+            let top = y;
+            if (left + rect.width > window.innerWidth - padding) {
+                left = window.innerWidth - rect.width - padding;
+            }
+            if (top + rect.height > window.innerHeight - padding) {
+                top = window.innerHeight - rect.height - padding;
+            }
+            left = Math.max(padding, left);
+            top = Math.max(padding, top);
+            setCoords({ left, top });
         }
     }, [x, y]);
 
@@ -100,11 +107,13 @@ export function CollectionContextMenu({
         },
     ];
 
-    return (
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <div
             ref={menuRef}
-            className="fixed z-50 bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[160px]"
-            style={{ left: x, top: y }}
+            className="fixed z-[1000] min-w-[200px] rounded border border-white/20 bg-white/95 py-2 shadow-[0_45px_120px_-90px_rgba(0,0,0,0.9)] backdrop-blur"
+            style={{ left: coords.left, top: coords.top }}
         >
             {menuItems.map((item, index) => (
                 <button
@@ -113,16 +122,17 @@ export function CollectionContextMenu({
                         item.onClick();
                         onClose();
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors cursor-pointer ${
+                    className={`flex w-full items-center gap-3 px-5 py-2 text-sm transition-colors ${
                         item.danger
                             ? 'text-red-600 hover:bg-red-50'
-                            : 'text-gray-700 hover:bg-gray-100'
+                            : 'text-stone-600 hover:bg-stone-100'
                     }`}
                 >
                     {item.icon}
                     <span>{item.label}</span>
                 </button>
             ))}
-        </div>
+        </div>,
+        document.body
     );
 }

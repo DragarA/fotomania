@@ -10,7 +10,7 @@ import {
     MoreVertical,
     Share,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -50,7 +50,6 @@ interface CatalogueSidebarProps {
     // New props for favourites
     favouriteSessions: ClientFavouriteSession[] | undefined;
     favouritesLoading: boolean;
-    onFavouritePhotoClick?: (photo: any) => void;
 }
 
 export function CatalogueSidebar({
@@ -64,7 +63,6 @@ export function CatalogueSidebar({
     onCollectionContextMenu,
     favouriteSessions,
     favouritesLoading,
-    onFavouritePhotoClick,
 }: CatalogueSidebarProps) {
     const { t } = useTranslation('gallery');
     const navigate = useNavigate();
@@ -80,6 +78,26 @@ export function CatalogueSidebar({
         x: number;
         y: number;
     } | null>(null);
+    const contextMenuTimer = useRef<number | null>(null);
+
+    const cancelContextMenuClose = () => {
+        if (contextMenuTimer.current !== null) {
+            window.clearTimeout(contextMenuTimer.current);
+            contextMenuTimer.current = null;
+        }
+    };
+
+    const scheduleContextMenuClose = () => {
+        cancelContextMenuClose();
+        contextMenuTimer.current = window.setTimeout(() => {
+            setContextMenu(null);
+            contextMenuTimer.current = null;
+        }, 200);
+    };
+
+    useEffect(() => {
+        return () => cancelContextMenuClose();
+    }, []);
 
     const copyPublicUrl = () => {
         const fullUrl = `${window.location.origin}/c/${catalogue.publicUrlSlug}`;
@@ -99,6 +117,7 @@ export function CatalogueSidebar({
 
     const handleContextMenu = (e: React.MouseEvent) => {
         e.preventDefault();
+        cancelContextMenuClose();
         setContextMenu({ x: e.clientX, y: e.clientY });
     };
 
@@ -149,70 +168,81 @@ export function CatalogueSidebar({
     };
 
     return (
-        <aside className="w-80 bg-white border-r border-gray-200 flex flex-col">
+        <aside className="flex w-full shrink-0 flex-col overflow-hidden rounded border border-white/20 bg-white/80 shadow-[0_45px_120px_-90px_rgba(0,0,0,0.85)] backdrop-blur-md lg:w-80 lg:min-w-[280px]">
             {/* Header with catalogue info and actions */}
-            <div className="p-6 border-b border-gray-200">
-                <div className="flex items-start justify-between mb-2">
+            <div className="space-y-4 border-b border-black/5 px-5 py-6">
+                <div className="flex items-start justify-between gap-2">
                     <Link
                         to="/catalogues"
-                        className="mr-2 text-gray-400 hover:text-gray-900 rounded transition-colors cursor-pointer"
+                        className="shrink-0 text-stone-400 transition-colors duration-500 hover:text-stone-700"
                     >
-                        <ChevronLeft className="w-10 h-10" />
+                        <ChevronLeft className="h-7 w-7" strokeWidth={1.5} />
                     </Link>
-                    <h1 className="text-2xl font-bold text-gray-900 flex-1">
-                        {catalogue.title}
-                    </h1>
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={handleContextMenu}
-                            className="p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors cursor-pointer"
-                            title={t('sidebar.moreOptions')}
-                        >
-                            <MoreVertical className="w-5 h-5" />
-                        </button>
-                    </div>
-                </div>
-                {catalogue.description && (
-                    <p className="text-gray-600 text-sm mb-4">
-                        {catalogue.description}
-                    </p>
-                )}
-
-                {/* Status Button */}
-                <div className="mb-4">
-                    <button
-                        onClick={toggleStatus}
-                        disabled={updateStatusMutation.isPending}
-                        className={`w-full h-10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm font-medium ${
-                            catalogue.status === 'published'
-                                ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                                : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
-                        }`}
-                    >
-                        {catalogue.status === 'draft' ? (
-                            <>
-                                <EyeOff className="w-4 h-4" />
-                                {t('sidebar.draft')}
-                            </>
-                        ) : (
-                            <>
-                                <Eye className="w-4 h-4" />
-                                {t('sidebar.published')}
-                            </>
+                    <div className="min-w-0 flex-1 space-y-1.5">
+                        <p className="text-[0.6rem] uppercase tracking-[0.3em] text-stone-400">
+                            {t('sidebar.collectionsTab')}
+                        </p>
+                        <h1 className="text-xl font-light leading-snug tracking-[0.02em] text-stone-800">
+                            {catalogue.title}
+                        </h1>
+                        {catalogue.description && (
+                            <p className="line-clamp-2 text-sm text-stone-500">
+                                {catalogue.description}
+                            </p>
                         )}
+                    </div>
+                    <button
+                        onClick={handleContextMenu}
+                        className="shrink-0 rounded-full border border-black/5 p-2 text-stone-400 transition-all duration-500 hover:-translate-y-0.5 hover:text-stone-700"
+                        title={t('sidebar.moreOptions')}
+                    >
+                        <MoreVertical className="h-5 w-5" strokeWidth={1.5} />
                     </button>
                 </div>
 
+                {/* Status Button */}
+                <button
+                    onClick={toggleStatus}
+                    disabled={updateStatusMutation.isPending}
+                    className={`flex h-12 w-full items-center justify-center rounded border border-black/5 text-xs uppercase tracking-[0.2em] transition-all duration-500 ${
+                        catalogue.status === 'published'
+                            ? 'bg-emerald-50 text-emerald-700'
+                            : 'bg-amber-50 text-amber-700'
+                    }`}
+                >
+                    {catalogue.status === 'draft' ? (
+                        <>
+                            <EyeOff
+                                className="mr-2 h-4 w-4 shrink-0"
+                                strokeWidth={1.5}
+                            />
+                            <span className="truncate">
+                                {t('sidebar.draft')}
+                            </span>
+                        </>
+                    ) : (
+                        <>
+                            <Eye
+                                className="mr-2 h-4 w-4 shrink-0"
+                                strokeWidth={1.5}
+                            />
+                            <span className="truncate">
+                                {t('sidebar.published')}
+                            </span>
+                        </>
+                    )}
+                </button>
+
                 {/* Action buttons for published catalogues */}
                 {catalogue.status === 'published' && (
-                    <div className="flex gap-2 mb-4">
+                    <div className="grid grid-cols-2 gap-2">
                         <Button
                             onClick={copyPublicUrl}
                             variant="outline"
                             size="sm"
-                            className="flex-1"
+                            className="justify-center tracking-[0.1em]"
                         >
-                            <Share className="w-4 h-4 mr-2" />
+                            <Share className="h-4 w-4 shrink-0" strokeWidth={1.5} />
                             {t('sidebar.share')}
                         </Button>
 
@@ -227,12 +257,12 @@ export function CatalogueSidebar({
                                 onClick={() => setIsPasswordModalOpen(true)}
                                 variant="outline"
                                 size="sm"
-                                className={`flex-1 ${catalogue.isProtected ? 'bg-green-100' : 'bg-red-100'}`}
+                                className="justify-center tracking-[0.1em]"
                             >
                                 {catalogue.isProtected ? (
-                                    <Lock className="w-4 h-4 mr-2" />
+                                    <Lock className="h-4 w-4 shrink-0" strokeWidth={1.5} />
                                 ) : (
-                                    <LockOpen className="w-4 h-4 mr-2" />
+                                    <LockOpen className="h-4 w-4 shrink-0" strokeWidth={1.5} />
                                 )}
                                 {t(
                                     catalogue.isProtected
@@ -245,48 +275,55 @@ export function CatalogueSidebar({
                 )}
 
                 {/* Tab Navigation */}
-                <div className="flex border-b border-gray-200 -mx-6 px-6">
-                    <button
-                        onClick={() => setActiveTab('collections')}
-                        className={`flex-1 py-3 text-sm font-medium border-b-2 transition-colors ${
-                            activeTab === 'collections'
-                                ? 'border-indigo-500 text-indigo-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'
-                        }`}
-                    >
-                        <div className="flex items-center justify-center gap-2">
-                            <Archive className="w-5 h-5" />
-                            <span>{t('sidebar.collectionsTab')}</span>
-                        </div>
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('favourites')}
-                        className={`flex-1 py-3 text-sm font-medium border-b-2 transition-colors ${
-                            activeTab === 'favourites'
-                                ? 'border-indigo-500 text-indigo-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'
-                        }`}
-                    >
-                        <div className="flex items-center justify-center gap-2">
-                            <Heart className="w-5 h-5" />
-                            <span>{t('sidebar.favouritesTab')}</span>
-                        </div>
-                    </button>
+                <div className="flex gap-2">
+                    {[
+                        {
+                            id: 'collections',
+                            label: t('sidebar.collectionsTab'),
+                            icon: Archive,
+                        },
+                        {
+                            id: 'favourites',
+                            label: t('sidebar.favouritesTab'),
+                            icon: Heart,
+                        },
+                    ].map(({ id, label, icon: Icon }) => {
+                        const active = activeTab === id;
+                        return (
+                            <button
+                                key={id}
+                                onClick={() => setActiveTab(id as TabType)}
+                                className={`flex-1 min-w-0 rounded border border-transparent px-2 py-2.5 text-[0.65rem] uppercase tracking-[0.15em] transition-all duration-500 ${
+                                    active
+                                        ? 'border-black/10 bg-stone-100 text-stone-800'
+                                        : 'text-stone-400 hover:text-stone-600'
+                                }`}
+                            >
+                                <div className="flex items-center justify-center gap-1.5">
+                                    <Icon
+                                        className="h-4 w-4 shrink-0"
+                                        strokeWidth={1.5}
+                                    />
+                                    <span className="truncate">{label}</span>
+                                </div>
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
             {/* Tab Content */}
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden px-5 py-5">
                 {activeTab === 'collections' ? (
                     // EXISTING COLLECTIONS VIEW
                     <>
                         <div className="flex items-center justify-between mb-3">
-                            <h2 className="text-lg font-semibold text-gray-900">
+                            <h2 className="text-sm uppercase tracking-[0.3em] text-stone-500">
                                 {t('sidebar.collectionsTitle')}
                             </h2>
                             <button
                                 onClick={onCreateCollection}
-                                className="text-accent-600 hover:text-accent-700 text-sm font-medium cursor-pointer"
+                                className="text-[0.6rem] uppercase tracking-[0.4em] text-stone-400 transition-colors duration-500 hover:text-stone-700"
                             >
                                 + {t('sidebar.add')}
                             </button>
@@ -294,29 +331,29 @@ export function CatalogueSidebar({
 
                         {collectionsLoading ? (
                             <div className="text-center py-8">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
+                                <div className="h-8 w-8 animate-spin rounded-full border border-stone-200 border-t-stone-700 mx-auto"></div>
                             </div>
                         ) : collections && collections.length > 0 ? (
                             <div className="space-y-2">
                                 {collections.map((collection) => (
                                     <div
                                         key={collection.id}
-                                        className={`p-3 rounded-lg cursor-pointer transition-colors group ${
+                                        className={`p-3.5 rounded border cursor-pointer transition-all duration-500 group ${
                                             selectedCollectionId ===
                                             collection.id
-                                                ? 'bg-indigo-50 border-2 border-accent-500'
-                                                : 'bg-gray-50 border-2 border-transparent hover:border-gray-300'
+                                                ? 'border-black/10 bg-white shadow-sm'
+                                                : 'border-transparent bg-stone-50 hover:border-black/10'
                                         }`}
                                         onClick={() =>
                                             onSelectCollection(collection.id)
                                         }
                                     >
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex-1">
-                                                <p className="font-medium text-gray-900">
+                                        <div className="flex items-center justify-between gap-2">
+                                            <div className="min-w-0 flex-1">
+                                                <p className="truncate font-medium text-stone-900">
                                                     {collection.name}
                                                 </p>
-                                                <p className="text-sm text-gray-500">
+                                                <p className="text-sm text-stone-500">
                                                     {collection.photoCount}{' '}
                                                     {t('sidebar.photos')}
                                                 </p>
@@ -329,7 +366,7 @@ export function CatalogueSidebar({
                                                         collection
                                                     );
                                                 }}
-                                                className="p-1 text-gray-600 hover:text-gray-900 cursor-pointer"
+                                                className="shrink-0 p-1 text-stone-400 hover:text-stone-700 cursor-pointer"
                                                 title={t('sidebar.moreOptions')}
                                             >
                                                 <MoreVertical className="w-5 h-5" />
@@ -339,16 +376,17 @@ export function CatalogueSidebar({
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-8">
-                                <p className="text-gray-500 mb-4">
+                            <div className="text-center py-8 space-y-4">
+                                <p className="text-stone-400 text-sm">
                                     {t('sidebar.noCollections')}
                                 </p>
-                                <button
+                                <Button
                                     onClick={onCreateCollection}
-                                    className="px-4 py-2 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-all cursor-pointer"
+                                    size="sm"
+                                    className="tracking-[0.15em]"
                                 >
                                     {t('sidebar.createFirstCollection')}
-                                </button>
+                                </Button>
                             </div>
                         )}
                     </>
@@ -368,7 +406,6 @@ export function CatalogueSidebar({
                 catalogueId={catalogueId}
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
-                onPhotoClick={onFavouritePhotoClick}
             />
 
             {/* Context Menu */}

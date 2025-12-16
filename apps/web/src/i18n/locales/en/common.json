@@ -57,6 +57,7 @@
   },
   "home": {
     "hero": {
+      "label": "Professional Photo Management",
       "title": "Capture. Organize. Share.",
       "subtitle": "The ultimate platform for photographers to store, manage, and showcase their work beautifully.",
       "getStarted": "Get Started",
@@ -79,16 +80,45 @@
         "description": "Share galleries with clients through beautiful, customizable links. No sign-up required."
       }
     },
-    "stats": {
-      "photosStored": "Photos Stored",
-      "photographers": "Photographers",
-      "galleriesCreated": "Galleries Created",
-      "uptime": "Uptime"
+    "valueProps": {
+      "unlimited": {
+        "value": "Unlimited",
+        "label": "Storage Space"
+      },
+      "resolution": {
+        "value": "Full",
+        "label": "Resolution"
+      },
+      "watermarks": {
+        "value": "Zero",
+        "label": "Watermarks"
+      },
+      "sharing": {
+        "value": "Secure",
+        "label": "Client Sharing"
+      }
     },
     "cta": {
       "title": "Ready to elevate your photography?",
       "subtitle": "Join thousands of photographers who trust Fotomania with their work",
       "startTrial": "Start Your Free Trial"
+    },
+    "whyUs": {
+      "label": "Why Fotomania",
+      "title": "Built for professional photographers",
+      "subtitle": "We understand the unique needs of photographers. From client galleries to proof delivery, every feature is designed with your workflow in mind.",
+      "secure": {
+        "title": "Secure & Private",
+        "description": "Your photos are encrypted and protected with enterprise-grade security."
+      },
+      "favorites": {
+        "title": "Client Favorites",
+        "description": "Let clients select their favorite photos with an elegant selection tool."
+      },
+      "galleries": {
+        "title": "Beautiful Galleries",
+        "description": "Present your work in stunning, customizable galleries that impress clients."
+      }
     }
   },
   "confirmDialog": {

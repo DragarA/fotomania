@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { createPortal } from 'react-dom';
 
 interface PhotoContextMenuProps {
     x: number;
@@ -10,6 +11,8 @@ interface PhotoContextMenuProps {
     onDelete: () => void;
     onSetAsCover?: () => void;
     isCurrentCover?: boolean;
+    onPointerEnterMenu?: () => void;
+    onPointerLeaveMenu?: () => void;
 }
 
 export function PhotoContextMenu({
@@ -21,9 +24,12 @@ export function PhotoContextMenu({
     onDelete,
     onSetAsCover,
     isCurrentCover,
+    onPointerEnterMenu,
+    onPointerLeaveMenu,
 }: PhotoContextMenuProps) {
     const { t } = useTranslation('gallery');
     const menuRef = useRef<HTMLDivElement>(null);
+    const [coords, setCoords] = useState({ left: x, top: y });
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -54,13 +60,18 @@ export function PhotoContextMenu({
     useEffect(() => {
         if (menuRef.current) {
             const rect = menuRef.current.getBoundingClientRect();
-            const adjustedX =
-                x + rect.width > window.innerWidth ? x - rect.width : x;
-            const adjustedY =
-                y + rect.height > window.innerHeight ? y - rect.height : y;
-
-            menuRef.current.style.left = `${adjustedX}px`;
-            menuRef.current.style.top = `${adjustedY}px`;
+            const padding = 16;
+            let left = x;
+            let top = y;
+            if (left + rect.width > window.innerWidth - padding) {
+                left = window.innerWidth - rect.width - padding;
+            }
+            if (top + rect.height > window.innerHeight - padding) {
+                top = window.innerHeight - rect.height - padding;
+            }
+            left = Math.max(padding, left);
+            top = Math.max(padding, top);
+            setCoords({ left, top });
         }
     }, [x, y]);
 
@@ -153,11 +164,17 @@ export function PhotoContextMenu({
         },
     ];
 
-    return (
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <div
             ref={menuRef}
-            className="fixed z-50 bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[160px] cursor-pointer"
-            style={{ left: x, top: y }}
+            className="fixed z-[1000] min-w-[200px] rounded border border-white/20 bg-white/95 py-2 text-left shadow-[0_45px_120px_-90px_rgba(0,0,0,0.9)] backdrop-blur"
+            style={{ left: coords.left, top: coords.top }}
+            onMouseEnter={onPointerEnterMenu}
+            onMouseLeave={() => {
+                onPointerLeaveMenu?.();
+            }}
         >
             {menuItems.map((item, index) => (
                 <button
@@ -169,31 +186,19 @@ export function PhotoContextMenu({
                         }
                     }}
                     disabled={item.disabled}
-                    className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
+                    className={`flex w-full items-center gap-3 px-5 py-2 text-sm transition-colors ${
                         item.disabled
-                            ? 'text-gray-400 cursor-not-allowed bg-gray-50'
+                            ? 'cursor-not-allowed text-stone-300'
                             : item.danger
-                              ? 'text-red-600 hover:bg-red-50 cursor-pointer'
-                              : 'text-gray-700 hover:bg-gray-100 cursor-pointer'
+                                ? 'text-red-600 hover:bg-red-50'
+                                : 'text-stone-600 hover:bg-stone-100'
                     }`}
                 >
                     {item.icon}
                     <span>{item.label}</span>
-                    {item.disabled && isCurrentCover && (
-                        <svg
-                            className="w-4 h-4 ml-auto"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                            />
-                        </svg>
-                    )}
                 </button>
             ))}
-        </div>
+        </div>,
+        document.body
     );
 }

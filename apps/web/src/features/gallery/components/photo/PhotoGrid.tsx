@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { API_BASE_URL } from '../../../../lib/api-client';
@@ -30,14 +30,32 @@ export function PhotoGrid({
         y: number;
         photo: Photo;
     } | null>(null);
+    const closeMenuTimer = useRef<number | null>(null);
+
+    const cancelMenuClose = () => {
+        if (closeMenuTimer.current !== null) {
+            window.clearTimeout(closeMenuTimer.current);
+            closeMenuTimer.current = null;
+        }
+    };
+
+    const scheduleMenuClose = () => {
+        cancelMenuClose();
+        closeMenuTimer.current = window.setTimeout(() => {
+            setContextMenu(null);
+            closeMenuTimer.current = null;
+        }, 200);
+    };
+
+    useEffect(() => () => cancelMenuClose(), []);
 
     if (isLoading) {
         return (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {[...Array(10)].map((_, i) => (
                     <div
                         key={i}
-                        className="aspect-square bg-gray-200 rounded-lg animate-pulse cursor-pointer"
+                        className="aspect-square rounded border border-white/15 bg-white/60 shadow-inner animate-pulse"
                     />
                 ))}
             </div>
@@ -46,17 +64,14 @@ export function PhotoGrid({
 
     if (photos.length === 0) {
         return (
-            <div className="bg-white rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-                <div className="text-gray-400 text-6xl mb-4">📷</div>
-                <h3 className="text-xl font-semibold text-gray-700 mb-2">
+            <div className="rounded border border-dashed border-black/10 bg-white/85 p-12 text-center shadow-[0_45px_140px_-120px_rgba(0,0,0,0.95)]">
+                <div className="mb-4 text-6xl">📷</div>
+                <h3 className="mb-2 text-xl font-light tracking-[0.02em] text-stone-800">
                     {t('photoGrid.noPhotosYet')}
                 </h3>
-                <p className="text-gray-500 mb-6">
-                    {t('photoGrid.dragAndDrop')}
-                </p>
-                <div className="inline-flex items-center gap-2 text-sm text-gray-400">
-                    <span>💡</span>
-                    <span>{t('photoGrid.uploadHint')}</span>
+                <p className="mb-4 text-stone-500">{t('photoGrid.dragAndDrop')}</p>
+                <div className="text-xs uppercase tracking-[0.4em] text-stone-400">
+                    {t('photoGrid.uploadHint')}
                 </div>
             </div>
         );
@@ -73,32 +88,42 @@ export function PhotoGrid({
 
     return (
         <>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {photos.map((photo) => {
                     const isMenuOpen = contextMenu?.photo.id === photo.id;
 
                     return (
                         <div
                             key={photo.id}
-                            className={`group relative aspect-square bg-gray-100 rounded-lg overflow-hidden transition-all flex items-center justify-center ${
+                            className={`group relative flex aspect-square items-center justify-center overflow-hidden rounded border border-black/5 bg-stone-100 shadow-[0_45px_120px_-90px_rgba(0,0,0,0.9)] transition-all duration-700 ${
                                 isMenuOpen
-                                    ? 'ring-2 ring-indigo-500'
-                                    : 'hover:ring-2 hover:ring-indigo-500'
+                                    ? 'ring-1 ring-stone-400'
+                                    : 'hover:-translate-y-1 hover:ring hover:ring-stone-300'
                             }`}
+                            onMouseEnter={() => {
+                                if (isMenuOpen) {
+                                    cancelMenuClose();
+                                }
+                            }}
+                            onMouseLeave={() => {
+                                if (isMenuOpen) {
+                                    scheduleMenuClose();
+                                }
+                            }}
                         >
                             <img
                                 src={`${API_BASE_URL}/uploads/${photo.thumbnailPath}`}
                                 alt={photo.originalFileName}
-                                className="w-full h-full object-contain cursor-pointer"
+                                className="h-full w-full cursor-pointer object-cover transition duration-700 group-hover:scale-[1.03]"
                                 loading="lazy"
                                 onClick={() => onPhotoClick?.(photo)}
                             />
 
                             {/* Cover badge */}
                             {photo.storagePath === catalogueCoverImage && (
-                                <div className="absolute top-2 left-2 bg-indigo-600 text-white px-2 py-1 rounded text-xs font-medium flex items-center gap-1 shadow-md">
+                                <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-white/85 px-3 py-1 text-[0.6rem] uppercase tracking-[0.3em] text-stone-600 shadow">
                                     <svg
-                                        className="w-3 h-3"
+                                        className="h-3 w-3"
                                         fill="currentColor"
                                         viewBox="0 0 20 20"
                                     >
@@ -112,6 +137,8 @@ export function PhotoGrid({
                                 </div>
                             )}
 
+                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/30 opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+
                             {/* Three-dot menu button */}
                             <button
                                 onClick={(e) => {
@@ -124,27 +151,28 @@ export function PhotoGrid({
                                         photo,
                                     });
                                 }}
-                                className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-black/60 transition-all text-white cursor-pointer ${
+                                className={`absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/60 text-white transition duration-500 ${
                                     isMenuOpen
-                                        ? 'opacity-100 scale-110'
-                                        : 'opacity-0 group-hover:opacity-100 hover:scale-110'
+                                        ? 'opacity-100'
+                                        : 'opacity-0 group-hover:opacity-100'
                                 }`}
                                 aria-label="Photo options"
                             >
                                 <svg
-                                    className="w-5 h-5 cursor-pointer"
-                                    fill="currentColor"
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    stroke="currentColor"
                                     viewBox="0 0 24 24"
                                 >
-                                    <circle cx="12" cy="5" r="2" />
-                                    <circle cx="12" cy="12" r="2" />
-                                    <circle cx="12" cy="19" r="2" />
+                                    <circle cx="12" cy="5" r="1.5" />
+                                    <circle cx="12" cy="12" r="1.5" />
+                                    <circle cx="12" cy="19" r="1.5" />
                                 </svg>
                             </button>
 
-                            <div className="absolute inset-0 bg-black/0 transition-colors flex items-end p-3 pointer-events-none">
+                            <div className="pointer-events-none absolute inset-0 flex items-end p-4">
                                 <div
-                                    className={`text-white transition-opacity text-sm truncate ${
+                                    className={`text-white transition-opacity duration-700 text-sm truncate ${
                                         isMenuOpen
                                             ? 'opacity-100'
                                             : 'opacity-0 group-hover:opacity-100'
@@ -162,7 +190,10 @@ export function PhotoGrid({
                 <PhotoContextMenu
                     x={contextMenu.x}
                     y={contextMenu.y}
-                    onClose={() => setContextMenu(null)}
+                    onClose={() => {
+                        cancelMenuClose();
+                        setContextMenu(null);
+                    }}
                     onOpen={() => {
                         onPhotoClick?.(contextMenu.photo);
                         setContextMenu(null);
@@ -186,6 +217,8 @@ export function PhotoGrid({
                     isCurrentCover={
                         contextMenu.photo.storagePath === catalogueCoverImage
                     }
+                    onPointerEnterMenu={cancelMenuClose}
+                    onPointerLeaveMenu={scheduleMenuClose}
                 />
             )}
         </>

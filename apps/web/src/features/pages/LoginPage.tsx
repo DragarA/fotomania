@@ -1,15 +1,17 @@
-import { useTranslation } from "react-i18next";
-import { useAuth, useLogin } from "../auth/hooks";
-import { useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Link } from "lucide-react";
+import { Link, useNavigate } from '@tanstack/react-router';
+import { LogIn, Mail, Lock } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { Button } from '@/components/ui/button';
+
+import { useAuth, useLogin } from '../auth/hooks';
 
 export function LoginPage() {
     const { t } = useTranslation('auth');
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    // Redirect to profile if already logged in
     useEffect(() => {
         if (user) {
             navigate({ to: '/profile' });
@@ -17,24 +19,34 @@ export function LoginPage() {
     }, [user, navigate]);
 
     return (
-        <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gray-50 p-8">
-            <div className="bg-white rounded-lg border border-gray-200 p-8 max-w-md w-full">
-                <div className="mb-8 text-center">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="flex min-h-[calc(100vh-80px)] items-center justify-center bg-stone-100 px-6 py-12">
+            <div className="w-full max-w-md">
+                {/* Header */}
+                <div className="mb-10 text-center">
+                    <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-stone-200/60">
+                        <LogIn className="h-6 w-6 text-stone-600" strokeWidth={1.5} />
+                    </div>
+                    <h1 className="text-3xl font-light tracking-[0.02em] text-stone-800">
                         {t('login.title')}
                     </h1>
-                    <p className="text-gray-600">{t('login.subtitle')}</p>
+                    <p className="mt-3 text-sm text-stone-500">
+                        {t('login.subtitle')}
+                    </p>
                 </div>
 
-                <LoginForm />
+                {/* Form Card */}
+                <div className="rounded-lg border border-black/5 bg-white p-8 shadow-sm">
+                    <LoginForm />
+                </div>
 
-                <div className="mt-8 pt-8 border-t border-gray-200 text-center">
-                    <span className="text-gray-600 mr-2">
-                        {t('login.noAccount')}
+                {/* Footer Link */}
+                <div className="mt-8 text-center">
+                    <span className="text-sm text-stone-500">
+                        {t('login.noAccount')}{' '}
                     </span>
                     <Link
                         to="/register"
-                        className="text-accent-600 font-semibold hover:text-accent-700 underline"
+                        className="text-sm font-medium text-stone-700 underline underline-offset-4 transition-colors duration-300 hover:text-stone-900"
                     >
                         {t('login.signUpLink')}
                     </Link>
@@ -64,60 +76,77 @@ function LoginForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
             {loginMutation.isError && (
-                <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
+                <div className="rounded border border-red-200/60 bg-red-50/80 px-4 py-3 text-sm text-red-700">
                     {t('login.error')}
                 </div>
             )}
 
-            <div>
+            <div className="space-y-2">
                 <label
                     htmlFor="email"
-                    className="block text-sm font-semibold text-gray-700 mb-2"
+                    className="block text-xs uppercase tracking-[0.2em] text-stone-500"
                 >
                     {t('login.emailLabel')}
                 </label>
-                <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent-500 transition-colors"
-                    placeholder={t('login.emailPlaceholder')}
-                    autoComplete="email"
-                />
+                <div className="relative">
+                    <Mail
+                        className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400"
+                        strokeWidth={1.5}
+                    />
+                    <input
+                        id="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="w-full rounded border border-black/10 bg-stone-50/50 py-3 pl-11 pr-4 text-sm text-stone-800 transition-all duration-300 placeholder:text-stone-400 focus:border-stone-400 focus:bg-white focus:outline-none"
+                        placeholder={t('login.emailPlaceholder')}
+                        autoComplete="email"
+                    />
+                </div>
             </div>
 
-            <div>
+            <div className="space-y-2">
                 <label
                     htmlFor="password"
-                    className="block text-sm font-semibold text-gray-700 mb-2"
+                    className="block text-xs uppercase tracking-[0.2em] text-stone-500"
                 >
                     {t('login.passwordLabel')}
                 </label>
-                <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-accent-500 transition-colors"
-                    placeholder={t('login.passwordPlaceholder')}
-                    autoComplete="current-password"
-                />
+                <div className="relative">
+                    <Lock
+                        className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400"
+                        strokeWidth={1.5}
+                    />
+                    <input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="w-full rounded border border-black/10 bg-stone-50/50 py-3 pl-11 pr-4 text-sm text-stone-800 transition-all duration-300 placeholder:text-stone-400 focus:border-stone-400 focus:bg-white focus:outline-none"
+                        placeholder={t('login.passwordPlaceholder')}
+                        autoComplete="current-password"
+                    />
+                </div>
             </div>
 
-            <button
+            <Button
                 type="submit"
                 disabled={loginMutation.isPending}
-                className="w-full bg-accent-500 text-white font-semibold py-3 rounded-lg hover:bg-accent-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-6 w-full"
             >
-                {loginMutation.isPending
-                    ? t('login.signingIn')
-                    : t('login.signInButton')}
-            </button>
+                {loginMutation.isPending ? (
+                    <>
+                        <span className="h-4 w-4 animate-spin rounded-full border border-white/30 border-t-white" />
+                        {t('login.signingIn')}
+                    </>
+                ) : (
+                    t('login.signInButton')
+                )}
+            </Button>
         </form>
     );
 }

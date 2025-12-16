@@ -20,11 +20,11 @@ export function PublicPhotoGrid({
 }: PublicPhotoGridProps) {
     if (isLoading) {
         return (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {[...Array(10)].map((_, i) => (
                     <div
                         key={i}
-                        className="aspect-square bg-gray-200 rounded-lg animate-pulse"
+                        className="aspect-square rounded border border-white/15 bg-white/60 shadow-inner animate-pulse"
                     />
                 ))}
             </div>
@@ -43,14 +43,14 @@ export function PublicPhotoGrid({
     }
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {photos.map((photo) => {
                 const isPhotoFavorite = isFavorite?.(photo.id) ?? false;
 
                 return (
                     <div
                         key={photo.id}
-                        className="group relative aspect-square bg-gray-100 rounded-lg overflow-hidden hover:ring-2 hover:ring-indigo-500 transition-all flex items-center justify-center"
+                        className="group relative flex aspect-square items-center justify-center overflow-hidden rounded border border-black/5 bg-stone-100 shadow-[0_45px_120px_-95px_rgba(0,0,0,0.9)] transition-all duration-700 hover:-translate-y-1"
                     >
                         <img
                             src={`${API_BASE_URL}/uploads/${
@@ -60,10 +60,12 @@ export function PublicPhotoGrid({
                                     : photo.storagePath
                             }`}
                             alt={photo.originalFileName}
-                            className="w-full h-full object-contain cursor-pointer"
+                            className="h-full w-full cursor-pointer object-cover transition duration-700 group-hover:scale-[1.03]"
                             loading="lazy"
                             onClick={() => onPhotoClick?.(photo)}
                         />
+
+                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/0 to-black/30 opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
 
                         {/* Favorite button */}
                         {onToggleFavorite && (
@@ -72,10 +74,10 @@ export function PublicPhotoGrid({
                                     e.stopPropagation();
                                     onToggleFavorite(photo.id);
                                 }}
-                                className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center transition-all cursor-pointer ${
+                                className={`absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 text-white transition duration-500 ${
                                     isPhotoFavorite
-                                        ? 'opacity-100 scale-110 group-hover:bg-black/60'
-                                        : 'opacity-0 group-hover:opacity-100 bg-black/60 hover:scale-110'
+                                        ? 'bg-black/80 opacity-100'
+                                        : 'bg-black/60 opacity-0 group-hover:opacity-100'
                                 }`}
                                 aria-label={
                                     isPhotoFavorite
@@ -84,14 +86,14 @@ export function PublicPhotoGrid({
                                 }
                             >
                                 <Heart
-                                    className={`w-5 h-5 ${isPhotoFavorite ? 'fill-red-500 text-red-500' : 'text-white'}`}
-                                />
+                                    className={`h-5 w-5 ${isPhotoFavorite ? 'fill-red-500 text-red-500' : 'text-white'}`}
+                                    />
                             </button>
                         )}
 
                         {/* Filename overlay */}
-                        <div className="absolute inset-0 bg-black/0 transition-colors flex items-end p-3 pointer-events-none">
-                            <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm truncate">
+                        <div className="pointer-events-none absolute inset-0 flex items-end p-4">
+                            <div className="text-white opacity-0 transition-opacity duration-700 text-sm tracking-[0.03em] group-hover:opacity-100">
                                 {photo.originalFileName}
                             </div>
                         </div>

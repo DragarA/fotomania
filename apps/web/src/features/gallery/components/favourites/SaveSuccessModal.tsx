@@ -27,34 +27,34 @@ export function SaveSuccessModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent>
+            <DialogContent className="border border-black/5 bg-white/90 backdrop-blur">
                 <DialogHeader>
-                    <div className="flex justify-center mb-4">
-                        <CheckCircle2 className="w-16 h-16 text-green-500" />
+                    <div className="mb-4 flex justify-center">
+                        <CheckCircle2 className="h-16 w-16 text-emerald-500" strokeWidth={1.5} />
                     </div>
-                    <DialogTitle className="text-center">
+                    <DialogTitle className="text-center text-2xl font-light tracking-[0.02em] text-stone-800">
                         {t('modal.success.title')}
                     </DialogTitle>
-                    <DialogDescription className="text-center">
+                    <DialogDescription className="text-center text-stone-500">
                         {t('modal.success.description')}
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="py-4 space-y-3">
-                    <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm font-medium text-gray-700">
-                                {t('modal.success.emailLabel')}:
+                <div className="space-y-4 py-4">
+                    <div className="rounded border border-black/5 bg-white/80 px-6 py-4 text-sm text-stone-600 shadow-sm">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs uppercase tracking-[0.4em]">
+                                {t('modal.success.emailLabel')}
                             </span>
-                            <span className="text-sm text-gray-900">
+                            <span className="font-light text-stone-800">
                                 {email}
                             </span>
                         </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm font-medium text-gray-700">
-                                {t('modal.success.photosSavedLabel')}:
+                        <div className="mt-3 flex items-center justify-between">
+                            <span className="text-xs uppercase tracking-[0.4em]">
+                                {t('modal.success.photosSavedLabel')}
                             </span>
-                            <span className="text-sm text-gray-900">
+                            <span className="font-light text-stone-800">
                                 {favoritesCount}{' '}
                                 {favoritesCount === 1
                                     ? t('modal.success.photo')
@@ -63,7 +63,7 @@ export function SaveSuccessModal({
                         </div>
                     </div>
 
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-stone-500">
                         <p>{t('modal.success.followUp', { email })}</p>
                     </div>
                 </div>
@@ -72,7 +72,7 @@ export function SaveSuccessModal({
                     <button
                         type="button"
                         onClick={onClose}
-                        className="w-full sm:w-auto px-4 py-2 bg-accent-500 text-white rounded-lg hover:bg-accent-600 transition-colors"
+                        className="w-full rounded border border-black/10 bg-stone-900 px-6 py-3 text-[0.65rem] uppercase tracking-[0.4em] text-white transition hover:-translate-y-0.5"
                     >
                         {t('modal.success.close')}
                     </button>

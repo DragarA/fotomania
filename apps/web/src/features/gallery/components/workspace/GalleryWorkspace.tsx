@@ -158,7 +158,7 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
     }
 
     return (
-        <div className="flex h-screen">
+        <div className="flex min-h-screen flex-col gap-6 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.75),_rgba(248,246,242,1))] px-4 py-6 md:px-8 lg:flex-row">
             <CatalogueSidebar
                 catalogue={catalogue}
                 catalogueId={catalogueId}
@@ -170,24 +170,25 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                 onCollectionContextMenu={handleCollectionContextMenu}
                 favouriteSessions={favouriteSessions}
                 favouritesLoading={favouritesLoading}
-                onFavouritePhotoClick={setSelectedPhoto}
             />
 
-            <PhotoWorkspace
-                selectedCollection={selectedCollection}
-                collections={collections}
-                photos={photos}
-                photosLoading={photosLoading}
-                catalogueId={catalogueId}
-                catalogue={catalogue}
-                dropzoneRootProps={getRootProps()}
-                dropzoneInputProps={getInputProps()}
-                isDragActive={isDragActive}
-                selectedCollectionId={selectedCollectionId}
-                onPhotoClick={setSelectedPhoto}
-                onPhotoDelete={handleDeletePhoto}
-                onSetAsCover={handleSetAsCover}
-            />
+            <div className="flex-1 w-full">
+                <PhotoWorkspace
+                    selectedCollection={selectedCollection}
+                    collections={collections}
+                    photos={photos}
+                    photosLoading={photosLoading}
+                    catalogueId={catalogueId}
+                    catalogue={catalogue}
+                    dropzoneRootProps={getRootProps()}
+                    dropzoneInputProps={getInputProps()}
+                    isDragActive={isDragActive}
+                    selectedCollectionId={selectedCollectionId}
+                    onPhotoClick={setSelectedPhoto}
+                    onPhotoDelete={handleDeletePhoto}
+                    onSetAsCover={handleSetAsCover}
+                />
+            </div>
 
             <CollectionModal
                 isOpen={modalState.isOpen}

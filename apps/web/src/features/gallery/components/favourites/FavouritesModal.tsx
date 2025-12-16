@@ -1,6 +1,10 @@
+import { Calendar, Heart, Mail, X } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
-import { API_BASE_URL } from '../../../../lib/api-client';
+import { Button } from '@/components/ui/button';
+import { API_BASE_URL } from '@/lib/api-client';
+
 import type { ClientFavouriteSession } from '../../hooks';
 import { useSessionFavouritesQuery } from '../../hooks';
 
@@ -9,7 +13,6 @@ interface FavouritesModalProps {
     catalogueId: string;
     isOpen: boolean;
     onClose: () => void;
-    onPhotoClick?: (photo: any) => void;
 }
 
 export function FavouritesModal({
@@ -17,7 +20,6 @@ export function FavouritesModal({
     catalogueId,
     isOpen,
     onClose,
-    onPhotoClick,
 }: FavouritesModalProps) {
     const { t } = useTranslation('gallery');
     const { data: sessionData, isLoading } = useSessionFavouritesQuery(
@@ -28,148 +30,150 @@ export function FavouritesModal({
 
     if (!isOpen || !session) return null;
 
+    if (typeof document === 'undefined') return null;
+
     const photos = sessionData?.photos || [];
 
-    return (
+    const formattedDate = new Date(session.createdAt).toLocaleString(
+        t('favouritesModal.locale'),
+        {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+        }
+    );
+
+    return createPortal(
         <div
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/50 px-4 py-6 backdrop-blur-sm"
             onClick={onClose}
         >
             <div
-                className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+                className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-lg bg-white shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                    <div>
-                        <h2 className="text-xl font-bold text-gray-900">
-                            {session.email}
-                        </h2>
-                        <p className="text-sm text-gray-500 mt-1">
-                            {t('favouritesModal.selected', {
-                                count: session.photoCount,
-                                photoText:
-                                    session.photoCount === 1
-                                        ? t('favouritesModal.photo')
-                                        : t('favouritesModal.photos'),
-                            })}{' '}
-                            {new Date(session.createdAt).toLocaleDateString(
-                                t('favouritesModal.locale'),
-                                {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                }
-                            )}
-                        </p>
-                    </div>
+                <div className="flex items-center justify-between px-6 py-5">
+                    <h2 className="text-xl font-light tracking-wide text-stone-800">
+                        {t('favouritesModal.title')}
+                    </h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                        className="text-stone-400 transition-colors hover:text-stone-600"
                     >
-                        <svg
-                            className="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
+                        <X className="h-5 w-5" strokeWidth={1.5} />
                     </button>
                 </div>
 
-                {/* Photo List */}
-                <div className="flex-1 overflow-y-auto p-6">
-                    {isLoading ? (
-                        <div className="flex items-center justify-center py-12">
-                            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
-                        </div>
-                    ) : photos.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-16 px-6">
-                            <div className="text-6xl mb-4">📷</div>
-                            <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                                {t('favouritesModal.noPhotosFound')}
-                            </h3>
-                            <p className="text-gray-500 text-center max-w-md">
-                                {t('favouritesModal.noFavouritedPhotos')}
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto px-6 pb-6">
+                    {/* Info Cards */}
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="rounded-lg bg-stone-50 p-4">
+                            <div className="mb-2 flex items-center gap-2 text-stone-400">
+                                <Mail className="h-4 w-4" strokeWidth={1.5} />
+                                <span className="text-[0.65rem] uppercase tracking-[0.2em]">
+                                    {t('favouritesModal.emailLabel')}
+                                </span>
+                            </div>
+                            <p className="text-sm font-medium text-stone-800">
+                                {session.email}
                             </p>
                         </div>
-                    ) : (
-                        <div className="space-y-3">
-                            {photos.map((photo, index) => (
-                                <div
-                                    key={photo.id}
-                                    className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer group"
-                                    onClick={() => onPhotoClick?.(photo)}
-                                >
-                                    {/* Thumbnail */}
-                                    <div className="flex-shrink-0 w-16 h-16 bg-gray-200 rounded overflow-hidden">
-                                        <img
-                                            src={`${API_BASE_URL}/uploads/${photo.thumbnailPath || photo.storagePath}`}
-                                            alt={photo.originalFileName}
-                                            className="w-full h-full object-cover"
-                                            loading="lazy"
-                                        />
-                                    </div>
 
-                                    {/* Photo Info */}
-                                    <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium text-gray-900 truncate">
-                                            {index + 1}.{' '}
-                                            {photo.originalFileName}
-                                        </p>
-                                        <p className="text-xs text-gray-500 mt-1">
-                                            {photo.width &&
-                                                photo.height &&
-                                                `${photo.width} × ${photo.height}`}
-                                            {photo.size &&
-                                                ` • ${(photo.size / 1024 / 1024).toFixed(2)} MB`}
-                                        </p>
-                                    </div>
-
-                                    {/* View Icon */}
-                                    <div className="flex-shrink-0 text-gray-400 group-hover:text-indigo-600 transition-colors">
-                                        <svg
-                                            className="w-5 h-5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                            />
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                                            />
-                                        </svg>
-                                    </div>
-                                </div>
-                            ))}
+                        <div className="rounded-lg bg-stone-50 p-4">
+                            <div className="mb-2 flex items-center gap-2 text-stone-400">
+                                <Calendar className="h-4 w-4" strokeWidth={1.5} />
+                                <span className="text-[0.65rem] uppercase tracking-[0.2em]">
+                                    {t('favouritesModal.submittedLabel')}
+                                </span>
+                            </div>
+                            <p className="text-sm font-medium text-stone-800">
+                                {formattedDate}
+                            </p>
                         </div>
-                    )}
+                    </div>
+
+                    {/* Photo Count */}
+                    <div className="mt-6 flex items-center gap-2 text-stone-700">
+                        <Heart className="h-5 w-5" strokeWidth={1.5} />
+                        <span className="text-base">
+                            {t('favouritesModal.favouritePhotos', { count: session.photoCount })}
+                        </span>
+                    </div>
+
+                    {/* Photo List */}
+                    <div className="mt-4">
+                        {isLoading ? (
+                            <div className="flex items-center justify-center py-12">
+                                <div className="h-8 w-8 animate-spin rounded-full border border-stone-200 border-t-stone-600"></div>
+                            </div>
+                        ) : photos.length === 0 ? (
+                            <div className="py-8 text-center text-stone-500">
+                                {t('favouritesModal.noPhotosFound')}
+                            </div>
+                        ) : (
+                            <div className="space-y-2">
+                                {photos.map((photo, index) => (
+                                    <div
+                                        key={photo.id}
+                                        className="flex items-center gap-3 rounded-lg bg-stone-50 p-3"
+                                    >
+                                        {/* Thumbnail */}
+                                        <div className="h-14 w-14 shrink-0 overflow-hidden rounded bg-stone-200">
+                                            <img
+                                                src={`${API_BASE_URL}/uploads/${photo.thumbnailPath || photo.storagePath}`}
+                                                alt={photo.originalFileName}
+                                                className="h-full w-full object-cover"
+                                                loading="lazy"
+                                            />
+                                        </div>
+
+                                        {/* Photo Info */}
+                                        <div className="min-w-0 flex-1">
+                                            <p className="truncate text-sm font-medium text-stone-800">
+                                                {photo.originalFileName}
+                                            </p>
+                                            <p className="mt-0.5 text-xs text-stone-500">
+                                                {photo.width && photo.height && (
+                                                    <span>{photo.width} × {photo.height}</span>
+                                                )}
+                                                {photo.size && (
+                                                    <span>
+                                                        {photo.width && photo.height && ' · '}
+                                                        {(photo.size / 1024 / 1024).toFixed(2)} MB
+                                                    </span>
+                                                )}
+                                            </p>
+                                        </div>
+
+                                        {/* Number Badge */}
+                                        <span className="shrink-0 text-sm text-stone-400">
+                                            #{index + 1}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* Footer */}
-                <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
-                    <button
+                <div className="px-6 pb-6">
+                    <Button
                         onClick={onClose}
-                        className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+                        className="w-full"
+                        size="lg"
                     >
                         {t('favouritesModal.close')}
-                    </button>
+                    </Button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }

@@ -1,44 +1,50 @@
-import { useTranslation } from 'react-i18next';
-import { useAuth } from '../auth/hooks';
 import { Link } from '@tanstack/react-router';
+import { Folder, Heart, Share2, Shield, Sparkles, Image } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+
+import { Button } from '@/components/ui/button';
+
+import { useAuth } from '../auth/hooks';
 
 export function HomePage() {
     const { t } = useTranslation('common');
     const { user } = useAuth();
 
-    console.log('HomePage rendered, user:', user);
-
     return (
         <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="relative bg-accent-50 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+            <section className="relative overflow-hidden bg-stone-50 py-24 lg:py-32">
+                {/* Subtle background pattern */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(0,0,0,0.02)_0%,_transparent_50%)]" />
+
+                <div className="relative mx-auto max-w-5xl px-6 sm:px-8">
                     <div className="text-center">
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900">
+                        <p className="mb-4 text-xs uppercase tracking-[0.4em] text-stone-400">
+                            {t('home.hero.label')}
+                        </p>
+                        <h1 className="mb-6 text-4xl font-light tracking-tight text-stone-800 sm:text-5xl lg:text-6xl">
                             {t('home.hero.title')}
                         </h1>
-                        <p className="text-xl md:text-2xl mb-8 text-gray-600 max-w-3xl mx-auto">
+                        <p className="mx-auto mb-10 max-w-2xl text-lg font-light text-stone-500 sm:text-xl">
                             {t('home.hero.subtitle')}
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
                             {user ? (
-                                <Link
-                                    to="/profile"
-                                    className="inline-block px-8 py-4 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors"
-                                >
-                                    {t('home.hero.goToProfile')}
-                                </Link>
+                                <Button asChild size="lg">
+                                    <Link to="/catalogues">
+                                        {t('home.hero.goToProfile')}
+                                    </Link>
+                                </Button>
                             ) : (
                                 <>
-                                    <Link
-                                        to="/login"
-                                        className="inline-block px-8 py-4 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors"
-                                    >
-                                        {t('home.hero.getStarted')}
-                                    </Link>
-                                    <button className="inline-block px-8 py-4 bg-white border-2 border-accent-500 text-accent-600 font-semibold rounded-lg hover:bg-accent-50 transition-colors cursor-pointer">
+                                    <Button asChild size="lg">
+                                        <Link to="/register">
+                                            {t('home.hero.getStarted')}
+                                        </Link>
+                                    </Button>
+                                    <Button variant="outline" size="lg">
                                         {t('home.hero.watchDemo')}
-                                    </button>
+                                    </Button>
                                 </>
                             )}
                         </div>
@@ -47,89 +53,53 @@ export function HomePage() {
             </section>
 
             {/* Features Section */}
-            <section className="py-20 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <section className="bg-white py-20 lg:py-28">
+                <div className="mx-auto max-w-6xl px-6 sm:px-8">
+                    <div className="mb-16 text-center">
+                        <h2 className="mb-4 text-3xl font-light tracking-tight text-stone-800 sm:text-4xl">
                             {t('home.features.title')}
                         </h2>
-                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                        <p className="mx-auto max-w-2xl text-stone-500">
                             {t('home.features.subtitle')}
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                         {/* Feature 1 */}
-                        <div className="text-center">
-                            <div className="inline-flex items-center justify-center w-16 h-16 bg-accent-100 rounded-full mb-6">
-                                <svg
-                                    className="w-8 h-8 text-accent-600"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                    />
-                                </svg>
+                        <div className="rounded-lg border border-black/5 bg-stone-50 p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg">
+                            <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-stone-600 shadow-sm">
+                                <Image className="h-5 w-5" strokeWidth={1.5} />
                             </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                            <h3 className="mb-3 text-lg font-medium tracking-wide text-stone-800">
                                 {t('home.features.storage.title')}
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-sm leading-relaxed text-stone-500">
                                 {t('home.features.storage.description')}
                             </p>
                         </div>
 
                         {/* Feature 2 */}
-                        <div className="text-center">
-                            <div className="inline-flex items-center justify-center w-16 h-16 bg-accent-100 rounded-full mb-6">
-                                <svg
-                                    className="w-8 h-8 text-accent-600"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                                    />
-                                </svg>
+                        <div className="rounded-lg border border-black/5 bg-stone-50 p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg">
+                            <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-stone-600 shadow-sm">
+                                <Folder className="h-5 w-5" strokeWidth={1.5} />
                             </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                            <h3 className="mb-3 text-lg font-medium tracking-wide text-stone-800">
                                 {t('home.features.organization.title')}
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-sm leading-relaxed text-stone-500">
                                 {t('home.features.organization.description')}
                             </p>
                         </div>
 
                         {/* Feature 3 */}
-                        <div className="text-center">
-                            <div className="inline-flex items-center justify-center w-16 h-16 bg-accent-100 rounded-full mb-6">
-                                <svg
-                                    className="w-8 h-8 text-accent-600"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                                    />
-                                </svg>
+                        <div className="rounded-lg border border-black/5 bg-stone-50 p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg">
+                            <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-stone-600 shadow-sm">
+                                <Share2 className="h-5 w-5" strokeWidth={1.5} />
                             </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                            <h3 className="mb-3 text-lg font-medium tracking-wide text-stone-800">
                                 {t('home.features.sharing.title')}
                             </h3>
-                            <p className="text-gray-600">
+                            <p className="text-sm leading-relaxed text-stone-500">
                                 {t('home.features.sharing.description')}
                             </p>
                         </div>
@@ -137,62 +107,153 @@ export function HomePage() {
                 </div>
             </section>
 
-            {/* Stats Section */}
-            <section className="py-20 bg-gray-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {/* Value Props Section */}
+            <section className="bg-stone-100 py-16 lg:py-20">
+                <div className="mx-auto max-w-6xl px-6 sm:px-8">
+                    <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
                         <div className="text-center">
-                            <div className="text-4xl md:text-5xl font-bold text-accent-600 mb-2">
-                                1M+
+                            <div className="mb-2 text-2xl font-light text-stone-800 sm:text-3xl">
+                                {t('home.valueProps.unlimited.value')}
                             </div>
-                            <div className="text-gray-600 font-medium">
-                                {t('home.stats.photosStored')}
+                            <div className="text-xs uppercase tracking-[0.2em] text-stone-500">
+                                {t('home.valueProps.unlimited.label')}
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="text-4xl md:text-5xl font-bold text-accent-600 mb-2">
-                                50K+
+                            <div className="mb-2 text-2xl font-light text-stone-800 sm:text-3xl">
+                                {t('home.valueProps.resolution.value')}
                             </div>
-                            <div className="text-gray-600 font-medium">
-                                {t('home.stats.photographers')}
-                            </div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-4xl md:text-5xl font-bold text-accent-600 mb-2">
-                                100K+
-                            </div>
-                            <div className="text-gray-600 font-medium">
-                                {t('home.stats.galleriesCreated')}
+                            <div className="text-xs uppercase tracking-[0.2em] text-stone-500">
+                                {t('home.valueProps.resolution.label')}
                             </div>
                         </div>
                         <div className="text-center">
-                            <div className="text-4xl md:text-5xl font-bold text-accent-600 mb-2">
-                                99.9%
+                            <div className="mb-2 text-2xl font-light text-stone-800 sm:text-3xl">
+                                {t('home.valueProps.watermarks.value')}
                             </div>
-                            <div className="text-gray-600 font-medium">
-                                {t('home.stats.uptime')}
+                            <div className="text-xs uppercase tracking-[0.2em] text-stone-500">
+                                {t('home.valueProps.watermarks.label')}
+                            </div>
+                        </div>
+                        <div className="text-center">
+                            <div className="mb-2 text-2xl font-light text-stone-800 sm:text-3xl">
+                                {t('home.valueProps.sharing.value')}
+                            </div>
+                            <div className="text-xs uppercase tracking-[0.2em] text-stone-500">
+                                {t('home.valueProps.sharing.label')}
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
+            {/* Why Choose Us Section */}
+            <section className="bg-white py-20 lg:py-28">
+                <div className="mx-auto max-w-6xl px-6 sm:px-8">
+                    <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+                        <div>
+                            <p className="mb-3 text-xs uppercase tracking-[0.4em] text-stone-400">
+                                {t('home.whyUs.label')}
+                            </p>
+                            <h2 className="mb-6 text-3xl font-light tracking-tight text-stone-800 sm:text-4xl">
+                                {t('home.whyUs.title')}
+                            </h2>
+                            <p className="mb-8 text-stone-500">
+                                {t('home.whyUs.subtitle')}
+                            </p>
+
+                            <div className="space-y-4">
+                                <div className="flex items-start gap-4">
+                                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-600">
+                                        <Shield
+                                            className="h-4 w-4"
+                                            strokeWidth={1.5}
+                                        />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-medium text-stone-800">
+                                            {t('home.whyUs.secure.title')}
+                                        </h4>
+                                        <p className="text-sm text-stone-500">
+                                            {t('home.whyUs.secure.description')}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-600">
+                                        <Heart
+                                            className="h-4 w-4"
+                                            strokeWidth={1.5}
+                                        />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-medium text-stone-800">
+                                            {t('home.whyUs.favorites.title')}
+                                        </h4>
+                                        <p className="text-sm text-stone-500">
+                                            {t(
+                                                'home.whyUs.favorites.description'
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-600">
+                                        <Sparkles
+                                            className="h-4 w-4"
+                                            strokeWidth={1.5}
+                                        />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-medium text-stone-800">
+                                            {t('home.whyUs.galleries.title')}
+                                        </h4>
+                                        <p className="text-sm text-stone-500">
+                                            {t(
+                                                'home.whyUs.galleries.description'
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="relative">
+                            <div className="aspect-[4/3] overflow-hidden rounded-lg bg-stone-200">
+                                <div className="flex h-full items-center justify-center text-stone-400">
+                                    <img
+                                        src={`/assets/cover.jpeg`}
+                                        alt="Cover"
+                                    />
+                                </div>
+                            </div>
+                            {/* Decorative elements */}
+                            <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-lg border border-black/5 bg-white shadow-lg" />
+                            <div className="absolute -right-4 -top-4 h-20 w-20 rounded-lg border border-black/5 bg-stone-50" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* CTA Section */}
-            <section className="py-20 bg-accent-50">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 className="text-4xl font-bold mb-6 text-gray-900">
+            <section className="bg-stone-800 py-20 lg:py-24">
+                <div className="mx-auto max-w-3xl px-6 text-center sm:px-8">
+                    <h2 className="mb-4 text-3xl font-light tracking-tight text-white sm:text-4xl">
                         {t('home.cta.title')}
                     </h2>
-                    <p className="text-xl mb-8 text-gray-600">
+                    <p className="mb-8 text-stone-400">
                         {t('home.cta.subtitle')}
                     </p>
                     {!user && (
-                        <Link
-                            to="/login"
-                            className="inline-block px-8 py-4 bg-accent-500 text-white font-semibold rounded-lg hover:bg-accent-600 transition-colors"
+                        <Button
+                            asChild
+                            size="lg"
+                            className="bg-white text-stone-800 hover:bg-stone-100"
                         >
-                            {t('home.cta.startTrial')}
-                        </Link>
+                            <Link to="/register">
+                                {t('home.cta.startTrial')}
+                            </Link>
+                        </Button>
                     )}
                 </div>
             </section>

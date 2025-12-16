@@ -57,6 +57,7 @@
   },
   "home": {
     "hero": {
+      "label": "Profesionalno upravljanje fotografij",
       "title": "Zajemite. Organizirajte. Delite.",
       "subtitle": "Ultimativna platforma za fotografe za shranjevanje, upravljanje in prikazovanje svojega dela.",
       "getStarted": "Začni",
@@ -79,16 +80,45 @@
         "description": "Delite galerije s strankami prek lepih, prilagodljivih povezav. Prijava ni potrebna."
       }
     },
-    "stats": {
-      "photosStored": "Shranjenih fotografij",
-      "photographers": "Fotografov",
-      "galleriesCreated": "Ustvarjenih galerij",
-      "uptime": "Razpoložljivost"
+    "valueProps": {
+      "unlimited": {
+        "value": "Neomejeno",
+        "label": "Prostora"
+      },
+      "resolution": {
+        "value": "Polna",
+        "label": "Ločljivost"
+      },
+      "watermarks": {
+        "value": "Brez",
+        "label": "Vodnih žigov"
+      },
+      "sharing": {
+        "value": "Varno",
+        "label": "Deljenje s strankami"
+      }
     },
     "cta": {
       "title": "Pripravljeni dvigniti svojo fotografijo na višjo raven?",
       "subtitle": "Pridružite se tisočim fotografov, ki zaupajo svoje delo Fotomaniji",
       "startTrial": "Začnite brezplačno preizkusno obdobje"
+    },
+    "whyUs": {
+      "label": "Zakaj Fotomania",
+      "title": "Narejeno za profesionalne fotografe",
+      "subtitle": "Razumemo edinstvene potrebe fotografov. Od galerij za stranke do dostave dokazil, vsaka funkcija je zasnovana z vašim delovnim procesom v mislih.",
+      "secure": {
+        "title": "Varno in zasebno",
+        "description": "Vaše fotografije so šifrirane in zaščitene z varnostjo na ravni podjetij."
+      },
+      "favorites": {
+        "title": "Priljubljene stranke",
+        "description": "Strankam omogočite izbiro priljubljenih fotografij z elegantnim orodjem za izbiro."
+      },
+      "galleries": {
+        "title": "Čudovite galerije",
+        "description": "Predstavite svoje delo v osupljivih, prilagodljivih galerijah, ki navdušijo stranke."
+      }
     }
   },
   "confirmDialog": {

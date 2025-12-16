@@ -141,6 +141,11 @@
     "locale": "en-US"
   },
   "favouritesModal": {
+    "title": "Client Favourites",
+    "emailLabel": "Email",
+    "submittedLabel": "Submitted",
+    "favouritePhotos": "{{count}} Favourite Photo",
+    "favouritePhotos_other": "{{count}} Favourite Photos",
     "selected": "Selected {{count}} {{photoText}} on",
     "photo": "photo",
     "photos": "photos",

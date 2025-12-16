@@ -36,11 +36,11 @@ export function CatalogueForm({
     });
 
     return (
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
             {/* Title Field */}
-            <div>
+            <div className="space-y-2">
                 <label
-                    className="block text-sm font-semibold text-gray-700 mb-2"
+                    className="text-xs uppercase tracking-[0.4em] text-stone-400"
                     htmlFor="title"
                 >
                     {t('catalogueForm.titleLabel')}
@@ -48,24 +48,22 @@ export function CatalogueForm({
                 <input
                     id="title"
                     {...register('title')}
-                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors ${
-                        errors.title
-                            ? 'border-red-500'
-                            : 'border-gray-200 focus:border-accent-500'
+                    className={`w-full rounded border bg-white/80 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300 ${
+                        errors.title ? 'border-red-400 focus:ring-red-200' : 'border-black/10'
                     }`}
                     placeholder={t('catalogueForm.titlePlaceholder')}
                 />
                 {errors.title && (
-                    <p className="mt-1 text-sm text-red-600">
+                    <p className="text-xs uppercase tracking-[0.3em] text-red-500">
                         {errors.title.message}
                     </p>
                 )}
             </div>
 
             {/* Description Field */}
-            <div>
+            <div className="space-y-2">
                 <label
-                    className="block text-sm font-semibold text-gray-700 mb-2"
+                    className="text-xs uppercase tracking-[0.4em] text-stone-400"
                     htmlFor="description"
                 >
                     {t('catalogueForm.descriptionLabel')}
@@ -73,15 +71,15 @@ export function CatalogueForm({
                 <textarea
                     id="description"
                     {...register('description')}
-                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition-colors min-h-[120px] ${
+                    className={`min-h-[140px] w-full rounded border bg-white/80 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300 ${
                         errors.description
-                            ? 'border-red-500'
-                            : 'border-gray-200 focus:border-accent-500'
+                            ? 'border-red-400 focus:ring-red-200'
+                            : 'border-black/10'
                     }`}
                     placeholder={t('catalogueForm.descriptionPlaceholder')}
                 />
                 {errors.description && (
-                    <p className="mt-1 text-sm text-red-600">
+                    <p className="text-xs uppercase tracking-[0.3em] text-red-500">
                         {errors.description.message}
                     </p>
                 )}
@@ -91,7 +89,7 @@ export function CatalogueForm({
             <button
                 type="submit"
                 disabled={isSubmitting || !isDirty}
-                className="w-full bg-accent-500 text-white font-semibold py-3 rounded-lg hover:bg-accent-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full rounded border border-black/10 bg-stone-900 px-6 py-3 text-[0.65rem] uppercase tracking-[0.4em] text-white transition duration-500 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed"
             >
                 {isSubmitting ? `${submitLabel}...` : submitLabel}
             </button>

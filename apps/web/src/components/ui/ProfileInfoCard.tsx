@@ -12,16 +12,16 @@ export function ProfileInfoCard({
     children,
 }: ProfileInfoCardProps) {
     return (
-        <div className="rounded-xl bg-gray-50 p-6">
-            <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 text-accent-600">{icon}</div>
-                <div className="flex-1">
-                    <h3 className="mb-1 text-sm font-semibold text-gray-700">
-                        {label}
-                    </h3>
-                    {children}
-                </div>
+        <div className="rounded-lg bg-stone-50 p-5">
+            <div className="mb-2 flex items-center gap-2 text-stone-400">
+                <span className="[&_svg]:h-4 [&_svg]:w-4 [&_svg]:stroke-[1.5]">
+                    {icon}
+                </span>
+                <span className="text-[0.65rem] uppercase tracking-[0.2em]">
+                    {label}
+                </span>
             </div>
+            <div className="text-stone-800">{children}</div>
         </div>
     );
 }

@@ -56,15 +56,25 @@ export function PhotoWorkspace({
     return (
         <main
             {...dropzoneRootProps}
-            className="flex-1 bg-gray-50 overflow-y-auto relative"
+            className="relative flex min-h-full flex-col overflow-hidden rounded border border-white/20 bg-white/70 shadow-[0_45px_140px_-100px_rgba(0,0,0,0.9)] backdrop-blur"
         >
             <input {...dropzoneInputProps} />
 
             {selectedCollection ? (
-                <div className="p-8">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                        {selectedCollection.name}
-                    </h2>
+                <div className="space-y-8 p-8 md:p-10">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-xs uppercase tracking-[0.4em] text-stone-400">
+                                {t('sidebar.collectionsTab')}
+                            </p>
+                            <h2 className="text-3xl font-light tracking-[0.02em] text-stone-800">
+                                {selectedCollection.name}
+                            </h2>
+                        </div>
+                        <div className="text-xs uppercase tracking-[0.4em] text-stone-400">
+                            {photos?.length || 0} {t('sidebar.photos')}
+                        </div>
+                    </div>
                     <PhotoGrid
                         photos={photos || []}
                         isLoading={photosLoading}
@@ -76,13 +86,13 @@ export function PhotoWorkspace({
                     />
                 </div>
             ) : (
-                <div className="flex items-center justify-center h-full">
-                    <div className="text-center text-gray-500">
-                        <p className="text-xl">
+                <div className="flex flex-1 items-center justify-center p-10 text-center text-stone-500">
+                    <div>
+                        <p className="text-xl tracking-[0.02em]">
                             {t('photoWorkspace.selectCollection')}
                         </p>
                         {collections && collections.length === 0 && (
-                            <p className="text-sm mt-2">
+                            <p className="mt-2 text-sm uppercase tracking-[0.3em]">
                                 {t('photoWorkspace.createFirstCollection')}
                             </p>
                         )}
@@ -92,16 +102,16 @@ export function PhotoWorkspace({
 
             {/* Drag overlay */}
             {isDragActive && selectedCollectionId && (
-                <div className="absolute inset-0 bg-accent-500/10 backdrop-blur-sm flex items-center justify-center z-30 border-4 border-dashed border-accent-500">
-                    <div className="bg-white rounded-2xl p-12 shadow-2xl text-center">
-                        <div className="text-6xl mb-4">📤</div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <div className="absolute inset-0 z-30 flex items-center justify-center border border-dashed border-stone-400/60 bg-white/70 backdrop-blur-sm">
+                    <div className="space-y-3 rounded border border-black/5 bg-white/90 px-12 py-10 text-center shadow-[0_60px_140px_-120px_rgba(0,0,0,0.95)]">
+                        <div className="text-5xl">📤</div>
+                        <h3 className="text-2xl font-light tracking-[0.02em] text-stone-800">
                             {t('photoWorkspace.dropImagesHere')}
                         </h3>
-                        <p className="text-gray-600">
+                        <p className="text-stone-500">
                             {t('photoWorkspace.uploadLimit')}
                         </p>
-                        <p className="text-sm text-gray-500 mt-2">
+                        <p className="text-sm uppercase tracking-[0.3em] text-stone-400">
                             {t('photoWorkspace.supportedFormats')}
                         </p>
                     </div>
