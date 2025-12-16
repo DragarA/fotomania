@@ -37,7 +37,7 @@ export function PublicCatalogueHero({
                         <img
                             src={`${API_BASE_URL}/uploads/${catalogue.coverImage}`}
                             alt=""
-                            className="max-h-[85%] max-w-[85%] object-contain shadow-[0_45px_120px_-60px_rgba(0,0,0,0.9)]"
+                            className="md:max-h-[85%] md:max-w-[85%] object-contain shadow-[0_45px_120px_-60px_rgba(0,0,0,0.9)]"
                         />
                     </div>
 
@@ -49,7 +49,7 @@ export function PublicCatalogueHero({
             )}
 
             {/* Hero Content */}
-            <div className="relative flex h-full flex-col items-center justify-center px-6 text-center sm:px-10">
+            <div className="relative flex h-full flex-col items-center justify-center px-6 text-center">
                 <div className="max-w-4xl space-y-4">
                     <p className="text-xs uppercase tracking-[0.5em] text-white/70">
                         {t('hero.subtitle')}
