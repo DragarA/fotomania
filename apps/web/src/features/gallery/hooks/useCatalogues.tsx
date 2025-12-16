@@ -1,10 +1,11 @@
-import { CataloguesService, PublicService } from '@repo/sdk';
+import { CataloguesService, PublicService, OpenAPI } from '@repo/sdk';
 import { CreateCatalogueDtoClass, UpdateCatalogueDtoClass } from '@repo/sdk';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import type { Catalogue, DeleteCatalogueResponse } from '../types';
+import { getPublicAccessToken } from './usePublicAccess';
 
 export function useCataloguesQuery() {
     return useQuery<Catalogue[]>({
@@ -36,8 +37,32 @@ export function useCatalogueQuery(
 export function usePublicCatalogueQuery(slug: string) {
     return useQuery({
         queryKey: ['catalogue', 'public', slug],
-        queryFn: () => PublicService.publicControllerFindBySlug({ slug }),
+        queryFn: async () => {
+            const token = getPublicAccessToken(slug);
+            const headers: HeadersInit = {
+                'Content-Type': 'application/json',
+            };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            const response = await fetch(
+                `${OpenAPI.BASE}/public/catalogue/${slug}`,
+                { headers }
+            );
+
+            if (!response.ok) {
+                const error = new Error('Failed to fetch catalogue') as Error & {
+                    status?: number;
+                };
+                error.status = response.status;
+                throw error;
+            }
+
+            return response.json();
+        },
         enabled: Boolean(slug),
+        retry: false, // Don't retry 401s
     });
 }
 

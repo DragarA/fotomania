@@ -41,3 +41,11 @@ export { usePhotoUpload } from './usePhotoUpload';
 export { useCatalogueFavouritesQuery } from './useCatalogueFavourites';
 export type { ClientFavouriteSession } from './useCatalogueFavourites';
 export { useSessionFavouritesQuery } from './useSessionFavourites';
+
+// Public access hooks
+export {
+    usePublicAccess,
+    getPublicAccessToken,
+    setPublicAccessToken,
+    clearPublicAccessToken,
+} from './usePublicAccess';

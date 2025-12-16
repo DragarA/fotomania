@@ -1,11 +1,16 @@
-import { createFileRoute, useParams } from '@tanstack/react-router';
+import { useParams } from '@tanstack/react-router';
 import { Heart } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { usePublicCatalogueQuery, usePublicPhotosQuery } from '../hooks';
+import {
+    usePublicCatalogueQuery,
+    usePublicPhotosQuery,
+    usePublicAccess,
+} from '../hooks';
 import { useFavorites } from '../../../hooks/useFavorites';
 import { PublicCatalogueHero } from '../components/public/PublicCatalogueHero';
+import { PasswordPrompt } from '../components/public/PasswordPrompt';
 import { CollectionTabs } from '../components/collection/CollectionTabs';
 import { PublicPhotoGrid } from '../components/photo/PublicPhotoGrid';
 import { PhotoLightbox } from '../components/photo/PhotoLightbox';
@@ -24,17 +29,29 @@ export function PublicCataloguePage() {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [savedEmail, setSavedEmail] = useState<string>('');
 
+    // Password protection
+    const {
+        verifyPassword,
+        isPending: isVerifying,
+        error: verifyError,
+    } = usePublicAccess(slug);
+
     // Data fetching
     const {
         data: catalogue,
         isLoading: catalogueLoading,
         isError,
         error,
+        refetch,
     } = usePublicCatalogueQuery(slug);
     const { data: photos, isLoading: photosLoading } = usePublicPhotosQuery(
         slug,
         selectedCollectionId
     );
+
+    // Check if password is required (401 error)
+    const isPasswordRequired =
+        isError && (error as Error & { status?: number })?.status === 401;
 
     // Favorites management
     const { toggleFavorite, isFavorite, getFavoriteIds, favoritesCount } =
@@ -79,6 +96,16 @@ export function PublicCataloguePage() {
         });
     };
 
+    // Handle password submission
+    const handlePasswordSubmit = (password: string) => {
+        verifyPassword(password, {
+            onSuccess: () => {
+                // Refetch catalogue data after successful password verification
+                refetch();
+            },
+        });
+    };
+
     // Loading state
     if (catalogueLoading) {
         return (
@@ -93,7 +120,18 @@ export function PublicCataloguePage() {
         );
     }
 
-    // Error state
+    // Password required state
+    if (isPasswordRequired) {
+        return (
+            <PasswordPrompt
+                onSubmit={handlePasswordSubmit}
+                isPending={isVerifying}
+                error={verifyError}
+            />
+        );
+    }
+
+    // Error state (not password related)
     if (isError || !catalogue) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.85),_rgba(38,34,31,1))] px-4">

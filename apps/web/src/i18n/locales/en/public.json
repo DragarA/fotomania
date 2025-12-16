@@ -12,6 +12,18 @@
       "message": "This link may be invalid or the gallery may have been removed."
     }
   },
+  "password": {
+    "title": "Protected Gallery",
+    "description": "This gallery is password protected. Please enter the password to view the photos.",
+    "placeholder": "Enter password",
+    "submit": "View Gallery",
+    "verifying": "Verifying...",
+    "protected": "Password Protected",
+    "error": {
+      "invalid": "Invalid password. Please try again.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
   "gallery": {
     "noCollections": "No collections available yet.",
     "noPhotos": "No photos in this collection yet.",

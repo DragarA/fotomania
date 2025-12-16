@@ -1055,6 +1055,54 @@
         ]
       }
     },
+    "/public/catalogue/{slug}/verify": {
+      "post": {
+        "operationId": "PublicController_verifyPassword",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "Public URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyPasswordReqDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password verified, returns access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyPasswordResDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid password"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "summary": "Verify password for a protected catalogue",
+        "tags": [
+          "public"
+        ]
+      }
+    },
     "/public/catalogue/{slug}": {
       "get": {
         "operationId": "PublicController_findBySlug",
@@ -1080,10 +1128,18 @@
               }
             }
           },
+          "401": {
+            "description": "Password required or invalid token"
+          },
           "404": {
             "description": "Catalogue not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Get public catalogue data by public URL slug",
         "tags": [
           "public"
@@ -1127,10 +1183,18 @@
               }
             }
           },
+          "401": {
+            "description": "Password required or invalid token"
+          },
           "404": {
             "description": "Collection not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Get photos for a public collection",
         "tags": [
           "public"
@@ -1175,10 +1239,18 @@
           "400": {
             "description": "Invalid request payload"
           },
+          "401": {
+            "description": "Password required or invalid token"
+          },
           "404": {
             "description": "Catalogue not found"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Add favourite photos for a client",
         "tags": [
           "public"
@@ -1581,6 +1653,32 @@
           "email",
           "createdAt",
           "photos"
+        ]
+      },
+      "VerifyPasswordReqDtoClass": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "Password to access the protected catalogue",
+            "example": "secret123"
+          }
+        },
+        "required": [
+          "password"
+        ]
+      },
+      "VerifyPasswordResDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Access token for accessing protected catalogue",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "required": [
+          "accessToken"
         ]
       },
       "CollectionPublicResDto": {

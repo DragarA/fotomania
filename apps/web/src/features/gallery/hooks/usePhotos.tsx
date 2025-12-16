@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { API_BASE_URL } from '../../../lib/api-client';
 import type { Photo, UploadPhotoParams } from '../types';
 import { uploadWithProgress } from '../utils/upload-helper';
+import { getPublicAccessToken } from './usePublicAccess';
 
 export function usePhotosQuery(collectionId: string | null) {
     return useQuery({
@@ -32,14 +33,32 @@ export function usePublicPhotosQuery(
             if (!collectionId) {
                 return [];
             }
-            return await PublicService.publicControllerFindCollectionPhotosBySlug(
-                {
-                    slug,
-                    collectionId,
-                }
+
+            const token = getPublicAccessToken(slug);
+            const headers: HeadersInit = {
+                'Content-Type': 'application/json',
+            };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            const response = await fetch(
+                `${OpenAPI.BASE}/public/catalogue/${slug}/collection/${collectionId}/photos`,
+                { headers }
             );
+
+            if (!response.ok) {
+                const error = new Error('Failed to fetch photos') as Error & {
+                    status?: number;
+                };
+                error.status = response.status;
+                throw error;
+            }
+
+            return response.json();
         },
         enabled: Boolean(slug) && Boolean(collectionId),
+        retry: false,
     });
 }
 

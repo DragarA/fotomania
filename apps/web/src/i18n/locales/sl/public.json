@@ -12,6 +12,18 @@
       "message": "Ta povezava je morda neveljavna ali pa je bila galerija odstranjena."
     }
   },
+  "password": {
+    "title": "Zaščitena galerija",
+    "description": "Ta galerija je zaščitena z geslom. Prosim vnesite geslo za ogled fotografij.",
+    "placeholder": "Vnesite geslo",
+    "submit": "Oglej si galerijo",
+    "verifying": "Preverjanje...",
+    "protected": "Zaščiteno z geslom",
+    "error": {
+      "invalid": "Napačno geslo. Prosim poskusite znova.",
+      "generic": "Nekaj je šlo narobe. Prosim poskusite znova."
+    }
+  },
   "gallery": {
     "noCollections": "Še ni zbirk.",
     "noPhotos": "V tej zbirki še ni fotografij.",
