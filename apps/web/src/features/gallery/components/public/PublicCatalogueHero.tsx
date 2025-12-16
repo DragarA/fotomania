@@ -20,29 +20,17 @@ export function PublicCatalogueHero({
             {/* Cover Photo Background */}
             {catalogue.coverImage && typeof catalogue.coverImage === 'string' ? (
                 <>
-                    {/* Blurred Background */}
-                    <div
-                        className="absolute inset-0 opacity-70"
-                        style={{
-                            backgroundImage: `url(${API_BASE_URL}/uploads/${catalogue.coverImage})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            filter: 'blur(60px)',
-                            transform: 'scale(1.2)',
-                        }}
-                    />
-
-                    {/* Main Cover Image */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-80">
+                    {/* Main Cover Image - Full page */}
+                    <div className="absolute inset-0">
                         <img
                             src={`${API_BASE_URL}/uploads/${catalogue.coverImage}`}
                             alt=""
-                            className="md:max-h-[85%] md:max-w-[85%] object-contain shadow-[0_45px_120px_-60px_rgba(0,0,0,0.9)]"
+                            className="h-full w-full object-cover"
                         />
                     </div>
 
                     {/* Dark overlay for text readability */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/70 to-black/90" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80" />
                 </>
             ) : (
                 <div className="absolute inset-0 bg-gradient-to-br from-[#312b28] to-[#1a1614]" />

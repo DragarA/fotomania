@@ -74,11 +74,7 @@ export function PublicPhotoGrid({
                                     e.stopPropagation();
                                     onToggleFavorite(photo.id);
                                 }}
-                                className={`absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 text-white transition duration-500 ${
-                                    isPhotoFavorite
-                                        ? 'bg-black/80 opacity-100'
-                                        : 'bg-black/60 opacity-0 group-hover:opacity-100'
-                                }`}
+                                className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/40 text-white transition duration-500 bg-black/80 opacity-100"
                                 aria-label={
                                     isPhotoFavorite
                                         ? 'Remove from favorites'
