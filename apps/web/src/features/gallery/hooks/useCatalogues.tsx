@@ -1,10 +1,11 @@
-import { CataloguesService, PublicService, OpenAPI } from '@repo/sdk';
+import { CataloguesService, OpenAPI } from '@repo/sdk';
 import { CreateCatalogueDtoClass, UpdateCatalogueDtoClass } from '@repo/sdk';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import type { Catalogue, DeleteCatalogueResponse } from '../types';
+
 import { getPublicAccessToken } from './usePublicAccess';
 
 export function useCataloguesQuery() {

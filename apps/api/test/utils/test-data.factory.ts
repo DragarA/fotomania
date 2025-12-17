@@ -2,8 +2,7 @@
  * Test data factories for creating consistent test fixtures
  */
 
-import { stat } from "fs";
-import { catalogueStatusEnum } from "../../src/common/db/schema";
+import { catalogueStatusEnum, collectionTypeEnum } from "../../src/common/db/schema";
 
 export const TestDataFactory = {
   /**
@@ -121,6 +120,9 @@ export const TestDataFactory = {
     id: 'test-collection-id-1',
     name: 'Test Collection',
     catalogueId: 'test-catalogue-id-1',
+    type: collectionTypeEnum.enumValues[0],
+    clientSessionId: 'test-client-session-id-1',
+    deliverySlug: 'test-delivery-slug-1',
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
     ...overrides,
@@ -134,6 +136,9 @@ export const TestDataFactory = {
       TestDataFactory.createCollection({
         id: `test-collection-id-${i + 1}`,
         name: `Test Collection ${i + 1}`,
+        type: collectionTypeEnum.enumValues[0],
+        clientSessionId: 'test-client-session-id-1',
+        deliverySlug: 'test-delivery-slug-1',
         ...overrides,
       })
     );

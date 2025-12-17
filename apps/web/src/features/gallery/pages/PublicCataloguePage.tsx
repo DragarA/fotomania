@@ -3,19 +3,20 @@ import { Heart } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+
+import { useFavorites } from '../../../hooks/useFavorites';
+import { CollectionTabs } from '../components/collection/CollectionTabs';
+import { SaveFavouritesModal } from '../components/favourites/SaveFavouritesModal';
+import { SaveSuccessModal } from '../components/favourites/SaveSuccessModal';
+import { PhotoLightbox } from '../components/photo/PhotoLightbox';
+import { PublicPhotoGrid } from '../components/photo/PublicPhotoGrid';
+import { PasswordPrompt } from '../components/public/PasswordPrompt';
+import { PublicCatalogueHero } from '../components/public/PublicCatalogueHero';
 import {
     usePublicCatalogueQuery,
     usePublicPhotosQuery,
     usePublicAccess,
 } from '../hooks';
-import { useFavorites } from '../../../hooks/useFavorites';
-import { PublicCatalogueHero } from '../components/public/PublicCatalogueHero';
-import { PasswordPrompt } from '../components/public/PasswordPrompt';
-import { CollectionTabs } from '../components/collection/CollectionTabs';
-import { PublicPhotoGrid } from '../components/photo/PublicPhotoGrid';
-import { PhotoLightbox } from '../components/photo/PhotoLightbox';
-import { SaveFavouritesModal } from '../components/favourites/SaveFavouritesModal';
-import { SaveSuccessModal } from '../components/favourites/SaveSuccessModal';
 
 export function PublicCataloguePage() {
     const { slug } = useParams({ from: '/c/$slug' });

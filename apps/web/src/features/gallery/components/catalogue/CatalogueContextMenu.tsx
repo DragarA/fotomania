@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
 interface CatalogueContextMenuProps {
     x: number;

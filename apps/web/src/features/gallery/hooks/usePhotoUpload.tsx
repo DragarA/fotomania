@@ -115,7 +115,7 @@ export function usePhotoUpload(collectionId: string | null) {
                 URL.revokeObjectURL(file.preview);
             });
         };
-    }, []);
+    }, [uploadQueue]);
 
     const isUploading = uploadQueue.some((f) => f.status === 'uploading');
     const hasCompleted = uploadQueue.some(

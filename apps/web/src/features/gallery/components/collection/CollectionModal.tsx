@@ -15,11 +15,11 @@ import {
     useCreateCollectionMutation,
     useUpdateCollectionMutation,
 } from '../../hooks';
+import { Collection } from '../../types';
 import {
     collectionFormSchema,
     type CollectionFormValues,
 } from '../../utils/validation';
-import { Collection } from '../../types';
 
 interface CollectionModalProps {
     isOpen: boolean;

@@ -1,7 +1,4 @@
-import type {
-    CollectionPhotoPublicResDto,
-    DeliveryPublicResDto,
-} from '@repo/sdk';
+import type { DeliveryPublicResDto } from '@repo/sdk';
 import { OpenAPI, PublicService } from '@repo/sdk';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -54,9 +51,9 @@ export function useDeliveryQuery(deliverySlug: string) {
             );
 
             if (!response.ok) {
-                const error = new Error(
-                    'Failed to fetch delivery'
-                ) as Error & { status?: number };
+                const error = new Error('Failed to fetch delivery') as Error & {
+                    status?: number;
+                };
                 error.status = response.status;
                 throw error;
             }
@@ -92,4 +89,3 @@ export function useDeliveryAccess(deliverySlug: string) {
         error: verifyMutation.error,
     };
 }
-

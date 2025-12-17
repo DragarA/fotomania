@@ -2,7 +2,7 @@ import { OpenAPI } from '@repo/sdk';
 
 // Configure the OpenAPI client
 OpenAPI.BASE =
-    ((import.meta as any).env?.VITE_API_BASE_URL as string) ||
+    (import.meta.env?.VITE_API_BASE_URL as string) ||
     'http://localhost:3000';
 
 // Export the base URL for use in components that need direct URL access

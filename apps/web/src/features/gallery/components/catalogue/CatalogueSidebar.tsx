@@ -88,14 +88,6 @@ export function CatalogueSidebar({
         }
     };
 
-    const scheduleContextMenuClose = () => {
-        cancelContextMenuClose();
-        contextMenuTimer.current = window.setTimeout(() => {
-            setContextMenu(null);
-            contextMenuTimer.current = null;
-        }, 200);
-    };
-
     useEffect(() => {
         return () => cancelContextMenuClose();
     }, []);

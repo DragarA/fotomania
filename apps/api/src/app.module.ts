@@ -8,11 +8,11 @@ import { ClientSessionsModule } from './client-sessions/client-sessions.module';
 import { CollectionsModule } from './collections/collections.module';
 import { AuthModule } from './common/auth/auth.module';
 import { DbModule } from './common/db/db.module';
+import { validateEnv } from './config/env.validation';
 import { I18nConfigModule } from './i18n/i18n.module';
 import { PhotosModule } from './photos/photos.module';
 import { PublicModule } from './public/public.module';
 import { UsersModule } from './users/users.module';
-import { validateEnv } from './config/env.validation';
 
 @Module({
     imports: [

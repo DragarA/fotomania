@@ -1,8 +1,8 @@
+import { CataloguePublicResDto } from '@repo/sdk';
 import { ChevronDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { API_BASE_URL } from '@/lib/api-client';
-import { CataloguePublicResDto } from '@repo/sdk';
 
 interface PublicCatalogueHeroProps {
     catalogue: CataloguePublicResDto;

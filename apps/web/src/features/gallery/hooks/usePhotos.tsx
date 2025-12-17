@@ -1,4 +1,4 @@
-import { OpenAPI, PhotosService, PublicService } from '@repo/sdk';
+import { OpenAPI, PhotosService } from '@repo/sdk';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { API_BASE_URL } from '../../../lib/api-client';
 import type { Photo, UploadPhotoParams } from '../types';
 import { uploadWithProgress } from '../utils/upload-helper';
+
 import { getPublicAccessToken } from './usePublicAccess';
 
 export function usePhotosQuery(collectionId: string | null) {
