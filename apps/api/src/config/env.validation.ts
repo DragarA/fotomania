@@ -27,6 +27,12 @@ export const envSchema = z.object({
     NODE_ENV: z
         .enum(['development', 'production', 'test'])
         .default('development'),
+
+    // Mailgun
+    MAILGUN_API_KEY: z.string().min(1, 'MAILGUN_API_KEY is required'),
+    MAILGUN_DOMAIN: z.string().min(1, 'MAILGUN_DOMAIN is required'),
+    MAILGUN_FROM_EMAIL: z.email('MAILGUN_FROM_EMAIL must be a valid email'),
+    MAILGUN_FROM_NAME: z.string().default('Fotomania'),
 });
 
 export type Env = z.infer<typeof envSchema>;

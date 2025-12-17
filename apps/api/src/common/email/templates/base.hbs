@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{subject}}</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <style type="text/css">
+    /* Reset */
+    body, table, td, p, a, li, blockquote {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+    table, td {
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+    img {
+      -ms-interpolation-mode: bicubic;
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+    }
+    /* Mobile styles */
+    @media only screen and (max-width: 620px) {
+      .email-container {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .content-padding {
+        padding-left: 28px !important;
+        padding-right: 28px !important;
+      }
+      .header-padding {
+        padding-left: 28px !important;
+        padding-right: 28px !important;
+      }
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #fafaf9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+  <!-- Preheader (hidden preview text) -->
+  <div style="display: none; max-height: 0; overflow: hidden;">
+    {{#if preheader}}{{preheader}}{{/if}}
+    &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+  </div>
+
+  <!-- Email wrapper -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #fafaf9;">
+    <tr>
+      <td align="center" style="padding: 48px 20px;">
+        
+        <!-- Email container -->
+        <table role="presentation" class="email-container" width="560" cellpadding="0" cellspacing="0" border="0" style="max-width: 560px; background-color: #ffffff; border-radius: 16px; border: 1px solid rgba(41, 37, 36, 0.06); overflow: hidden;">
+          
+          <!-- Header -->
+          <tr>
+            <td class="header-padding" style="padding: 36px 44px 0 44px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td>
+                    <span style="color: #292524; font-size: 13px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase;">FOTOMANIA</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Divider line -->
+          <tr>
+            <td class="content-padding" style="padding: 24px 44px 0 44px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="border-top: 1px solid rgba(41, 37, 36, 0.08);"></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Body content -->
+          <tr>
+            <td class="content-padding" style="padding: 40px 44px 48px 44px;">
+              {{{body}}}
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td class="content-padding" style="padding: 28px 44px; background-color: #f5f5f4; border-top: 1px solid rgba(41, 37, 36, 0.06);">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="text-align: center;">
+                    <p style="margin: 0; color: rgba(41, 37, 36, 0.5); font-size: 11px; font-weight: 300; letter-spacing: 1.5px; text-transform: uppercase;">
+                      © {{year}} Fotomania
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+        <!-- /Email container -->
+
+      </td>
+    </tr>
+  </table>
+  <!-- /Email wrapper -->
+</body>
+</html>
