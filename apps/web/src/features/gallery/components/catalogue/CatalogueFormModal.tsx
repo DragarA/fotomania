@@ -1,3 +1,4 @@
+import { X } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -106,19 +107,7 @@ export function CatalogueFormModal({
                         onClick={onClose}
                         className="rounded-full border border-black/10 p-2 text-stone-400 transition hover:-translate-y-0.5 hover:text-stone-700"
                     >
-                        <svg
-                            className="h-5 w-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={1.5}
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
+                        <X className="h-5 w-5" strokeWidth={1.5} />
                     </button>
                 </div>
 

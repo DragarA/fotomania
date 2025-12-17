@@ -1,4 +1,4 @@
-import { Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, X } from 'lucide-react';
 import { useEffect } from 'react';
 
 import { API_BASE_URL } from '../../../../lib/api-client';
@@ -85,19 +85,7 @@ export function PhotoLightbox({
                     className="w-12 h-12 flex items-center justify-center text-white hover:bg-white/10 rounded-full transition-colors cursor-pointer"
                     aria-label="Close"
                 >
-                    <svg
-                        className="w-8 h-8"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                        />
-                    </svg>
+                    <X className="w-8 h-8" />
                 </button>
             </div>
 
@@ -111,19 +99,7 @@ export function PhotoLightbox({
                     className="absolute left-4 z-10 w-12 h-12 flex items-center justify-center text-white hover:bg-white/10 rounded-full transition-colors cursor-pointer"
                     aria-label="Previous photo"
                 >
-                    <svg
-                        className="w-8 h-8"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 19l-7-7 7-7"
-                        />
-                    </svg>
+                    <ChevronLeft className="w-8 h-8" />
                 </button>
             )}
 
@@ -137,19 +113,7 @@ export function PhotoLightbox({
                     className="absolute right-4 z-10 w-12 h-12 flex items-center justify-center text-white hover:bg-white/10 rounded-full transition-colors"
                     aria-label="Next photo"
                 >
-                    <svg
-                        className="w-8 h-8"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                        />
-                    </svg>
+                    <ChevronRight className="w-8 h-8" />
                 </button>
             )}
 
