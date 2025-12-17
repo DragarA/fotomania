@@ -21,7 +21,7 @@ export function AppLayout() {
     const { pathname } = useRouterState({
         select: (state) => state.location,
     });
-    const isPublicGallery = pathname.startsWith('/c/');
+    const isPublicGallery = pathname.startsWith('/c/') || pathname.startsWith('/d/');
 
     return (
         <>

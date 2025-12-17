@@ -88,8 +88,8 @@ export class CollectionsController {
             user.id
         );
         return data.map(
-            ({ collection, photoCount }) =>
-                new CollectionResDto({ collection, photoCount })
+            ({ collection, photoCount, clientEmail }) =>
+                new CollectionResDto({ collection, photoCount, clientEmail: clientEmail || undefined })
         );
     }
 
@@ -110,7 +110,56 @@ export class CollectionsController {
         return new CollectionResDto({
             collection: data.collection,
             photoCount: data.photoCount,
+            clientEmail: data.clientEmail || undefined,
         });
+    }
+
+    @Post('from-session/:sessionId')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    @ApiOperation({
+        summary: 'Create a delivery collection from a client session',
+    })
+    @ApiParam({
+        name: 'sessionId',
+        description: 'Client session ID (favourites session)',
+    })
+    @ApiResponse({
+        status: 201,
+        description: 'Delivery collection created successfully',
+        type: CollectionResDto,
+    })
+    @ApiResponse({ status: 404, description: 'Session not found' })
+    @ApiResponse({ status: 400, description: 'Delivery collection already exists' })
+    @ApiResponse({ status: 403, description: 'Forbidden' })
+    async createFromSession(
+        @Param('sessionId') sessionId: string,
+        @User() user: UserEntity
+    ) {
+        const data = await this.collectionsService.createDeliveryCollection(
+            sessionId,
+            user.id
+        );
+        return new CollectionResDto(data);
+    }
+
+    @Get(':id/downloads')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    @ApiOperation({ summary: 'Get download history for a delivery collection' })
+    @ApiParam({ name: 'id', description: 'Collection ID' })
+    @ApiResponse({
+        status: 200,
+        description: 'Returns download history',
+    })
+    @ApiResponse({ status: 404, description: 'Collection not found' })
+    @ApiResponse({ status: 400, description: 'Not a delivery collection' })
+    @ApiResponse({ status: 403, description: 'Forbidden' })
+    async getDownloadHistory(
+        @Param('id') id: string,
+        @User() user: UserEntity
+    ) {
+        return this.collectionsService.getDownloadHistory(id, user.id);
     }
 
     @Patch(':id')

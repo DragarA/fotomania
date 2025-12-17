@@ -225,6 +225,22 @@ export const $CollectionResDto = {
             description: 'ID of the catalogue this collection belongs to',
             example: '550e8400-e29b-41d4-a716-446655440001'
         },
+        type: {
+            type: 'string',
+            description: 'Type of collection',
+            enum: ['proofing', 'delivery'],
+            example: 'proofing'
+        },
+        clientSessionId: {
+            type: 'string',
+            description: 'ID of the client session this delivery collection was created from',
+            example: '550e8400-e29b-41d4-a716-446655440002'
+        },
+        deliverySlug: {
+            type: 'string',
+            description: 'Public delivery URL slug for delivery collections',
+            example: 'abc123xyz'
+        },
         createdAt: {
             format: 'date-time',
             type: 'string',
@@ -241,9 +257,14 @@ export const $CollectionResDto = {
             type: 'number',
             description: 'Number of photos in the collection',
             example: 42
+        },
+        clientEmail: {
+            type: 'string',
+            description: 'Email of the client for delivery collections',
+            example: 'client@example.com'
         }
     },
-    required: ['id', 'name', 'catalogueId', 'createdAt', 'updatedAt', 'photoCount']
+    required: ['id', 'name', 'catalogueId', 'type', 'createdAt', 'updatedAt', 'photoCount']
 } as const;
 
 export const $UpdateCollectionDtoClass = {
@@ -334,6 +355,30 @@ export const $ClientSessionFavouritesResDto = {
         }
     },
     required: ['sessionId', 'email', 'createdAt', 'photos']
+} as const;
+
+export const $VerifyPasswordReqDtoClass = {
+    type: 'object',
+    properties: {
+        password: {
+            type: 'string',
+            description: 'Password to access the protected catalogue',
+            example: 'secret123'
+        }
+    },
+    required: ['password']
+} as const;
+
+export const $VerifyPasswordResDto = {
+    type: 'object',
+    properties: {
+        accessToken: {
+            type: 'string',
+            description: 'Access token for accessing protected catalogue',
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+        }
+    },
+    required: ['accessToken']
 } as const;
 
 export const $CollectionPublicResDto = {
@@ -497,4 +542,41 @@ export const $AddFavouritesResDto = {
         }
     },
     required: ['success', 'clientSessionEmail']
+} as const;
+
+export const $DeliveryPublicResDto = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: 'Delivery collection ID',
+            example: '550e8400-e29b-41d4-a716-446655440000'
+        },
+        name: {
+            type: 'string',
+            description: 'Delivery collection name',
+            example: 'Delivery - client@example.com'
+        },
+        clientEmail: {
+            type: 'object',
+            description: 'Client email address',
+            example: 'client@example.com'
+        },
+        catalogueTitle: {
+            type: 'string',
+            description: 'Parent catalogue title',
+            example: 'Wedding Photos 2024'
+        },
+        deliverySlug: {
+            type: 'string',
+            description: 'Delivery slug for URL',
+            example: 'abc123-def456'
+        },
+        photoCount: {
+            type: 'number',
+            description: 'Number of photos in the delivery collection',
+            example: 42
+        }
+    },
+    required: ['id', 'name', 'catalogueTitle', 'deliverySlug', 'photoCount']
 } as const;

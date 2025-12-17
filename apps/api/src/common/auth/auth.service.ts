@@ -169,7 +169,7 @@ export class AuthService {
                     emailVerified: foundUser.emailVerified,
                 },
             };
-        } catch (error) {
+        } catch {
             throw new Error('Invalid refresh token');
         }
     }

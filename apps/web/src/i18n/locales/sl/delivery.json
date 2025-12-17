@@ -1,0 +1,18 @@
+{
+  "loading": "Nalagam...",
+  "incorrectPassword": "Napačno geslo",
+  "notFound": "Dostava ni najdena",
+  "notFoundDescription": "Ta povezava do dostave je morda potekla ali ne obstaja.",
+  "deliveryLabel": "Dostava fotografij",
+  "preparedFor": "Pripravljeno za",
+  "noRecipient": "Brez prejemnika",
+  "photosIncluded": "Vključene fotografije",
+  "photoCount": "{{count}} fotografija",
+  "photoCount_other": "{{count}} fotografij",
+  "downloading": "Pripravljam prenos...",
+  "downloadAll": "Prenesi vse fotografije",
+  "noPhotosYet": "Tej dostavi še niso bile dodane nobene fotografije.",
+  "preview": "Predogled",
+  "footer": "Poganja Fotomania"
+}
+

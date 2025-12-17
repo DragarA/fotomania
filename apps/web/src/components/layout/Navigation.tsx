@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { LogOut, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { LanguageSwitcher } from '../ui/LanguageSwitcher';
 
 export function Navigation() {
     const { t } = useTranslation('common');
+    const navigate = useNavigate();
     const { user, isLoading } = useAuth();
     const logoutMutation = useLogout();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,6 +18,7 @@ export function Navigation() {
     const handleLogout = () => {
         logoutMutation.mutate();
         setMobileMenuOpen(false);
+        navigate({ to: '/' });
     };
 
     const closeMobileMenu = () => {

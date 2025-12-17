@@ -4,9 +4,9 @@ import {
     ForbiddenException,
     Inject,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { eq, and, count, gt } from 'drizzle-orm';
 import { v4 as uuid } from 'uuid';
-import * as bcrypt from 'bcrypt';
 
 import { CollectionsService } from '../collections/collections.service';
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
@@ -18,8 +18,8 @@ import { photo } from '../common/db/schema/photos.schema';
 
 import { ClientFavouritesResDto } from './dto/client-favourites-res.dto';
 import { CreateCatalogueDto } from './dto/create-catalogue.dto';
-import { UpdateCatalogueDto } from './dto/update-catalogue.dto';
 import { UpdateCatalogueStatusDto } from './dto/update-catalogue-status.dto';
+import { UpdateCatalogueDto } from './dto/update-catalogue.dto';
 
 @Injectable()
 export class CataloguesService {
@@ -95,7 +95,7 @@ export class CataloguesService {
             .from(collection)
             .innerJoin(photo, eq(collection.id, photo.collectionId))
             .where(
-                and(eq(collection.catalogueId, catalogueResult.catalogue.id))
+                and(eq(collection.catalogueId, catalogueResult.catalogue.id), eq(collection.type, 'proofing'))
             )
             .having(gt(count(photo.id), 0))
             .groupBy(collection.id);

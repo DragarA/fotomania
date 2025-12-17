@@ -5,12 +5,14 @@ import { initReactI18next } from 'react-i18next';
 // Import translation files
 import enAuth from './locales/en/auth.json';
 import enCommon from './locales/en/common.json';
+import enDelivery from './locales/en/delivery.json';
 import enErrors from './locales/en/errors.json';
 import enGallery from './locales/en/gallery.json';
 import enPublic from './locales/en/public.json';
 import enValidation from './locales/en/validation.json';
 import slAuth from './locales/sl/auth.json';
 import slCommon from './locales/sl/common.json';
+import slDelivery from './locales/sl/delivery.json';
 import slErrors from './locales/sl/errors.json';
 import slGallery from './locales/sl/gallery.json';
 import slPublic from './locales/sl/public.json';
@@ -23,6 +25,7 @@ const resources = {
         auth: enAuth,
         gallery: enGallery,
         public: enPublic,
+        delivery: enDelivery,
         validation: enValidation,
         errors: enErrors,
     },
@@ -31,6 +34,7 @@ const resources = {
         auth: slAuth,
         gallery: slGallery,
         public: slPublic,
+        delivery: slDelivery, // Fallback to English for now
         validation: slValidation,
         errors: slErrors,
     },

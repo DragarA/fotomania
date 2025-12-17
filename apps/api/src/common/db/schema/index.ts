@@ -4,3 +4,4 @@ export * from './collections.schema';
 export * from './photos.schema';
 export * from './client-session.schema';
 export * from './client-favourite.schema';
+export * from './delivery-download.schema';

@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerRefreshData, AuthControllerRefreshResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerUpdateStatusData, CataloguesControllerUpdateStatusResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CataloguesControllerGetCatalogueFavouritesData, CataloguesControllerGetCatalogueFavouritesResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, ClientSessionsControllerGetCatalogueFavouritesData, ClientSessionsControllerGetCatalogueFavouritesResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse, PublicControllerAddFavouritesData, PublicControllerAddFavouritesResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerRefreshData, AuthControllerRefreshResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerUpdateStatusData, CataloguesControllerUpdateStatusResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CataloguesControllerGetCatalogueFavouritesData, CataloguesControllerGetCatalogueFavouritesResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, CollectionsControllerCreateFromSessionData, CollectionsControllerCreateFromSessionResponse, CollectionsControllerGetDownloadHistoryData, CollectionsControllerGetDownloadHistoryResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, ClientSessionsControllerGetCatalogueFavouritesData, ClientSessionsControllerGetCatalogueFavouritesResponse, PublicControllerVerifyPasswordData, PublicControllerVerifyPasswordResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse, PublicControllerAddFavouritesData, PublicControllerAddFavouritesResponse, PublicControllerVerifyDeliveryPasswordData, PublicControllerVerifyDeliveryPasswordResponse, PublicControllerFindDeliveryBySlugData, PublicControllerFindDeliveryBySlugResponse, PublicControllerDownloadDeliveryData, PublicControllerDownloadDeliveryResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -476,6 +476,50 @@ export class CollectionsService {
         });
     }
     
+    /**
+     * Create a delivery collection from a client session
+     * @param data The data for the request.
+     * @param data.sessionId Client session ID (favourites session)
+     * @returns CollectionResDto Delivery collection created successfully
+     * @throws ApiError
+     */
+    public static collectionsControllerCreateFromSession(data: CollectionsControllerCreateFromSessionData): CancelablePromise<CollectionsControllerCreateFromSessionResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/collections/from-session/{sessionId}',
+            path: {
+                sessionId: data.sessionId
+            },
+            errors: {
+                400: 'Delivery collection already exists',
+                403: 'Forbidden',
+                404: 'Session not found'
+            }
+        });
+    }
+    
+    /**
+     * Get download history for a delivery collection
+     * @param data The data for the request.
+     * @param data.id Collection ID
+     * @returns unknown Returns download history
+     * @throws ApiError
+     */
+    public static collectionsControllerGetDownloadHistory(data: CollectionsControllerGetDownloadHistoryData): CancelablePromise<CollectionsControllerGetDownloadHistoryResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/collections/{id}/downloads',
+            path: {
+                id: data.id
+            },
+            errors: {
+                400: 'Not a delivery collection',
+                403: 'Forbidden',
+                404: 'Collection not found'
+            }
+        });
+    }
+    
 }
 
 export class PhotosService {
@@ -597,6 +641,30 @@ export class ClientSessionsService {
 
 export class PublicService {
     /**
+     * Verify password for a protected catalogue
+     * @param data The data for the request.
+     * @param data.slug Public URL slug
+     * @param data.requestBody
+     * @returns VerifyPasswordResDto Password verified, returns access token
+     * @throws ApiError
+     */
+    public static publicControllerVerifyPassword(data: PublicControllerVerifyPasswordData): CancelablePromise<PublicControllerVerifyPasswordResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/public/catalogue/{slug}/verify',
+            path: {
+                slug: data.slug
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                401: 'Invalid password',
+                404: 'Catalogue not found'
+            }
+        });
+    }
+    
+    /**
      * Get public catalogue data by public URL slug
      * @param data The data for the request.
      * @param data.slug Public URL slug
@@ -611,6 +679,7 @@ export class PublicService {
                 slug: data.slug
             },
             errors: {
+                401: 'Password required or invalid token',
                 404: 'Catalogue not found'
             }
         });
@@ -633,6 +702,7 @@ export class PublicService {
                 collectionId: data.collectionId
             },
             errors: {
+                401: 'Password required or invalid token',
                 404: 'Collection not found'
             }
         });
@@ -657,7 +727,74 @@ export class PublicService {
             mediaType: 'application/json',
             errors: {
                 400: 'Invalid request payload',
+                401: 'Password required or invalid token',
                 404: 'Catalogue not found'
+            }
+        });
+    }
+    
+    /**
+     * Verify password for a protected delivery collection
+     * @param data The data for the request.
+     * @param data.deliverySlug Delivery URL slug
+     * @param data.requestBody
+     * @returns VerifyPasswordResDto Password verified, returns access token
+     * @throws ApiError
+     */
+    public static publicControllerVerifyDeliveryPassword(data: PublicControllerVerifyDeliveryPasswordData): CancelablePromise<PublicControllerVerifyDeliveryPasswordResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/public/delivery/{deliverySlug}/verify',
+            path: {
+                deliverySlug: data.deliverySlug
+            },
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                401: 'Invalid password',
+                404: 'Delivery not found'
+            }
+        });
+    }
+    
+    /**
+     * Get delivery collection data by slug
+     * @param data The data for the request.
+     * @param data.deliverySlug Delivery URL slug
+     * @returns DeliveryPublicResDto Returns the delivery collection info
+     * @throws ApiError
+     */
+    public static publicControllerFindDeliveryBySlug(data: PublicControllerFindDeliveryBySlugData): CancelablePromise<PublicControllerFindDeliveryBySlugResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/public/delivery/{deliverySlug}',
+            path: {
+                deliverySlug: data.deliverySlug
+            },
+            errors: {
+                401: 'Password required or invalid token',
+                404: 'Delivery not found'
+            }
+        });
+    }
+    
+    /**
+     * Download all photos as a zip file
+     * @param data The data for the request.
+     * @param data.deliverySlug Delivery URL slug
+     * @returns unknown Returns a zip file containing all photos
+     * @throws ApiError
+     */
+    public static publicControllerDownloadDelivery(data: PublicControllerDownloadDeliveryData): CancelablePromise<PublicControllerDownloadDeliveryResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/public/delivery/{deliverySlug}/download',
+            path: {
+                deliverySlug: data.deliverySlug
+            },
+            errors: {
+                401: 'Password required or invalid token',
+                404: 'Delivery not found'
             }
         });
     }

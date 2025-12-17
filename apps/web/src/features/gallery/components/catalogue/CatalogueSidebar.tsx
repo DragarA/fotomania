@@ -8,6 +8,7 @@ import {
     LockOpen,
     Lock,
     MoreVertical,
+    Package,
     Share,
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
@@ -335,45 +336,68 @@ export function CatalogueSidebar({
                             </div>
                         ) : collections && collections.length > 0 ? (
                             <div className="space-y-2">
-                                {collections.map((collection) => (
-                                    <div
-                                        key={collection.id}
-                                        className={`p-3.5 rounded border cursor-pointer transition-all duration-500 group ${
-                                            selectedCollectionId ===
-                                            collection.id
-                                                ? 'border-black/10 bg-white shadow-sm'
-                                                : 'border-transparent bg-stone-50 hover:border-black/10'
-                                        }`}
-                                        onClick={() =>
-                                            onSelectCollection(collection.id)
-                                        }
-                                    >
-                                        <div className="flex items-center justify-between gap-2">
-                                            <div className="min-w-0 flex-1">
-                                                <p className="truncate font-medium text-stone-900">
-                                                    {collection.name}
-                                                </p>
-                                                <p className="text-sm text-stone-500">
-                                                    {collection.photoCount}{' '}
-                                                    {t('sidebar.photos')}
-                                                </p>
+                                {collections.map((collection) => {
+                                    const isDelivery =
+                                        collection.type === 'delivery';
+                                    return (
+                                        <div
+                                            key={collection.id}
+                                            className={`p-3.5 rounded border cursor-pointer transition-all duration-500 group ${
+                                                selectedCollectionId ===
+                                                collection.id
+                                                    ? 'border-black/10 bg-white shadow-sm'
+                                                    : isDelivery
+                                                      ? 'border-transparent bg-amber-50 hover:border-amber-200'
+                                                      : 'border-transparent bg-stone-50 hover:border-black/10'
+                                            }`}
+                                            onClick={() =>
+                                                onSelectCollection(collection.id)
+                                            }
+                                        >
+                                            <div className="flex items-center justify-between gap-2">
+                                                <div className="min-w-0 flex-1">
+                                                    <div className="flex items-center gap-2">
+                                                        {isDelivery && (
+                                                            <Package
+                                                                className="h-4 w-4 shrink-0 text-amber-600"
+                                                                strokeWidth={1.5}
+                                                            />
+                                                        )}
+                                                        <p className="truncate font-medium text-stone-900">
+                                                            {isDelivery ? collection.name.replace('Delivery', t('collection.delivery_collection_name')) : collection.name}
+                                                        </p>
+                                                    </div>
+                                                    <p className="text-sm text-stone-500">
+                                                        {collection.photoCount}{' '}
+                                                        {t('sidebar.photos')}
+                                                        {isDelivery &&
+                                                            collection.clientEmail && (
+                                                                <span className="ml-1">
+                                                                    •{' '}
+                                                                    {String(
+                                                                        collection.clientEmail
+                                                                    )}
+                                                                </span>
+                                                            )}
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onCollectionContextMenu(
+                                                            e,
+                                                            collection
+                                                        );
+                                                    }}
+                                                    className="shrink-0 p-1 text-stone-400 hover:text-stone-700 cursor-pointer"
+                                                    title={t('sidebar.moreOptions')}
+                                                >
+                                                    <MoreVertical className="w-5 h-5" />
+                                                </button>
                                             </div>
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    onCollectionContextMenu(
-                                                        e,
-                                                        collection
-                                                    );
-                                                }}
-                                                className="shrink-0 p-1 text-stone-400 hover:text-stone-700 cursor-pointer"
-                                                title={t('sidebar.moreOptions')}
-                                            >
-                                                <MoreVertical className="w-5 h-5" />
-                                            </button>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         ) : (
                             <div className="text-center py-8 space-y-4">
@@ -406,6 +430,7 @@ export function CatalogueSidebar({
                 catalogueId={catalogueId}
                 isOpen={isModalOpen}
                 onClose={handleCloseModal}
+                onDeliveryCreated={() => setActiveTab('collections')}
             />
 
             {/* Context Menu */}

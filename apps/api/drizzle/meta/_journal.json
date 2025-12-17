@@ -50,6 +50,13 @@
       "when": 1765781232567,
       "tag": "0006_plain_ego",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1765907867044,
+      "tag": "0007_crazy_princess_powerful",
+      "breakpoints": true
     }
   ]
 }

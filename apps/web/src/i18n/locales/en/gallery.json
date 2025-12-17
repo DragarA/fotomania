@@ -42,7 +42,8 @@
     "saving": "Saving...",
     "no_collections": "No collections yet",
     "create_first": "Create your first collection to get started",
-    "select_to_view": "Select a collection to view photos"
+    "select_to_view": "Select a collection to view photos",
+    "delivery_collection_name": "Delivery"
   },
   "catalogueForm": {
     "createTitle": "Create Catalogue",
@@ -131,7 +132,8 @@
   },
   "collectionContextMenu": {
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "shareDelivery": "Copy Delivery Link"
   },
   "favouritesView": {
     "noFavouritesYet": "No favorites yet",
@@ -152,7 +154,9 @@
     "locale": "en-US",
     "noPhotosFound": "No photos found",
     "noFavouritedPhotos": "This session doesn't have any favorited photos.",
-    "close": "Close"
+    "close": "Close",
+    "createDeliveryCollection": "Create Delivery Collection",
+    "creatingDelivery": "Creating..."
   },
   "toast": {
     "uploadFailed": "Upload failed",
@@ -164,6 +168,8 @@
     "collectionUpdateFailed": "Failed to update collection",
     "collectionDeletedSuccess": "Collection deleted successfully!",
     "collectionDeleteFailed": "Failed to delete collection",
+    "deliveryCollectionCreatedSuccess": "Delivery collection created successfully!",
+    "deliveryCollectionCreateFailed": "Failed to create delivery collection",
     "catalogueCoverUpdated": "Catalogue cover updated",
     "catalogueCoverUpdateFailed": "Failed to update cover"
   },

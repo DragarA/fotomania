@@ -3,6 +3,7 @@ import 'i18next';
 // Import English translations as the source of truth for types
 import auth from './locales/en/auth.json';
 import common from './locales/en/common.json';
+import delivery from './locales/en/delivery.json';
 import errors from './locales/en/errors.json';
 import gallery from './locales/en/gallery.json';
 import publicNs from './locales/en/public.json';
@@ -14,6 +15,7 @@ export type TranslationResources = {
     auth: typeof auth;
     gallery: typeof gallery;
     public: typeof publicNs;
+    delivery: typeof delivery;
     validation: typeof validation;
     errors: typeof errors;
 };

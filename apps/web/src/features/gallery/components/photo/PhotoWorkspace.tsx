@@ -68,7 +68,7 @@ export function PhotoWorkspace({
                                 {t('sidebar.collectionsTab')}
                             </p>
                             <h2 className="text-3xl font-light tracking-[0.02em] text-stone-800">
-                                {selectedCollection.name}
+                                {selectedCollection.type === 'delivery' ? selectedCollection.name.replace(t('collection.delivery_collection_name'), 'Delivery') : selectedCollection.name}
                             </h2>
                         </div>
                         <div className="text-xs uppercase tracking-[0.4em] text-stone-400">

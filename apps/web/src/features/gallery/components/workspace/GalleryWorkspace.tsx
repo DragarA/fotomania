@@ -212,6 +212,20 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                             collectionContextMenu.collection.name
                         )
                     }
+                    isDelivery={
+                        collectionContextMenu.collection.type === 'delivery'
+                    }
+                    onShareDelivery={
+                        collectionContextMenu.collection.type === 'delivery' &&
+                        collectionContextMenu.collection.deliverySlug
+                            ? () => {
+                                  const deliveryUrl = `${window.location.origin}/d/${collectionContextMenu.collection.deliverySlug}`;
+                                  navigator.clipboard.writeText(deliveryUrl);
+                                  toast.success(t('sidebar.linkCopied'));
+                                  closeContextMenu();
+                              }
+                            : undefined
+                    }
                 />
             )}
 

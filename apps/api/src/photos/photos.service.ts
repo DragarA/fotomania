@@ -292,14 +292,24 @@ export class PhotosService {
         const originalSharp = sharp(file.buffer).rotate();
         const originalMetadata = await originalSharp.metadata();
 
-        await originalSharp
-            .resize({
-                width: 1000,
-                withoutEnlargement: true,
-            })
-            .jpeg({ quality: 80 })
-            .toFile(filePath);
+        // Check if this is a delivery collection - skip compression for delivery
+        const isDeliveryCollection = existingCollection.collection.type === 'delivery';
 
+        if (isDeliveryCollection) {
+            // For delivery collections, save original file without compression
+            await originalSharp.toFile(filePath);
+        } else {
+            // For proofing collections, compress the image
+            await originalSharp
+                .resize({
+                    width: 1000,
+                    withoutEnlargement: true,
+                })
+                .jpeg({ quality: 80 })
+                .toFile(filePath);
+        }
+
+        // Thumbnail is always generated the same way
         const thumbSharp = sharp(file.buffer).rotate();
         await thumbSharp
             .resize({

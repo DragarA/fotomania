@@ -6,4 +6,7 @@ export interface Collection {
     id: string;
     name: string;
     photoCount?: number;
+    type?: 'proofing' | 'delivery';
+    deliverySlug?: string | null;
+    clientEmail?: string | null;
 }

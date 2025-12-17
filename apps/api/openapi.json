@@ -819,6 +819,91 @@
         ]
       }
     },
+    "/collections/from-session/{sessionId}": {
+      "post": {
+        "operationId": "CollectionsController_createFromSession",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "required": true,
+            "in": "path",
+            "description": "Client session ID (favourites session)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Delivery collection created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Delivery collection already exists"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Create a delivery collection from a client session",
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/collections/{id}/downloads": {
+      "get": {
+        "operationId": "CollectionsController_getDownloadHistory",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns download history"
+          },
+          "400": {
+            "description": "Not a delivery collection"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get download history for a delivery collection",
+        "tags": [
+          "collections"
+        ]
+      }
+    },
     "/photos/upload/{collectionId}": {
       "post": {
         "operationId": "PhotosController_uploadFile",
@@ -1256,6 +1341,133 @@
           "public"
         ]
       }
+    },
+    "/public/delivery/{deliverySlug}/verify": {
+      "post": {
+        "operationId": "PublicController_verifyDeliveryPassword",
+        "parameters": [
+          {
+            "name": "deliverySlug",
+            "required": true,
+            "in": "path",
+            "description": "Delivery URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyPasswordReqDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password verified, returns access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyPasswordResDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid password"
+          },
+          "404": {
+            "description": "Delivery not found"
+          }
+        },
+        "summary": "Verify password for a protected delivery collection",
+        "tags": [
+          "public"
+        ]
+      }
+    },
+    "/public/delivery/{deliverySlug}": {
+      "get": {
+        "operationId": "PublicController_findDeliveryBySlug",
+        "parameters": [
+          {
+            "name": "deliverySlug",
+            "required": true,
+            "in": "path",
+            "description": "Delivery URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the delivery collection info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryPublicResDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password required or invalid token"
+          },
+          "404": {
+            "description": "Delivery not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get delivery collection data by slug",
+        "tags": [
+          "public"
+        ]
+      }
+    },
+    "/public/delivery/{deliverySlug}/download": {
+      "get": {
+        "operationId": "PublicController_downloadDelivery",
+        "parameters": [
+          {
+            "name": "deliverySlug",
+            "required": true,
+            "in": "path",
+            "description": "Delivery URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a zip file containing all photos"
+          },
+          "401": {
+            "description": "Password required or invalid token"
+          },
+          "404": {
+            "description": "Delivery not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Download all photos as a zip file",
+        "tags": [
+          "public"
+        ]
+      }
     }
   },
   "info": {
@@ -1530,6 +1742,25 @@
             "description": "ID of the catalogue this collection belongs to",
             "example": "550e8400-e29b-41d4-a716-446655440001"
           },
+          "type": {
+            "type": "string",
+            "description": "Type of collection",
+            "enum": [
+              "proofing",
+              "delivery"
+            ],
+            "example": "proofing"
+          },
+          "clientSessionId": {
+            "type": "string",
+            "description": "ID of the client session this delivery collection was created from",
+            "example": "550e8400-e29b-41d4-a716-446655440002"
+          },
+          "deliverySlug": {
+            "type": "string",
+            "description": "Public delivery URL slug for delivery collections",
+            "example": "abc123xyz"
+          },
           "createdAt": {
             "format": "date-time",
             "type": "string",
@@ -1546,12 +1777,18 @@
             "type": "number",
             "description": "Number of photos in the collection",
             "example": 42
+          },
+          "clientEmail": {
+            "type": "string",
+            "description": "Email of the client for delivery collections",
+            "example": "client@example.com"
           }
         },
         "required": [
           "id",
           "name",
           "catalogueId",
+          "type",
           "createdAt",
           "updatedAt",
           "photoCount"
@@ -1863,6 +2100,48 @@
         "required": [
           "success",
           "clientSessionEmail"
+        ]
+      },
+      "DeliveryPublicResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Delivery collection ID",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Delivery collection name",
+            "example": "Delivery - client@example.com"
+          },
+          "clientEmail": {
+            "type": "object",
+            "description": "Client email address",
+            "example": "client@example.com"
+          },
+          "catalogueTitle": {
+            "type": "string",
+            "description": "Parent catalogue title",
+            "example": "Wedding Photos 2024"
+          },
+          "deliverySlug": {
+            "type": "string",
+            "description": "Delivery slug for URL",
+            "example": "abc123-def456"
+          },
+          "photoCount": {
+            "type": "number",
+            "description": "Number of photos in the delivery collection",
+            "example": 42
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "catalogueTitle",
+          "deliverySlug",
+          "photoCount"
         ]
       }
     }

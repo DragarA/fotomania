@@ -30,12 +30,12 @@ import {
     CreateCatalogueDtoClass,
     createCatalogueSchema,
 } from './dto/create-catalogue.dto';
+import { UpdateCatalogueStatusDto, UpdateCatalogueStatusDtoClass, updateCatalogueStatusSchema } from './dto/update-catalogue-status.dto';
 import {
     UpdateCatalogueDto,
     UpdateCatalogueDtoClass,
     updateCatalogueSchema,
 } from './dto/update-catalogue.dto';
-import { UpdateCatalogueStatusDto, UpdateCatalogueStatusDtoClass, updateCatalogueStatusSchema } from './dto/update-catalogue-status.dto';
 
 @ApiTags('catalogues')
 @Controller('catalogues')

@@ -7,7 +7,9 @@ import {
     useEffect,
     ReactNode,
 } from 'react';
+
 import '@/lib/api-client';
+import { queryClient } from '@/queryClient';
 
 // Types
 interface User {
@@ -79,6 +81,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setUser(null);
             setAccessToken(null);
             setRefreshToken(null);
+            // Clear all cached query data to prevent data leakage between users
+            queryClient.clear();
         };
 
         window.addEventListener('auth:logout', handleLogoutEvent);
@@ -115,6 +119,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
         localStorage.removeItem('tokenExpiry');
+
+        // Clear all cached query data to prevent data leakage between users
+        queryClient.clear();
     };
 
     const refreshAccessToken = async (): Promise<boolean> => {

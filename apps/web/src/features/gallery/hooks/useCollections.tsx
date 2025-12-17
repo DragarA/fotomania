@@ -125,3 +125,29 @@ export function useDeleteCollectionMutation() {
         },
     });
 }
+
+export function useCreateDeliveryCollectionMutation() {
+    const { t } = useTranslation('gallery');
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ sessionId }: { sessionId: string }) =>
+            CollectionsService.collectionsControllerCreateFromSession({
+                sessionId,
+            }),
+        onSuccess: (collection) => {
+            queryClient.invalidateQueries({
+                queryKey: ['collections', collection.catalogueId],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ['catalogues'],
+            });
+            toast.success(t('toast.deliveryCollectionCreatedSuccess'));
+        },
+        onError: (error: any) => {
+            toast.error(
+                error.message || t('toast.deliveryCollectionCreateFailed')
+            );
+        },
+    });
+}

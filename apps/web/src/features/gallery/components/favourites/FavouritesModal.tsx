@@ -1,4 +1,4 @@
-import { Calendar, Heart, Mail, X } from 'lucide-react';
+import { Calendar, Heart, Mail, Package, X } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -6,13 +6,17 @@ import { Button } from '@/components/ui/button';
 import { API_BASE_URL } from '@/lib/api-client';
 
 import type { ClientFavouriteSession } from '../../hooks';
-import { useSessionFavouritesQuery } from '../../hooks';
+import {
+    useCreateDeliveryCollectionMutation,
+    useSessionFavouritesQuery,
+} from '../../hooks';
 
 interface FavouritesModalProps {
     session: ClientFavouriteSession | null;
     catalogueId: string;
     isOpen: boolean;
     onClose: () => void;
+    onDeliveryCreated?: () => void;
 }
 
 export function FavouritesModal({
@@ -20,6 +24,7 @@ export function FavouritesModal({
     catalogueId,
     isOpen,
     onClose,
+    onDeliveryCreated,
 }: FavouritesModalProps) {
     const { t } = useTranslation('gallery');
     const { data: sessionData, isLoading } = useSessionFavouritesQuery(
@@ -27,6 +32,22 @@ export function FavouritesModal({
         session?.sessionId || '',
         isOpen && Boolean(session)
     );
+
+    const createDeliveryMutation = useCreateDeliveryCollectionMutation();
+
+    const handleCreateDelivery = () => {
+        if (!session) return;
+
+        createDeliveryMutation.mutate(
+            { sessionId: session.sessionId },
+            {
+                onSuccess: () => {
+                    onClose();
+                    onDeliveryCreated?.();
+                },
+            }
+        );
+    };
 
     if (!isOpen || !session) return null;
 
@@ -163,9 +184,21 @@ export function FavouritesModal({
                 </div>
 
                 {/* Footer */}
-                <div className="px-6 pb-6">
+                <div className="space-y-3 px-6 pb-6">
+                    <Button
+                        onClick={handleCreateDelivery}
+                        className="w-full"
+                        size="lg"
+                        disabled={createDeliveryMutation.isPending}
+                    >
+                        <Package className="mr-2 h-4 w-4" />
+                        {createDeliveryMutation.isPending
+                            ? t('favouritesModal.creatingDelivery')
+                            : t('favouritesModal.createDeliveryCollection')}
+                    </Button>
                     <Button
                         onClick={onClose}
+                        variant="outline"
                         className="w-full"
                         size="lg"
                     >

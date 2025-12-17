@@ -167,6 +167,18 @@ export type CollectionResDto = {
      */
     catalogueId: string;
     /**
+     * Type of collection
+     */
+    type: 'proofing' | 'delivery';
+    /**
+     * ID of the client session this delivery collection was created from
+     */
+    clientSessionId?: string;
+    /**
+     * Public delivery URL slug for delivery collections
+     */
+    deliverySlug?: string;
+    /**
      * Timestamp when the collection was created
      */
     createdAt: string;
@@ -178,7 +190,16 @@ export type CollectionResDto = {
      * Number of photos in the collection
      */
     photoCount: number;
+    /**
+     * Email of the client for delivery collections
+     */
+    clientEmail?: string;
 };
+
+/**
+ * Type of collection
+ */
+export type type = 'proofing' | 'delivery';
 
 export type UpdateCollectionDtoClass = {
     /**
@@ -243,6 +264,20 @@ export type ClientSessionFavouritesResDto = {
      * Array of favorited photos
      */
     photos: Array<PhotoResDto>;
+};
+
+export type VerifyPasswordReqDtoClass = {
+    /**
+     * Password to access the protected catalogue
+     */
+    password: string;
+};
+
+export type VerifyPasswordResDto = {
+    /**
+     * Access token for accessing protected catalogue
+     */
+    accessToken: string;
 };
 
 export type CollectionPublicResDto = {
@@ -366,6 +401,35 @@ export type AddFavouritesResDto = {
      * Client session email associated with the favourites
      */
     clientSessionEmail: string;
+};
+
+export type DeliveryPublicResDto = {
+    /**
+     * Delivery collection ID
+     */
+    id: string;
+    /**
+     * Delivery collection name
+     */
+    name: string;
+    /**
+     * Client email address
+     */
+    clientEmail?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Parent catalogue title
+     */
+    catalogueTitle: string;
+    /**
+     * Delivery slug for URL
+     */
+    deliverySlug: string;
+    /**
+     * Number of photos in the delivery collection
+     */
+    photoCount: number;
 };
 
 export type AppControllerGetHelloResponse = unknown;
@@ -529,6 +593,24 @@ export type CollectionsControllerRemoveData = {
 
 export type CollectionsControllerRemoveResponse = unknown;
 
+export type CollectionsControllerCreateFromSessionData = {
+    /**
+     * Client session ID (favourites session)
+     */
+    sessionId: string;
+};
+
+export type CollectionsControllerCreateFromSessionResponse = CollectionResDto;
+
+export type CollectionsControllerGetDownloadHistoryData = {
+    /**
+     * Collection ID
+     */
+    id: string;
+};
+
+export type CollectionsControllerGetDownloadHistoryResponse = unknown;
+
 export type PhotosControllerUploadFileData = {
     /**
      * Collection ID
@@ -578,6 +660,16 @@ export type ClientSessionsControllerGetCatalogueFavouritesData = {
 
 export type ClientSessionsControllerGetCatalogueFavouritesResponse = ClientSessionFavouritesResDto;
 
+export type PublicControllerVerifyPasswordData = {
+    requestBody: VerifyPasswordReqDtoClass;
+    /**
+     * Public URL slug
+     */
+    slug: string;
+};
+
+export type PublicControllerVerifyPasswordResponse = VerifyPasswordResDto;
+
 export type PublicControllerFindBySlugData = {
     /**
      * Public URL slug
@@ -609,6 +701,34 @@ export type PublicControllerAddFavouritesData = {
 };
 
 export type PublicControllerAddFavouritesResponse = AddFavouritesResDto;
+
+export type PublicControllerVerifyDeliveryPasswordData = {
+    /**
+     * Delivery URL slug
+     */
+    deliverySlug: string;
+    requestBody: VerifyPasswordReqDtoClass;
+};
+
+export type PublicControllerVerifyDeliveryPasswordResponse = VerifyPasswordResDto;
+
+export type PublicControllerFindDeliveryBySlugData = {
+    /**
+     * Delivery URL slug
+     */
+    deliverySlug: string;
+};
+
+export type PublicControllerFindDeliveryBySlugResponse = DeliveryPublicResDto;
+
+export type PublicControllerDownloadDeliveryData = {
+    /**
+     * Delivery URL slug
+     */
+    deliverySlug: string;
+};
+
+export type PublicControllerDownloadDeliveryResponse = unknown;
 
 export type $OpenApiTs = {
     '/': {
@@ -963,6 +1083,52 @@ export type $OpenApiTs = {
             };
         };
     };
+    '/collections/from-session/{sessionId}': {
+        post: {
+            req: CollectionsControllerCreateFromSessionData;
+            res: {
+                /**
+                 * Delivery collection created successfully
+                 */
+                201: CollectionResDto;
+                /**
+                 * Delivery collection already exists
+                 */
+                400: unknown;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Session not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/collections/{id}/downloads': {
+        get: {
+            req: CollectionsControllerGetDownloadHistoryData;
+            res: {
+                /**
+                 * Returns download history
+                 */
+                200: unknown;
+                /**
+                 * Not a delivery collection
+                 */
+                400: unknown;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Collection not found
+                 */
+                404: unknown;
+            };
+        };
+    };
     '/photos/upload/{collectionId}': {
         post: {
             req: PhotosControllerUploadFileData;
@@ -1060,6 +1226,25 @@ export type $OpenApiTs = {
             };
         };
     };
+    '/public/catalogue/{slug}/verify': {
+        post: {
+            req: PublicControllerVerifyPasswordData;
+            res: {
+                /**
+                 * Password verified, returns access token
+                 */
+                200: VerifyPasswordResDto;
+                /**
+                 * Invalid password
+                 */
+                401: unknown;
+                /**
+                 * Catalogue not found
+                 */
+                404: unknown;
+            };
+        };
+    };
     '/public/catalogue/{slug}': {
         get: {
             req: PublicControllerFindBySlugData;
@@ -1068,6 +1253,10 @@ export type $OpenApiTs = {
                  * Returns the catalogue
                  */
                 200: CataloguePublicResDto;
+                /**
+                 * Password required or invalid token
+                 */
+                401: unknown;
                 /**
                  * Catalogue not found
                  */
@@ -1083,6 +1272,10 @@ export type $OpenApiTs = {
                  * Returns the photos
                  */
                 200: Array<CollectionPhotoPublicResDto>;
+                /**
+                 * Password required or invalid token
+                 */
+                401: unknown;
                 /**
                  * Collection not found
                  */
@@ -1103,7 +1296,68 @@ export type $OpenApiTs = {
                  */
                 400: unknown;
                 /**
+                 * Password required or invalid token
+                 */
+                401: unknown;
+                /**
                  * Catalogue not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/public/delivery/{deliverySlug}/verify': {
+        post: {
+            req: PublicControllerVerifyDeliveryPasswordData;
+            res: {
+                /**
+                 * Password verified, returns access token
+                 */
+                200: VerifyPasswordResDto;
+                /**
+                 * Invalid password
+                 */
+                401: unknown;
+                /**
+                 * Delivery not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/public/delivery/{deliverySlug}': {
+        get: {
+            req: PublicControllerFindDeliveryBySlugData;
+            res: {
+                /**
+                 * Returns the delivery collection info
+                 */
+                200: DeliveryPublicResDto;
+                /**
+                 * Password required or invalid token
+                 */
+                401: unknown;
+                /**
+                 * Delivery not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/public/delivery/{deliverySlug}/download': {
+        get: {
+            req: PublicControllerDownloadDeliveryData;
+            res: {
+                /**
+                 * Returns a zip file containing all photos
+                 */
+                200: unknown;
+                /**
+                 * Password required or invalid token
+                 */
+                401: unknown;
+                /**
+                 * Delivery not found
                  */
                 404: unknown;
             };

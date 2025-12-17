@@ -1,0 +1,18 @@
+{
+  "loading": "Loading delivery...",
+  "incorrectPassword": "Incorrect password",
+  "notFound": "Delivery Not Found",
+  "notFoundDescription": "This delivery link may have expired or doesn't exist.",
+  "deliveryLabel": "Photo Delivery",
+  "preparedFor": "Prepared For",
+  "noRecipient": "No recipient",
+  "photosIncluded": "Photos Included",
+  "photoCount": "{{count}} photo",
+  "photoCount_other": "{{count}} photos",
+  "downloading": "Preparing download...",
+  "downloadAll": "Download All Photos",
+  "noPhotosYet": "No photos have been added to this delivery yet.",
+  "preview": "Preview",
+  "footer": "Powered by Fotomania"
+}
+

@@ -62,7 +62,7 @@ export function PublicCatalogueHero({
                     <span className="hidden text-[0.65rem] uppercase tracking-[0.5em] sm:block">
                         {t('hero.viewGallery')}
                     </span>
-                    <div className="flex h-12 w-12 animate-bounce items-center justify-center rounded-full border border-white/40 bg-white/10 group-hover:border-white">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/40 bg-white/10 group-hover:border-white">
                         <ChevronDown className="h-6 w-6" strokeWidth={1} />
                     </div>
                 </button>

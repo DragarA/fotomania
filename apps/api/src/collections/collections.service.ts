@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import { promises as fsPromises } from 'fs';
 import * as path from 'path';
 
@@ -7,13 +6,16 @@ import {
     Logger,
     NotFoundException,
     ForbiddenException,
+    BadRequestException,
 } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
 import { eq, and, sql } from 'drizzle-orm';
 
 import { DRIZZLE, type DbInstance, type DrizzleDB } from '../common/db/drizzle';
 import { catalogue } from '../common/db/schema/catalogues.schema';
+import { clientSession } from '../common/db/schema/client-session.schema';
 import { collection } from '../common/db/schema/collections.schema';
+import { deliveryDownload } from '../common/db/schema/delivery-download.schema';
 import { photo } from '../common/db/schema/photos.schema';
 import { PhotosService } from '../photos/photos.service';
 
@@ -89,11 +91,16 @@ export class CollectionsService {
             .select({
                 collection,
                 photoCount: sql<number>`cast(count(${photo.id}) as int)`,
+                clientEmail: clientSession.email,
             })
             .from(collection)
             .leftJoin(photo, eq(collection.id, photo.collectionId))
+            .leftJoin(
+                clientSession,
+                eq(collection.clientSessionId, clientSession.id)
+            )
             .where(eq(collection.catalogueId, catalogueId))
-            .groupBy(collection.id);
+            .groupBy(collection.id, clientSession.email);
     }
 
     async findOne(id: string, ownerId: string) {
@@ -101,12 +108,17 @@ export class CollectionsService {
             .select({
                 collection,
                 photoCount: sql<number>`cast(count(${photo.id}) as int)`,
+                clientEmail: clientSession.email,
             })
             .from(collection)
             .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
             .leftJoin(photo, eq(collection.id, photo.collectionId))
+            .leftJoin(
+                clientSession,
+                eq(collection.clientSessionId, clientSession.id)
+            )
             .where(and(eq(collection.id, id), eq(catalogue.ownerId, ownerId)))
-            .groupBy(collection.id);
+            .groupBy(collection.id, clientSession.email);
 
         if (!result) {
             throw new NotFoundException(`Collection with ID ${id} not found`);
@@ -171,10 +183,7 @@ export class CollectionsService {
         return { message: 'Collection deleted successfully' };
     }
 
-    private async removeCollection(
-        id: string,
-        dbInstance: DbInstance
-    ) {
+    private async removeCollection(id: string, dbInstance: DbInstance) {
         // Delete collection directory with error handling
         const collectionPath = path.join(this.uploadRoot, 'collections', id);
         try {
@@ -191,8 +200,98 @@ export class CollectionsService {
             // Directory doesn't exist, no need to log
         }
 
+        // Delete delivery downloads for this collection
+        await dbInstance
+            .delete(deliveryDownload)
+            .where(eq(deliveryDownload.collectionId, id));
+
         await this.photosService.removeAllForCollection(id, dbInstance);
 
         await dbInstance.delete(collection).where(eq(collection.id, id));
+    }
+
+    /**
+     * Create a delivery collection from a client session (favourites)
+     */
+    async createDeliveryCollection(sessionId: string, ownerId: string) {
+        // 1. Verify the session exists and get the catalogue
+        const [session] = await this.db
+            .select({
+                session: clientSession,
+                catalogue,
+            })
+            .from(clientSession)
+            .innerJoin(catalogue, eq(clientSession.catalogueId, catalogue.id))
+            .where(eq(clientSession.id, sessionId));
+
+        if (!session) {
+            throw new NotFoundException(
+                `Client session with ID ${sessionId} not found`
+            );
+        }
+
+        // 2. Verify the user owns the catalogue
+        if (session.catalogue.ownerId !== ownerId) {
+            throw new ForbiddenException(
+                'You do not have permission to create delivery collections for this catalogue'
+            );
+        }
+
+        // 3. Check if a delivery collection already exists for this session
+        const [existingDelivery] = await this.db
+            .select()
+            .from(collection)
+            .where(eq(collection.clientSessionId, sessionId));
+
+        if (existingDelivery) {
+            throw new BadRequestException(
+                'A delivery collection already exists for this session'
+            );
+        }
+
+        // 4. Create the delivery collection
+        const id = crypto.randomUUID();
+        const now = new Date();
+        const deliverySlug = crypto.randomUUID();
+
+        const [newCollection] = await this.db
+            .insert(collection)
+            .values({
+                id,
+                name: `Delivery - ${session.session.email}`,
+                catalogueId: session.catalogue.id,
+                type: 'delivery',
+                clientSessionId: sessionId,
+                deliverySlug,
+                createdAt: now,
+                updatedAt: now,
+            })
+            .returning();
+
+        return {
+            collection: newCollection,
+            photoCount: 0,
+            clientEmail: session.session.email,
+        };
+    }
+
+    /**
+     * Get download history for a delivery collection
+     */
+    async getDownloadHistory(collectionId: string, ownerId: string) {
+        // Verify collection exists and user owns it
+        const existing = await this.findOne(collectionId, ownerId);
+
+        if (existing.collection.type !== 'delivery') {
+            throw new BadRequestException(
+                'Download history is only available for delivery collections'
+            );
+        }
+
+        return this.db
+            .select()
+            .from(deliveryDownload)
+            .where(eq(deliveryDownload.collectionId, collectionId))
+            .orderBy(deliveryDownload.downloadedAt);
     }
 }
