@@ -34,8 +34,8 @@
     "save": {
       "title": "Save Your Favorites",
       "description": "Enter your email to save {{count}} favorite {{photoText}}. The photographer will be able to see which photos you selected.",
-      "photo": "photo",
-      "photos": "photos",
+      "photo_one": "photo",
+      "photo_other": "photos",
       "emailLabel": "Email Address",
       "emailPlaceholder": "your.email@example.com",
       "cancel": "Cancel",
@@ -48,8 +48,8 @@
       "description": "Your selection has been saved and sent to the photographer.",
       "emailLabel": "Email",
       "photosSavedLabel": "Photos saved",
-      "photo": "photo",
-      "photos": "photos",
+      "photo_one": "photo",
+      "photo_other": "photos",
       "followUp": "The photographer will review your selected favorites. You may receive a follow-up email at {{email}} with further instructions.",
       "close": "Close"
     }

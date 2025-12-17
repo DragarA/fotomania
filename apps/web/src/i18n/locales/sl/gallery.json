@@ -13,7 +13,8 @@
         "quickActions": "Hitre akcije",
         "manageCatalogues": "Upravljaj kataloge",
         "newCatalogue": "Nov katalog",
-        "accountSettings": "Nastavitve računa"
+        "accountSettings": "Nastavitve računa",
+        "accountDetails": "Podrobnosti računa"
     },
     "catalogues": {
         "title": "Vaši katalogi",
@@ -22,7 +23,10 @@
         "loading": "Nalaganje katalogov...",
         "error": "Napaka pri nalaganju katalogov",
         "noDescription": "Brez opisa.",
-        "photos": "fotografij",
+        "photos_one": "fotografija",
+        "photos_two": "fotografiji",
+        "photos_few": "fotografije",
+        "photos_other": "fotografij",
         "empty": {
             "title": "Še nimate katalogov",
             "message": "Ustvarite svoj prvi katalog za deljenje fotografskih galerij s strankami."
@@ -73,7 +77,10 @@
         "favouritesTab": "Priljubljene",
         "collectionsTitle": "Zbirke",
         "add": "Dodaj",
-        "photos": "fotografij",
+        "photos_one": "fotografija",
+        "photos_two": "fotografiji",
+        "photos_few": "fotografije",
+        "photos_other": "fotografij",
         "noCollections": "Še nimate zbirk",
         "createFirstCollection": "Ustvari prvo zbirko",
         "backToCatalogues": "Nazaj na kataloge",
@@ -110,7 +117,9 @@
     },
     "uploadQueue": {
         "uploading": "Nalaganje {{current}} od {{total}} datotek...",
-        "uploaded": "{{count}} datoteka naložena",
+        "uploaded_one": "{{count}} datoteka naložena",
+        "uploaded_two": "{{count}} datoteki naloženi",
+        "uploaded_few": "{{count}} datoteke naložene",
         "uploaded_other": "{{count}} datotek naloženih",
         "remove": "Odstrani",
         "uploadComplete": "Nalaganje dokončano",
@@ -138,15 +147,19 @@
     "favouritesView": {
         "noFavouritesYet": "Še ni priljubljenih",
         "clientsWillAppear": "Ko stranke izberejo svoje priljubljene fotografije, se bodo prikazale tukaj.",
-        "photo": "fotografija",
-        "photos": "fotografij",
+        "photo_one": "fotografija",
+        "photo_two": "fotografiji",
+        "photo_few": "fotografije",
+        "photo_other": "fotografij",
         "locale": "sl-SI"
     },
     "favouritesModal": {
         "title": "Priljubljene stranke",
         "emailLabel": "E-pošta",
         "submittedLabel": "Oddano",
-        "favouritePhotos": "{{count}} priljubljena fotografija",
+        "favouritePhotos_one": "{{count}} priljubljena fotografija",
+        "favouritePhotos_two": "{{count}} priljubljeni fotografiji",
+        "favouritePhotos_few": "{{count}} priljubljene fotografije",
         "favouritePhotos_other": "{{count}} priljubljenih fotografij",
         "selected": "Izbrano {{count}} {{photoText}} dne",
         "photo": "fotografija",

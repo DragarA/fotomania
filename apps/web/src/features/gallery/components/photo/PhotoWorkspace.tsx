@@ -72,7 +72,7 @@ export function PhotoWorkspace({
                             </h2>
                         </div>
                         <div className="text-xs uppercase tracking-[0.4em] text-stone-400">
-                            {photos?.length || 0} {t('sidebar.photos')}
+                            {photos?.length || 0} {t('sidebar.photos', { count: photos?.length || 0 })}
                         </div>
                     </div>
                     <PhotoGrid

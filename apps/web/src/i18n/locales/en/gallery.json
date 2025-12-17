@@ -13,7 +13,8 @@
     "quickActions": "Quick Actions",
     "manageCatalogues": "Manage catalogues",
     "newCatalogue": "New catalogue",
-    "accountSettings": "Account Settings"
+    "accountSettings": "Account Settings",
+    "accountDetails": "Account Details"
   },
   "catalogues": {
     "title": "Your Catalogues",
@@ -22,7 +23,8 @@
     "loading": "Loading catalogues...",
     "error": "Failed to load catalogues",
     "noDescription": "No description provided.",
-    "photos": "photos",
+    "photos_one": "photo",
+    "photos_other": "photos",
     "empty": {
       "title": "No catalogues yet",
       "message": "Create your first catalogue to start sharing photo galleries with clients."
@@ -73,7 +75,8 @@
     "favouritesTab": "Favourites",
     "collectionsTitle": "Collections",
     "add": "Add",
-    "photos": "photos",
+    "photos_one": "photo",
+    "photos_other": "photos",
     "noCollections": "No collections yet",
     "createFirstCollection": "Create First Collection",
     "backToCatalogues": "Back to Catalogues",
@@ -110,7 +113,7 @@
   },
   "uploadQueue": {
     "uploading": "Uploading {{current}} of {{total}} files...",
-    "uploaded": "{{count}} file uploaded",
+    "uploaded_one": "{{count}} file uploaded",
     "uploaded_other": "{{count}} files uploaded",
     "remove": "Remove",
     "uploadComplete": "Upload complete",
@@ -138,15 +141,15 @@
   "favouritesView": {
     "noFavouritesYet": "No favorites yet",
     "clientsWillAppear": "When clients select their favorite photos, they'll appear here.",
-    "photo": "photo",
-    "photos": "photos",
+    "photo_one": "photo",
+    "photo_other": "photos",
     "locale": "en-US"
   },
   "favouritesModal": {
     "title": "Client Favourites",
     "emailLabel": "Email",
     "submittedLabel": "Submitted",
-    "favouritePhotos": "{{count}} Favourite Photo",
+    "favouritePhotos_one": "{{count}} Favourite Photo",
     "favouritePhotos_other": "{{count}} Favourite Photos",
     "selected": "Selected {{count}} {{photoText}} on",
     "photo": "photo",

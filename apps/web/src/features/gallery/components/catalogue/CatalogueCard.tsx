@@ -53,7 +53,7 @@ export function CatalogueCard({ catalogue }: CatalogueCardProps) {
                         className="mr-2 h-4 w-4 text-stone-400"
                         strokeWidth={1.5}
                     />
-                    {catalogue.photoCount || 0} {t('catalogues.photos')}
+                    {catalogue.photoCount || 0} {t('catalogues.photos', { count: catalogue.photoCount || 0 })}
                 </div>
             </div>
         </Link>

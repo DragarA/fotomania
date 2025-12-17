@@ -7,7 +7,7 @@
   "preparedFor": "Prepared For",
   "noRecipient": "No recipient",
   "photosIncluded": "Photos Included",
-  "photoCount": "{{count}} photo",
+  "photoCount_one": "{{count}} photo",
   "photoCount_other": "{{count}} photos",
   "downloading": "Preparing download...",
   "downloadAll": "Download All Photos",

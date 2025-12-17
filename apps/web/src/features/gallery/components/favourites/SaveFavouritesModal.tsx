@@ -108,9 +108,7 @@ export function SaveFavouritesModal({
                             {t('modal.save.description', {
                                 count: favoritesCount,
                                 photoText:
-                                    favoritesCount === 1
-                                        ? t('modal.save.photo')
-                                        : t('modal.save.photos'),
+                                    t('modal.save.photo', { count: favoritesCount }),
                             })}
                         </DialogDescription>
                     </DialogHeader>

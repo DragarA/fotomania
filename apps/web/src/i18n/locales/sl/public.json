@@ -34,8 +34,10 @@
     "save": {
       "title": "Shrani priljubljene",
       "description": "Vnesite svoj e-poštni naslov za shranitev {{count}} {{photoText}}. Fotograf bo lahko videl, katere fotografije ste izbrali.",
-      "photo": "priljubljeno fotografijo",
-      "photos": "priljubljenih fotografij",
+      "photo_one": "priljubljena fotografija",
+      "photo_two": "priljubljeni fotografiji",
+      "photo_few": "priljubljene fotografije",
+      "photo_other": "priljubljenih fotografij",
       "emailLabel": "E-poštni naslov",
       "emailPlaceholder": "vase.ime@example.com",
       "cancel": "Prekliči",
@@ -49,7 +51,10 @@
       "emailLabel": "E-pošta",
       "photosSavedLabel": "Shranjenih fotografij",
       "photo": "fotografija",
-      "photos": "fotografij",
+      "photo_one": "fotografija",
+      "photo_two": "fotografiji",
+      "photo_few": "fotografije",
+      "photo_other": "fotografij",
       "followUp": "Fotograf bo pregledal vaše izbrane priljubljene fotografije. Morda boste prejeli e-pošto na {{email}} z nadaljnjimi navodili.",
       "close": "Zapri"
     }

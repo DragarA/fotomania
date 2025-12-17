@@ -35,7 +35,7 @@ export function ProfilePage() {
                 {/* Profile Information */}
                 <div className="rounded-lg border border-black/5 bg-white p-6 shadow-sm sm:p-8">
                     <h2 className="mb-6 text-xs uppercase tracking-[0.3em] text-stone-500">
-                        Account Details
+                        {t('profile.accountDetails')}
                     </h2>
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

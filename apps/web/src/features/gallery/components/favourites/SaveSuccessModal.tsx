@@ -56,9 +56,7 @@ export function SaveSuccessModal({
                             </span>
                             <span className="font-light text-stone-800">
                                 {favoritesCount}{' '}
-                                {favoritesCount === 1
-                                    ? t('modal.success.photo')
-                                    : t('modal.success.photos')}
+                                {t('modal.success.photo', { count: favoritesCount })}
                             </span>
                         </div>
                     </div>

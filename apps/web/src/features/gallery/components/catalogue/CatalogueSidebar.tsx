@@ -361,7 +361,7 @@ export function CatalogueSidebar({
                                                     </div>
                                                     <p className="text-sm text-stone-500">
                                                         {collection.photoCount}{' '}
-                                                        {t('sidebar.photos')}
+                                                        {t('sidebar.photos', { count: collection.photoCount })}
                                                         {isDelivery &&
                                                             collection.clientEmail && (
                                                                 <span className="ml-1">
