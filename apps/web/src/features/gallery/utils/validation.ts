@@ -3,19 +3,19 @@ import { z } from 'zod';
 export const catalogueFormSchema = z.object({
     title: z
         .string()
-        .min(1, 'Title is required')
-        .max(100, 'Title must be less than 100 characters'),
+        .min(1)
+        .max(100),
 
     description: z
         .string()
-        .max(500, 'Description must be less than 500 characters')
+        .max(500)
         .optional()
         .or(z.literal('')),
 
     publicUrlSlug: z
         .string()
-        .min(3, 'Slug must be at least 3 characters')
-        .max(50, 'Slug must be less than 50 characters')
+        .min(3)
+        .max(50)
         .regex(
             /^[a-z0-9-]+$/,
             'Slug can only contain lowercase letters, numbers, and hyphens'
@@ -36,8 +36,8 @@ export type CatalogueCreateFormValues = z.infer<
 export const collectionFormSchema = z.object({
     name: z
         .string()
-        .min(1, 'Name is required')
-        .max(100, 'Name must be less than 100 characters'),
+        .min(1)
+        .max(100),
     catalogueId: z.string().uuid('Invalid catalogue ID'),
 });
 

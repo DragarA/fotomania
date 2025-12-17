@@ -7,7 +7,7 @@ export const clientSession = pgTable('clientSession', {
     email: text('email').notNull(),
     catalogueId: text('catalogueId')
         .notNull()
-        .references(() => catalogue.id),
+        .references(() => catalogue.id, { onDelete: 'cascade' }),
     createdAt: timestamp('createdAt').notNull(),
     updatedAt: timestamp('updatedAt').notNull(),
 });

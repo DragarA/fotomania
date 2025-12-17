@@ -7,8 +7,8 @@ export const clientFavourite = pgTable('clientFavourite', {
     id: text('id').primaryKey(),
     clientSessionId: text('clientSessionId')
         .notNull()
-        .references(() => clientSession.id),
+        .references(() => clientSession.id, { onDelete: 'cascade' }),
     photoId: text('photoId')
         .notNull()
-        .references(() => photo.id),
+        .references(() => photo.id, { onDelete: 'cascade' }),
 });

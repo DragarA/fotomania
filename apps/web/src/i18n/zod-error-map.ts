@@ -3,54 +3,60 @@ import { z } from 'zod';
 import i18n from './config';
 
 /**
- * Custom Zod error map for internationalized validation messages
+ * Custom Zod v4 error map for internationalized validation messages
  *
  * This handles common validation errors globally (e.g., required, type errors, length).
  * For domain-specific validation rules, use per-schema translations.
+ *
+ * Returns: { message: string } | string | undefined | null
+ * - Return undefined/null to use default Zod message
  */
-export const zodI18nErrorMap = ((issue: any, ctx: any) => {
-    // Handle common validation errors globally
+export const zodI18nErrorMap = (issue: z.core.$ZodRawIssue) => {
     switch (issue.code) {
-        case z.ZodIssueCode.invalid_type:
-            if (issue.received === 'undefined') {
-                return { message: i18n.t('validation:required') };
+        case 'invalid_type':
+            console.log(issue);
+            // Check for undefined input (required field)
+            if (issue.input === undefined) {
+                return i18n.t('validation:required');
             }
-            return {
-                message: i18n.t('validation:invalid_type', {
-                    expected: issue.expected,
-                    received: issue.received,
-                }),
-            };
+            return i18n.t('validation:invalid_type', {
+                expected: issue.expected,
+                received: typeof issue.input,
+            });
 
-        case z.ZodIssueCode.too_small:
-            if (issue.type === 'string') {
-                return {
-                    message: i18n.t('validation:too_small', {
-                        minimum: issue.minimum,
-                    }),
-                };
+        case 'too_small':
+            if (issue.origin === 'string') {
+                return i18n.t('validation:too_small', {
+                    minimum: issue.minimum,
+                });
             }
             break;
 
-        case z.ZodIssueCode.too_big:
-            if (issue.type === 'string') {
-                return {
-                    message: i18n.t('validation:too_big', {
-                        maximum: issue.maximum,
-                    }),
-                };
+        case 'too_big':
+            if (issue.origin === 'string') {
+                return i18n.t('validation:too_big', {
+                    maximum: issue.maximum,
+                });
+            }
+            break;
+
+        case 'invalid_format':
+            if (issue.format === 'email') {
+                return i18n.t('validation:invalid_email');
             }
             break;
     }
 
-    // Fallback to default error message or per-schema custom message
-    return { message: ctx.defaultError };
-}) as z.ZodErrorMap;
+    // Return undefined to use default Zod error message
+    return undefined;
+};
 
 /**
  * Apply the global error map to Zod
  * Call this once in your app initialization
  */
 export function initializeZodI18n() {
-    z.setErrorMap(zodI18nErrorMap);
+    z.config({
+        customError: zodI18nErrorMap,
+    });
 }
