@@ -132,6 +132,13 @@ OpenAPI.interceptors.response.use(async (response: Response) => {
             return response;
         }
 
+        // Don't attempt refresh if already logged out (no refresh token)
+        const refreshToken = localStorage.getItem('refreshToken');
+        if (!refreshToken) {
+            window.dispatchEvent(new Event('auth:logout'));
+            return response;
+        }
+
         // Try to refresh the token
         if (!isRefreshing) {
             isRefreshing = true;
@@ -172,6 +179,29 @@ OpenAPI.interceptors.response.use(async (response: Response) => {
                 localStorage.removeItem('user');
                 localStorage.removeItem('tokenExpiry');
                 window.dispatchEvent(new Event('auth:logout'));
+            }
+        } else {
+            // Wait for the ongoing refresh to complete, then retry
+            try {
+                await new Promise((resolve, reject) => {
+                    failedQueue.push({ resolve, reject });
+                });
+                // Refresh succeeded, retry the request
+                const newToken = localStorage.getItem('accessToken');
+                if (newToken) {
+                    const retryResponse = await fetch(originalRequest.url, {
+                        ...originalRequest,
+                        headers: {
+                            ...Object.fromEntries(
+                                originalRequest.headers.entries()
+                            ),
+                            Authorization: `Bearer ${newToken}`,
+                        },
+                    });
+                    return retryResponse;
+                }
+            } catch {
+                // Refresh failed, logout already handled by the initiating request
             }
         }
     }
