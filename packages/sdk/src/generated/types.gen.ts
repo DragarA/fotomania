@@ -33,6 +33,143 @@ export type AuthRefreshDtoClass = {
     refreshToken: string;
 };
 
+export type UserResDto = {
+    /**
+     * Unique identifier for the user
+     */
+    id: string;
+    /**
+     * Full name of the user
+     */
+    name: string;
+    /**
+     * Email address of the user
+     */
+    email: string;
+    /**
+     * Whether the email has been verified
+     */
+    emailVerified: boolean;
+    /**
+     * Profile image URL
+     */
+    image?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business name
+     */
+    businessName?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business address
+     */
+    businessAddress?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business phone number
+     */
+    businessPhone?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business email address
+     */
+    businessEmail?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business website URL
+     */
+    businessWebsite?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business logo URL
+     */
+    businessLogo?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business description
+     */
+    businessDescription?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Preferred language code
+     */
+    preferredLanguage: string;
+    /**
+     * Timestamp when the user was created
+     */
+    createdAt: string;
+    /**
+     * Timestamp when the user was last updated
+     */
+    updatedAt: string;
+};
+
+export type UpdateUserDtoClass = {
+    /**
+     * Full name of the user
+     */
+    name?: string;
+    /**
+     * Business name
+     */
+    businessName?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business address
+     */
+    businessAddress?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business phone number
+     */
+    businessPhone?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business email address
+     */
+    businessEmail?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business website URL
+     */
+    businessWebsite?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business logo URL
+     */
+    businessLogo?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Business description
+     */
+    businessDescription?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Preferred language code
+     */
+    preferredLanguage?: 'en' | 'sl';
+};
+
+/**
+ * Preferred language code
+ */
+export type preferredLanguage = 'en' | 'sl';
+
 export type CreateCatalogueDtoClass = {
     /**
      * Catalogue title
@@ -462,25 +599,13 @@ export type AuthControllerGoogleAuthRedirectResponse = unknown;
 
 export type AuthControllerGetCurrentUserResponse = unknown;
 
-export type UsersControllerFindAllResponse = unknown;
+export type UsersControllerGetMeResponse = UserResDto;
 
-export type UsersControllerFindOneData = {
-    id: string;
+export type UsersControllerUpdateMeData = {
+    requestBody: UpdateUserDtoClass;
 };
 
-export type UsersControllerFindOneResponse = unknown;
-
-export type UsersControllerUpdateData = {
-    id: string;
-};
-
-export type UsersControllerUpdateResponse = unknown;
-
-export type UsersControllerRemoveData = {
-    id: string;
-};
-
-export type UsersControllerRemoveResponse = unknown;
+export type UsersControllerUpdateMeResponse = UserResDto;
 
 export type CataloguesControllerCreateData = {
     requestBody: CreateCatalogueDtoClass;
@@ -822,42 +947,26 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/users': {
+    '/users/me': {
         get: {
             res: {
                 /**
-                 * Returns all users
+                 * Returns the current user profile
                  */
-                200: unknown;
-            };
-        };
-    };
-    '/users/{id}': {
-        get: {
-            req: UsersControllerFindOneData;
-            res: {
-                /**
-                 * Returns a user
-                 */
-                200: unknown;
+                200: UserResDto;
             };
         };
         patch: {
-            req: UsersControllerUpdateData;
+            req: UsersControllerUpdateMeData;
             res: {
                 /**
-                 * User updated successfully
+                 * User profile updated successfully
                  */
-                200: unknown;
-            };
-        };
-        delete: {
-            req: UsersControllerRemoveData;
-            res: {
+                200: UserResDto;
                 /**
-                 * User deleted successfully
+                 * Invalid request data
                  */
-                200: unknown;
+                400: unknown;
             };
         };
     };

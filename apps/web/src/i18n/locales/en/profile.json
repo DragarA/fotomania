@@ -1,0 +1,60 @@
+{
+    "title": "Profile Information",
+    "user": "User",
+    "noEmail": "No email",
+    "fullName": "Full Name",
+    "emailAddress": "Email Address",
+    "emailVerification": "Email Verification",
+    "verified": "Verified",
+    "notVerified": "Not Verified",
+    "userId": "User ID",
+    "notProvided": "Not provided",
+    "quickActions": "Quick Actions",
+    "manageCatalogues": "Manage catalogues",
+    "newCatalogue": "New catalogue",
+    "accountSettings": "Account Settings",
+    "accountDetails": "Account Details",
+    "preferredLanguage": "Preferred Language",
+    "editProfile": "Edit Profile",
+    "businessDetails": "Business Details",
+    "businessName": "Business Name",
+    "businessEmail": "Business Email",
+    "businessPhone": "Business Phone",
+    "businessAddress": "Business Address",
+    "businessWebsite": "Business Website",
+    "businessDescription": "Business Description",
+    "error": {
+        "loadFailed": "Failed to load profile"
+    },
+    "modal": {
+        "title": "Edit Profile",
+        "subtitle": "Profile Settings",
+        "description": "Update your personal and business information"
+    },
+    "form": {
+        "personalInfo": "Personal Information",
+        "businessInfo": "Business Information",
+        "name": "Full Name",
+        "namePlaceholder": "John Doe",
+        "preferredLanguage": "Preferred Language",
+        "businessName": "Business Name",
+        "businessNamePlaceholder": "Photo Studio Pro",
+        "businessEmail": "Business Email",
+        "businessEmailPlaceholder": "contact@example.com",
+        "businessPhone": "Business Phone",
+        "businessPhonePlaceholder": "+1 234 567 8900",
+        "businessAddress": "Business Address",
+        "businessAddressPlaceholder": "123 Main Street, City, Country",
+        "businessWebsite": "Website",
+        "businessWebsitePlaceholder": "https://example.com",
+        "businessDescription": "Description",
+        "businessDescriptionPlaceholder": "Tell clients about your photography services...",
+        "saveChanges": "Save Changes",
+        "saving": "Saving..."
+    },
+    "toast": {
+        "updateSuccess": "Profile updated successfully!",
+        "updateError": "Failed to update profile"
+    }
+}
+

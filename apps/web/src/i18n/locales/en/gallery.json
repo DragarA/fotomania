@@ -1,21 +1,4 @@
 {
-  "profile": {
-    "title": "Profile Information",
-    "user": "User",
-    "noEmail": "No email",
-    "fullName": "Full Name",
-    "emailAddress": "Email Address",
-    "emailVerification": "Email Verification",
-    "verified": "Verified",
-    "notVerified": "Not Verified",
-    "userId": "User ID",
-    "notProvided": "Not provided",
-    "quickActions": "Quick Actions",
-    "manageCatalogues": "Manage catalogues",
-    "newCatalogue": "New catalogue",
-    "accountSettings": "Account Settings",
-    "accountDetails": "Account Details"
-  },
   "catalogues": {
     "title": "Your Catalogues",
     "subtitle": "Manage the galleries that you share with your clients.",

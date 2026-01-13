@@ -35,37 +35,6 @@ describe('UsersService', () => {
         resetDrizzleMock(mockDb);
     });
 
-    describe('findAll', () => {
-        it('should return an array of users', async () => {
-            // Arrange
-            const testUsers = TestDataFactory.createUsers(3);
-            mockDb.select.mockReturnValue({
-                from: jest.fn().mockResolvedValue(testUsers),
-            } as any);
-
-            // Act
-            const result = await service.findAll();
-
-            // Assert
-            expect(result).toEqual(testUsers);
-            expect(result).toHaveLength(3);
-        });
-
-        it('should return empty array when no users exist', async () => {
-            // Arrange
-            mockDb.select.mockReturnValue({
-                from: jest.fn().mockResolvedValue([]),
-            } as any);
-
-            // Act
-            const result = await service.findAll();
-
-            // Assert
-            expect(result).toEqual([]);
-            expect(result).toHaveLength(0);
-        });
-    });
-
     describe('findOne', () => {
         it('should return a user by ID', async () => {
             // Arrange
@@ -139,11 +108,10 @@ describe('UsersService', () => {
     });
 
     describe('update', () => {
-        it('should update user and return updated user', async () => {
+        it('should update user name and return updated user', async () => {
             // Arrange
             const updatedUser = TestDataFactory.createUser({
                 name: 'Updated Name',
-                email: 'updated@example.com',
             });
             const setFn = jest.fn().mockReturnValue({
                 where: jest.fn().mockReturnValue({
@@ -157,27 +125,26 @@ describe('UsersService', () => {
             // Act
             const result = await service.update('test-user-id-1', {
                 name: 'Updated Name',
-                email: 'updated@example.com',
             });
 
             // Assert
             expect(result).toBeDefined();
             expect(result).toEqual(updatedUser);
             expect(result!.name).toBe('Updated Name');
-            expect(result!.email).toBe('updated@example.com');
             expect(setFn).toHaveBeenCalledWith(
                 expect.objectContaining({
                     name: 'Updated Name',
-                    email: 'updated@example.com',
                     updatedAt: expect.any(Date),
                 })
             );
         });
 
-        it('should update only provided fields', async () => {
+        it('should update business fields', async () => {
             // Arrange
             const updatedUser = TestDataFactory.createUser({
-                name: 'New Name Only',
+                businessName: 'Photo Studio Pro',
+                businessEmail: 'studio@example.com',
+                businessPhone: '+386 1 234 5678',
             });
             const setFn = jest.fn().mockReturnValue({
                 where: jest.fn().mockReturnValue({
@@ -190,15 +157,85 @@ describe('UsersService', () => {
 
             // Act
             const result = await service.update('test-user-id-1', {
-                name: 'New Name Only',
+                businessName: 'Photo Studio Pro',
+                businessEmail: 'studio@example.com',
+                businessPhone: '+386 1 234 5678',
             });
 
             // Assert
             expect(result).toBeDefined();
-            expect(result!.name).toBe('New Name Only');
+            expect(result!.businessName).toBe('Photo Studio Pro');
+            expect(result!.businessEmail).toBe('studio@example.com');
+            expect(result!.businessPhone).toBe('+386 1 234 5678');
             expect(setFn).toHaveBeenCalledWith(
                 expect.objectContaining({
-                    name: 'New Name Only',
+                    businessName: 'Photo Studio Pro',
+                    businessEmail: 'studio@example.com',
+                    businessPhone: '+386 1 234 5678',
+                    updatedAt: expect.any(Date),
+                })
+            );
+        });
+
+        it('should update preferred language', async () => {
+            // Arrange
+            const updatedUser = TestDataFactory.createUser({
+                preferredLanguage: 'sl',
+            });
+            const setFn = jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                    returning: jest.fn().mockResolvedValue([updatedUser]),
+                }),
+            });
+            mockDb.update.mockReturnValue({
+                set: setFn,
+            } as any);
+
+            // Act
+            const result = await service.update('test-user-id-1', {
+                preferredLanguage: 'sl',
+            });
+
+            // Assert
+            expect(result).toBeDefined();
+            expect(result!.preferredLanguage).toBe('sl');
+            expect(setFn).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    preferredLanguage: 'sl',
+                    updatedAt: expect.any(Date),
+                })
+            );
+        });
+
+        it('should set business fields to null when empty string provided', async () => {
+            // Arrange
+            const updatedUser = TestDataFactory.createUser({
+                businessName: null,
+                businessEmail: null,
+            });
+            const setFn = jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                    returning: jest.fn().mockResolvedValue([updatedUser]),
+                }),
+            });
+            mockDb.update.mockReturnValue({
+                set: setFn,
+            } as any);
+
+            // Act
+            const result = await service.update('test-user-id-1', {
+                businessName: '',
+                businessEmail: '',
+            });
+
+            // Assert
+            expect(result).toBeDefined();
+            expect(result!.businessName).toBeNull();
+            expect(result!.businessEmail).toBeNull();
+            expect(setFn).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    businessName: null,
+                    businessEmail: null,
                     updatedAt: expect.any(Date),
                 })
             );
@@ -230,34 +267,6 @@ describe('UsersService', () => {
             );
 
             jest.restoreAllMocks();
-        });
-    });
-
-    describe('remove', () => {
-        it('should delete a user by ID', async () => {
-            // Arrange
-            mockDb.delete.mockReturnValue({
-                where: jest.fn().mockResolvedValue(undefined),
-            } as any);
-
-            // Act
-            await service.remove('test-user-id-1');
-
-            // Assert
-            expect(mockDb.delete).toHaveBeenCalledTimes(1);
-        });
-
-        it('should not throw error when deleting nonexistent user', async () => {
-            // Arrange
-            mockDb.delete.mockReturnValue({
-                where: jest.fn().mockResolvedValue(undefined),
-            } as any);
-
-            // Act & Assert
-            await expect(
-                service.remove('nonexistent-id')
-            ).resolves.not.toThrow();
-            expect(mockDb.delete).toHaveBeenCalledTimes(1);
         });
     });
 });

@@ -1,0 +1,60 @@
+{
+    "title": "Informacije o profilu",
+    "user": "Uporabnik",
+    "noEmail": "Brez e-pošte",
+    "fullName": "Polno ime",
+    "emailAddress": "E-poštni naslov",
+    "emailVerification": "Preverjanje e-pošte",
+    "verified": "Potrjeno",
+    "notVerified": "Ni potrjeno",
+    "userId": "ID uporabnika",
+    "notProvided": "Ni na voljo",
+    "quickActions": "Hitre akcije",
+    "manageCatalogues": "Upravljaj kataloge",
+    "newCatalogue": "Nov katalog",
+    "accountSettings": "Nastavitve računa",
+    "accountDetails": "Podrobnosti računa",
+    "preferredLanguage": "Prednostni jezik",
+    "editProfile": "Uredi profil",
+    "businessDetails": "Podrobnosti podjetja",
+    "businessName": "Ime podjetja",
+    "businessEmail": "E-pošta podjetja",
+    "businessPhone": "Telefon podjetja",
+    "businessAddress": "Naslov podjetja",
+    "businessWebsite": "Spletna stran podjetja",
+    "businessDescription": "Opis podjetja",
+    "error": {
+        "loadFailed": "Nalaganje profila ni uspelo"
+    },
+    "modal": {
+        "title": "Uredi profil",
+        "subtitle": "Nastavitve profila",
+        "description": "Posodobite svoje osebne in poslovne podatke"
+    },
+    "form": {
+        "personalInfo": "Osebni podatki",
+        "businessInfo": "Poslovni podatki",
+        "name": "Polno ime",
+        "namePlaceholder": "Janez Novak",
+        "preferredLanguage": "Prednostni jezik",
+        "businessName": "Ime podjetja",
+        "businessNamePlaceholder": "Foto Studio Pro",
+        "businessEmail": "E-pošta podjetja",
+        "businessEmailPlaceholder": "kontakt@primer.si",
+        "businessPhone": "Telefon podjetja",
+        "businessPhonePlaceholder": "+386 1 234 5678",
+        "businessAddress": "Naslov podjetja",
+        "businessAddressPlaceholder": "Slovenska cesta 1, Ljubljana, Slovenija",
+        "businessWebsite": "Spletna stran",
+        "businessWebsitePlaceholder": "https://primer.si",
+        "businessDescription": "Opis",
+        "businessDescriptionPlaceholder": "Povejte strankam o svojih fotografskih storitvah...",
+        "saveChanges": "Shrani spremembe",
+        "saving": "Shranjevanje..."
+    },
+    "toast": {
+        "updateSuccess": "Profil uspešno posodobljen!",
+        "updateError": "Posodabljanje profila ni uspelo"
+    }
+}
+

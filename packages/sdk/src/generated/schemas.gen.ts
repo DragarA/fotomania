@@ -46,6 +46,157 @@ export const $AuthRefreshDtoClass = {
     required: ['refreshToken']
 } as const;
 
+export const $UserResDto = {
+    type: 'object',
+    properties: {
+        id: {
+            type: 'string',
+            description: 'Unique identifier for the user',
+            example: '550e8400-e29b-41d4-a716-446655440000'
+        },
+        name: {
+            type: 'string',
+            description: 'Full name of the user',
+            example: 'John Doe'
+        },
+        email: {
+            type: 'string',
+            description: 'Email address of the user',
+            example: 'john.doe@example.com'
+        },
+        emailVerified: {
+            type: 'boolean',
+            description: 'Whether the email has been verified',
+            example: true
+        },
+        image: {
+            type: 'object',
+            description: 'Profile image URL',
+            nullable: true,
+            example: 'https://example.com/avatar.jpg'
+        },
+        businessName: {
+            type: 'object',
+            description: 'Business name',
+            nullable: true,
+            example: 'Photo Studio Pro'
+        },
+        businessAddress: {
+            type: 'object',
+            description: 'Business address',
+            nullable: true,
+            example: '123 Main Street, Ljubljana, Slovenia'
+        },
+        businessPhone: {
+            type: 'object',
+            description: 'Business phone number',
+            nullable: true,
+            example: '+386 1 234 5678'
+        },
+        businessEmail: {
+            type: 'object',
+            description: 'Business email address',
+            nullable: true,
+            example: 'contact@photostudio.com'
+        },
+        businessWebsite: {
+            type: 'object',
+            description: 'Business website URL',
+            nullable: true,
+            example: 'https://photostudio.com'
+        },
+        businessLogo: {
+            type: 'object',
+            description: 'Business logo URL',
+            nullable: true,
+            example: 'https://example.com/logo.png'
+        },
+        businessDescription: {
+            type: 'object',
+            description: 'Business description',
+            nullable: true,
+            example: 'Professional photography services for weddings and events.'
+        },
+        preferredLanguage: {
+            type: 'string',
+            description: 'Preferred language code',
+            example: 'en'
+        },
+        createdAt: {
+            format: 'date-time',
+            type: 'string',
+            description: 'Timestamp when the user was created',
+            example: '2024-12-08T19:00:00.000Z'
+        },
+        updatedAt: {
+            format: 'date-time',
+            type: 'string',
+            description: 'Timestamp when the user was last updated',
+            example: '2024-12-08T19:30:00.000Z'
+        }
+    },
+    required: ['id', 'name', 'email', 'emailVerified', 'preferredLanguage', 'createdAt', 'updatedAt']
+} as const;
+
+export const $UpdateUserDtoClass = {
+    type: 'object',
+    properties: {
+        name: {
+            type: 'string',
+            description: 'Full name of the user',
+            example: 'John Doe'
+        },
+        businessName: {
+            type: 'object',
+            description: 'Business name',
+            nullable: true,
+            example: 'Photo Studio Pro'
+        },
+        businessAddress: {
+            type: 'object',
+            description: 'Business address',
+            nullable: true,
+            example: '123 Main Street, Ljubljana, Slovenia'
+        },
+        businessPhone: {
+            type: 'object',
+            description: 'Business phone number',
+            nullable: true,
+            example: '+386 1 234 5678'
+        },
+        businessEmail: {
+            type: 'object',
+            description: 'Business email address',
+            nullable: true,
+            example: 'contact@photostudio.com'
+        },
+        businessWebsite: {
+            type: 'object',
+            description: 'Business website URL',
+            nullable: true,
+            example: 'https://photostudio.com'
+        },
+        businessLogo: {
+            type: 'object',
+            description: 'Business logo URL',
+            nullable: true,
+            example: 'https://example.com/logo.png'
+        },
+        businessDescription: {
+            type: 'object',
+            description: 'Business description',
+            nullable: true,
+            example: 'Professional photography services for weddings and events.'
+        },
+        preferredLanguage: {
+            type: 'string',
+            description: 'Preferred language code',
+            enum: ['en', 'sl'],
+            example: 'en'
+        }
+    }
+} as const;
+
 export const $CreateCatalogueDtoClass = {
     type: 'object',
     properties: {

@@ -64,6 +64,13 @@
       "when": 1765976185316,
       "tag": "0008_odd_lord_hawal",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1765996639282,
+      "tag": "0009_cooing_warlock",
+      "breakpoints": true
     }
   ]
 }

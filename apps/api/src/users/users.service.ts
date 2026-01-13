@@ -4,13 +4,11 @@ import { eq } from 'drizzle-orm';
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
 import { user } from '../common/db/schema';
 
+import { UpdateUserDto } from './dto/update-user.dto';
+
 @Injectable()
 export class UsersService {
     constructor(@Inject(DRIZZLE) private readonly db: DrizzleDB) {}
-
-    async findAll() {
-        return this.db.select().from(user);
-    }
 
     async findOne(id: string) {
         const [foundUser] = await this.db
@@ -28,16 +26,45 @@ export class UsersService {
         return foundUser;
     }
 
-    async update(id: string, data: { email?: string; name?: string }) {
+    async update(id: string, data: UpdateUserDto) {
+        // Filter out undefined values and prepare update data
+        const updateData: Record<string, unknown> = {
+            updatedAt: new Date(),
+        };
+
+        if (data.name !== undefined) {
+            updateData.name = data.name;
+        }
+        if (data.businessName !== undefined) {
+            updateData.businessName = data.businessName || null;
+        }
+        if (data.businessAddress !== undefined) {
+            updateData.businessAddress = data.businessAddress || null;
+        }
+        if (data.businessPhone !== undefined) {
+            updateData.businessPhone = data.businessPhone || null;
+        }
+        if (data.businessEmail !== undefined) {
+            updateData.businessEmail = data.businessEmail || null;
+        }
+        if (data.businessWebsite !== undefined) {
+            updateData.businessWebsite = data.businessWebsite || null;
+        }
+        if (data.businessLogo !== undefined) {
+            updateData.businessLogo = data.businessLogo || null;
+        }
+        if (data.businessDescription !== undefined) {
+            updateData.businessDescription = data.businessDescription || null;
+        }
+        if (data.preferredLanguage !== undefined) {
+            updateData.preferredLanguage = data.preferredLanguage;
+        }
+
         const [updatedUser] = await this.db
             .update(user)
-            .set({ ...data, updatedAt: new Date() })
+            .set(updateData)
             .where(eq(user.id, id))
             .returning();
         return updatedUser;
-    }
-
-    async remove(id: string) {
-        await this.db.delete(user).where(eq(user.id, id));
     }
 }

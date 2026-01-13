@@ -1,21 +1,4 @@
 {
-    "profile": {
-        "title": "Informacije o profilu",
-        "user": "Uporabnik",
-        "noEmail": "Brez e-pošte",
-        "fullName": "Polno ime",
-        "emailAddress": "E-poštni naslov",
-        "emailVerification": "Preverjanje e-pošte",
-        "verified": "Potrjeno",
-        "notVerified": "Ni potrjeno",
-        "userId": "ID uporabnika",
-        "notProvided": "Ni na voljo",
-        "quickActions": "Hitre akcije",
-        "manageCatalogues": "Upravljaj kataloge",
-        "newCatalogue": "Nov katalog",
-        "accountSettings": "Nastavitve računa",
-        "accountDetails": "Podrobnosti računa"
-    },
     "catalogues": {
         "title": "Vaši katalogi",
         "subtitle": "Upravljajte galerije, ki jih delite s svojimi strankami.",

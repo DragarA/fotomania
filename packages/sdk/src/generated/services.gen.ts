@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerRefreshData, AuthControllerRefreshResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerFindAllResponse, UsersControllerFindOneData, UsersControllerFindOneResponse, UsersControllerUpdateData, UsersControllerUpdateResponse, UsersControllerRemoveData, UsersControllerRemoveResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerUpdateStatusData, CataloguesControllerUpdateStatusResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CataloguesControllerGetCatalogueFavouritesData, CataloguesControllerGetCatalogueFavouritesResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, CollectionsControllerCreateFromSessionData, CollectionsControllerCreateFromSessionResponse, CollectionsControllerGetDownloadHistoryData, CollectionsControllerGetDownloadHistoryResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, ClientSessionsControllerGetCatalogueFavouritesData, ClientSessionsControllerGetCatalogueFavouritesResponse, PublicControllerVerifyPasswordData, PublicControllerVerifyPasswordResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse, PublicControllerAddFavouritesData, PublicControllerAddFavouritesResponse, PublicControllerVerifyDeliveryPasswordData, PublicControllerVerifyDeliveryPasswordResponse, PublicControllerFindDeliveryBySlugData, PublicControllerFindDeliveryBySlugResponse, PublicControllerDownloadDeliveryData, PublicControllerDownloadDeliveryResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerRefreshData, AuthControllerRefreshResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerGetMeResponse, UsersControllerUpdateMeData, UsersControllerUpdateMeResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerUpdateStatusData, CataloguesControllerUpdateStatusResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CataloguesControllerGetCatalogueFavouritesData, CataloguesControllerGetCatalogueFavouritesResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, CollectionsControllerCreateFromSessionData, CollectionsControllerCreateFromSessionResponse, CollectionsControllerGetDownloadHistoryData, CollectionsControllerGetDownloadHistoryResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, ClientSessionsControllerGetCatalogueFavouritesData, ClientSessionsControllerGetCatalogueFavouritesResponse, PublicControllerVerifyPasswordData, PublicControllerVerifyPasswordResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse, PublicControllerAddFavouritesData, PublicControllerAddFavouritesResponse, PublicControllerVerifyDeliveryPasswordData, PublicControllerVerifyDeliveryPasswordResponse, PublicControllerFindDeliveryBySlugData, PublicControllerFindDeliveryBySlugResponse, PublicControllerDownloadDeliveryData, PublicControllerDownloadDeliveryResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -136,64 +136,32 @@ export class AuthService {
 
 export class UsersService {
     /**
-     * Get all users
-     * @returns unknown Returns all users
+     * Get current user profile
+     * @returns UserResDto Returns the current user profile
      * @throws ApiError
      */
-    public static usersControllerFindAll(): CancelablePromise<UsersControllerFindAllResponse> {
+    public static usersControllerGetMe(): CancelablePromise<UsersControllerGetMeResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/users'
+            url: '/users/me'
         });
     }
     
     /**
-     * Get user by ID
+     * Update current user profile
      * @param data The data for the request.
-     * @param data.id
-     * @returns unknown Returns a user
+     * @param data.requestBody
+     * @returns UserResDto User profile updated successfully
      * @throws ApiError
      */
-    public static usersControllerFindOne(data: UsersControllerFindOneData): CancelablePromise<UsersControllerFindOneResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/users/{id}',
-            path: {
-                id: data.id
-            }
-        });
-    }
-    
-    /**
-     * Update user
-     * @param data The data for the request.
-     * @param data.id
-     * @returns unknown User updated successfully
-     * @throws ApiError
-     */
-    public static usersControllerUpdate(data: UsersControllerUpdateData): CancelablePromise<UsersControllerUpdateResponse> {
+    public static usersControllerUpdateMe(data: UsersControllerUpdateMeData): CancelablePromise<UsersControllerUpdateMeResponse> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/users/{id}',
-            path: {
-                id: data.id
-            }
-        });
-    }
-    
-    /**
-     * Delete user
-     * @param data The data for the request.
-     * @param data.id
-     * @returns unknown User deleted successfully
-     * @throws ApiError
-     */
-    public static usersControllerRemove(data: UsersControllerRemoveData): CancelablePromise<UsersControllerRemoveResponse> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/users/{id}',
-            path: {
-                id: data.id
+            url: '/users/me',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                400: 'Invalid request data'
             }
         });
     }

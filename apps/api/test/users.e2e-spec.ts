@@ -6,294 +6,284 @@ import { MockDrizzleDB, resetDrizzleMock } from './utils/drizzle-mock.factory';
 import { TestDataFactory } from './utils/test-data.factory';
 
 describe('UsersController (e2e)', () => {
-  let app: INestApplication;
-  let mockDb: MockDrizzleDB;
+    let app: INestApplication;
+    let mockDb: MockDrizzleDB;
 
-  beforeAll(async () => {
-    const setup = await setupE2ETest();
-    app = setup.app;
-    mockDb = setup.mockDb;
-  });
-
-  afterAll(async () => {
-    await teardownE2ETest(app);
-  });
-
-  beforeEach(() => {
-    resetDrizzleMock(mockDb);
-    jest.clearAllMocks();
-  });
-
-  describe('GET /users', () => {
-    it('should return an array of users', async () => {
-      // Arrange
-      const testUsers = TestDataFactory.createUsers(3);
-      mockDb.select.mockReturnValue({
-        from: jest.fn().mockResolvedValue(testUsers),
-      } as any);
-
-      // Act & Assert
-      const response = await request(app.getHttpServer())
-        .get('/users')
-        .expect(200);
-
-      expect(response.body).toBeInstanceOf(Array);
-      expect(response.body).toHaveLength(3);
-      expect(response.body[0]).toHaveProperty('id');
-      expect(response.body[0]).toHaveProperty('email');
-      expect(response.body[0]).toHaveProperty('name');
+    beforeAll(async () => {
+        const setup = await setupE2ETest();
+        app = setup.app;
+        mockDb = setup.mockDb;
     });
 
-    it('should return empty array when no users exist', async () => {
-      // Arrange
-      mockDb.select.mockReturnValue({
-        from: jest.fn().mockResolvedValue([]),
-      } as any);
-
-      // Act & Assert
-      const response = await request(app.getHttpServer())
-        .get('/users')
-        .expect(200);
-
-      expect(response.body).toBeInstanceOf(Array);
-      expect(response.body).toHaveLength(0);
-    });
-  });
-
-  describe('GET /users/:id', () => {
-    it('should return a single user by ID', async () => {
-      // Arrange
-      const testUser = TestDataFactory.createUser({
-        id: 'test-user-123',
-        email: 'specific@example.com',
-        name: 'Specific User',
-      });
-      mockDb.select.mockReturnValue({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([testUser]),
-        }),
-      } as any);
-
-      // Act & Assert
-      const response = await request(app.getHttpServer())
-        .get('/users/test-user-123')
-        .expect(200);
-
-      expect(response.body).toHaveProperty('id', 'test-user-123');
-      expect(response.body).toHaveProperty('email', 'specific@example.com');
-      expect(response.body).toHaveProperty('name', 'Specific User');
+    afterAll(async () => {
+        await teardownE2ETest(app);
     });
 
-    it('should handle when user not found gracefully', async () => {
-      // Arrange
-      mockDb.select.mockReturnValue({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]),
-        }),
-      } as any);
-
-      // Act & Assert
-      const response = await request(app.getHttpServer())
-        .get('/users/nonexistent-id')
-        .expect(200);
-
-      expect(response.body).toEqual({});
-    });
-  });
-
-  describe('PATCH /users/:id', () => {
-    it('should update user name', async () => {
-      // Arrange
-      const updatedUser = TestDataFactory.createUser({
-        id: 'test-user-123',
-        name: 'Updated Name',
-        email: 'test@example.com',
-      });
-      mockDb.update.mockReturnValue({
-        set: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            returning: jest.fn().mockResolvedValue([updatedUser]),
-          }),
-        }),
-      } as any);
-
-      // Act & Assert
-      const response = await request(app.getHttpServer())
-        .patch('/users/test-user-123')
-        .send({ name: 'Updated Name' })
-        .expect(200);
-
-      expect(response.body).toHaveProperty('name', 'Updated Name');
+    beforeEach(() => {
+        resetDrizzleMock(mockDb);
+        jest.clearAllMocks();
     });
 
-    it('should update user email', async () => {
-      // Arrange
-      const updatedUser = TestDataFactory.createUser({
-        id: 'test-user-123',
-        email: 'newemail@example.com',
-      });
-      mockDb.update.mockReturnValue({
-        set: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            returning: jest.fn().mockResolvedValue([updatedUser]),
-          }),
-        }),
-      } as any);
+    describe('GET /users/me', () => {
+        it('should return the current user profile', async () => {
+            // Arrange
+            const testUser = TestDataFactory.createUser({
+                id: 'test-user-123',
+                email: 'test@example.com',
+                name: 'Test User',
+                businessName: 'Test Business',
+                businessEmail: 'business@example.com',
+                preferredLanguage: 'en',
+            });
+            mockDb.select.mockReturnValue({
+                from: jest.fn().mockReturnValue({
+                    where: jest.fn().mockResolvedValue([testUser]),
+                }),
+            } as any);
 
-      // Act & Assert
-      const response = await request(app.getHttpServer())
-        .patch('/users/test-user-123')
-        .send({ email: 'newemail@example.com' })
-        .expect(200);
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .get('/users/me')
+                .expect(200);
 
-      expect(response.body).toHaveProperty('email', 'newemail@example.com');
+            expect(response.body).toHaveProperty('id', 'test-user-123');
+            expect(response.body).toHaveProperty('email', 'test@example.com');
+            expect(response.body).toHaveProperty('name', 'Test User');
+            expect(response.body).toHaveProperty('businessName', 'Test Business');
+            expect(response.body).toHaveProperty('businessEmail', 'business@example.com');
+            expect(response.body).toHaveProperty('preferredLanguage', 'en');
+        });
+
+        it('should return user with all business fields', async () => {
+            // Arrange
+            const testUser = TestDataFactory.createUser({
+                id: 'test-user-123',
+                businessName: 'Photo Studio Pro',
+                businessAddress: '123 Main Street',
+                businessPhone: '+386 1 234 5678',
+                businessEmail: 'contact@photostudio.com',
+                businessWebsite: 'https://photostudio.com',
+                businessLogo: 'https://example.com/logo.png',
+                businessDescription: 'Professional photography services',
+                preferredLanguage: 'sl',
+            });
+            mockDb.select.mockReturnValue({
+                from: jest.fn().mockReturnValue({
+                    where: jest.fn().mockResolvedValue([testUser]),
+                }),
+            } as any);
+
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .get('/users/me')
+                .expect(200);
+
+            expect(response.body).toHaveProperty('businessName', 'Photo Studio Pro');
+            expect(response.body).toHaveProperty('businessAddress', '123 Main Street');
+            expect(response.body).toHaveProperty('businessPhone', '+386 1 234 5678');
+            expect(response.body).toHaveProperty('businessEmail', 'contact@photostudio.com');
+            expect(response.body).toHaveProperty('businessWebsite', 'https://photostudio.com');
+            expect(response.body).toHaveProperty('businessLogo', 'https://example.com/logo.png');
+            expect(response.body).toHaveProperty('businessDescription', 'Professional photography services');
+            expect(response.body).toHaveProperty('preferredLanguage', 'sl');
+        });
     });
 
-    it('should update both name and email', async () => {
-      // Arrange
-      const updatedUser = TestDataFactory.createUser({
-        id: 'test-user-123',
-        name: 'New Name',
-        email: 'new@example.com',
-      });
-      mockDb.update.mockReturnValue({
-        set: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            returning: jest.fn().mockResolvedValue([updatedUser]),
-          }),
-        }),
-      } as any);
+    describe('PATCH /users/me', () => {
+        it('should update user name', async () => {
+            // Arrange
+            const updatedUser = TestDataFactory.createUser({
+                id: 'test-user-123',
+                name: 'Updated Name',
+                email: 'test@example.com',
+            });
+            mockDb.update.mockReturnValue({
+                set: jest.fn().mockReturnValue({
+                    where: jest.fn().mockReturnValue({
+                        returning: jest.fn().mockResolvedValue([updatedUser]),
+                    }),
+                }),
+            } as any);
 
-      // Act & Assert
-      const response = await request(app.getHttpServer())
-        .patch('/users/test-user-123')
-        .send({
-          name: 'New Name',
-          email: 'new@example.com',
-        })
-        .expect(200);
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .patch('/users/me')
+                .send({ name: 'Updated Name' })
+                .expect(200);
 
-      expect(response.body).toHaveProperty('name', 'New Name');
-      expect(response.body).toHaveProperty('email', 'new@example.com');
+            expect(response.body).toHaveProperty('name', 'Updated Name');
+        });
+
+        it('should update business fields', async () => {
+            // Arrange
+            const updatedUser = TestDataFactory.createUser({
+                id: 'test-user-123',
+                businessName: 'New Business Name',
+                businessAddress: '456 New Street',
+                businessPhone: '+386 2 345 6789',
+                businessEmail: 'new@business.com',
+                businessWebsite: 'https://newbusiness.com',
+                businessDescription: 'Updated description',
+            });
+            mockDb.update.mockReturnValue({
+                set: jest.fn().mockReturnValue({
+                    where: jest.fn().mockReturnValue({
+                        returning: jest.fn().mockResolvedValue([updatedUser]),
+                    }),
+                }),
+            } as any);
+
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .patch('/users/me')
+                .send({
+                    businessName: 'New Business Name',
+                    businessAddress: '456 New Street',
+                    businessPhone: '+386 2 345 6789',
+                    businessEmail: 'new@business.com',
+                    businessWebsite: 'https://newbusiness.com',
+                    businessDescription: 'Updated description',
+                })
+                .expect(200);
+
+            expect(response.body).toHaveProperty('businessName', 'New Business Name');
+            expect(response.body).toHaveProperty('businessAddress', '456 New Street');
+            expect(response.body).toHaveProperty('businessPhone', '+386 2 345 6789');
+            expect(response.body).toHaveProperty('businessEmail', 'new@business.com');
+            expect(response.body).toHaveProperty('businessWebsite', 'https://newbusiness.com');
+            expect(response.body).toHaveProperty('businessDescription', 'Updated description');
+        });
+
+        it('should update preferred language', async () => {
+            // Arrange
+            const updatedUser = TestDataFactory.createUser({
+                id: 'test-user-123',
+                preferredLanguage: 'sl',
+            });
+            mockDb.update.mockReturnValue({
+                set: jest.fn().mockReturnValue({
+                    where: jest.fn().mockReturnValue({
+                        returning: jest.fn().mockResolvedValue([updatedUser]),
+                    }),
+                }),
+            } as any);
+
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .patch('/users/me')
+                .send({ preferredLanguage: 'sl' })
+                .expect(200);
+
+            expect(response.body).toHaveProperty('preferredLanguage', 'sl');
+        });
+
+        it('should reject invalid preferred language', async () => {
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .patch('/users/me')
+                .send({ preferredLanguage: 'invalid' })
+                .expect(400);
+
+            expect(response.body).toHaveProperty('message');
+        });
+
+        it('should reject invalid business email format', async () => {
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .patch('/users/me')
+                .send({ businessEmail: 'not-an-email' })
+                .expect(400);
+
+            expect(response.body).toHaveProperty('message');
+        });
+
+        it('should reject invalid business website URL', async () => {
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .patch('/users/me')
+                .send({ businessWebsite: 'not-a-url' })
+                .expect(400);
+
+            expect(response.body).toHaveProperty('message');
+        });
+
+        it('should allow clearing business fields with null', async () => {
+            // Arrange
+            const updatedUser = TestDataFactory.createUser({
+                id: 'test-user-123',
+                businessName: null,
+                businessEmail: null,
+            });
+            mockDb.update.mockReturnValue({
+                set: jest.fn().mockReturnValue({
+                    where: jest.fn().mockReturnValue({
+                        returning: jest.fn().mockResolvedValue([updatedUser]),
+                    }),
+                }),
+            } as any);
+
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .patch('/users/me')
+                .send({
+                    businessName: null,
+                    businessEmail: null,
+                })
+                .expect(200);
+
+            expect(response.body).toHaveProperty('businessName', null);
+            expect(response.body).toHaveProperty('businessEmail', null);
+        });
+
+        it('should handle empty update body', async () => {
+            // Arrange
+            const user = TestDataFactory.createUser();
+            mockDb.update.mockReturnValue({
+                set: jest.fn().mockReturnValue({
+                    where: jest.fn().mockReturnValue({
+                        returning: jest.fn().mockResolvedValue([user]),
+                    }),
+                }),
+            } as any);
+
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .patch('/users/me')
+                .send({})
+                .expect(200);
+
+            expect(response.body).toBeDefined();
+        });
+
+        it('should update multiple fields at once', async () => {
+            // Arrange
+            const updatedUser = TestDataFactory.createUser({
+                id: 'test-user-123',
+                name: 'New Name',
+                businessName: 'New Business',
+                preferredLanguage: 'sl',
+            });
+            mockDb.update.mockReturnValue({
+                set: jest.fn().mockReturnValue({
+                    where: jest.fn().mockReturnValue({
+                        returning: jest.fn().mockResolvedValue([updatedUser]),
+                    }),
+                }),
+            } as any);
+
+            // Act & Assert
+            const response = await request(app.getHttpServer())
+                .patch('/users/me')
+                .send({
+                    name: 'New Name',
+                    businessName: 'New Business',
+                    preferredLanguage: 'sl',
+                })
+                .expect(200);
+
+            expect(response.body).toHaveProperty('name', 'New Name');
+            expect(response.body).toHaveProperty('businessName', 'New Business');
+            expect(response.body).toHaveProperty('preferredLanguage', 'sl');
+        });
     });
-
-    it('should handle empty update body', async () => {
-      // Arrange
-      const user = TestDataFactory.createUser();
-      mockDb.update.mockReturnValue({
-        set: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            returning: jest.fn().mockResolvedValue([user]),
-          }),
-        }),
-      } as any);
-
-      // Act & Assert
-      const response = await request(app.getHttpServer())
-        .patch('/users/test-user-123')
-        .send({})
-        .expect(200);
-
-      expect(response.body).toBeDefined();
-    });
-  });
-
-  describe('DELETE /users/:id', () => {
-    it('should delete a user by ID', async () => {
-      // Arrange
-      mockDb.delete.mockReturnValue({
-        where: jest.fn().mockResolvedValue(undefined),
-      } as any);
-
-      // Act & Assert
-      await request(app.getHttpServer())
-        .delete('/users/test-user-123')
-        .expect(200);
-    });
-
-    it('should not throw error when deleting nonexistent user', async () => {
-      // Arrange
-      mockDb.delete.mockReturnValue({
-        where: jest.fn().mockResolvedValue(undefined),
-      } as any);
-
-      // Act & Assert
-      await request(app.getHttpServer())
-        .delete('/users/nonexistent-id')
-        .expect(200);
-    });
-  });
-
-  describe('Users CRUD Flow (Integration)', () => {
-    it('should handle complete CRUD operations', async () => {
-      // 1. Get all users (initially empty)
-      mockDb.select.mockReturnValueOnce({
-        from: jest.fn().mockResolvedValue([]),
-      } as any);
-      let response = await request(app.getHttpServer())
-        .get('/users')
-        .expect(200);
-      expect(response.body).toHaveLength(0);
-
-      // 2. Create user implicitly tested via auth (not part of UsersController)
-
-      // 3. Get all users (with one user)
-      const user = TestDataFactory.createUser({ id: 'user-1' });
-      mockDb.select.mockReturnValueOnce({
-        from: jest.fn().mockResolvedValue([user]),
-      } as any);
-      response = await request(app.getHttpServer())
-        .get('/users')
-        .expect(200);
-      expect(response.body).toHaveLength(1);
-
-      // 4. Get single user
-      mockDb.select.mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([user]),
-        }),
-      } as any);
-      response = await request(app.getHttpServer())
-        .get('/users/user-1')
-        .expect(200);
-      expect(response.body.id).toBe('user-1');
-
-      // 5. Update user
-      const updatedUser = TestDataFactory.createUser({
-        id: 'user-1',
-        name: 'Updated Name',
-      });
-      mockDb.update.mockReturnValueOnce({
-        set: jest.fn().mockReturnValue({
-          where: jest.fn().mockReturnValue({
-            returning: jest.fn().mockResolvedValue([updatedUser]),
-          }),
-        }),
-      } as any);
-      response = await request(app.getHttpServer())
-        .patch('/users/user-1')
-        .send({ name: 'Updated Name' })
-        .expect(200);
-      expect(response.body.name).toBe('Updated Name');
-
-      // 6. Delete user
-      mockDb.delete.mockReturnValueOnce({
-        where: jest.fn().mockResolvedValue(undefined),
-      } as any);
-      await request(app.getHttpServer())
-        .delete('/users/user-1')
-        .expect(200);
-
-      // 7. Verify user deleted
-      mockDb.select.mockReturnValueOnce({
-        from: jest.fn().mockReturnValue({
-          where: jest.fn().mockResolvedValue([]),
-        }),
-      } as any);
-      response = await request(app.getHttpServer())
-        .get('/users/user-1')
-        .expect(200);
-      expect(response.body).toEqual({});
-    });
-  });
 });
