@@ -33,6 +33,12 @@ export const envSchema = z.object({
     MAILGUN_DOMAIN: z.string().min(1, 'MAILGUN_DOMAIN is required'),
     MAILGUN_FROM_EMAIL: z.email('MAILGUN_FROM_EMAIL must be a valid email'),
     MAILGUN_FROM_NAME: z.string().default('Fotomania'),
+
+    // Frontend URL for email links
+    FRONTEND_URL: z
+        .string()
+        .url('FRONTEND_URL must be a valid URL')
+        .default('http://localhost:5173'),
 });
 
 export type Env = z.infer<typeof envSchema>;

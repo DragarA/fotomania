@@ -1,22 +1,47 @@
-import { INestApplication } from '@nestjs/common';
+import { CanActivate, ExecutionContext, INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 
-import { setupE2ETest, teardownE2ETest } from './setup-e2e';
-import { MockDrizzleDB, resetDrizzleMock } from './utils/drizzle-mock.factory';
+import { AppModule } from '../src/app.module';
+import { JwtAuthGuard } from '../src/common/auth/guards/jwt-auth.guard';
+import { DRIZZLE } from '../src/common/db/drizzle';
+
+import { createDrizzleMock, MockDrizzleDB, resetDrizzleMock } from './utils/drizzle-mock.factory';
 import { TestDataFactory } from './utils/test-data.factory';
+
+// Mock JwtAuthGuard that always allows access and sets a test user
+class MockJwtAuthGuard implements CanActivate {
+    canActivate(context: ExecutionContext): boolean {
+        const request = context.switchToHttp().getRequest();
+        request.user = { id: 'test-user-123', email: 'test@example.com' };
+        return true;
+    }
+}
 
 describe('UsersController (e2e)', () => {
     let app: INestApplication;
     let mockDb: MockDrizzleDB;
 
     beforeAll(async () => {
-        const setup = await setupE2ETest();
-        app = setup.app;
-        mockDb = setup.mockDb;
+        mockDb = createDrizzleMock();
+
+        const moduleFixture: TestingModule = await Test.createTestingModule({
+            imports: [AppModule],
+        })
+            .overrideProvider(DRIZZLE)
+            .useValue(mockDb)
+            .overrideGuard(JwtAuthGuard)
+            .useClass(MockJwtAuthGuard)
+            .compile();
+
+        app = moduleFixture.createNestApplication();
+        await app.init();
     });
 
     afterAll(async () => {
-        await teardownE2ETest(app);
+        if (app) {
+            await app.close();
+        }
     });
 
     beforeEach(() => {

@@ -1,15 +1,23 @@
-import { INestApplication, ExecutionContext } from '@nestjs/common';
+import { INestApplication, ExecutionContext, CanActivate } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 
 import { AppModule } from '../src/app.module';
 import { JwtAuthGuard } from '../src/common/auth/guards/jwt-auth.guard';
 import { DRIZZLE } from '../src/common/db/drizzle';
+import { PublicAccessGuard } from '../src/public/guards/public-access.guard';
 
 import { teardownE2ETest } from './setup-e2e';
 import { MockDrizzleDB, resetDrizzleMock } from './utils/drizzle-mock.factory';
 import { createDrizzleMock } from './utils/drizzle-mock.factory';
 import { TestDataFactory } from './utils/test-data.factory';
+
+// Mock PublicAccessGuard that always allows access
+class MockPublicAccessGuard implements CanActivate {
+  canActivate(): boolean {
+    return true;
+  }
+}
 
 
 
@@ -36,6 +44,8 @@ describe('CataloguesController (e2e)', () => {
           return true;
         },
       })
+      .overrideGuard(PublicAccessGuard)
+      .useClass(MockPublicAccessGuard)
       .compile();
 
     app = moduleFixture.createNestApplication();

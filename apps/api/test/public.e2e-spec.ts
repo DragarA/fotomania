@@ -6,6 +6,7 @@ import request from 'supertest';
 
 import { AppModule } from '../src/app.module';
 import { DRIZZLE } from '../src/common/db/drizzle';
+import { EmailService } from '../src/common/email/email.service';
 
 import { teardownE2ETest } from './setup-e2e';
 import { MockDrizzleDB, resetDrizzleMock, createDrizzleMock } from './utils/drizzle-mock.factory';
@@ -15,15 +16,21 @@ describe('PublicController (e2e)', () => {
   let app: INestApplication;
   let mockDb: MockDrizzleDB;
   let jwtService: JwtService;
+  let mockEmailService: jest.Mocked<EmailService>;
 
   beforeAll(async () => {
     mockDb = createDrizzleMock();
+    mockEmailService = {
+      send: jest.fn().mockResolvedValue(undefined),
+    } as any;
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
       .overrideProvider(DRIZZLE)
       .useValue(mockDb)
+      .overrideProvider(EmailService)
+      .useValue(mockEmailService)
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -73,14 +80,22 @@ describe('PublicController (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/public/catalogue/protected-wedding/verify')
         .send({ password: 'secret123' })
-        .expect(200);
+        .expect(201);
 
       expect(response.body.accessToken).toBeDefined();
-      
+
       // Verify the token is valid
       const payload = jwtService.verify(response.body.accessToken);
       expect(payload.slug).toBe('protected-wedding');
       expect(payload.type).toBe('public-access');
+    });
+
+    it('should return 400 for empty password', async () => {
+      // Empty password fails validation
+      await request(app.getHttpServer())
+        .post('/public/catalogue/open-wedding/verify')
+        .send({ password: '' })
+        .expect(400);
     });
 
     it('should return 401 for incorrect password', async () => {
@@ -118,7 +133,7 @@ describe('PublicController (e2e)', () => {
         .expect(404);
     });
 
-    it('should return token for catalogue without password', async () => {
+    it('should return token for catalogue without password when any password provided', async () => {
       const mockCatalogue = TestDataFactory.createCatalogue({
         publicUrlSlug: 'open-wedding',
         password: null,
@@ -132,10 +147,11 @@ describe('PublicController (e2e)', () => {
         }),
       } as any);
 
+      // For catalogues without password, any non-empty password returns a token
       const response = await request(app.getHttpServer())
         .post('/public/catalogue/open-wedding/verify')
-        .send({ password: '' })
-        .expect(200);
+        .send({ password: 'any-password' })
+        .expect(201);
 
       expect(response.body.accessToken).toBeDefined();
     });
@@ -394,15 +410,13 @@ describe('PublicController (e2e)', () => {
       // Password protection check (guard)
       mockPasswordProtectionCheck(null);
 
-      // Mock catalogue lookup
+      // Mock catalogue lookup (with user join for owner email)
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
-          leftJoin: jest.fn().mockReturnValue({
-            leftJoin: jest.fn().mockReturnValue({
-              where: jest.fn().mockResolvedValue([
-                { id: mockCatalogue.id },
-              ]),
-            }),
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([
+              { id: mockCatalogue.id, title: 'Wedding 2024', ownerEmail: 'photographer@example.com' },
+            ]),
           }),
         }),
       } as any);

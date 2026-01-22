@@ -164,10 +164,12 @@ describe('CollectionsService', () => {
             mockDb.select.mockReturnValueOnce({
                 from: jest.fn().mockReturnValue({
                     leftJoin: jest.fn().mockReturnValue({
-                        where: jest.fn().mockReturnValue({
-                            groupBy: jest
-                                .fn()
-                                .mockResolvedValue(mockCollections),
+                        leftJoin: jest.fn().mockReturnValue({
+                            where: jest.fn().mockReturnValue({
+                                groupBy: jest
+                                    .fn()
+                                    .mockResolvedValue(mockCollections),
+                            }),
                         }),
                     }),
                 }),
@@ -233,10 +235,12 @@ describe('CollectionsService', () => {
                 from: jest.fn().mockReturnValue({
                     innerJoin: jest.fn().mockReturnValue({
                         leftJoin: jest.fn().mockReturnValue({
-                            where: jest.fn().mockReturnValue({
-                                groupBy: jest
-                                    .fn()
-                                    .mockResolvedValue([mockResult]),
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockReturnValue({
+                                    groupBy: jest
+                                        .fn()
+                                        .mockResolvedValue([mockResult]),
+                                }),
                             }),
                         }),
                     }),
@@ -256,8 +260,10 @@ describe('CollectionsService', () => {
                 from: jest.fn().mockReturnValue({
                     innerJoin: jest.fn().mockReturnValue({
                         leftJoin: jest.fn().mockReturnValue({
-                            where: jest.fn().mockReturnValue({
-                                groupBy: jest.fn().mockResolvedValue([]),
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockReturnValue({
+                                    groupBy: jest.fn().mockResolvedValue([]),
+                                }),
                             }),
                         }),
                     }),
@@ -289,10 +295,12 @@ describe('CollectionsService', () => {
                 from: jest.fn().mockReturnValue({
                     innerJoin: jest.fn().mockReturnValue({
                         leftJoin: jest.fn().mockReturnValue({
-                            where: jest.fn().mockReturnValue({
-                                groupBy: jest
-                                    .fn()
-                                    .mockResolvedValue([existingCollection]),
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockReturnValue({
+                                    groupBy: jest
+                                        .fn()
+                                        .mockResolvedValue([existingCollection]),
+                                }),
                             }),
                         }),
                     }),
@@ -343,10 +351,12 @@ describe('CollectionsService', () => {
                 from: jest.fn().mockReturnValue({
                     innerJoin: jest.fn().mockReturnValue({
                         leftJoin: jest.fn().mockReturnValue({
-                            where: jest.fn().mockReturnValue({
-                                groupBy: jest
-                                    .fn()
-                                    .mockResolvedValue([existingCollection]),
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockReturnValue({
+                                    groupBy: jest
+                                        .fn()
+                                        .mockResolvedValue([existingCollection]),
+                                }),
                             }),
                         }),
                     }),

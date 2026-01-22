@@ -7,6 +7,7 @@ import { ClientSessionsService } from '../client-sessions/client-sessions.servic
 import { PhotosService } from '../photos/photos.service';
 
 import { PublicController } from './public.controller';
+import { PublicService } from './public.service';
 
 describe('PublicController', () => {
     let controller: PublicController;
@@ -26,6 +27,11 @@ describe('PublicController', () => {
             addFavourites: jest.fn(),
         };
 
+        const mockPublicService = {
+            isPasswordProtected: jest.fn().mockResolvedValue(false),
+            validateAccessToken: jest.fn().mockReturnValue(true),
+        };
+
         const module: TestingModule = await Test.createTestingModule({
             controllers: [PublicController],
             providers: [
@@ -40,6 +46,10 @@ describe('PublicController', () => {
                 {
                     provide: ClientSessionsService,
                     useValue: mockClientSessionsService,
+                },
+                {
+                    provide: PublicService,
+                    useValue: mockPublicService,
                 },
             ],
         }).compile();

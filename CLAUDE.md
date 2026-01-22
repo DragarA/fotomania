@@ -13,6 +13,12 @@ Fotomania is a **Turborepo monorepo** with a type-safe API-to-frontend pipeline:
 
 ## Common Commands
 
+Before running any commands, make sure you select the proper version of node via `nvm`:
+
+```bash
+nvm use
+```
+
 ### Development
 ```bash
 # Development (OpenAPI spec auto-generates on API startup)

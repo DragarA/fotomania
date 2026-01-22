@@ -1,29 +1,37 @@
 import {
     BadRequestException,
+    Inject,
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
-import { Inject } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { eq, and, inArray, count } from 'drizzle-orm';
 
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
-import { collection, photo } from '../common/db/schema';
+import { collection, photo, user } from '../common/db/schema';
 import { catalogue } from '../common/db/schema/catalogues.schema';
 import { clientFavourite } from '../common/db/schema/client-favourite.schema';
 import { clientSession } from '../common/db/schema/client-session.schema';
+import { EmailTemplate } from '../common/email/email.constants';
+import { EmailService } from '../common/email/email.service';
 
 @Injectable()
 export class ClientSessionsService {
-    constructor(@Inject(DRIZZLE) private readonly db: DrizzleDB) {}
+    constructor(
+        @Inject(DRIZZLE) private readonly db: DrizzleDB,
+        private readonly emailService: EmailService,
+        private readonly configService: ConfigService
+    ) {}
 
     async addFavourites(slug: string, email: string, photoIds: string[]) {
         const [existingCatalogue] = await this.db
             .select({
                 id: catalogue.id,
+                title: catalogue.title,
+                ownerEmail: user.email,
             })
             .from(catalogue)
-            .leftJoin(collection, eq(catalogue.id, collection.catalogueId))
-            .leftJoin(photo, eq(collection.id, photo.collectionId))
+            .innerJoin(user, eq(catalogue.ownerId, user.id))
             .where(eq(catalogue.publicUrlSlug, slug));
 
         if (!existingCatalogue) {
@@ -94,6 +102,23 @@ export class ClientSessionsService {
             .delete(clientFavourite)
             .where(eq(clientFavourite.clientSessionId, existingSession!.id));
         await this.db.insert(clientFavourite).values(favouritesToInsert);
+
+        // Send email notification to photographer
+        const frontendUrl = this.configService.get<string>('FRONTEND_URL');
+        const photoCount = photoIds.length;
+
+        await this.emailService.send({
+            to: existingCatalogue.ownerEmail,
+            subject: `New photo selections from ${email}`,
+            template: EmailTemplate.FAVOURITES_SUBMITTED,
+            context: {
+                clientEmail: email,
+                catalogueTitle: existingCatalogue.title,
+                photoCount,
+                photoLabel: photoCount === 1 ? 'photo' : 'photos',
+                dashboardUrl: `${frontendUrl}/catalogues/${existingCatalogue.id}`,
+            },
+        });
 
         return existingSession;
     }
