@@ -1,3 +1,4 @@
+import { Upload } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import type { Collection, Photo } from '../../types';
@@ -34,6 +35,7 @@ interface PhotoWorkspaceProps {
     onPhotoClick: (photo: Photo) => void;
     onPhotoDelete: (photo: Photo) => void;
     onSetAsCover: (photo: Photo) => void;
+    onUploadClick: () => void;
 }
 
 export function PhotoWorkspace({
@@ -50,6 +52,7 @@ export function PhotoWorkspace({
     onPhotoClick,
     onPhotoDelete,
     onSetAsCover,
+    onUploadClick,
 }: PhotoWorkspaceProps) {
     const { t } = useTranslation('gallery');
 
@@ -71,8 +74,17 @@ export function PhotoWorkspace({
                                 {selectedCollection.type === 'delivery' ? selectedCollection.name.replace(t('collection.delivery_collection_name'), 'Delivery') : selectedCollection.name}
                             </h2>
                         </div>
-                        <div className="text-xs uppercase tracking-[0.4em] text-stone-400">
-                            {photos?.length || 0} {t('sidebar.photos', { count: photos?.length || 0 })}
+                        <div className="flex items-center gap-4">
+                            <button
+                                onClick={onUploadClick}
+                                className="flex items-center gap-2 rounded border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-700 shadow-sm transition-colors hover:bg-stone-50"
+                            >
+                                <Upload className="h-4 w-4" />
+                                {t('photoWorkspace.uploadPhotos')}
+                            </button>
+                            <div className="text-xs uppercase tracking-[0.4em] text-stone-400">
+                                {photos?.length || 0} {t('sidebar.photos', { count: photos?.length || 0 })}
+                            </div>
                         </div>
                     </div>
                     <PhotoGrid
@@ -83,6 +95,7 @@ export function PhotoWorkspace({
                         onPhotoClick={onPhotoClick}
                         onPhotoDelete={onPhotoDelete}
                         onSetAsCover={onSetAsCover}
+                        onUploadClick={onUploadClick}
                     />
                 </div>
             ) : (

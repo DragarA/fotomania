@@ -69,7 +69,7 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
         usePhotosQuery(selectedCollectionId);
 
     // Dropzone
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
         accept: {
             'image/jpeg': ['.jpg', '.jpeg'],
             'image/png': ['.png'],
@@ -189,6 +189,7 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                     onPhotoClick={setSelectedPhoto}
                     onPhotoDelete={handleDeletePhoto}
                     onSetAsCover={handleSetAsCover}
+                    onUploadClick={open}
                 />
             </div>
 

@@ -1,4 +1,4 @@
-import { CheckCircle, MoreVertical } from 'lucide-react';
+import { CheckCircle, MoreVertical, Upload } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -15,6 +15,7 @@ interface PhotoGridProps {
     onPhotoClick?: (photo: Photo) => void;
     onPhotoDelete?: (photo: Photo) => void;
     onSetAsCover?: (photo: Photo) => void;
+    onUploadClick?: () => void;
 }
 
 export function PhotoGrid({
@@ -24,6 +25,7 @@ export function PhotoGrid({
     onPhotoClick,
     onPhotoDelete,
     onSetAsCover,
+    onUploadClick,
 }: PhotoGridProps) {
     const { t } = useTranslation('gallery');
     const [contextMenu, setContextMenu] = useState<{
@@ -71,6 +73,15 @@ export function PhotoGrid({
                     {t('photoGrid.noPhotosYet')}
                 </h3>
                 <p className="mb-4 text-stone-500">{t('photoGrid.dragAndDrop')}</p>
+                {onUploadClick && (
+                    <button
+                        onClick={onUploadClick}
+                        className="mb-4 flex items-center gap-2 mx-auto rounded border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-700 shadow-sm transition-colors hover:bg-stone-50"
+                    >
+                        <Upload className="h-4 w-4" />
+                        {t('photoGrid.browseFiles')}
+                    </button>
+                )}
                 <div className="text-xs uppercase tracking-[0.4em] text-stone-400">
                     {t('photoGrid.uploadHint')}
                 </div>

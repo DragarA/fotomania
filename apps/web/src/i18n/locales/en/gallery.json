@@ -86,13 +86,15 @@
     "createFirstCollection": "Create your first collection to get started",
     "dropImagesHere": "Drop images here",
     "uploadLimit": "Upload up to 20 images at once",
-    "supportedFormats": "Supported: JPG, PNG, WebP, HEIC (max 10MB each)"
+    "supportedFormats": "Supported: JPG, PNG, WebP, HEIC (max 10MB each)",
+    "uploadPhotos": "Upload Photos"
   },
   "photoGrid": {
     "noPhotosYet": "No photos yet",
     "dragAndDrop": "Drag and drop images anywhere on this area to upload",
-    "uploadHint": "You can upload JPG, PNG, WebP or HEIC images", 
-    "cover": "Cover"
+    "uploadHint": "You can upload JPG, PNG, WebP or HEIC images",
+    "cover": "Cover",
+    "browseFiles": "Browse Files"
   },
   "uploadQueue": {
     "uploading": "Uploading {{current}} of {{total}} files...",

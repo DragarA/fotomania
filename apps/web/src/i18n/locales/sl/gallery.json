@@ -90,13 +90,15 @@
         "createFirstCollection": "Ustvarite svojo prvo zbirko za začetek",
         "dropImagesHere": "Spustite slike tukaj",
         "uploadLimit": "Naložite do 20 slik naenkrat",
-        "supportedFormats": "Podprto: JPG, PNG, WebP, HEIC (največ 10MB vsaka)"
+        "supportedFormats": "Podprto: JPG, PNG, WebP, HEIC (največ 10MB vsaka)",
+        "uploadPhotos": "Naloži fotografije"
     },
     "photoGrid": {
         "noPhotosYet": "Še ni fotografij",
         "dragAndDrop": "Povlecite in spustite slike kamorkoli na to območje za nalaganje",
         "uploadHint": "Naložite lahko slike JPG, PNG, WebP ali HEIC",
-        "cover": "Naslovnica"
+        "cover": "Naslovnica",
+        "browseFiles": "Prebrskaj datoteke"
     },
     "uploadQueue": {
         "uploading": "Nalaganje {{current}} od {{total}} datotek...",
