@@ -162,6 +162,25 @@ export class CollectionsController {
         return this.collectionsService.getDownloadHistory(id, user.id);
     }
 
+    @Post(':id/send-delivery-email')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    @ApiOperation({ summary: 'Send delivery ready email to the client' })
+    @ApiParam({ name: 'id', description: 'Collection ID' })
+    @ApiResponse({
+        status: 200,
+        description: 'Delivery email sent successfully',
+    })
+    @ApiResponse({ status: 404, description: 'Collection not found' })
+    @ApiResponse({ status: 400, description: 'Not a delivery collection or no client email' })
+    @ApiResponse({ status: 403, description: 'Forbidden' })
+    async sendDeliveryEmail(
+        @Param('id') id: string,
+        @User() user: UserEntity
+    ) {
+        return this.collectionsService.sendDeliveryEmail(id, user.id);
+    }
+
     @Patch(':id')
     @UseGuards(JwtAuthGuard)
     @ApiBearerAuth('JWT-auth')

@@ -22,6 +22,8 @@ nvm use
 ### Development
 ```bash
 # Development (OpenAPI spec auto-generates on API startup)
+# Never run this command, work under the assumption that the development servers are always running
+# If the development servers are not running, ask me to start them, never start them yourself. 
 pnpm dev                                    # API (port 3000), Web (port 5173), SDK watcher
 
 # Individual packages

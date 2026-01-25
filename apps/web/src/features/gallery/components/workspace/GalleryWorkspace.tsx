@@ -12,6 +12,7 @@ import {
     useDeletePhotoMutation,
     usePhotoUpload,
     useCatalogueFavouritesQuery,
+    useSendDeliveryEmailMutation,
 } from '../../hooks';
 import { useCatalogueDetailState } from '../../state/useCatalogueDetailState';
 import type { Collection, Photo } from '../../types';
@@ -59,6 +60,7 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
     const deleteMutation = useDeleteCollectionMutation();
     const deletePhotoMutation = useDeletePhotoMutation();
     const setCoverMutation = useSetCatalogueCoverMutation();
+    const sendDeliveryEmailMutation = useSendDeliveryEmailMutation();
 
     // Photo upload
     const { uploadQueue, addFiles, removeFile, clearCompleted } =
@@ -222,6 +224,16 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                                   const deliveryUrl = `${window.location.origin}/d/${collectionContextMenu.collection.deliverySlug}`;
                                   navigator.clipboard.writeText(deliveryUrl);
                                   toast.success(t('sidebar.linkCopied'));
+                                  closeContextMenu();
+                              }
+                            : undefined
+                    }
+                    onSendDeliveryEmail={
+                        collectionContextMenu.collection.type === 'delivery'
+                            ? () => {
+                                  sendDeliveryEmailMutation.mutate({
+                                      collectionId: collectionContextMenu.collection.id,
+                                  });
                                   closeContextMenu();
                               }
                             : undefined

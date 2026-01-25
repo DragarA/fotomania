@@ -119,7 +119,8 @@
   "collectionContextMenu": {
     "edit": "Edit",
     "delete": "Delete",
-    "shareDelivery": "Copy Delivery Link"
+    "shareDelivery": "Copy Delivery Link",
+    "sendDeliveryEmail": "Send Email to Client"
   },
   "favouritesView": {
     "noFavouritesYet": "No favorites yet",
@@ -156,6 +157,8 @@
     "collectionDeleteFailed": "Failed to delete collection",
     "deliveryCollectionCreatedSuccess": "Delivery collection created successfully!",
     "deliveryCollectionCreateFailed": "Failed to create delivery collection",
+    "deliveryEmailSent": "Delivery email sent successfully",
+    "deliveryEmailFailed": "Failed to send delivery email",
     "catalogueCoverUpdated": "Catalogue cover updated",
     "catalogueCoverUpdateFailed": "Failed to update cover"
   },

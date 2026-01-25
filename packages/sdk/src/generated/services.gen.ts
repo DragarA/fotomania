@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerRefreshData, AuthControllerRefreshResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerGetMeResponse, UsersControllerUpdateMeData, UsersControllerUpdateMeResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerUpdateStatusData, CataloguesControllerUpdateStatusResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CataloguesControllerGetCatalogueFavouritesData, CataloguesControllerGetCatalogueFavouritesResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, CollectionsControllerCreateFromSessionData, CollectionsControllerCreateFromSessionResponse, CollectionsControllerGetDownloadHistoryData, CollectionsControllerGetDownloadHistoryResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, ClientSessionsControllerGetCatalogueFavouritesData, ClientSessionsControllerGetCatalogueFavouritesResponse, PublicControllerVerifyPasswordData, PublicControllerVerifyPasswordResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse, PublicControllerAddFavouritesData, PublicControllerAddFavouritesResponse, PublicControllerVerifyDeliveryPasswordData, PublicControllerVerifyDeliveryPasswordResponse, PublicControllerFindDeliveryBySlugData, PublicControllerFindDeliveryBySlugResponse, PublicControllerDownloadDeliveryData, PublicControllerDownloadDeliveryResponse } from './types.gen';
+import type { AppControllerGetHelloResponse, AppControllerHealthCheckResponse, AuthControllerRegisterData, AuthControllerRegisterResponse, AuthControllerLoginData, AuthControllerLoginResponse, AuthControllerLogoutResponse, AuthControllerRefreshData, AuthControllerRefreshResponse, AuthControllerGoogleAuthResponse, AuthControllerGoogleAuthRedirectResponse, AuthControllerGetCurrentUserResponse, UsersControllerGetMeResponse, UsersControllerUpdateMeData, UsersControllerUpdateMeResponse, CataloguesControllerCreateData, CataloguesControllerCreateResponse, CataloguesControllerFindAllResponse, CataloguesControllerFindOneData, CataloguesControllerFindOneResponse, CataloguesControllerUpdateData, CataloguesControllerUpdateResponse, CataloguesControllerRemoveData, CataloguesControllerRemoveResponse, CataloguesControllerUpdateStatusData, CataloguesControllerUpdateStatusResponse, CataloguesControllerSetCoverData, CataloguesControllerSetCoverResponse, CataloguesControllerGetCatalogueFavouritesData, CataloguesControllerGetCatalogueFavouritesResponse, CollectionsControllerCreateData, CollectionsControllerCreateResponse, CollectionsControllerFindAllData, CollectionsControllerFindAllResponse, CollectionsControllerFindOneData, CollectionsControllerFindOneResponse, CollectionsControllerUpdateData, CollectionsControllerUpdateResponse, CollectionsControllerRemoveData, CollectionsControllerRemoveResponse, CollectionsControllerCreateFromSessionData, CollectionsControllerCreateFromSessionResponse, CollectionsControllerGetDownloadHistoryData, CollectionsControllerGetDownloadHistoryResponse, CollectionsControllerSendDeliveryEmailData, CollectionsControllerSendDeliveryEmailResponse, PhotosControllerUploadFileData, PhotosControllerUploadFileResponse, PhotosControllerFindAllData, PhotosControllerFindAllResponse, PhotosControllerFindOneData, PhotosControllerFindOneResponse, PhotosControllerRemoveData, PhotosControllerRemoveResponse, ClientSessionsControllerGetCatalogueFavouritesData, ClientSessionsControllerGetCatalogueFavouritesResponse, PublicControllerVerifyPasswordData, PublicControllerVerifyPasswordResponse, PublicControllerFindBySlugData, PublicControllerFindBySlugResponse, PublicControllerFindCollectionPhotosBySlugData, PublicControllerFindCollectionPhotosBySlugResponse, PublicControllerAddFavouritesData, PublicControllerAddFavouritesResponse, PublicControllerVerifyDeliveryPasswordData, PublicControllerVerifyDeliveryPasswordResponse, PublicControllerFindDeliveryBySlugData, PublicControllerFindDeliveryBySlugResponse, PublicControllerDownloadDeliveryData, PublicControllerDownloadDeliveryResponse } from './types.gen';
 
 export class AppService {
     /**
@@ -482,6 +482,28 @@ export class CollectionsService {
             },
             errors: {
                 400: 'Not a delivery collection',
+                403: 'Forbidden',
+                404: 'Collection not found'
+            }
+        });
+    }
+    
+    /**
+     * Send delivery ready email to the client
+     * @param data The data for the request.
+     * @param data.id Collection ID
+     * @returns unknown Delivery email sent successfully
+     * @throws ApiError
+     */
+    public static collectionsControllerSendDeliveryEmail(data: CollectionsControllerSendDeliveryEmailData): CancelablePromise<CollectionsControllerSendDeliveryEmailResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/collections/{id}/send-delivery-email',
+            path: {
+                id: data.id
+            },
+            errors: {
+                400: 'Not a delivery collection or no client email',
                 403: 'Forbidden',
                 404: 'Collection not found'
             }

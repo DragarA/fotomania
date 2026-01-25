@@ -1,4 +1,4 @@
-import { Pencil, Share2, Trash2 } from 'lucide-react';
+import { Mail, Pencil, Share2, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ interface CollectionContextMenuProps {
     onDelete: () => void;
     isDelivery?: boolean;
     onShareDelivery?: () => void;
+    onSendDeliveryEmail?: () => void;
 }
 
 export function CollectionContextMenu({
@@ -21,6 +22,7 @@ export function CollectionContextMenu({
     onDelete,
     isDelivery = false,
     onShareDelivery,
+    onSendDeliveryEmail,
 }: CollectionContextMenuProps) {
     const { t } = useTranslation('gallery');
     const menuRef = useRef<HTMLDivElement>(null);
@@ -78,6 +80,16 @@ export function CollectionContextMenu({
                       label: t('collectionContextMenu.shareDelivery'),
                       icon: <Share2 className="h-4 w-4" strokeWidth={1.5} />,
                       onClick: onShareDelivery,
+                  },
+              ]
+            : []),
+        // Send delivery email (only for delivery collections)
+        ...(isDelivery && onSendDeliveryEmail
+            ? [
+                  {
+                      label: t('collectionContextMenu.sendDeliveryEmail'),
+                      icon: <Mail className="h-4 w-4" strokeWidth={1.5} />,
+                      onClick: onSendDeliveryEmail,
                   },
               ]
             : []),

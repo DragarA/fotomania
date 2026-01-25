@@ -25,6 +25,7 @@ export {
     useUpdateCollectionMutation,
     useDeleteCollectionMutation,
     useCreateDeliveryCollectionMutation,
+    useSendDeliveryEmailMutation,
 } from './useCollections';
 
 // Photo hooks

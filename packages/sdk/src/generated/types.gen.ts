@@ -736,6 +736,15 @@ export type CollectionsControllerGetDownloadHistoryData = {
 
 export type CollectionsControllerGetDownloadHistoryResponse = unknown;
 
+export type CollectionsControllerSendDeliveryEmailData = {
+    /**
+     * Collection ID
+     */
+    id: string;
+};
+
+export type CollectionsControllerSendDeliveryEmailResponse = unknown;
+
 export type PhotosControllerUploadFileData = {
     /**
      * Collection ID
@@ -1225,6 +1234,29 @@ export type $OpenApiTs = {
                 200: unknown;
                 /**
                  * Not a delivery collection
+                 */
+                400: unknown;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Collection not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/collections/{id}/send-delivery-email': {
+        post: {
+            req: CollectionsControllerSendDeliveryEmailData;
+            res: {
+                /**
+                 * Delivery email sent successfully
+                 */
+                200: unknown;
+                /**
+                 * Not a delivery collection or no client email
                  */
                 400: unknown;
                 /**

@@ -125,7 +125,8 @@
     "collectionContextMenu": {
         "edit": "Uredi",
         "delete": "Izbriši",
-        "shareDelivery": "Kopiraj povezavo dostave"
+        "shareDelivery": "Kopiraj povezavo dostave",
+        "sendDeliveryEmail": "Pošlji e-pošto stranki"
     },
     "favouritesView": {
         "noFavouritesYet": "Še ni priljubljenih",
@@ -164,6 +165,10 @@
         "collectionUpdateFailed": "Posodabljanje zbirke ni uspelo",
         "collectionDeletedSuccess": "Zbirka uspešno izbrisana!",
         "collectionDeleteFailed": "Brisanje zbirke ni uspelo",
+        "deliveryCollectionCreatedSuccess": "Dostava uspešno ustvarjena!",
+        "deliveryCollectionCreateFailed": "Ustvarjanje dostave ni uspelo",
+        "deliveryEmailSent": "E-pošta o dostavi uspešno poslana",
+        "deliveryEmailFailed": "Pošiljanje e-pošte o dostavi ni uspelo",
         "catalogueCoverUpdated": "Naslovnica kataloga posodobljena",
         "catalogueCoverUpdateFailed": "Posodabljanje naslovnice ni uspelo"
     },

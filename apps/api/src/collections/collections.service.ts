@@ -9,6 +9,7 @@ import {
     BadRequestException,
 } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { eq, and, sql } from 'drizzle-orm';
 
 import { DRIZZLE, type DbInstance, type DrizzleDB } from '../common/db/drizzle';
@@ -17,6 +18,9 @@ import { clientSession } from '../common/db/schema/client-session.schema';
 import { collection } from '../common/db/schema/collections.schema';
 import { deliveryDownload } from '../common/db/schema/delivery-download.schema';
 import { photo } from '../common/db/schema/photos.schema';
+import { user } from '../common/db/schema/users.schema';
+import { EmailTemplate } from '../common/email/email.constants';
+import { EmailService } from '../common/email/email.service';
 import { PhotosService } from '../photos/photos.service';
 
 import { CreateCollectionDto } from './dto/create-collection.dto';
@@ -29,7 +33,9 @@ export class CollectionsService {
 
     constructor(
         @Inject(DRIZZLE) private readonly db: DrizzleDB,
-        private readonly photosService: PhotosService
+        private readonly photosService: PhotosService,
+        private readonly emailService: EmailService,
+        private readonly configService: ConfigService
     ) {}
 
     async create(createCollectionDto: CreateCollectionDto, ownerId: string) {
@@ -293,5 +299,77 @@ export class CollectionsService {
             .from(deliveryDownload)
             .where(eq(deliveryDownload.collectionId, collectionId))
             .orderBy(deliveryDownload.downloadedAt);
+    }
+
+    /**
+     * Send delivery ready email to the client
+     */
+    async sendDeliveryEmail(collectionId: string, ownerId: string) {
+        // 1. Get collection with client session and catalogue info
+        const [result] = await this.db
+            .select({
+                collection,
+                clientEmail: clientSession.email,
+                catalogueTitle: catalogue.title,
+                photographerName: user.name,
+            })
+            .from(collection)
+            .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
+            .innerJoin(user, eq(catalogue.ownerId, user.id))
+            .leftJoin(
+                clientSession,
+                eq(collection.clientSessionId, clientSession.id)
+            )
+            .where(
+                and(eq(collection.id, collectionId), eq(catalogue.ownerId, ownerId))
+            );
+
+        if (!result) {
+            throw new NotFoundException(
+                `Collection with ID ${collectionId} not found`
+            );
+        }
+
+        // 2. Verify it's a delivery collection
+        if (result.collection.type !== 'delivery') {
+            throw new BadRequestException(
+                'Email can only be sent for delivery collections'
+            );
+        }
+
+        // 3. Verify we have a client email
+        if (!result.clientEmail) {
+            throw new BadRequestException(
+                'No client email associated with this delivery collection'
+            );
+        }
+
+        // 4. Verify we have a delivery slug
+        if (!result.collection.deliverySlug) {
+            throw new BadRequestException(
+                'Delivery collection does not have a delivery URL'
+            );
+        }
+
+        // 5. Build the delivery URL
+        const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
+        const deliveryUrl = `${frontendUrl}/d/${result.collection.deliverySlug}`;
+
+        // 6. Send the email
+        await this.emailService.send({
+            to: result.clientEmail,
+            subject: 'Your photos are ready',
+            template: EmailTemplate.DELIVERY_READY,
+            context: {
+                deliveryUrl,
+                photographerName: result.photographerName || undefined,
+            },
+        });
+
+        this.logger.log(
+            `Delivery email sent to ${result.clientEmail} for collection ${collectionId}`
+        );
+
+        return { message: 'Delivery email sent successfully' };
     }
 }

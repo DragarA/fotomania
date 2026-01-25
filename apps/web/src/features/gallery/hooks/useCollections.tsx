@@ -151,3 +151,22 @@ export function useCreateDeliveryCollectionMutation() {
         },
     });
 }
+
+export function useSendDeliveryEmailMutation() {
+    const { t } = useTranslation('gallery');
+
+    return useMutation({
+        mutationFn: ({ collectionId }: { collectionId: string }) =>
+            CollectionsService.collectionsControllerSendDeliveryEmail({
+                id: collectionId,
+            }),
+        onSuccess: () => {
+            toast.success(t('toast.deliveryEmailSent'));
+        },
+        onError: (error: any) => {
+            toast.error(
+                error.body?.message || error.message || t('toast.deliveryEmailFailed')
+            );
+        },
+    });
+}
