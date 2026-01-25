@@ -6,15 +6,24 @@ import { ConfigService } from '@nestjs/config';
 import FormData from 'form-data';
 import Handlebars from 'handlebars';
 import Mailgun from 'mailgun.js';
+import { I18nService } from 'nestjs-i18n';
 
 import { EmailTemplate } from './email.constants';
 
+const DEFAULT_LANGUAGE = 'en';
+
 export interface SendEmailOptions {
     to: string | string[];
-    subject: string;
     template: EmailTemplate;
+    language?: string;
     context: Record<string, unknown>;
 }
+
+// Map template enum values to translation keys
+const TEMPLATE_TO_TRANSLATION_KEY: Record<EmailTemplate, string> = {
+    [EmailTemplate.DELIVERY_READY]: 'delivery_ready',
+    [EmailTemplate.FAVOURITES_SUBMITTED]: 'favourites_submitted',
+};
 
 @Injectable()
 export class EmailService implements OnModuleInit {
@@ -27,7 +36,10 @@ export class EmailService implements OnModuleInit {
     private readonly fromEmail: string;
     private readonly fromName: string;
 
-    constructor(private readonly configService: ConfigService) {
+    constructor(
+        private readonly configService: ConfigService,
+        private readonly i18n: I18nService
+    ) {
         const mailgun = new Mailgun(FormData);
         this.mg = mailgun.client({
             username: 'api',
@@ -42,27 +54,38 @@ export class EmailService implements OnModuleInit {
     onModuleInit() {
         this.loadTemplates();
         this.registerPartials();
+        this.registerI18nHelper();
         this.logger.log('Email templates loaded and compiled');
     }
 
     async send(options: SendEmailOptions): Promise<void> {
-        const html = this.renderTemplate(options.template, options.context);
-        const to = Array.isArray(options.to) ? options.to : [options.to];
+        const { template, context, to } = options;
+        const language = options.language || DEFAULT_LANGUAGE;
+
+        // Get the translated subject
+        const translationKey = TEMPLATE_TO_TRANSLATION_KEY[template];
+        const subject = this.i18n.t(`emails.${translationKey}.subject`, {
+            lang: language,
+            args: context,
+        });
+
+        const html = this.renderTemplate(template, context, language);
+        const recipients = Array.isArray(to) ? to : [to];
 
         try {
             const result = await this.mg.messages.create(this.domain, {
                 from: `${this.fromName} <${this.fromEmail}>`,
-                to,
-                subject: options.subject,
+                to: recipients,
+                subject,
                 html,
             });
 
             this.logger.log(
-                `Email sent successfully to ${to.join(', ')}: ${result.id}`
+                `Email sent successfully to ${recipients.join(', ')}: ${result.id}`
             );
         } catch (error) {
             this.logger.error(
-                `Failed to send email to ${to.join(', ')}`,
+                `Failed to send email to ${recipients.join(', ')}`,
                 error
             );
             throw error;
@@ -104,9 +127,31 @@ export class EmailService implements OnModuleInit {
         }
     }
 
+    private registerI18nHelper(): void {
+        // Store reference to i18n service for use in helper
+        const i18n = this.i18n;
+
+        // Register the 't' helper for translations
+        // Usage in templates: {{t 'emails.key' arg1=value1 arg2=value2}}
+        Handlebars.registerHelper(
+            't',
+            function (
+                this: Record<string, unknown>,
+                key: string,
+                options: Handlebars.HelperOptions
+            ) {
+                const lang = this._lang as string;
+                const args = options.hash || {};
+
+                return i18n.t(key, { lang, args });
+            }
+        );
+    }
+
     private renderTemplate(
         template: EmailTemplate,
-        context: Record<string, unknown>
+        context: Record<string, unknown>,
+        language: string
     ): string {
         const contentTemplate = this.templates.get(template);
 
@@ -114,15 +159,20 @@ export class EmailService implements OnModuleInit {
             throw new Error(`Template "${template}" not found`);
         }
 
+        // Add language to context for the 't' helper
+        const contextWithLang = {
+            ...context,
+            _lang: language,
+        };
+
         // Render the content template first
-        const body = contentTemplate(context);
+        const body = contentTemplate(contextWithLang);
 
         // Wrap the content in the base layout with common context
         return this.baseTemplate({
-            ...context,
+            ...contextWithLang,
             body,
             year: new Date().getFullYear(),
         });
     }
 }
-

@@ -1,11 +1,11 @@
 <!-- Greeting -->
 <h1 style="margin: 0 0 16px 0; color: #292524; font-size: 28px; font-weight: 300; letter-spacing: 0.5px; line-height: 1.3;">
-  New photo selections
+  {{t 'emails.favourites_submitted.greeting'}}
 </h1>
 
 <!-- Message -->
 <p style="margin: 0 0 24px 0; color: rgba(41, 37, 36, 0.7); font-size: 15px; font-weight: 300; line-height: 1.7; letter-spacing: 0.2px;">
-  A client has selected their favourite photos from your catalogue.
+  {{t 'emails.favourites_submitted.message'}}
 </p>
 
 <!-- Client details -->
@@ -13,19 +13,19 @@
   <tr>
     <td style="padding: 16px; background-color: rgba(41, 37, 36, 0.03); border-radius: 8px;">
       <p style="margin: 0 0 8px 0; color: rgba(41, 37, 36, 0.5); font-size: 12px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px;">
-        Client Email
+        {{t 'emails.favourites_submitted.client_email_label'}}
       </p>
       <p style="margin: 0 0 16px 0; color: #292524; font-size: 15px; font-weight: 400;">
         {{clientEmail}}
       </p>
       <p style="margin: 0 0 8px 0; color: rgba(41, 37, 36, 0.5); font-size: 12px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px;">
-        Catalogue
+        {{t 'emails.favourites_submitted.catalogue_label'}}
       </p>
       <p style="margin: 0 0 16px 0; color: #292524; font-size: 15px; font-weight: 400;">
         {{catalogueTitle}}
       </p>
       <p style="margin: 0 0 8px 0; color: rgba(41, 37, 36, 0.5); font-size: 12px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px;">
-        Photos Selected
+        {{t 'emails.favourites_submitted.photos_selected_label'}}
       </p>
       <p style="margin: 0; color: #292524; font-size: 15px; font-weight: 400;">
         {{photoCount}} {{photoLabel}}
@@ -38,14 +38,14 @@
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 0 0 40px 0;">
   <tr>
     <td>
-      {{> button url=dashboardUrl text="View Selections"}}
+      {{> button url=dashboardUrl text=(t 'emails.favourites_submitted.cta_button')}}
     </td>
   </tr>
 </table>
 
 <!-- Alternative link -->
 <p style="margin: 0 0 8px 0; color: rgba(41, 37, 36, 0.4); font-size: 12px; font-weight: 300; line-height: 1.5; letter-spacing: 0.3px;">
-  Or copy this link to your browser:
+  {{t 'emails.favourites_submitted.alt_link_text'}}
 </p>
 <p style="margin: 0; word-break: break-all;">
   <a href="{{dashboardUrl}}" style="color: #292524; font-size: 12px; font-weight: 400; text-decoration: underline; text-underline-offset: 2px;">{{dashboardUrl}}</a>

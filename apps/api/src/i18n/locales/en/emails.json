@@ -1,0 +1,25 @@
+{
+  "delivery_ready": {
+    "subject": "Your photos are ready",
+    "greeting": "Your photos are ready",
+    "message": "Great news — your photos have been professionally edited and are now ready for download.",
+    "photographer_prepared": "{photographerName} has prepared your gallery.",
+    "cta_button": "View Gallery",
+    "alt_link_text": "Or copy this link to your browser:"
+  },
+  "favourites_submitted": {
+    "subject": "New photo selections from {clientEmail}",
+    "greeting": "New photo selections",
+    "message": "A client has selected their favourite photos from your catalogue.",
+    "client_email_label": "Client Email",
+    "catalogue_label": "Catalogue",
+    "photos_selected_label": "Photos Selected",
+    "photo_singular": "photo",
+    "photo_plural": "photos",
+    "cta_button": "View Selections",
+    "alt_link_text": "Or copy this link to your browser:"
+  },
+  "common": {
+    "footer_copyright": "© {year} Fotomania"
+  }
+}

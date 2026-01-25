@@ -1,0 +1,25 @@
+{
+  "delivery_ready": {
+    "subject": "Vaše fotografije so pripravljene",
+    "greeting": "Vaše fotografije so pripravljene",
+    "message": "Odlična novica — vaše fotografije so bile profesionalno obdelane in so zdaj pripravljene za prenos.",
+    "photographer_prepared": "{photographerName} je pripravil/a vašo galerijo.",
+    "cta_button": "Oglej si galerijo",
+    "alt_link_text": "Ali kopirajte to povezavo v brskalnik:"
+  },
+  "favourites_submitted": {
+    "subject": "Nov izbor fotografij od {clientEmail}",
+    "greeting": "Nov izbor fotografij",
+    "message": "Stranka je izbrala svoje najljubše fotografije iz vašega kataloga.",
+    "client_email_label": "E-pošta stranke",
+    "catalogue_label": "Katalog",
+    "photos_selected_label": "Izbranih fotografij",
+    "photo_singular": "fotografija",
+    "photo_plural": "fotografij",
+    "cta_button": "Oglej si izbor",
+    "alt_link_text": "Ali kopirajte to povezavo v brskalnik:"
+  },
+  "common": {
+    "footer_copyright": "© {year} Fotomania"
+  }
+}

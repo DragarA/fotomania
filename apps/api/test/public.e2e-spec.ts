@@ -410,12 +410,12 @@ describe('PublicController (e2e)', () => {
       // Password protection check (guard)
       mockPasswordProtectionCheck(null);
 
-      // Mock catalogue lookup (with user join for owner email)
+      // Mock catalogue lookup (with user join for owner email and language)
       mockDb.select.mockReturnValueOnce({
         from: jest.fn().mockReturnValue({
           innerJoin: jest.fn().mockReturnValue({
             where: jest.fn().mockResolvedValue([
-              { id: mockCatalogue.id, title: 'Wedding 2024', ownerEmail: 'photographer@example.com' },
+              { id: mockCatalogue.id, title: 'Wedding 2024', ownerEmail: 'photographer@example.com', ownerPreferredLanguage: 'en' },
             ]),
           }),
         }),

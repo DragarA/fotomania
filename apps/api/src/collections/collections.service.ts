@@ -312,6 +312,7 @@ export class CollectionsService {
                 clientEmail: clientSession.email,
                 catalogueTitle: catalogue.title,
                 photographerName: user.name,
+                photographerLanguage: user.preferredLanguage,
             })
             .from(collection)
             .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
@@ -355,11 +356,11 @@ export class CollectionsService {
         const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
         const deliveryUrl = `${frontendUrl}/d/${result.collection.deliverySlug}`;
 
-        // 6. Send the email
+        // 6. Send the email using photographer's preferred language
         await this.emailService.send({
             to: result.clientEmail,
-            subject: 'Your photos are ready',
             template: EmailTemplate.DELIVERY_READY,
+            language: result.photographerLanguage || 'en',
             context: {
                 deliveryUrl,
                 photographerName: result.photographerName || undefined,

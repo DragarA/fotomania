@@ -1,16 +1,16 @@
 <!-- Greeting -->
 <h1 style="margin: 0 0 16px 0; color: #292524; font-size: 28px; font-weight: 300; letter-spacing: 0.5px; line-height: 1.3;">
-  Your photos are ready
+  {{t 'emails.delivery_ready.greeting'}}
 </h1>
 
 <!-- Message -->
 <p style="margin: 0 0 24px 0; color: rgba(41, 37, 36, 0.7); font-size: 15px; font-weight: 300; line-height: 1.7; letter-spacing: 0.2px;">
-  Great news — your photos have been professionally edited and are now ready for download.
+  {{t 'emails.delivery_ready.message'}}
 </p>
 
 {{#if photographerName}}
 <p style="margin: 0 0 36px 0; color: rgba(41, 37, 36, 0.7); font-size: 15px; font-weight: 300; line-height: 1.7; letter-spacing: 0.2px;">
-  <span style="color: #292524; font-weight: 400;">{{photographerName}}</span> has prepared your gallery.
+  {{t 'emails.delivery_ready.photographer_prepared' photographerName=photographerName}}
 </p>
 {{/if}}
 
@@ -18,14 +18,14 @@
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 0 0 40px 0;">
   <tr>
     <td>
-      {{> button url=deliveryUrl text="View Gallery"}}
+      {{> button url=deliveryUrl text=(t 'emails.delivery_ready.cta_button')}}
     </td>
   </tr>
 </table>
 
 <!-- Alternative link -->
 <p style="margin: 0 0 8px 0; color: rgba(41, 37, 36, 0.4); font-size: 12px; font-weight: 300; line-height: 1.5; letter-spacing: 0.3px;">
-  Or copy this link to your browser:
+  {{t 'emails.delivery_ready.alt_link_text'}}
 </p>
 <p style="margin: 0; word-break: break-all;">
   <a href="{{deliveryUrl}}" style="color: #292524; font-size: 12px; font-weight: 400; text-decoration: underline; text-underline-offset: 2px;">{{deliveryUrl}}</a>

@@ -1,1 +1,2330 @@
-{"openapi":"3.0.0","paths":{"/":{"get":{"operationId":"AppController_getHello","parameters":[],"responses":{"200":{"description":"Returns a hello message"}},"summary":"Get hello message","tags":["app"]}},"/health":{"get":{"operationId":"AppController_healthCheck","parameters":[],"responses":{"200":{"description":"Service is healthy"}},"summary":"Health check","tags":["app"]}},"/auth/register":{"post":{"operationId":"AuthController_register","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthRegisterDtoClass"}}}},"responses":{"201":{"description":"User registered successfully"}},"summary":"Register a new user","tags":["auth"]}},"/auth/login":{"post":{"operationId":"AuthController_login","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthLoginDtoClass"}}}},"responses":{"200":{"description":"Login successful"}},"summary":"Login with email and password","tags":["auth"]}},"/auth/logout":{"post":{"operationId":"AuthController_logout","parameters":[],"responses":{"200":{"description":"Logout successful"}},"summary":"Logout current user (client-side with JWT)","tags":["auth"]}},"/auth/refresh":{"post":{"operationId":"AuthController_refresh","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthRefreshDtoClass"}}}},"responses":{"200":{"description":"Tokens refreshed successfully"},"401":{"description":"Invalid refresh token"}},"summary":"Refresh access token using refresh token","tags":["auth"]}},"/auth/google":{"get":{"operationId":"AuthController_googleAuth","parameters":[],"responses":{"200":{"description":""}},"summary":"Initiate Google OAuth login","tags":["auth"]}},"/auth/google/callback":{"get":{"operationId":"AuthController_googleAuthRedirect","parameters":[],"responses":{"200":{"description":""}},"summary":"Google OAuth callback","tags":["auth"]}},"/auth/me":{"get":{"operationId":"AuthController_getCurrentUser","parameters":[],"responses":{"200":{"description":"Returns current user"}},"security":[{"JWT-auth":[]}],"summary":"Get current user","tags":["auth"]}},"/users/me":{"get":{"operationId":"UsersController_getMe","parameters":[],"responses":{"200":{"description":"Returns the current user profile","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserResDto"}}}}},"security":[{"JWT-auth":[]}],"summary":"Get current user profile","tags":["users"]},"patch":{"operationId":"UsersController_updateMe","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UpdateUserDtoClass"}}}},"responses":{"200":{"description":"User profile updated successfully","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserResDto"}}}},"400":{"description":"Invalid request data"}},"security":[{"JWT-auth":[]}],"summary":"Update current user profile","tags":["users"]}},"/catalogues":{"post":{"operationId":"CataloguesController_create","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreateCatalogueDtoClass"}}}},"responses":{"201":{"description":"Catalogue created successfully","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CatalogueResDto"}}}},"400":{"description":"Invalid request data"}},"security":[{"JWT-auth":[]}],"summary":"Create a new catalogue","tags":["catalogues"]},"get":{"operationId":"CataloguesController_findAll","parameters":[],"responses":{"200":{"description":"Returns all user catalogues","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/CatalogueResDto"}}}}}},"security":[{"JWT-auth":[]}],"summary":"Get all catalogues for the current user","tags":["catalogues"]}},"/catalogues/{id}":{"get":{"operationId":"CataloguesController_findOne","parameters":[{"name":"id","required":true,"in":"path","description":"Catalogue ID","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns the catalogue","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CatalogueResDto"}}}},"404":{"description":"Catalogue not found"}},"security":[{"JWT-auth":[]}],"summary":"Get a catalogue by ID","tags":["catalogues"]},"patch":{"operationId":"CataloguesController_update","parameters":[{"name":"id","required":true,"in":"path","description":"Catalogue ID","schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UpdateCatalogueDtoClass"}}}},"responses":{"200":{"description":"Catalogue updated successfully","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CatalogueResDto"}}}},"403":{"description":"Forbidden"},"404":{"description":"Catalogue not found"}},"security":[{"JWT-auth":[]}],"summary":"Update a catalogue","tags":["catalogues"]},"delete":{"operationId":"CataloguesController_remove","parameters":[{"name":"id","required":true,"in":"path","description":"Catalogue ID","schema":{"type":"string"}}],"responses":{"200":{"description":"Catalogue deleted successfully"},"403":{"description":"Forbidden"},"404":{"description":"Catalogue not found"}},"security":[{"JWT-auth":[]}],"summary":"Delete a catalogue","tags":["catalogues"]}},"/catalogues/{id}/status":{"patch":{"operationId":"CataloguesController_updateStatus","parameters":[{"name":"id","required":true,"in":"path","description":"Catalogue ID","schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UpdateCatalogueStatusDtoClass"}}}},"responses":{"200":{"description":"Catalogue updated successfully","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CatalogueResDto"}}}},"403":{"description":"Forbidden"},"404":{"description":"Catalogue not found"}},"security":[{"JWT-auth":[]}],"summary":"Update a catalogue status","tags":["catalogues"]}},"/catalogues/{catalogueId}/cover/{photoId}":{"patch":{"operationId":"CataloguesController_setCover","parameters":[{"name":"catalogueId","required":true,"in":"path","description":"Catalogue ID","schema":{"type":"string"}},{"name":"photoId","required":true,"in":"path","description":"Photo ID to set as cover","schema":{"type":"string"}}],"responses":{"200":{"description":"Cover updated","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CatalogueResDto"}}}},"403":{"description":"Forbidden"},"404":{"description":"Catalogue or photo not found"}},"security":[{"JWT-auth":[]}],"summary":"Set a photo as catalogue cover","tags":["catalogues"]}},"/catalogues/{catalogueId}/favourites":{"get":{"operationId":"CataloguesController_getCatalogueFavourites","parameters":[{"name":"catalogueId","required":true,"in":"path","description":"Catalogue ID","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns all client sessions with their favourites","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/ClientFavouritesResDto"}}}}},"403":{"description":"Forbidden"},"404":{"description":"Catalogue not found"}},"security":[{"JWT-auth":[]}],"summary":"Get all client favourites for a catalogue","tags":["catalogues"]}},"/collections":{"post":{"operationId":"CollectionsController_create","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreateCollectionDtoClass"}}}},"responses":{"201":{"description":"Collection created successfully","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CollectionResDto"}}}},"400":{"description":"Invalid request data"},"403":{"description":"Forbidden"},"404":{"description":"Catalogue not found"}},"security":[{"JWT-auth":[]}],"summary":"Create a new collection","tags":["collections"]},"get":{"operationId":"CollectionsController_findAll","parameters":[{"name":"catalogueId","required":true,"in":"query","description":"Catalogue ID to filter collections","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns all collections for the catalogue","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/CollectionResDto"}}}}},"403":{"description":"Forbidden"},"404":{"description":"Catalogue not found"}},"security":[{"JWT-auth":[]}],"summary":"Get all collections for a catalogue","tags":["collections"]}},"/collections/{id}":{"get":{"operationId":"CollectionsController_findOne","parameters":[{"name":"id","required":true,"in":"path","description":"Collection ID","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns the collection","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CollectionResDto"}}}},"403":{"description":"Forbidden"},"404":{"description":"Collection not found"}},"security":[{"JWT-auth":[]}],"summary":"Get a collection by ID","tags":["collections"]},"patch":{"operationId":"CollectionsController_update","parameters":[{"name":"id","required":true,"in":"path","description":"Collection ID","schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/UpdateCollectionDtoClass"}}}},"responses":{"200":{"description":"Collection updated successfully","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CollectionResDto"}}}},"403":{"description":"Forbidden"},"404":{"description":"Collection not found"}},"security":[{"JWT-auth":[]}],"summary":"Update a collection","tags":["collections"]},"delete":{"operationId":"CollectionsController_remove","parameters":[{"name":"id","required":true,"in":"path","description":"Collection ID","schema":{"type":"string"}}],"responses":{"200":{"description":"Collection deleted successfully"},"403":{"description":"Forbidden"},"404":{"description":"Collection not found"}},"security":[{"JWT-auth":[]}],"summary":"Delete a collection","tags":["collections"]}},"/collections/from-session/{sessionId}":{"post":{"operationId":"CollectionsController_createFromSession","parameters":[{"name":"sessionId","required":true,"in":"path","description":"Client session ID (favourites session)","schema":{"type":"string"}}],"responses":{"201":{"description":"Delivery collection created successfully","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CollectionResDto"}}}},"400":{"description":"Delivery collection already exists"},"403":{"description":"Forbidden"},"404":{"description":"Session not found"}},"security":[{"JWT-auth":[]}],"summary":"Create a delivery collection from a client session","tags":["collections"]}},"/collections/{id}/downloads":{"get":{"operationId":"CollectionsController_getDownloadHistory","parameters":[{"name":"id","required":true,"in":"path","description":"Collection ID","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns download history"},"400":{"description":"Not a delivery collection"},"403":{"description":"Forbidden"},"404":{"description":"Collection not found"}},"security":[{"JWT-auth":[]}],"summary":"Get download history for a delivery collection","tags":["collections"]}},"/collections/{id}/send-delivery-email":{"post":{"operationId":"CollectionsController_sendDeliveryEmail","parameters":[{"name":"id","required":true,"in":"path","description":"Collection ID","schema":{"type":"string"}}],"responses":{"200":{"description":"Delivery email sent successfully"},"400":{"description":"Not a delivery collection or no client email"},"403":{"description":"Forbidden"},"404":{"description":"Collection not found"}},"security":[{"JWT-auth":[]}],"summary":"Send delivery ready email to the client","tags":["collections"]}},"/photos/upload/{collectionId}":{"post":{"operationId":"PhotosController_uploadFile","parameters":[{"name":"collectionId","required":true,"in":"path","description":"Collection ID","schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"multipart/form-data":{"schema":{"type":"object","properties":{"file":{"type":"string","format":"binary"}}}}}},"responses":{"201":{"description":"Photo uploaded successfully","content":{"application/json":{"schema":{"$ref":"#/components/schemas/PhotoResDto"}}}},"400":{"description":"Invalid file or request data"},"403":{"description":"Forbidden"},"404":{"description":"Collection not found"}},"security":[{"JWT-auth":[]}],"summary":"Upload a photo file","tags":["photos"]}},"/photos":{"get":{"operationId":"PhotosController_findAll","parameters":[{"name":"collectionId","required":true,"in":"query","description":"Collection ID to filter photos","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns all photos for the collection","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/PhotoResDto"}}}}},"403":{"description":"Forbidden"},"404":{"description":"Collection not found"}},"security":[{"JWT-auth":[]}],"summary":"Get all photos for a collection","tags":["photos"]}},"/photos/{id}":{"get":{"operationId":"PhotosController_findOne","parameters":[{"name":"id","required":true,"in":"path","description":"Photo ID","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns the photo","content":{"application/json":{"schema":{"$ref":"#/components/schemas/PhotoResDto"}}}},"403":{"description":"Forbidden"},"404":{"description":"Photo not found"}},"security":[{"JWT-auth":[]}],"summary":"Get a photo by ID","tags":["photos"]},"delete":{"operationId":"PhotosController_remove","parameters":[{"name":"id","required":true,"in":"path","description":"Photo ID","schema":{"type":"string"}}],"responses":{"200":{"description":"Photo deleted successfully"},"403":{"description":"Forbidden"},"404":{"description":"Photo not found"}},"security":[{"JWT-auth":[]}],"summary":"Delete a photo","tags":["photos"]}},"/client-sessions/{catalogueId}/favourites/{sessionId}":{"get":{"operationId":"ClientSessionsController_getCatalogueFavourites","parameters":[{"name":"catalogueId","required":true,"in":"path","description":"Catalogue ID","schema":{"type":"string"}},{"name":"sessionId","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns all client sessions with their favourites","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ClientSessionFavouritesResDto"}}}},"403":{"description":"Forbidden"},"404":{"description":"Catalogue not found"}},"security":[{"JWT-auth":[]}],"summary":"Get all client favourites for a catalogue","tags":["client-sessions"]}},"/public/catalogue/{slug}/verify":{"post":{"operationId":"PublicController_verifyPassword","parameters":[{"name":"slug","required":true,"in":"path","description":"Public URL slug","schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/VerifyPasswordReqDtoClass"}}}},"responses":{"200":{"description":"Password verified, returns access token","content":{"application/json":{"schema":{"$ref":"#/components/schemas/VerifyPasswordResDto"}}}},"401":{"description":"Invalid password"},"404":{"description":"Catalogue not found"}},"summary":"Verify password for a protected catalogue","tags":["public"]}},"/public/catalogue/{slug}":{"get":{"operationId":"PublicController_findBySlug","parameters":[{"name":"slug","required":true,"in":"path","description":"Public URL slug","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns the catalogue","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CataloguePublicResDto"}}}},"401":{"description":"Password required or invalid token"},"404":{"description":"Catalogue not found"}},"security":[{"bearer":[]}],"summary":"Get public catalogue data by public URL slug","tags":["public"]}},"/public/catalogue/{slug}/collection/{collectionId}/photos":{"get":{"operationId":"PublicController_findCollectionPhotosBySlug","parameters":[{"name":"slug","required":true,"in":"path","description":"Public URL slug","schema":{"type":"string"}},{"name":"collectionId","required":true,"in":"path","description":"Collection ID","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns the photos","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/CollectionPhotoPublicResDto"}}}}},"401":{"description":"Password required or invalid token"},"404":{"description":"Collection not found"}},"security":[{"bearer":[]}],"summary":"Get photos for a public collection","tags":["public"]}},"/public/catalogue/{slug}/favourites":{"post":{"operationId":"PublicController_addFavourites","parameters":[{"name":"slug","required":true,"in":"path","description":"Public URL slug","schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AddFavouritesReqDtoClass"}}}},"responses":{"201":{"description":"Favourites added successfully","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AddFavouritesResDto"}}}},"400":{"description":"Invalid request payload"},"401":{"description":"Password required or invalid token"},"404":{"description":"Catalogue not found"}},"security":[{"bearer":[]}],"summary":"Add favourite photos for a client","tags":["public"]}},"/public/delivery/{deliverySlug}/verify":{"post":{"operationId":"PublicController_verifyDeliveryPassword","parameters":[{"name":"deliverySlug","required":true,"in":"path","description":"Delivery URL slug","schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/VerifyPasswordReqDtoClass"}}}},"responses":{"200":{"description":"Password verified, returns access token","content":{"application/json":{"schema":{"$ref":"#/components/schemas/VerifyPasswordResDto"}}}},"401":{"description":"Invalid password"},"404":{"description":"Delivery not found"}},"summary":"Verify password for a protected delivery collection","tags":["public"]}},"/public/delivery/{deliverySlug}":{"get":{"operationId":"PublicController_findDeliveryBySlug","parameters":[{"name":"deliverySlug","required":true,"in":"path","description":"Delivery URL slug","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns the delivery collection info","content":{"application/json":{"schema":{"$ref":"#/components/schemas/DeliveryPublicResDto"}}}},"401":{"description":"Password required or invalid token"},"404":{"description":"Delivery not found"}},"security":[{"bearer":[]}],"summary":"Get delivery collection data by slug","tags":["public"]}},"/public/delivery/{deliverySlug}/download":{"get":{"operationId":"PublicController_downloadDelivery","parameters":[{"name":"deliverySlug","required":true,"in":"path","description":"Delivery URL slug","schema":{"type":"string"}}],"responses":{"200":{"description":"Returns a zip file containing all photos"},"401":{"description":"Password required or invalid token"},"404":{"description":"Delivery not found"}},"security":[{"bearer":[]}],"summary":"Download all photos as a zip file","tags":["public"]}}},"info":{"title":"Fotomania API","description":"The Fotomania API documentation","version":"1.0","contact":{}},"tags":[{"name":"app","description":""}],"servers":[],"components":{"securitySchemes":{"JWT-auth":{"scheme":"bearer","bearerFormat":"JWT","type":"http","name":"JWT","description":"Enter JWT token","in":"header"}},"schemas":{"AuthRegisterDtoClass":{"type":"object","properties":{"email":{"type":"string","description":"User Email"},"password":{"type":"string","description":"User Password"},"name":{"type":"string","description":"User Name"}},"required":["email","password","name"]},"AuthLoginDtoClass":{"type":"object","properties":{"email":{"type":"string","description":"User Email"},"password":{"type":"string","description":"User Password"}},"required":["email","password"]},"AuthRefreshDtoClass":{"type":"object","properties":{"refreshToken":{"type":"string","example":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c","description":"Refresh token"}},"required":["refreshToken"]},"UserResDto":{"type":"object","properties":{"id":{"type":"string","description":"Unique identifier for the user","example":"550e8400-e29b-41d4-a716-446655440000"},"name":{"type":"string","description":"Full name of the user","example":"John Doe"},"email":{"type":"string","description":"Email address of the user","example":"john.doe@example.com"},"emailVerified":{"type":"boolean","description":"Whether the email has been verified","example":true},"image":{"type":"object","description":"Profile image URL","nullable":true,"example":"https://example.com/avatar.jpg"},"businessName":{"type":"object","description":"Business name","nullable":true,"example":"Photo Studio Pro"},"businessAddress":{"type":"object","description":"Business address","nullable":true,"example":"123 Main Street, Ljubljana, Slovenia"},"businessPhone":{"type":"object","description":"Business phone number","nullable":true,"example":"+386 1 234 5678"},"businessEmail":{"type":"object","description":"Business email address","nullable":true,"example":"contact@photostudio.com"},"businessWebsite":{"type":"object","description":"Business website URL","nullable":true,"example":"https://photostudio.com"},"businessLogo":{"type":"object","description":"Business logo URL","nullable":true,"example":"https://example.com/logo.png"},"businessDescription":{"type":"object","description":"Business description","nullable":true,"example":"Professional photography services for weddings and events."},"preferredLanguage":{"type":"string","description":"Preferred language code","example":"en"},"createdAt":{"format":"date-time","type":"string","description":"Timestamp when the user was created","example":"2024-12-08T19:00:00.000Z"},"updatedAt":{"format":"date-time","type":"string","description":"Timestamp when the user was last updated","example":"2024-12-08T19:30:00.000Z"}},"required":["id","name","email","emailVerified","preferredLanguage","createdAt","updatedAt"]},"UpdateUserDtoClass":{"type":"object","properties":{"name":{"type":"string","description":"Full name of the user","example":"John Doe"},"businessName":{"type":"object","description":"Business name","nullable":true,"example":"Photo Studio Pro"},"businessAddress":{"type":"object","description":"Business address","nullable":true,"example":"123 Main Street, Ljubljana, Slovenia"},"businessPhone":{"type":"object","description":"Business phone number","nullable":true,"example":"+386 1 234 5678"},"businessEmail":{"type":"object","description":"Business email address","nullable":true,"example":"contact@photostudio.com"},"businessWebsite":{"type":"object","description":"Business website URL","nullable":true,"example":"https://photostudio.com"},"businessLogo":{"type":"object","description":"Business logo URL","nullable":true,"example":"https://example.com/logo.png"},"businessDescription":{"type":"object","description":"Business description","nullable":true,"example":"Professional photography services for weddings and events."},"preferredLanguage":{"type":"string","description":"Preferred language code","enum":["en","sl"],"example":"en"}}},"CreateCatalogueDtoClass":{"type":"object","properties":{"title":{"type":"string","description":"Catalogue title","example":"Summer Wedding 2024"},"description":{"type":"string","description":"Catalogue description","example":"Beautiful moments from our summer wedding"}},"required":["title"]},"CatalogueResDto":{"type":"object","properties":{"id":{"type":"string","description":"Unique identifier for the catalogue","example":"550e8400-e29b-41d4-a716-446655440000"},"title":{"type":"string","description":"Title of the catalogue","example":"Summer Wedding 2024"},"description":{"type":"object","description":"Description of the catalogue","example":"Beautiful moments from our summer wedding"},"coverImage":{"type":"object","description":"URL of the cover image","example":"https://example.com/images/cover.jpg"},"publicUrlSlug":{"type":"string","description":"Auto-generated public URL slug","example":"7c9e6679-7425-40de-944b-e07fc1f90ae7"},"ownerId":{"type":"string","description":"ID of the catalogue owner","example":"550e8400-e29b-41d4-a716-446655440001"},"createdAt":{"format":"date-time","type":"string","description":"Timestamp when the catalogue was created","example":"2024-12-08T19:00:00.000Z"},"updatedAt":{"format":"date-time","type":"string","description":"Timestamp when the catalogue was last updated","example":"2024-12-08T19:30:00.000Z"},"photoCount":{"type":"number","description":"Number of photos in the catalogue","example":150},"status":{"type":"string","description":"Status of the catalogue","example":"published"},"isProtected":{"type":"boolean","description":"Indicates if the catalogue is password protected","example":false}},"required":["id","title","publicUrlSlug","ownerId","createdAt","updatedAt","photoCount","status","isProtected"]},"UpdateCatalogueDtoClass":{"type":"object","properties":{"title":{"type":"string","description":"Catalogue title","example":"Summer Wedding 2024"},"description":{"type":"string","description":"Catalogue description","example":"Beautiful moments from our summer wedding"},"coverImage":{"type":"object","description":"Catalogue cover image path","nullable":true,"example":"collections/abc123/thumb_photo456.jpg"}}},"UpdateCatalogueStatusDtoClass":{"type":"object","properties":{"status":{"type":"string","description":"Status of the catalogue","example":"draft"},"password":{"type":"string","description":"Catalogue password for public access","example":"secret123!"}},"required":["status"]},"ClientFavouritesResDto":{"type":"object","properties":{"sessionId":{"type":"string","description":"Client session ID"},"email":{"type":"string","description":"Client email address"},"createdAt":{"format":"date-time","type":"string","description":"Session created timestamp"},"photoCount":{"type":"number","description":"Array of favorited photos"}},"required":["sessionId","email","createdAt","photoCount"]},"CreateCollectionDtoClass":{"type":"object","properties":{"name":{"type":"string","description":"Collection name","example":"Ceremony Photos"},"catalogueId":{"type":"string","description":"ID of the catalogue this collection belongs to","example":"550e8400-e29b-41d4-a716-446655440000"}},"required":["name","catalogueId"]},"CollectionResDto":{"type":"object","properties":{"id":{"type":"string","description":"Unique identifier for the collection","example":"550e8400-e29b-41d4-a716-446655440000"},"name":{"type":"string","description":"Name of the collection","example":"Ceremony Photos"},"catalogueId":{"type":"string","description":"ID of the catalogue this collection belongs to","example":"550e8400-e29b-41d4-a716-446655440001"},"type":{"type":"string","description":"Type of collection","enum":["proofing","delivery"],"example":"proofing"},"clientSessionId":{"type":"string","description":"ID of the client session this delivery collection was created from","example":"550e8400-e29b-41d4-a716-446655440002"},"deliverySlug":{"type":"string","description":"Public delivery URL slug for delivery collections","example":"abc123xyz"},"createdAt":{"format":"date-time","type":"string","description":"Timestamp when the collection was created","example":"2024-12-08T19:00:00.000Z"},"updatedAt":{"format":"date-time","type":"string","description":"Timestamp when the collection was last updated","example":"2024-12-08T19:30:00.000Z"},"photoCount":{"type":"number","description":"Number of photos in the collection","example":42},"clientEmail":{"type":"string","description":"Email of the client for delivery collections","example":"client@example.com"}},"required":["id","name","catalogueId","type","createdAt","updatedAt","photoCount"]},"UpdateCollectionDtoClass":{"type":"object","properties":{"name":{"type":"string","description":"Collection name","example":"Ceremony Photos"}}},"PhotoResDto":{"type":"object","properties":{"id":{"type":"string","description":"Unique identifier for the photo","example":"550e8400-e29b-41d4-a716-446655440000"},"originalFileName":{"type":"string","description":"Original filename of the photo","example":"wedding-ceremony-001.jpg"},"storagePath":{"type":"string","description":"Storage path where the photo is stored","example":"/uploads/catalogues/abc123/photos/uuid.jpg"},"mimeType":{"type":"string","description":"MIME type of the photo","example":"image/jpeg"},"thumbnailPath":{"type":"string","description":"Path to the thumbnail image","example":"/uploads/catalogues/abc123/thumbnails/uuid.jpg"},"width":{"type":"number","description":"Width of the photo in pixels","example":1920},"height":{"type":"number","description":"Height of the photo in pixels","example":1080},"size":{"type":"number","description":"File size in bytes","example":2048576},"collectionId":{"type":"string","description":"ID of the collection this photo belongs to","example":"550e8400-e29b-41d4-a716-446655440000"}},"required":["id","originalFileName","storagePath","mimeType","collectionId"]},"ClientSessionFavouritesResDto":{"type":"object","properties":{"sessionId":{"type":"string","description":"Client session ID"},"email":{"type":"string","description":"Client email address"},"createdAt":{"format":"date-time","type":"string","description":"Session created timestamp"},"photos":{"description":"Array of favorited photos","type":"array","items":{"$ref":"#/components/schemas/PhotoResDto"}}},"required":["sessionId","email","createdAt","photos"]},"VerifyPasswordReqDtoClass":{"type":"object","properties":{"password":{"type":"string","description":"Password to access the protected catalogue","example":"secret123"}},"required":["password"]},"VerifyPasswordResDto":{"type":"object","properties":{"accessToken":{"type":"string","description":"Access token for accessing protected catalogue","example":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."}},"required":["accessToken"]},"CollectionPublicResDto":{"type":"object","properties":{"id":{"type":"string","description":"Unique identifier of the collection","example":"d63bb7c9-b5b3-4d91-89a9-32fd573017cc"},"name":{"type":"string","description":"Display name of the collection","example":"Ceremony"}},"required":["id","name"]},"CataloguePublicResDto":{"type":"object","properties":{"id":{"type":"string","description":"Unique identifier of the catalogue","example":"7a934018-12bd-4501-9e7f-8d2b9669dcfb"},"title":{"type":"string","description":"Display title of the catalogue","example":"Summer Wedding 2024"},"description":{"type":"object","description":"Optional description presented on the public page"},"coverImage":{"type":"object","description":"Optional cover image that will be shown to guests","example":"/uploads/catalogues/cat-123/cover.jpg"},"publicUrlSlug":{"type":"string","description":"Slug that identifies the catalogue in public routes","example":"c0b4bf8c-0757-4c8d-bfa1-aa4a8f7bbf72"},"createdAt":{"format":"date-time","type":"string","description":"Creation timestamp of the catalogue","example":"2024-02-05T10:15:32.000Z"},"updatedAt":{"format":"date-time","type":"string","description":"Last modification timestamp of the catalogue","example":"2024-02-10T19:04:12.000Z"},"collections":{"description":"Collections grouped under this catalogue","type":"array","items":{"$ref":"#/components/schemas/CollectionPublicResDto"}}},"required":["id","title","publicUrlSlug","createdAt","updatedAt","collections"]},"CollectionPhotoPublicResDto":{"type":"object","properties":{"id":{"type":"string","description":"Unique identifier of the photo","example":"9b5c4e28-2bd3-4e43-9f75-7dd29586a7b4"},"originalFileName":{"type":"string","description":"Original filename uploaded by the photographer","example":"IMG_1042.CR3"},"storagePath":{"type":"string","description":"Relative path to the processed photo asset","example":"/uploads/collections/1234/abcd.jpg"},"thumbnailPath":{"type":"object","description":"Relative path to the thumbnail image, if generated","example":"/uploads/collections/1234/thumb_abcd.jpg"},"mimeType":{"type":"string","description":"Mime type of the stored photo","example":"image/jpeg"},"width":{"type":"object","description":"Image width in pixels, if available","example":2400},"height":{"type":"object","description":"Image height in pixels, if available","example":1600},"size":{"type":"object","description":"File size in bytes, if available","example":5463221},"createdAt":{"format":"date-time","type":"string","description":"Timestamp when the photo was uploaded","example":"2024-03-04T19:55:11.000Z"},"updatedAt":{"format":"date-time","type":"string","description":"Timestamp when the photo metadata was last updated","example":"2024-03-05T10:12:42.000Z"}},"required":["id","originalFileName","storagePath","mimeType","createdAt","updatedAt"]},"AddFavouritesReqDtoClass":{"type":"object","properties":{"email":{"type":"string","description":"Email address of the client","example":"john.doe@example.com"},"photoIds":{"description":"Array of photo IDs to mark as favourites","example":["9b5c4e28-2bd3-4e43-9f75-7dd29586a7b4","a3f1c2d8-4e5f-6a7b-8c9d-0e1f2a3b4c5d"],"type":"array","items":{"type":"string"}}},"required":["email","photoIds"]},"AddFavouritesResDto":{"type":"object","properties":{"success":{"type":"boolean","description":"Success indicator","example":true},"clientSessionEmail":{"type":"string","description":"Client session email associated with the favourites","example":"test@email.com"}},"required":["success","clientSessionEmail"]},"DeliveryPublicResDto":{"type":"object","properties":{"id":{"type":"string","description":"Delivery collection ID","example":"550e8400-e29b-41d4-a716-446655440000"},"name":{"type":"string","description":"Delivery collection name","example":"Delivery - client@example.com"},"clientEmail":{"type":"object","description":"Client email address","example":"client@example.com"},"catalogueTitle":{"type":"string","description":"Parent catalogue title","example":"Wedding Photos 2024"},"deliverySlug":{"type":"string","description":"Delivery slug for URL","example":"abc123-def456"},"photoCount":{"type":"number","description":"Number of photos in the delivery collection","example":42}},"required":["id","name","catalogueTitle","deliverySlug","photoCount"]}}}}
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "AppController_getHello",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns a hello message"
+          }
+        },
+        "summary": "Get hello message",
+        "tags": [
+          "app"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "AppController_healthCheck",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Service is healthy"
+          }
+        },
+        "summary": "Health check",
+        "tags": [
+          "app"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRegisterDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully"
+          }
+        },
+        "summary": "Register a new user",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthLoginDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful"
+          }
+        },
+        "summary": "Login with email and password",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Logout successful"
+          }
+        },
+        "summary": "Logout current user (client-side with JWT)",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRefreshDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokens refreshed successfully"
+          },
+          "401": {
+            "description": "Invalid refresh token"
+          }
+        },
+        "summary": "Refresh access token using refresh token",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "operationId": "AuthController_googleAuth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Initiate Google OAuth login",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "operationId": "AuthController_googleAuthRedirect",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Google OAuth callback",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "operationId": "AuthController_getCurrentUser",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns current user"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get current user",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/users/me": {
+      "get": {
+        "operationId": "UsersController_getMe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns the current user profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get current user profile",
+        "tags": [
+          "users"
+        ]
+      },
+      "patch": {
+        "operationId": "UsersController_updateMe",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User profile updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Update current user profile",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/catalogues": {
+      "post": {
+        "operationId": "CataloguesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCatalogueDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Catalogue created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Create a new catalogue",
+        "tags": [
+          "catalogues"
+        ]
+      },
+      "get": {
+        "operationId": "CataloguesController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns all user catalogues",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CatalogueResDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all catalogues for the current user",
+        "tags": [
+          "catalogues"
+        ]
+      }
+    },
+    "/catalogues/{id}": {
+      "get": {
+        "operationId": "CataloguesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the catalogue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get a catalogue by ID",
+        "tags": [
+          "catalogues"
+        ]
+      },
+      "patch": {
+        "operationId": "CataloguesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCatalogueDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Catalogue updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Update a catalogue",
+        "tags": [
+          "catalogues"
+        ]
+      },
+      "delete": {
+        "operationId": "CataloguesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Catalogue deleted successfully"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Delete a catalogue",
+        "tags": [
+          "catalogues"
+        ]
+      }
+    },
+    "/catalogues/{id}/status": {
+      "patch": {
+        "operationId": "CataloguesController_updateStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCatalogueStatusDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Catalogue updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Update a catalogue status",
+        "tags": [
+          "catalogues"
+        ]
+      }
+    },
+    "/catalogues/{catalogueId}/cover/{photoId}": {
+      "patch": {
+        "operationId": "CataloguesController_setCover",
+        "parameters": [
+          {
+            "name": "catalogueId",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "photoId",
+            "required": true,
+            "in": "path",
+            "description": "Photo ID to set as cover",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cover updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogueResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue or photo not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Set a photo as catalogue cover",
+        "tags": [
+          "catalogues"
+        ]
+      }
+    },
+    "/catalogues/{catalogueId}/favourites": {
+      "get": {
+        "operationId": "CataloguesController_getCatalogueFavourites",
+        "parameters": [
+          {
+            "name": "catalogueId",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all client sessions with their favourites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientFavouritesResDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all client favourites for a catalogue",
+        "tags": [
+          "catalogues"
+        ]
+      }
+    },
+    "/collections": {
+      "post": {
+        "operationId": "CollectionsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCollectionDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Collection created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Create a new collection",
+        "tags": [
+          "collections"
+        ]
+      },
+      "get": {
+        "operationId": "CollectionsController_findAll",
+        "parameters": [
+          {
+            "name": "catalogueId",
+            "required": true,
+            "in": "query",
+            "description": "Catalogue ID to filter collections",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all collections for the catalogue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollectionResDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all collections for a catalogue",
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/collections/{id}": {
+      "get": {
+        "operationId": "CollectionsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get a collection by ID",
+        "tags": [
+          "collections"
+        ]
+      },
+      "patch": {
+        "operationId": "CollectionsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCollectionDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Collection updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Update a collection",
+        "tags": [
+          "collections"
+        ]
+      },
+      "delete": {
+        "operationId": "CollectionsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collection deleted successfully"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Delete a collection",
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/collections/from-session/{sessionId}": {
+      "post": {
+        "operationId": "CollectionsController_createFromSession",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "required": true,
+            "in": "path",
+            "description": "Client session ID (favourites session)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Delivery collection created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Delivery collection already exists"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Session not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Create a delivery collection from a client session",
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/collections/{id}/downloads": {
+      "get": {
+        "operationId": "CollectionsController_getDownloadHistory",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns download history"
+          },
+          "400": {
+            "description": "Not a delivery collection"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get download history for a delivery collection",
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/collections/{id}/send-delivery-email": {
+      "post": {
+        "operationId": "CollectionsController_sendDeliveryEmail",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delivery email sent successfully"
+          },
+          "400": {
+            "description": "Not a delivery collection or no client email"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Send delivery ready email to the client",
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/photos/upload/{collectionId}": {
+      "post": {
+        "operationId": "PhotosController_uploadFile",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Photo uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhotoResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid file or request data"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Upload a photo file",
+        "tags": [
+          "photos"
+        ]
+      }
+    },
+    "/photos": {
+      "get": {
+        "operationId": "PhotosController_findAll",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "required": true,
+            "in": "query",
+            "description": "Collection ID to filter photos",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all photos for the collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PhotoResDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all photos for a collection",
+        "tags": [
+          "photos"
+        ]
+      }
+    },
+    "/photos/{id}": {
+      "get": {
+        "operationId": "PhotosController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Photo ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the photo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhotoResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Photo not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get a photo by ID",
+        "tags": [
+          "photos"
+        ]
+      },
+      "delete": {
+        "operationId": "PhotosController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Photo ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Photo deleted successfully"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Photo not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Delete a photo",
+        "tags": [
+          "photos"
+        ]
+      }
+    },
+    "/client-sessions/{catalogueId}/favourites/{sessionId}": {
+      "get": {
+        "operationId": "ClientSessionsController_getCatalogueFavourites",
+        "parameters": [
+          {
+            "name": "catalogueId",
+            "required": true,
+            "in": "path",
+            "description": "Catalogue ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sessionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns all client sessions with their favourites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSessionFavouritesResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all client favourites for a catalogue",
+        "tags": [
+          "client-sessions"
+        ]
+      }
+    },
+    "/public/catalogue/{slug}/verify": {
+      "post": {
+        "operationId": "PublicController_verifyPassword",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "Public URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyPasswordReqDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password verified, returns access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyPasswordResDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid password"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "summary": "Verify password for a protected catalogue",
+        "tags": [
+          "public"
+        ]
+      }
+    },
+    "/public/catalogue/{slug}": {
+      "get": {
+        "operationId": "PublicController_findBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "Public URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the catalogue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CataloguePublicResDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password required or invalid token"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get public catalogue data by public URL slug",
+        "tags": [
+          "public"
+        ]
+      }
+    },
+    "/public/catalogue/{slug}/collection/{collectionId}/photos": {
+      "get": {
+        "operationId": "PublicController_findCollectionPhotosBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "Public URL slug",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "collectionId",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the photos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollectionPhotoPublicResDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password required or invalid token"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get photos for a public collection",
+        "tags": [
+          "public"
+        ]
+      }
+    },
+    "/public/catalogue/{slug}/favourites": {
+      "post": {
+        "operationId": "PublicController_addFavourites",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "description": "Public URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddFavouritesReqDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Favourites added successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddFavouritesResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request payload"
+          },
+          "401": {
+            "description": "Password required or invalid token"
+          },
+          "404": {
+            "description": "Catalogue not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add favourite photos for a client",
+        "tags": [
+          "public"
+        ]
+      }
+    },
+    "/public/delivery/{deliverySlug}/verify": {
+      "post": {
+        "operationId": "PublicController_verifyDeliveryPassword",
+        "parameters": [
+          {
+            "name": "deliverySlug",
+            "required": true,
+            "in": "path",
+            "description": "Delivery URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyPasswordReqDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password verified, returns access token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyPasswordResDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid password"
+          },
+          "404": {
+            "description": "Delivery not found"
+          }
+        },
+        "summary": "Verify password for a protected delivery collection",
+        "tags": [
+          "public"
+        ]
+      }
+    },
+    "/public/delivery/{deliverySlug}": {
+      "get": {
+        "operationId": "PublicController_findDeliveryBySlug",
+        "parameters": [
+          {
+            "name": "deliverySlug",
+            "required": true,
+            "in": "path",
+            "description": "Delivery URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the delivery collection info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeliveryPublicResDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password required or invalid token"
+          },
+          "404": {
+            "description": "Delivery not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get delivery collection data by slug",
+        "tags": [
+          "public"
+        ]
+      }
+    },
+    "/public/delivery/{deliverySlug}/download": {
+      "get": {
+        "operationId": "PublicController_downloadDelivery",
+        "parameters": [
+          {
+            "name": "deliverySlug",
+            "required": true,
+            "in": "path",
+            "description": "Delivery URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a zip file containing all photos"
+          },
+          "401": {
+            "description": "Password required or invalid token"
+          },
+          "404": {
+            "description": "Delivery not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Download all photos as a zip file",
+        "tags": [
+          "public"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Fotomania API",
+    "description": "The Fotomania API documentation",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "app",
+      "description": ""
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "JWT-auth": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "name": "JWT",
+        "description": "Enter JWT token",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "AuthRegisterDtoClass": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User Email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User Password"
+          },
+          "name": {
+            "type": "string",
+            "description": "User Name"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "name"
+        ]
+      },
+      "AuthLoginDtoClass": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User Email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User Password"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "AuthRefreshDtoClass": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+            "description": "Refresh token"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "UserResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the user",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Full name of the user",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address of the user",
+            "example": "john.doe@example.com"
+          },
+          "emailVerified": {
+            "type": "boolean",
+            "description": "Whether the email has been verified",
+            "example": true
+          },
+          "image": {
+            "type": "object",
+            "description": "Profile image URL",
+            "nullable": true,
+            "example": "https://example.com/avatar.jpg"
+          },
+          "businessName": {
+            "type": "object",
+            "description": "Business name",
+            "nullable": true,
+            "example": "Photo Studio Pro"
+          },
+          "businessAddress": {
+            "type": "object",
+            "description": "Business address",
+            "nullable": true,
+            "example": "123 Main Street, Ljubljana, Slovenia"
+          },
+          "businessPhone": {
+            "type": "object",
+            "description": "Business phone number",
+            "nullable": true,
+            "example": "+386 1 234 5678"
+          },
+          "businessEmail": {
+            "type": "object",
+            "description": "Business email address",
+            "nullable": true,
+            "example": "contact@photostudio.com"
+          },
+          "businessWebsite": {
+            "type": "object",
+            "description": "Business website URL",
+            "nullable": true,
+            "example": "https://photostudio.com"
+          },
+          "businessLogo": {
+            "type": "object",
+            "description": "Business logo URL",
+            "nullable": true,
+            "example": "https://example.com/logo.png"
+          },
+          "businessDescription": {
+            "type": "object",
+            "description": "Business description",
+            "nullable": true,
+            "example": "Professional photography services for weddings and events."
+          },
+          "preferredLanguage": {
+            "type": "string",
+            "description": "Preferred language code",
+            "example": "en"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Timestamp when the user was created",
+            "example": "2024-12-08T19:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Timestamp when the user was last updated",
+            "example": "2024-12-08T19:30:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "emailVerified",
+          "preferredLanguage",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateUserDtoClass": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Full name of the user",
+            "example": "John Doe"
+          },
+          "businessName": {
+            "type": "object",
+            "description": "Business name",
+            "nullable": true,
+            "example": "Photo Studio Pro"
+          },
+          "businessAddress": {
+            "type": "object",
+            "description": "Business address",
+            "nullable": true,
+            "example": "123 Main Street, Ljubljana, Slovenia"
+          },
+          "businessPhone": {
+            "type": "object",
+            "description": "Business phone number",
+            "nullable": true,
+            "example": "+386 1 234 5678"
+          },
+          "businessEmail": {
+            "type": "object",
+            "description": "Business email address",
+            "nullable": true,
+            "example": "contact@photostudio.com"
+          },
+          "businessWebsite": {
+            "type": "object",
+            "description": "Business website URL",
+            "nullable": true,
+            "example": "https://photostudio.com"
+          },
+          "businessLogo": {
+            "type": "object",
+            "description": "Business logo URL",
+            "nullable": true,
+            "example": "https://example.com/logo.png"
+          },
+          "businessDescription": {
+            "type": "object",
+            "description": "Business description",
+            "nullable": true,
+            "example": "Professional photography services for weddings and events."
+          },
+          "preferredLanguage": {
+            "type": "string",
+            "description": "Preferred language code",
+            "enum": [
+              "en",
+              "sl"
+            ],
+            "example": "en"
+          }
+        }
+      },
+      "CreateCatalogueDtoClass": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Catalogue title",
+            "example": "Summer Wedding 2024"
+          },
+          "description": {
+            "type": "string",
+            "description": "Catalogue description",
+            "example": "Beautiful moments from our summer wedding"
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "CatalogueResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the catalogue",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the catalogue",
+            "example": "Summer Wedding 2024"
+          },
+          "description": {
+            "type": "object",
+            "description": "Description of the catalogue",
+            "example": "Beautiful moments from our summer wedding"
+          },
+          "coverImage": {
+            "type": "object",
+            "description": "URL of the cover image",
+            "example": "https://example.com/images/cover.jpg"
+          },
+          "publicUrlSlug": {
+            "type": "string",
+            "description": "Auto-generated public URL slug",
+            "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+          },
+          "ownerId": {
+            "type": "string",
+            "description": "ID of the catalogue owner",
+            "example": "550e8400-e29b-41d4-a716-446655440001"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Timestamp when the catalogue was created",
+            "example": "2024-12-08T19:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Timestamp when the catalogue was last updated",
+            "example": "2024-12-08T19:30:00.000Z"
+          },
+          "photoCount": {
+            "type": "number",
+            "description": "Number of photos in the catalogue",
+            "example": 150
+          },
+          "status": {
+            "type": "string",
+            "description": "Status of the catalogue",
+            "example": "published"
+          },
+          "isProtected": {
+            "type": "boolean",
+            "description": "Indicates if the catalogue is password protected",
+            "example": false
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "publicUrlSlug",
+          "ownerId",
+          "createdAt",
+          "updatedAt",
+          "photoCount",
+          "status",
+          "isProtected"
+        ]
+      },
+      "UpdateCatalogueDtoClass": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Catalogue title",
+            "example": "Summer Wedding 2024"
+          },
+          "description": {
+            "type": "string",
+            "description": "Catalogue description",
+            "example": "Beautiful moments from our summer wedding"
+          },
+          "coverImage": {
+            "type": "object",
+            "description": "Catalogue cover image path",
+            "nullable": true,
+            "example": "collections/abc123/thumb_photo456.jpg"
+          }
+        }
+      },
+      "UpdateCatalogueStatusDtoClass": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of the catalogue",
+            "example": "draft"
+          },
+          "password": {
+            "type": "string",
+            "description": "Catalogue password for public access",
+            "example": "secret123!"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "ClientFavouritesResDto": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "description": "Client session ID"
+          },
+          "email": {
+            "type": "string",
+            "description": "Client email address"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Session created timestamp"
+          },
+          "photoCount": {
+            "type": "number",
+            "description": "Array of favorited photos"
+          }
+        },
+        "required": [
+          "sessionId",
+          "email",
+          "createdAt",
+          "photoCount"
+        ]
+      },
+      "CreateCollectionDtoClass": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Collection name",
+            "example": "Ceremony Photos"
+          },
+          "catalogueId": {
+            "type": "string",
+            "description": "ID of the catalogue this collection belongs to",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          }
+        },
+        "required": [
+          "name",
+          "catalogueId"
+        ]
+      },
+      "CollectionResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the collection",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the collection",
+            "example": "Ceremony Photos"
+          },
+          "catalogueId": {
+            "type": "string",
+            "description": "ID of the catalogue this collection belongs to",
+            "example": "550e8400-e29b-41d4-a716-446655440001"
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of collection",
+            "enum": [
+              "proofing",
+              "delivery"
+            ],
+            "example": "proofing"
+          },
+          "clientSessionId": {
+            "type": "string",
+            "description": "ID of the client session this delivery collection was created from",
+            "example": "550e8400-e29b-41d4-a716-446655440002"
+          },
+          "deliverySlug": {
+            "type": "string",
+            "description": "Public delivery URL slug for delivery collections",
+            "example": "abc123xyz"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Timestamp when the collection was created",
+            "example": "2024-12-08T19:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Timestamp when the collection was last updated",
+            "example": "2024-12-08T19:30:00.000Z"
+          },
+          "photoCount": {
+            "type": "number",
+            "description": "Number of photos in the collection",
+            "example": 42
+          },
+          "clientEmail": {
+            "type": "string",
+            "description": "Email of the client for delivery collections",
+            "example": "client@example.com"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "catalogueId",
+          "type",
+          "createdAt",
+          "updatedAt",
+          "photoCount"
+        ]
+      },
+      "UpdateCollectionDtoClass": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Collection name",
+            "example": "Ceremony Photos"
+          }
+        }
+      },
+      "PhotoResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the photo",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "originalFileName": {
+            "type": "string",
+            "description": "Original filename of the photo",
+            "example": "wedding-ceremony-001.jpg"
+          },
+          "storagePath": {
+            "type": "string",
+            "description": "Storage path where the photo is stored",
+            "example": "/uploads/catalogues/abc123/photos/uuid.jpg"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "MIME type of the photo",
+            "example": "image/jpeg"
+          },
+          "thumbnailPath": {
+            "type": "string",
+            "description": "Path to the thumbnail image",
+            "example": "/uploads/catalogues/abc123/thumbnails/uuid.jpg"
+          },
+          "width": {
+            "type": "number",
+            "description": "Width of the photo in pixels",
+            "example": 1920
+          },
+          "height": {
+            "type": "number",
+            "description": "Height of the photo in pixels",
+            "example": 1080
+          },
+          "size": {
+            "type": "number",
+            "description": "File size in bytes",
+            "example": 2048576
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "ID of the collection this photo belongs to",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          }
+        },
+        "required": [
+          "id",
+          "originalFileName",
+          "storagePath",
+          "mimeType",
+          "collectionId"
+        ]
+      },
+      "ClientSessionFavouritesResDto": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "description": "Client session ID"
+          },
+          "email": {
+            "type": "string",
+            "description": "Client email address"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Session created timestamp"
+          },
+          "photos": {
+            "description": "Array of favorited photos",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhotoResDto"
+            }
+          }
+        },
+        "required": [
+          "sessionId",
+          "email",
+          "createdAt",
+          "photos"
+        ]
+      },
+      "VerifyPasswordReqDtoClass": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "Password to access the protected catalogue",
+            "example": "secret123"
+          }
+        },
+        "required": [
+          "password"
+        ]
+      },
+      "VerifyPasswordResDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Access token for accessing protected catalogue",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "required": [
+          "accessToken"
+        ]
+      },
+      "CollectionPublicResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the collection",
+            "example": "d63bb7c9-b5b3-4d91-89a9-32fd573017cc"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the collection",
+            "example": "Ceremony"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
+      "CataloguePublicResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the catalogue",
+            "example": "7a934018-12bd-4501-9e7f-8d2b9669dcfb"
+          },
+          "title": {
+            "type": "string",
+            "description": "Display title of the catalogue",
+            "example": "Summer Wedding 2024"
+          },
+          "description": {
+            "type": "object",
+            "description": "Optional description presented on the public page"
+          },
+          "coverImage": {
+            "type": "object",
+            "description": "Optional cover image that will be shown to guests",
+            "example": "/uploads/catalogues/cat-123/cover.jpg"
+          },
+          "publicUrlSlug": {
+            "type": "string",
+            "description": "Slug that identifies the catalogue in public routes",
+            "example": "c0b4bf8c-0757-4c8d-bfa1-aa4a8f7bbf72"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Creation timestamp of the catalogue",
+            "example": "2024-02-05T10:15:32.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last modification timestamp of the catalogue",
+            "example": "2024-02-10T19:04:12.000Z"
+          },
+          "collections": {
+            "description": "Collections grouped under this catalogue",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CollectionPublicResDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "publicUrlSlug",
+          "createdAt",
+          "updatedAt",
+          "collections"
+        ]
+      },
+      "CollectionPhotoPublicResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of the photo",
+            "example": "9b5c4e28-2bd3-4e43-9f75-7dd29586a7b4"
+          },
+          "originalFileName": {
+            "type": "string",
+            "description": "Original filename uploaded by the photographer",
+            "example": "IMG_1042.CR3"
+          },
+          "storagePath": {
+            "type": "string",
+            "description": "Relative path to the processed photo asset",
+            "example": "/uploads/collections/1234/abcd.jpg"
+          },
+          "thumbnailPath": {
+            "type": "object",
+            "description": "Relative path to the thumbnail image, if generated",
+            "example": "/uploads/collections/1234/thumb_abcd.jpg"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "Mime type of the stored photo",
+            "example": "image/jpeg"
+          },
+          "width": {
+            "type": "object",
+            "description": "Image width in pixels, if available",
+            "example": 2400
+          },
+          "height": {
+            "type": "object",
+            "description": "Image height in pixels, if available",
+            "example": 1600
+          },
+          "size": {
+            "type": "object",
+            "description": "File size in bytes, if available",
+            "example": 5463221
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Timestamp when the photo was uploaded",
+            "example": "2024-03-04T19:55:11.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Timestamp when the photo metadata was last updated",
+            "example": "2024-03-05T10:12:42.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "originalFileName",
+          "storagePath",
+          "mimeType",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "AddFavouritesReqDtoClass": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email address of the client",
+            "example": "john.doe@example.com"
+          },
+          "photoIds": {
+            "description": "Array of photo IDs to mark as favourites",
+            "example": [
+              "9b5c4e28-2bd3-4e43-9f75-7dd29586a7b4",
+              "a3f1c2d8-4e5f-6a7b-8c9d-0e1f2a3b4c5d"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "email",
+          "photoIds"
+        ]
+      },
+      "AddFavouritesResDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Success indicator",
+            "example": true
+          },
+          "clientSessionEmail": {
+            "type": "string",
+            "description": "Client session email associated with the favourites",
+            "example": "test@email.com"
+          }
+        },
+        "required": [
+          "success",
+          "clientSessionEmail"
+        ]
+      },
+      "DeliveryPublicResDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Delivery collection ID",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Delivery collection name",
+            "example": "Delivery - client@example.com"
+          },
+          "clientEmail": {
+            "type": "object",
+            "description": "Client email address",
+            "example": "client@example.com"
+          },
+          "catalogueTitle": {
+            "type": "string",
+            "description": "Parent catalogue title",
+            "example": "Wedding Photos 2024"
+          },
+          "deliverySlug": {
+            "type": "string",
+            "description": "Delivery slug for URL",
+            "example": "abc123-def456"
+          },
+          "photoCount": {
+            "type": "number",
+            "description": "Number of photos in the delivery collection",
+            "example": 42
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "catalogueTitle",
+          "deliverySlug",
+          "photoCount"
+        ]
+      }
+    }
+  }
+}

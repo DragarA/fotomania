@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { eq, and, inArray, count } from 'drizzle-orm';
+import { I18nService } from 'nestjs-i18n';
 
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
 import { collection, photo, user } from '../common/db/schema';
@@ -20,7 +21,8 @@ export class ClientSessionsService {
     constructor(
         @Inject(DRIZZLE) private readonly db: DrizzleDB,
         private readonly emailService: EmailService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly i18n: I18nService
     ) {}
 
     async addFavourites(slug: string, email: string, photoIds: string[]) {
@@ -29,6 +31,7 @@ export class ClientSessionsService {
                 id: catalogue.id,
                 title: catalogue.title,
                 ownerEmail: user.email,
+                ownerPreferredLanguage: user.preferredLanguage,
             })
             .from(catalogue)
             .innerJoin(user, eq(catalogue.ownerId, user.id))
@@ -106,16 +109,24 @@ export class ClientSessionsService {
         // Send email notification to photographer
         const frontendUrl = this.configService.get<string>('FRONTEND_URL');
         const photoCount = photoIds.length;
+        const ownerLanguage = existingCatalogue.ownerPreferredLanguage || 'en';
+
+        // Get translated photo label based on count
+        const photoLabelKey =
+            photoCount === 1
+                ? 'emails.favourites_submitted.photo_singular'
+                : 'emails.favourites_submitted.photo_plural';
+        const photoLabel = this.i18n.t(photoLabelKey, { lang: ownerLanguage });
 
         await this.emailService.send({
             to: existingCatalogue.ownerEmail,
-            subject: `New photo selections from ${email}`,
             template: EmailTemplate.FAVOURITES_SUBMITTED,
+            language: ownerLanguage,
             context: {
                 clientEmail: email,
                 catalogueTitle: existingCatalogue.title,
                 photoCount,
-                photoLabel: photoCount === 1 ? 'photo' : 'photos',
+                photoLabel,
                 dashboardUrl: `${frontendUrl}/catalogues/${existingCatalogue.id}`,
             },
         });

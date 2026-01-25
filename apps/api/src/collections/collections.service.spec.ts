@@ -1,4 +1,5 @@
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import {
@@ -7,6 +8,7 @@ import {
     resetDrizzleMock,
 } from '../../test/utils/drizzle-mock.factory';
 import { DRIZZLE } from '../common/db/drizzle';
+import { EmailService } from '../common/email/email.service';
 import { PhotosService } from '../photos/photos.service';
 
 import { CollectionsService } from './collections.service';
@@ -28,6 +30,15 @@ describe('CollectionsService', () => {
             removeAllForCollection: jest.fn(),
         };
 
+        const mockEmailService = {
+            send: jest.fn().mockResolvedValue(undefined),
+        };
+
+        const mockConfigService = {
+            getOrThrow: jest.fn().mockReturnValue('http://localhost:5173'),
+            get: jest.fn().mockReturnValue('http://localhost:5173'),
+        };
+
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 CollectionsService,
@@ -38,6 +49,14 @@ describe('CollectionsService', () => {
                 {
                     provide: PhotosService,
                     useValue: mockPhotosServiceValue,
+                },
+                {
+                    provide: EmailService,
+                    useValue: mockEmailService,
+                },
+                {
+                    provide: ConfigService,
+                    useValue: mockConfigService,
                 },
             ],
         }).compile();
