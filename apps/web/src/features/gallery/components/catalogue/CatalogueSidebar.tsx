@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Tooltip } from '@/components/ui/tooltip';
+import { useConfirmDialog } from '@/features/common/useConfirmDialog';
 
 import {
     useDeleteCatalogueMutation,
@@ -67,6 +68,7 @@ export function CatalogueSidebar({
 }: CatalogueSidebarProps) {
     const { t } = useTranslation('gallery');
     const navigate = useNavigate();
+    const { confirmDelete } = useConfirmDialog();
     const deleteCatalogueMutation = useDeleteCatalogueMutation();
     const updateStatusMutation = useUpdateCatalogueStatusMutation(catalogueId);
     const [activeTab, setActiveTab] = useState<TabType>('collections');
@@ -119,21 +121,20 @@ export function CatalogueSidebar({
     };
 
     const handleDelete = () => {
-        if (
-            window.confirm(
-                t('sidebar.deleteConfirm', { title: catalogue.title })
-            )
-        ) {
-            deleteCatalogueMutation.mutate(catalogueId, {
-                onSuccess: () => {
-                    toast.success(t('sidebar.deleteSuccess'));
-                    navigate({ to: '/catalogues' });
-                },
-                onError: (error) => {
-                    toast.error(error.message || t('sidebar.deleteError'));
-                },
-            });
-        }
+        confirmDelete({
+            title: t('sidebar.deleteConfirm', { title: catalogue.title }),
+            onConfirm: () => {
+                deleteCatalogueMutation.mutate(catalogueId, {
+                    onSuccess: () => {
+                        toast.success(t('sidebar.deleteSuccess'));
+                        navigate({ to: '/catalogues' });
+                    },
+                    onError: (error) => {
+                        toast.error(error.message || t('sidebar.deleteError'));
+                    },
+                });
+            },
+        });
     };
 
     const toggleStatus = () => {

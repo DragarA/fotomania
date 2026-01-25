@@ -3,6 +3,8 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
+
 import {
     useCreateCatalogueMutation,
     useUpdateCatalogueMutation,
@@ -35,6 +37,8 @@ export function CatalogueFormModal({
             enabled: isEditMode && isOpen,
         }
     );
+
+    useBodyScrollLock(isOpen);
 
     if (!isOpen) return null;
 

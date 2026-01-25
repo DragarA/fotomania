@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import { API_BASE_URL } from '@/lib/api-client';
 
 import type { ClientFavouriteSession } from '../../hooks';
@@ -34,6 +35,8 @@ export function FavouritesModal({
     );
 
     const createDeliveryMutation = useCreateDeliveryCollectionMutation();
+
+    useBodyScrollLock(isOpen && Boolean(session));
 
     const handleCreateDelivery = () => {
         if (!session) return;

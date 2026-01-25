@@ -3,6 +3,8 @@ import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
+
 import { useCurrentUserQuery, useUpdateUserMutation, type UpdateUserDto } from '../hooks/useUser';
 
 import { ProfileForm, type ProfileFormValues } from './ProfileForm';
@@ -17,6 +19,8 @@ export function EditProfileModal({ isOpen, onClose, onSuccess }: EditProfileModa
     const { t } = useTranslation('profile');
     const { data: user, isLoading } = useCurrentUserQuery();
     const updateMutation = useUpdateUserMutation();
+
+    useBodyScrollLock(isOpen);
 
     if (!isOpen) return null;
 

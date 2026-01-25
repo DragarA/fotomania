@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight, Heart, X } from 'lucide-react';
 import { useEffect } from 'react';
 
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import { API_BASE_URL } from '../../../../lib/api-client';
 import type { Photo } from '../../types';
 
@@ -28,6 +29,9 @@ export function PhotoLightbox({
     const hasNext = currentIndex < photos.length - 1;
     const isPhotoFavorite = isFavorite?.(photo.id) ?? false;
 
+    // Prevent body scroll when lightbox is open
+    useBodyScrollLock(true);
+
     // Keyboard navigation
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -43,14 +47,6 @@ export function PhotoLightbox({
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [onClose, onNext, onPrevious, hasPrevious, hasNext]);
-
-    // Prevent body scroll when lightbox is open
-    useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, []);
 
     return (
         <div
