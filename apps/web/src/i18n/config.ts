@@ -8,6 +8,7 @@ import enCommon from './locales/en/common.json';
 import enDelivery from './locales/en/delivery.json';
 import enErrors from './locales/en/errors.json';
 import enGallery from './locales/en/gallery.json';
+import enOnboarding from './locales/en/onboarding.json';
 import enProfile from './locales/en/profile.json';
 import enPublic from './locales/en/public.json';
 import enValidation from './locales/en/validation.json';
@@ -16,6 +17,7 @@ import slCommon from './locales/sl/common.json';
 import slDelivery from './locales/sl/delivery.json';
 import slErrors from './locales/sl/errors.json';
 import slGallery from './locales/sl/gallery.json';
+import slOnboarding from './locales/sl/onboarding.json';
 import slProfile from './locales/sl/profile.json';
 import slPublic from './locales/sl/public.json';
 import slValidation from './locales/sl/validation.json';
@@ -26,6 +28,7 @@ const resources = {
         common: enCommon,
         auth: enAuth,
         gallery: enGallery,
+        onboarding: enOnboarding,
         profile: enProfile,
         public: enPublic,
         delivery: enDelivery,
@@ -36,6 +39,7 @@ const resources = {
         common: slCommon,
         auth: slAuth,
         gallery: slGallery,
+        onboarding: slOnboarding,
         profile: slProfile,
         public: slPublic,
         delivery: slDelivery,

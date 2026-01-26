@@ -6,6 +6,7 @@ import common from './locales/en/common.json';
 import delivery from './locales/en/delivery.json';
 import errors from './locales/en/errors.json';
 import gallery from './locales/en/gallery.json';
+import onboarding from './locales/en/onboarding.json';
 import profile from './locales/en/profile.json';
 import publicNs from './locales/en/public.json';
 import validation from './locales/en/validation.json';
@@ -20,6 +21,7 @@ export type TranslationResources = {
     delivery: typeof delivery;
     validation: typeof validation;
     errors: typeof errors;
+    onboarding: typeof onboarding;
 };
 
 // Augment i18next module to provide type safety

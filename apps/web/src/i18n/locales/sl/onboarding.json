@@ -1,0 +1,31 @@
+{
+  "welcome": {
+    "slide1Title": "Dobrodošli v Fotomania",
+    "slide1Subtitle": "Vaša profesionalna platforma za galerije",
+    "slide2Title": "Uredi in deli",
+    "slide2Feature1": "Ustvarite čudovite kataloge",
+    "slide2Feature2": "Organizirajte fotografije v zbirke",
+    "slide2Feature3": "Varno delite s strankami",
+    "slide3Title": "Začnimo",
+    "slide3Subtitle": "Ustvarite svoj prvi katalog v nekaj sekundah"
+  },
+  "steps": {
+    "createCatalogue": "Ustvarite svoj prvi katalog",
+    "createCatalogueDesc": "Katalogi so vsebniki za vaše fotografiranja. Kliknite tukaj, da ustvarite novega.",
+    "explainSidebar": "Vaš delovni prostor",
+    "explainSidebarDesc": "Zbirke organizirajo fotografije, Priljubljene prikazujejo izbore strank.",
+    "createCollection": "Dodaj zbirko",
+    "createCollectionDesc": "Zbirke vam pomagajo združiti povezane fotografije. Ustvarite eno za nalaganje.",
+    "uploadPhotos": "Naložite fotografije",
+    "uploadPhotosDesc": "Kliknite tukaj ali povlecite slike za nalaganje v zbirko.",
+    "favouritesDelivery": "Priljubljene strank",
+    "favouritesDeliveryDesc": "Ko stranke izberejo priljubljene iz deljenih katalogov, se pojavijo tukaj. Iz njih ustvarite dostave."
+  },
+  "buttons": {
+    "next": "Naprej",
+    "back": "Nazaj",
+    "skip": "Preskoči vodič",
+    "getStarted": "Začni",
+    "gotIt": "Razumem"
+  }
+}

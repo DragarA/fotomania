@@ -1,0 +1,31 @@
+{
+  "welcome": {
+    "slide1Title": "Welcome to Fotomania",
+    "slide1Subtitle": "Your professional photo gallery platform",
+    "slide2Title": "Organize & Share",
+    "slide2Feature1": "Create beautiful catalogues",
+    "slide2Feature2": "Organize photos in collections",
+    "slide2Feature3": "Share with clients securely",
+    "slide3Title": "Let's Get Started",
+    "slide3Subtitle": "Create your first catalogue in seconds"
+  },
+  "steps": {
+    "createCatalogue": "Create your first catalogue",
+    "createCatalogueDesc": "Catalogues are containers for your photo shoots. Click here to create one.",
+    "explainSidebar": "Your workspace",
+    "explainSidebarDesc": "Use Collections to organize photos and Favourites to see client selections.",
+    "createCollection": "Add a collection",
+    "createCollectionDesc": "Collections help you group related photos. Create one to start uploading.",
+    "uploadPhotos": "Upload your photos",
+    "uploadPhotosDesc": "Click here or drag and drop images to upload them to this collection.",
+    "favouritesDelivery": "Client favourites",
+    "favouritesDeliveryDesc": "When clients select favourites from shared catalogues, they appear here. Create delivery collections from selections."
+  },
+  "buttons": {
+    "next": "Next",
+    "back": "Back",
+    "skip": "Skip Tutorial",
+    "getStarted": "Get Started",
+    "gotIt": "Got it!"
+  }
+}
