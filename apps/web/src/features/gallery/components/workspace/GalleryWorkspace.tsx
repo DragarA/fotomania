@@ -2,6 +2,9 @@ import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
+import { SpotlightTooltip } from '@/features/onboarding/components/SpotlightTooltip';
+import { useOnboarding } from '@/features/onboarding/useOnboarding';
+
 import { useConfirmDialog } from '../../../common/useConfirmDialog';
 import {
     useCatalogueQuery,
@@ -29,7 +32,9 @@ interface GalleryWorkspaceProps {
 
 export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
     const { t } = useTranslation('gallery');
+    const { t: tOnboarding } = useTranslation('onboarding');
     const { confirmDelete } = useConfirmDialog();
+    const { currentStep, isActive, nextStep, skipOnboarding } = useOnboarding();
 
     // Data queries
     const { data: catalogue, isLoading: catalogueLoading } =
@@ -159,6 +164,15 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
         return <div>{t('workspace.catalogueNotFound')}</div>;
     }
 
+    const showExplainUi = isActive && currentStep === 'explain-ui';
+    const showCreateCollection = isActive && currentStep === 'create-collection';
+    const showUploadPhotos =
+        isActive &&
+        currentStep === 'upload-photos' &&
+        Boolean(selectedCollectionId);
+    const showFavourites =
+        isActive && currentStep === 'favourites-delivery';
+
     return (
         <div className="flex min-h-screen flex-col gap-6 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.75),_rgba(248,246,242,1))] px-4 py-6 md:px-8 lg:flex-row">
             <CatalogueSidebar
@@ -192,6 +206,50 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                     onUploadClick={open}
                 />
             </div>
+
+            {showExplainUi ? (
+                <SpotlightTooltip
+                    targetSelector='[data-onboarding="sidebar-tabs"]'
+                    title={tOnboarding('steps.explainSidebar')}
+                    description={tOnboarding('steps.explainSidebarDesc')}
+                    onNext={nextStep}
+                    onSkip={skipOnboarding}
+                    position="right"
+                />
+            ) : null}
+
+            {showCreateCollection ? (
+                <SpotlightTooltip
+                    targetSelector='[data-onboarding="sidebar-add-collection"]'
+                    title={tOnboarding('steps.createCollection')}
+                    description={tOnboarding('steps.createCollectionDesc')}
+                    onNext={nextStep}
+                    onSkip={skipOnboarding}
+                    position="right"
+                />
+            ) : null}
+
+            {showUploadPhotos ? (
+                <SpotlightTooltip
+                    targetSelector='[data-onboarding="upload-photos"]'
+                    title={tOnboarding('steps.uploadPhotos')}
+                    description={tOnboarding('steps.uploadPhotosDesc')}
+                    onNext={nextStep}
+                    onSkip={skipOnboarding}
+                    position="bottom"
+                />
+            ) : null}
+
+            {showFavourites ? (
+                <SpotlightTooltip
+                    targetSelector='[data-onboarding="sidebar-favourites-tab"]'
+                    title={tOnboarding('steps.favouritesDelivery')}
+                    description={tOnboarding('steps.favouritesDeliveryDesc')}
+                    onNext={nextStep}
+                    onSkip={skipOnboarding}
+                    position="right"
+                />
+            ) : null}
 
             <CollectionModal
                 isOpen={modalState.isOpen}

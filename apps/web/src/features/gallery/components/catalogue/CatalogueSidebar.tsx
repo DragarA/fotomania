@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Tooltip } from '@/components/ui/tooltip';
 import { useConfirmDialog } from '@/features/common/useConfirmDialog';
+import { useOnboarding } from '@/features/onboarding/useOnboarding';
 
 import {
     useDeleteCatalogueMutation,
@@ -72,6 +73,7 @@ export function CatalogueSidebar({
     const deleteCatalogueMutation = useDeleteCatalogueMutation();
     const updateStatusMutation = useUpdateCatalogueStatusMutation(catalogueId);
     const [activeTab, setActiveTab] = useState<TabType>('collections');
+    const { currentStep, isActive } = useOnboarding();
     const [selectedSession, setSelectedSession] =
         useState<ClientFavouriteSession | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,6 +95,26 @@ export function CatalogueSidebar({
     useEffect(() => {
         return () => cancelContextMenuClose();
     }, []);
+
+    useEffect(() => {
+        if (!isActive) {
+            return;
+        }
+
+        if (currentStep === 'favourites-delivery' && activeTab !== 'favourites') {
+            setActiveTab('favourites');
+            return;
+        }
+
+        if (
+            (currentStep === 'create-collection' ||
+                currentStep === 'upload-photos' ||
+                currentStep === 'explain-ui') &&
+            activeTab !== 'collections'
+        ) {
+            setActiveTab('collections');
+        }
+    }, [activeTab, currentStep, isActive]);
 
     const copyPublicUrl = () => {
         const fullUrl = `${window.location.origin}/c/${catalogue.publicUrlSlug}`;
@@ -269,7 +291,7 @@ export function CatalogueSidebar({
                 )}
 
                 {/* Tab Navigation */}
-                <div className="flex gap-2">
+             <div className="flex gap-2" data-onboarding="sidebar-tabs">
                     {[
                         {
                             id: 'collections',
@@ -287,6 +309,11 @@ export function CatalogueSidebar({
                             <button
                                 key={id}
                                 onClick={() => setActiveTab(id as TabType)}
+                                data-onboarding={
+                                    id === 'favourites'
+                                        ? 'sidebar-favourites-tab'
+                                        : undefined
+                                }
                                 className={`flex-1 min-w-0 rounded border border-transparent px-2 py-2.5 text-[0.65rem] uppercase tracking-[0.15em] transition-all duration-500 ${
                                     active
                                         ? 'border-black/10 bg-stone-100 text-stone-800'
@@ -317,6 +344,7 @@ export function CatalogueSidebar({
                             </h2>
                             <button
                                 onClick={onCreateCollection}
+                                data-onboarding="sidebar-add-collection"
                                 className="text-[0.6rem] uppercase tracking-[0.4em] text-stone-400 transition-colors duration-500 hover:text-stone-700"
                             >
                                 + {t('sidebar.add')}

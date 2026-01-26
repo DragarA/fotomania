@@ -77,6 +77,7 @@ export function PhotoWorkspace({
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={onUploadClick}
+                                data-onboarding="upload-photos"
                                 className="flex items-center gap-2 rounded border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-700 shadow-sm transition-colors hover:bg-stone-50"
                             >
                                 <Upload className="h-4 w-4" />

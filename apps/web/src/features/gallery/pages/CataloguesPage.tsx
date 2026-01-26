@@ -1,8 +1,11 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
+
+import { SpotlightTooltip } from "@/features/onboarding/components/SpotlightTooltip";
+import { useOnboarding } from "@/features/onboarding/useOnboarding";
 
 import { CatalogueCard } from "../components/catalogue/CatalogueCard";
 import { CatalogueFormModal } from "../components/catalogue/CatalogueFormModal";
@@ -10,11 +13,24 @@ import { useCataloguesQuery } from "../hooks";
 
 export function CataloguesPage() {
     const { t } = useTranslation('gallery');
+    const { t: tOnboarding } = useTranslation('onboarding');
     const navigate = useNavigate();
     const { data, isLoading, isError, error } = useCataloguesQuery();
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+    const { currentStep, isActive, nextStep, skipOnboarding } = useOnboarding();
+
+    const spotlightSelector = useMemo(() => {
+        if (!data || data.length === 0) {
+            return '[data-onboarding="create-catalogue-empty"]';
+        }
+
+        return '[data-onboarding="create-catalogue-primary"]';
+    }, [data]);
 
     const handleCreateSuccess = (catalogueId: string) => {
+        if (isActive && currentStep === 'create-catalogue') {
+            nextStep();
+        }
         navigate({ to: '/catalogues/$catalogueId', params: { catalogueId } });
     };
 
@@ -58,7 +74,12 @@ export function CataloguesPage() {
                 <p className="text-sm text-stone-700 sm:text-base">
                     {t('catalogues.empty.message')}
                 </p>
-                <Button onClick={() => setIsCreateModalOpen(true)} variant="default" className="tracking-[0.15em]">
+                <Button
+                    onClick={() => setIsCreateModalOpen(true)}
+                    variant="default"
+                    className="tracking-[0.15em]"
+                    data-onboarding="create-catalogue-empty"
+                >
                     {t('catalogues.createButton')}
                 </Button>
             </div>
@@ -85,6 +106,7 @@ export function CataloguesPage() {
                             onClick={() => setIsCreateModalOpen(true)}
                             size="lg"
                             className="ml-auto tracking-[0.15em]"
+                            data-onboarding="create-catalogue-primary"
                         >
                             {t('catalogues.createButton')}
                         </Button>
@@ -93,6 +115,16 @@ export function CataloguesPage() {
 
                 {renderGrid()}
             </div>
+
+            {isActive && currentStep === 'create-catalogue' ? (
+                <SpotlightTooltip
+                    targetSelector={spotlightSelector}
+                    title={tOnboarding('steps.createCatalogue')}
+                    description={tOnboarding('steps.createCatalogueDesc')}
+                    onSkip={skipOnboarding}
+                    position="bottom"
+                />
+            ) : null}
 
             <CatalogueFormModal
                 isOpen={isCreateModalOpen}
