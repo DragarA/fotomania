@@ -64,17 +64,17 @@ export function PhotoWorkspace({
             <input {...dropzoneInputProps} />
 
             {selectedCollection ? (
-                <div className="space-y-8 p-8 md:p-10">
-                    <div className="flex items-center justify-between">
-                        <div>
+                <div className="space-y-8 p-6 sm:p-8 md:p-10">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="min-w-0 flex-1">
                             <p className="text-xs uppercase tracking-[0.4em] text-stone-400">
                                 {t('sidebar.collectionsTab')}
                             </p>
-                            <h2 className="text-3xl font-light tracking-[0.02em] text-stone-800">
-                                {selectedCollection.type === 'delivery' ? selectedCollection.name.replace(t('collection.delivery_collection_name'), 'Delivery') : selectedCollection.name}
+                            <h2 className="truncate text-2xl font-light tracking-[0.02em] text-stone-800 sm:text-3xl">
+                                {selectedCollection.type === 'delivery' ? selectedCollection.name.replace('Delivery', t('collection.delivery_collection_name')) : selectedCollection.name}
                             </h2>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
                             <button
                                 onClick={onUploadClick}
                                 data-onboarding="upload-photos"
@@ -83,7 +83,7 @@ export function PhotoWorkspace({
                                 <Upload className="h-4 w-4" />
                                 {t('photoWorkspace.uploadPhotos')}
                             </button>
-                            <div className="text-xs uppercase tracking-[0.4em] text-stone-400">
+                            <div className="whitespace-nowrap text-xs uppercase tracking-[0.4em] text-stone-400">
                                 {photos?.length || 0} {t('sidebar.photos', { count: photos?.length || 0 })}
                             </div>
                         </div>

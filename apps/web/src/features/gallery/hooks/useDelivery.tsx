@@ -1,4 +1,7 @@
-import type { DeliveryPublicResDto } from '@repo/sdk';
+import type {
+    CollectionPhotoPublicResDto,
+    DeliveryPublicResDto,
+} from '@repo/sdk';
 import { OpenAPI, PublicService } from '@repo/sdk';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -52,6 +55,42 @@ export function useDeliveryQuery(deliverySlug: string) {
 
             if (!response.ok) {
                 const error = new Error('Failed to fetch delivery') as Error & {
+                    status?: number;
+                };
+                error.status = response.status;
+                throw error;
+            }
+
+            return response.json();
+        },
+        enabled: !!deliverySlug,
+        retry: (failureCount, error: any) => {
+            // Don't retry on 401 (password required)
+            if (error?.status === 401) return false;
+            return failureCount < 3;
+        },
+    });
+}
+
+export function useDeliveryPhotosQuery(deliverySlug: string) {
+    return useQuery<CollectionPhotoPublicResDto[]>({
+        queryKey: ['delivery', deliverySlug, 'photos'],
+        queryFn: async () => {
+            const token = getDeliveryAccessToken(deliverySlug);
+            const headers: HeadersInit = {
+                'Content-Type': 'application/json',
+            };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            const response = await fetch(
+                `${OpenAPI.BASE}/public/delivery/${deliverySlug}/photos`,
+                { headers }
+            );
+
+            if (!response.ok) {
+                const error = new Error('Failed to fetch photos') as Error & {
                     status?: number;
                 };
                 error.status = response.status;

@@ -1,5 +1,14 @@
 import { Link } from '@tanstack/react-router';
-import { Folder, Heart, Share2, Shield, Sparkles, Image } from 'lucide-react';
+import {
+    Folder,
+    Heart,
+    Share2,
+    Shield,
+    Sparkles,
+    Image,
+    User,
+    Users,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
@@ -103,6 +112,113 @@ export function HomePage() {
                                 {t('home.features.sharing.description')}
                             </p>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* How It Works Section */}
+            <section className="bg-stone-50 py-20 lg:py-28">
+                <div className="mx-auto max-w-6xl px-6 sm:px-8">
+                    <div className="mb-16 text-center">
+                        <p className="mb-3 text-xs uppercase tracking-[0.4em] text-stone-400">
+                            {t('home.howItWorks.label')}
+                        </p>
+                        <h2 className="mb-4 text-3xl font-light tracking-tight text-stone-800 sm:text-4xl">
+                            {t('home.howItWorks.title')}
+                        </h2>
+                        <p className="mx-auto max-w-2xl text-stone-500">
+                            {t('home.howItWorks.subtitle')}
+                        </p>
+                    </div>
+
+                    <div className="grid gap-6 md:grid-cols-3">
+                        {[
+                            {
+                                icon: Folder,
+                                title: t('home.howItWorks.steps.create.title'),
+                                description: t('home.howItWorks.steps.create.description'),
+                            },
+                            {
+                                icon: Image,
+                                title: t('home.howItWorks.steps.organize.title'),
+                                description: t('home.howItWorks.steps.organize.description'),
+                            },
+                            {
+                                icon: Share2,
+                                title: t('home.howItWorks.steps.share.title'),
+                                description: t('home.howItWorks.steps.share.description'),
+                            },
+                        ].map(({ icon: Icon, title, description }) => (
+                            <div
+                                key={title}
+                                className="rounded-xl border border-white/40 bg-white/80 p-6 shadow-[0_35px_90px_-70px_rgba(0,0,0,0.85)]"
+                            >
+                                <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600">
+                                    <Icon className="h-5 w-5" strokeWidth={1.4} />
+                                </div>
+                                <h3 className="mb-3 text-base font-medium tracking-wide text-stone-800">
+                                    {title}
+                                </h3>
+                                <p className="text-sm leading-relaxed text-stone-500">
+                                    {description}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Use Cases Section */}
+            <section className="bg-white py-20 lg:py-28">
+                <div className="mx-auto max-w-6xl px-6 sm:px-8">
+                    <div className="mb-16 text-center">
+                        <p className="mb-3 text-xs uppercase tracking-[0.4em] text-stone-400">
+                            {t('home.useCases.label')}
+                        </p>
+                        <h2 className="mb-4 text-3xl font-light tracking-tight text-stone-800 sm:text-4xl">
+                            {t('home.useCases.title')}
+                        </h2>
+                        <p className="mx-auto max-w-2xl text-stone-500">
+                            {t('home.useCases.subtitle')}
+                        </p>
+                    </div>
+
+                    <div className="grid gap-8 lg:grid-cols-2">
+                        <div className="rounded-xl border border-black/5 bg-stone-50 p-8 shadow-[0_35px_80px_-70px_rgba(0,0,0,0.85)]">
+                            <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-700">
+                                <User className="h-5 w-5" strokeWidth={1.4} />
+                            </div>
+                            <h3 className="mb-4 text-lg font-medium tracking-wide text-stone-800">
+                                {t('home.useCases.private.title')}
+                            </h3>
+                            <p className="text-sm leading-relaxed text-stone-500">
+                                {t('home.useCases.private.description')}
+                            </p>
+                        </div>
+
+                        <div className="rounded-xl border border-black/5 bg-stone-50 p-8 shadow-[0_35px_80px_-70px_rgba(0,0,0,0.85)]">
+                            <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-700">
+                                <Users className="h-5 w-5" strokeWidth={1.4} />
+                            </div>
+                            <h3 className="mb-4 text-lg font-medium tracking-wide text-stone-800">
+                                {t('home.useCases.public.title')}
+                            </h3>
+                            <p className="text-sm leading-relaxed text-stone-500">
+                                {t('home.useCases.public.description')}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="mt-10 rounded-2xl border border-stone-200 bg-white px-8 py-10 text-center shadow-[0_45px_120px_-90px_rgba(0,0,0,0.85)]">
+                        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-stone-200 bg-stone-50 text-stone-600">
+                            <Sparkles className="h-5 w-5" strokeWidth={1.4} />
+                        </div>
+                        <h3 className="mb-3 text-lg font-medium text-stone-800">
+                            {t('home.useCases.benefit.title')}
+                        </h3>
+                        <p className="mx-auto max-w-2xl text-sm text-stone-500">
+                            {t('home.useCases.benefit.description')}
+                        </p>
                     </div>
                 </div>
             </section>

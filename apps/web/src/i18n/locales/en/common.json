@@ -81,6 +81,42 @@
         "description": "Share galleries with clients through beautiful, customizable links. No sign-up required."
       }
     },
+    "howItWorks": {
+      "label": "How It Works",
+      "title": "From upload to delivery in three steps",
+      "subtitle": "A unified workflow that adapts to private sessions or public events.",
+      "steps": {
+        "create": {
+          "title": "Create",
+          "description": "Set up a catalogue for a client session, wedding, or event."
+        },
+        "organize": {
+          "title": "Upload & Organize",
+          "description": "Add photos to collections so every shoot stays tidy and searchable."
+        },
+        "share": {
+          "title": "Share & Deliver",
+          "description": "Send secure links, collect favourites, and deliver final galleries fast."
+        }
+      }
+    },
+    "useCases": {
+      "label": "Use Cases",
+      "title": "Built for private and public workflows",
+      "subtitle": "Run every type of project in one place without duplicating effort.",
+      "private": {
+        "title": "Private Client Catalogues",
+        "description": "Create a catalogue per client, upload their photos, and share with password protection for weddings, portraits, or studio sessions."
+      },
+      "public": {
+        "title": "Public Event Catalogues",
+        "description": "Publish a public catalogue where attendees browse, pick favourites, and request deliveries from the same source gallery."
+      },
+      "benefit": {
+        "title": "One workflow, zero duplication",
+        "description": "Whether private or public, all favourites and deliveries stay in the same catalogue so you never repeat work."
+      }
+    },
     "valueProps": {
       "unlimited": {
         "value": "Unlimited",

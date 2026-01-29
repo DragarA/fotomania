@@ -220,6 +220,7 @@ export function CatalogueSidebar({
                 <button
                     onClick={toggleStatus}
                     disabled={updateStatusMutation.isPending}
+                    data-onboarding="catalogue-status"
                     className={`flex h-12 w-full items-center justify-center rounded border border-black/5 text-xs uppercase tracking-[0.2em] transition-all duration-500 ${
                         catalogue.status === 'published'
                             ? 'bg-emerald-50 text-emerald-700'
@@ -248,6 +249,9 @@ export function CatalogueSidebar({
                         </>
                     )}
                 </button>
+                <p className="text-[0.6rem] uppercase tracking-[0.3em] text-stone-400">
+                    {t('sidebar.statusHelp')}
+                </p>
 
                 {/* Action buttons for published catalogues */}
                 {catalogue.status === 'published' && (

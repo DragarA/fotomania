@@ -81,6 +81,42 @@
         "description": "Delite galerije s strankami prek lepih, prilagodljivih povezav. Prijava ni potrebna."
       }
     },
+    "howItWorks": {
+      "label": "Kako deluje",
+      "title": "Od nalaganja do dostave v treh korakih",
+      "subtitle": "Enoten potek dela za zasebne projekte ali javne dogodke.",
+      "steps": {
+        "create": {
+          "title": "Ustvarite",
+          "description": "Pripravite katalog za stranko, poroko ali dogodek."
+        },
+        "organize": {
+          "title": "Naložite in organizirajte",
+          "description": "Dodajte fotografije v zbirke, da je vsako snemanje urejeno."
+        },
+        "share": {
+          "title": "Delite in dostavite",
+          "description": "Pošljite varne povezave, zberite priljubljene in hitro dostavite galerije."
+        }
+      }
+    },
+    "useCases": {
+      "label": "Primeri uporabe",
+      "title": "Za zasebne in javne poteke dela",
+      "subtitle": "Vsak tip projekta vodite na enem mestu brez podvajanja dela.",
+      "private": {
+        "title": "Katalogi za zasebne stranke",
+        "description": "Za vsako stranko ustvarite katalog, naložite fotografije in delite z zaščito gesla za poroke, portrete ali studijske seanse."
+      },
+      "public": {
+        "title": "Javni katalozi dogodkov",
+        "description": "Objavite javni katalog, kjer udeleženci brskajo, izbirajo priljubljene in zahtevajo dostave iz iste galerije."
+      },
+      "benefit": {
+        "title": "En potek, brez podvajanja",
+        "description": "Ne glede na tip projekta vse priljubljene in dostave ostanejo v istem katalogu, brez ponavljanja dela."
+      }
+    },
     "valueProps": {
       "unlimited": {
         "value": "Neomejeno",

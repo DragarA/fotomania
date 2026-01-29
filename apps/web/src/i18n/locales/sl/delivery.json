@@ -13,6 +13,8 @@
   "photoCount_other": "{{count}} fotografij",
   "downloading": "Pripravljam prenos...",
   "downloadAll": "Prenesi vse fotografije",
+  "download": "Prenesi",
+  "downloadPhoto": "Prenesi fotografijo",
   "noPhotosYet": "Tej dostavi še niso bile dodane nobene fotografije.",
   "preview": "Predogled",
   "footer": "Poganja Fotomania"

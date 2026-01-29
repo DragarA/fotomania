@@ -68,6 +68,7 @@
     "publishSuccess": "Catalogue published successfully",
     "unpublishSuccess": "Catalogue unpublished successfully",
     "statusUpdateError": "Failed to update status",
+    "statusHelp": "Draft keeps it private. Publish to share the link with clients.",
     "share": "Share",
     "protected": "Protected",
     "addPassword": "Add Password",

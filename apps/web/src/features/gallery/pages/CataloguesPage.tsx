@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
 import { SpotlightTooltip } from "@/features/onboarding/components/SpotlightTooltip";
+import { WelcomeModal } from "@/features/onboarding/components/WelcomeModal";
 import { useOnboarding } from "@/features/onboarding/useOnboarding";
 
 import { CatalogueCard } from "../components/catalogue/CatalogueCard";
@@ -17,7 +18,24 @@ export function CataloguesPage() {
     const navigate = useNavigate();
     const { data, isLoading, isError, error } = useCataloguesQuery();
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-    const { currentStep, isActive, nextStep, skipOnboarding } = useOnboarding();
+    const {
+        currentStep,
+        isActive,
+        isCompleted,
+        completedSteps,
+        nextStep,
+        skipOnboarding,
+        shouldShowWelcome,
+        completeWelcome,
+    } = useOnboarding();
+
+    const showWelcome =
+        shouldShowWelcome &&
+        !isLoading &&
+        !isError &&
+        !isCompleted &&
+        !completedSteps.welcome &&
+        (data?.length ?? 0) === 0;
 
     const spotlightSelector = useMemo(() => {
         if (!data || data.length === 0) {
@@ -130,6 +148,12 @@ export function CataloguesPage() {
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
                 onSuccess={handleCreateSuccess}
+            />
+
+            <WelcomeModal
+                isOpen={showWelcome}
+                onSkip={skipOnboarding}
+                onComplete={completeWelcome}
             />
         </div>
     );

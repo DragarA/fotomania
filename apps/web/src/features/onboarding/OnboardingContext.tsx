@@ -7,12 +7,15 @@ import {
     useState,
 } from 'react';
 
+import { useAuth } from '@/features/auth/hooks';
+
 const ONBOARDING_STORAGE_KEY = 'fotomania_onboarding';
 
 const onboardingSteps = [
     'welcome',
     'create-catalogue',
     'explain-ui',
+    'catalogue-status',
     'create-collection',
     'upload-photos',
     'favourites-delivery',
@@ -27,13 +30,18 @@ interface OnboardingState {
     completedSteps: CompletedSteps;
     isActive: boolean;
     isCompleted: boolean;
+    userId?: string;
 }
 
 export interface OnboardingContextType extends OnboardingState {
+    /** Whether this is a first-time user who should see onboarding */
+    shouldShowWelcome: boolean;
     startOnboarding: () => void;
     nextStep: () => void;
     skipOnboarding: () => void;
     resetOnboarding: () => void;
+    /** Call when welcome modal is completed to start the spotlight flow */
+    completeWelcome: () => void;
 }
 
 const buildCompletedSteps = (override?: Partial<CompletedSteps>): CompletedSteps =>
@@ -54,16 +62,36 @@ export const OnboardingContext = createContext<
 >(undefined);
 
 export function OnboardingProvider({ children }: { children: ReactNode }) {
+    const { user } = useAuth();
     const [state, setState] = useState<OnboardingState>(defaultState);
+    const [isFirstTime, setIsFirstTime] = useState<boolean>(false);
+    const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
+        if (!user?.id) {
+            setState(defaultState);
+            setIsFirstTime(false);
+            setIsInitialized(true);
+            return;
+        }
+
         const stored = localStorage.getItem(ONBOARDING_STORAGE_KEY);
+
         if (!stored) {
+            setState({ ...defaultState, userId: user.id });
+            setIsFirstTime(true);
+            setIsInitialized(true);
             return;
         }
 
         try {
             const parsed = JSON.parse(stored) as Partial<OnboardingState>;
+            if (parsed.userId && parsed.userId !== user.id) {
+                setState({ ...defaultState, userId: user.id });
+                setIsFirstTime(true);
+                setIsInitialized(true);
+                return;
+            }
             const currentStep = onboardingSteps.includes(
                 parsed.currentStep as OnboardingStep
             )
@@ -75,15 +103,24 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
                 completedSteps: buildCompletedSteps(parsed.completedSteps),
                 isActive: Boolean(parsed.isActive),
                 isCompleted: Boolean(parsed.isCompleted),
+                userId: user.id,
             });
+            setIsFirstTime(false);
         } catch (error) {
             console.error('Failed to parse onboarding state', error);
+            setState({ ...defaultState, userId: user.id });
+            setIsFirstTime(true);
         }
-    }, []);
+        setIsInitialized(true);
+    }, [user?.id]);
 
     useEffect(() => {
+        if (!user?.id) {
+            return;
+        }
+
         localStorage.setItem(ONBOARDING_STORAGE_KEY, JSON.stringify(state));
-    }, [state]);
+    }, [state, user?.id]);
 
     const startOnboarding = useCallback(() => {
         setState({
@@ -154,17 +191,45 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
 
     const resetOnboarding = useCallback(() => {
         setState(defaultState);
+        setIsFirstTime(true);
+        localStorage.removeItem(ONBOARDING_STORAGE_KEY);
     }, []);
+
+    const completeWelcome = useCallback(() => {
+        setState((prev) => ({
+            ...prev,
+            currentStep: 'create-catalogue',
+            completedSteps: {
+                ...prev.completedSteps,
+                welcome: true,
+            },
+            isActive: true,
+        }));
+        setIsFirstTime(false);
+    }, []);
+
+    // Should show welcome modal: user hasn't completed welcome and isn't mid-flow
+    const shouldShowWelcome = useMemo(() => {
+        if (!isInitialized) return false;
+        return (
+            Boolean(user?.id) &&
+            !state.completedSteps.welcome &&
+            !state.isCompleted &&
+            !state.isActive
+        );
+    }, [isInitialized, state.completedSteps.welcome, state.isCompleted, state.isActive, user?.id]);
 
     const value = useMemo(
         () => ({
             ...state,
+            shouldShowWelcome,
             startOnboarding,
             nextStep,
             skipOnboarding,
             resetOnboarding,
+            completeWelcome,
         }),
-        [state, nextStep, resetOnboarding, skipOnboarding, startOnboarding]
+        [state, shouldShowWelcome, nextStep, resetOnboarding, skipOnboarding, startOnboarding, completeWelcome]
     );
 
     return (

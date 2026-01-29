@@ -16,6 +16,8 @@
     "explainSidebarDesc": "Use Collections to organize photos and Favourites to see client selections.",
     "createCollection": "Add a collection",
     "createCollectionDesc": "Collections help you group related photos. Create one to start uploading.",
+    "catalogueStatus": "Catalogue status",
+    "catalogueStatusDesc": "Draft stays private. Publish to share the catalogue link with clients.",
     "uploadPhotos": "Upload your photos",
     "uploadPhotosDesc": "Click here or drag and drop images to upload them to this collection.",
     "favouritesDelivery": "Client favourites",

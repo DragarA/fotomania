@@ -195,6 +195,76 @@ export class PublicController {
         return new DeliveryPublicResDto(result);
     }
 
+    @Get('/delivery/:deliverySlug/photos')
+    @UseGuards(DeliveryAccessGuard)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Get photos for a delivery collection' })
+    @ApiParam({ name: 'deliverySlug', description: 'Delivery URL slug' })
+    @ApiResponse({ status: 200, type: [CollectionPhotoPublicResDto] })
+    @ApiResponse({
+        status: 401,
+        description: 'Password required or invalid token',
+    })
+    @ApiResponse({ status: 404, description: 'Delivery not found' })
+    async findDeliveryPhotos(@Param('deliverySlug') deliverySlug: string) {
+        const photos = await this.publicService.findDeliveryPhotos(deliverySlug);
+        return photos.map((photo) => new CollectionPhotoPublicResDto(photo));
+    }
+
+    @Get('/delivery/:deliverySlug/photo/:photoId/download')
+    @UseGuards(DeliveryAccessGuard)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Download a single photo from a delivery' })
+    @ApiParam({ name: 'deliverySlug', description: 'Delivery URL slug' })
+    @ApiParam({ name: 'photoId', description: 'Photo ID' })
+    @ApiResponse({
+        status: 200,
+        description: 'Returns the photo file',
+    })
+    @ApiResponse({
+        status: 401,
+        description: 'Password required or invalid token',
+    })
+    @ApiResponse({ status: 404, description: 'Photo or delivery not found' })
+    async downloadDeliveryPhoto(
+        @Param('deliverySlug') deliverySlug: string,
+        @Param('photoId') photoId: string,
+        @Res() res: Response
+    ) {
+        const photoData = await this.publicService.findDeliveryPhoto(
+            deliverySlug,
+            photoId
+        );
+
+        const uploadRoot = path.resolve('./uploads');
+        const filePath = path.join(uploadRoot, photoData.storagePath);
+
+        if (!fs.existsSync(filePath)) {
+            res.status(404).send('File not found');
+            return;
+        }
+
+        // Determine content type based on file extension
+        const ext = path.extname(photoData.originalFileName).toLowerCase();
+        const contentTypes: Record<string, string> = {
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.webp': 'image/webp',
+        };
+        const contentType = contentTypes[ext] || 'application/octet-stream';
+
+        res.setHeader('Content-Type', contentType);
+        res.setHeader(
+            'Content-Disposition',
+            `attachment; filename="${photoData.originalFileName}"`
+        );
+
+        const fileStream = fs.createReadStream(filePath);
+        fileStream.pipe(res);
+    }
+
     @Get('/delivery/:deliverySlug/download')
     @UseGuards(DeliveryAccessGuard)
     @ApiBearerAuth()

@@ -72,6 +72,7 @@
         "publishSuccess": "Katalog uspešno objavljen",
         "unpublishSuccess": "Katalog umaknjen iz objave",
         "statusUpdateError": "Posodobitev statusa ni uspela",
+        "statusHelp": "Osnutek ostane zaseben. Objavite za deljenje povezave s strankami.",
         "share": "Deli",
         "protected": "Zaščiteno",
         "addPassword": "Dodaj geslo",

@@ -165,13 +165,31 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
     }
 
     const showExplainUi = isActive && currentStep === 'explain-ui';
-    const showCreateCollection = isActive && currentStep === 'create-collection';
+    const showStatusToggle =
+        isActive && currentStep === 'catalogue-status' && !modalState.isOpen;
+    const showCreateCollection =
+        isActive &&
+        currentStep === 'create-collection' &&
+        !modalState.isOpen;
     const showUploadPhotos =
         isActive &&
         currentStep === 'upload-photos' &&
-        Boolean(selectedCollectionId);
+        Boolean(selectedCollectionId) &&
+        !modalState.isOpen;
     const showFavourites =
         isActive && currentStep === 'favourites-delivery';
+
+    const handleCollectionModalClose = (createdCollectionId?: string) => {
+        closeModal(createdCollectionId);
+
+        if (
+            isActive &&
+            currentStep === 'create-collection' &&
+            createdCollectionId
+        ) {
+            nextStep();
+        }
+    };
 
     return (
         <div className="flex min-h-screen flex-col gap-6 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.75),_rgba(248,246,242,1))] px-4 py-6 md:px-8 lg:flex-row">
@@ -218,6 +236,17 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                 />
             ) : null}
 
+            {showStatusToggle ? (
+                <SpotlightTooltip
+                    targetSelector='[data-onboarding="catalogue-status"]'
+                    title={tOnboarding('steps.catalogueStatus')}
+                    description={tOnboarding('steps.catalogueStatusDesc')}
+                    onNext={nextStep}
+                    onSkip={skipOnboarding}
+                    position="right"
+                />
+            ) : null}
+
             {showCreateCollection ? (
                 <SpotlightTooltip
                     targetSelector='[data-onboarding="sidebar-add-collection"]'
@@ -253,7 +282,7 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
 
             <CollectionModal
                 isOpen={modalState.isOpen}
-                onClose={closeModal}
+                onClose={handleCollectionModalClose}
                 mode={modalState.mode}
                 catalogueId={catalogueId}
                 initialData={modalState.initialData}

@@ -1,6 +1,7 @@
 import { ArrowRight, X } from 'lucide-react';
 import { RefObject, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
 type SpotlightPosition = 'top' | 'bottom' | 'left' | 'right';
 
@@ -32,9 +33,14 @@ export function SpotlightTooltip({
     onNext,
     onSkip,
 }: SpotlightTooltipProps) {
+    const { t } = useTranslation('onboarding');
     const [targetRect, setTargetRect] = useState<TargetRect | null>(null);
 
     useEffect(() => {
+        if (typeof document === 'undefined') {
+            return;
+        }
+
         const resolveTarget = () => {
             const element =
                 targetRef?.current ??
@@ -60,9 +66,17 @@ export function SpotlightTooltip({
         window.addEventListener('resize', resolveTarget);
         window.addEventListener('scroll', resolveTarget, true);
 
+        const observer = new MutationObserver(resolveTarget);
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+        });
+
         return () => {
             window.removeEventListener('resize', resolveTarget);
             window.removeEventListener('scroll', resolveTarget, true);
+            observer.disconnect();
         };
     }, [targetRef, targetSelector]);
 
@@ -114,14 +128,14 @@ export function SpotlightTooltip({
     };
 
     return createPortal(
-        <div className="fixed inset-0 z-[1000]">
-            <div className="absolute inset-0 bg-[rgba(6,5,4,0.65)]" />
+        <div className="fixed inset-0 z-[1000] pointer-events-none">
+            <div className="absolute inset-0 bg-[rgba(6,5,4,0.35)]" />
             <div
-                className="absolute rounded-xl border border-white/40 bg-transparent shadow-[0_0_0_9999px_rgba(6,5,4,0.65)]"
+                className="absolute rounded-xl border border-white/40 bg-transparent shadow-[0_0_0_9999px_rgba(6,5,4,0.35)] pointer-events-none"
                 style={highlightStyle}
             />
             <div
-                className="absolute max-w-xs rounded-xl border border-white/20 bg-white/95 p-5 text-stone-700 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)]"
+                className="absolute max-w-xs rounded-xl border border-white/20 bg-white/95 p-5 text-stone-700 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.7)] pointer-events-auto"
                 style={tooltipStyle}
             >
                 <div className="flex items-start justify-between gap-4">
@@ -150,7 +164,7 @@ export function SpotlightTooltip({
                         onClick={onNext}
                         className="mt-4 inline-flex items-center gap-2 rounded-full bg-stone-900 px-4 py-2 text-xs uppercase tracking-[0.35em] text-white"
                     >
-                        Next
+                        {t('buttons.next')}
                         <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
                     </button>
                 ) : null}

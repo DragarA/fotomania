@@ -11,6 +11,8 @@
   "photoCount_other": "{{count}} photos",
   "downloading": "Preparing download...",
   "downloadAll": "Download All Photos",
+  "download": "Download",
+  "downloadPhoto": "Download photo",
   "noPhotosYet": "No photos have been added to this delivery yet.",
   "preview": "Preview",
   "footer": "Powered by Fotomania"

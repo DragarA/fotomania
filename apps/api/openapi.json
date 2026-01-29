@@ -1454,6 +1454,97 @@
         ]
       }
     },
+    "/public/delivery/{deliverySlug}/photos": {
+      "get": {
+        "operationId": "PublicController_findDeliveryPhotos",
+        "parameters": [
+          {
+            "name": "deliverySlug",
+            "required": true,
+            "in": "path",
+            "description": "Delivery URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollectionPhotoPublicResDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password required or invalid token"
+          },
+          "404": {
+            "description": "Delivery not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get photos for a delivery collection",
+        "tags": [
+          "public"
+        ]
+      }
+    },
+    "/public/delivery/{deliverySlug}/photo/{photoId}/download": {
+      "get": {
+        "operationId": "PublicController_downloadDeliveryPhoto",
+        "parameters": [
+          {
+            "name": "deliverySlug",
+            "required": true,
+            "in": "path",
+            "description": "Delivery URL slug",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "photoId",
+            "required": true,
+            "in": "path",
+            "description": "Photo ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the photo file"
+          },
+          "401": {
+            "description": "Password required or invalid token"
+          },
+          "404": {
+            "description": "Photo or delivery not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Download a single photo from a delivery",
+        "tags": [
+          "public"
+        ]
+      }
+    },
     "/public/delivery/{deliverySlug}/download": {
       "get": {
         "operationId": "PublicController_downloadDelivery",

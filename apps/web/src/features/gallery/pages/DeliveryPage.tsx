@@ -1,22 +1,27 @@
 import { useParams } from '@tanstack/react-router';
-import { Download, Package, Mail, Image, Loader2 } from 'lucide-react';
+import { Download, Image, Loader2, Mail, Package } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { API_BASE_URL } from '@/lib/api-client';
 
+import { DeliveryLightbox } from '../components/photo/DeliveryLightbox';
+import { DeliveryPhotoGrid } from '../components/photo/DeliveryPhotoGrid';
 import { PasswordPrompt } from '../components/public/PasswordPrompt';
 import {
-    useDeliveryQuery,
-    useDeliveryAccess,
     getDeliveryAccessToken,
+    useDeliveryAccess,
+    useDeliveryPhotosQuery,
+    useDeliveryQuery,
 } from '../hooks/useDelivery';
+import type { PublicPhoto } from '../types/photo.types';
 
 export function DeliveryPage() {
     const { slug } = useParams({ from: '/d/$slug' });
     const { t } = useTranslation('delivery');
     const [isDownloading, setIsDownloading] = useState(false);
+    const [selectedPhoto, setSelectedPhoto] = useState<PublicPhoto | null>(null);
 
     // Password protection
     const {
@@ -33,6 +38,9 @@ export function DeliveryPage() {
         error,
         refetch,
     } = useDeliveryQuery(slug);
+
+    const { data: photos, isLoading: photosLoading } =
+        useDeliveryPhotosQuery(slug);
 
     // Check if password is required (401 error)
     const isPasswordRequired =
@@ -71,7 +79,10 @@ export function DeliveryPage() {
             const a = document.createElement('a');
             a.href = url;
             a.download =
-                response.headers.get('content-disposition')?.split('filename=')[1]?.replace(/"/g, '') ||
+                response.headers
+                    .get('content-disposition')
+                    ?.split('filename=')[1]
+                    ?.replace(/"/g, '') ||
                 `${delivery?.catalogueTitle}_delivery.zip`;
             document.body.appendChild(a);
             a.click();
@@ -81,6 +92,31 @@ export function DeliveryPage() {
             console.error('Download error:', err);
         } finally {
             setIsDownloading(false);
+        }
+    };
+
+    // Lightbox navigation
+    const handlePhotoClick = (photo: PublicPhoto) => {
+        setSelectedPhoto(photo);
+    };
+
+    const handleLightboxClose = () => {
+        setSelectedPhoto(null);
+    };
+
+    const handleLightboxNext = () => {
+        if (!photos || !selectedPhoto) return;
+        const currentIndex = photos.findIndex((p) => p.id === selectedPhoto.id);
+        if (currentIndex < photos.length - 1) {
+            setSelectedPhoto(photos[currentIndex + 1]);
+        }
+    };
+
+    const handleLightboxPrevious = () => {
+        if (!photos || !selectedPhoto) return;
+        const currentIndex = photos.findIndex((p) => p.id === selectedPhoto.id);
+        if (currentIndex > 0) {
+            setSelectedPhoto(photos[currentIndex - 1]);
         }
     };
 
@@ -116,7 +152,9 @@ export function DeliveryPage() {
                     <h1 className="mt-4 text-2xl font-light text-stone-800">
                         {t('notFound')}
                     </h1>
-                    <p className="mt-2 text-stone-600">{t('notFoundDescription')}</p>
+                    <p className="mt-2 text-stone-600">
+                        {t('notFoundDescription')}
+                    </p>
                 </div>
             </div>
         );
@@ -151,7 +189,8 @@ export function DeliveryPage() {
                             </span>
                         </div>
                         <p className="mt-2 text-xl font-medium text-stone-800">
-                            {String(delivery?.clientEmail || '') || t('noRecipient')}
+                            {String(delivery?.clientEmail || '') ||
+                                t('noRecipient')}
                         </p>
                     </div>
 
@@ -167,7 +206,9 @@ export function DeliveryPage() {
                             {deliveryLoading ? (
                                 <span className="text-stone-400">...</span>
                             ) : (
-                                t('photoCount', { count: delivery?.photoCount || 0 })
+                                t('photoCount', {
+                                    count: delivery?.photoCount || 0,
+                                })
                             )}
                         </p>
                     </div>
@@ -176,7 +217,9 @@ export function DeliveryPage() {
                     <div className="px-8 py-8">
                         <Button
                             onClick={handleDownload}
-                            disabled={isDownloading || delivery?.photoCount === 0}
+                            disabled={
+                                isDownloading || delivery?.photoCount === 0
+                            }
                             size="lg"
                             className="w-full bg-stone-800 py-6 text-base tracking-wide hover:bg-stone-900"
                         >
@@ -194,6 +237,20 @@ export function DeliveryPage() {
                         </Button>
                     </div>
                 </div>
+
+                {/* Photo Preview Section */}
+                {delivery && delivery.photoCount > 0 && (
+                    <div className="mt-12">
+                        <h2 className="mb-6 text-sm uppercase tracking-[0.2em] text-stone-500">
+                            {t('preview')}
+                        </h2>
+                        <DeliveryPhotoGrid
+                            photos={photos || []}
+                            isLoading={photosLoading}
+                            onPhotoClick={handlePhotoClick}
+                        />
+                    </div>
+                )}
             </div>
 
             {/* Footer */}
@@ -202,7 +259,19 @@ export function DeliveryPage() {
                     {t('footer')}
                 </p>
             </div>
+
+            {/* Lightbox */}
+            {selectedPhoto && photos && (
+                <DeliveryLightbox
+                    photo={selectedPhoto}
+                    photos={photos}
+                    deliverySlug={slug}
+                    onClose={handleLightboxClose}
+                    onNext={handleLightboxNext}
+                    onPrevious={handleLightboxPrevious}
+                    getAccessToken={() => getDeliveryAccessToken(slug)}
+                />
+            )}
         </div>
     );
 }
-

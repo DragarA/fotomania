@@ -265,6 +265,45 @@ export class PublicService {
     }
 
     /**
+     * Get a specific photo from a delivery collection
+     */
+    async findDeliveryPhoto(deliverySlug: string, photoId: string) {
+        const [deliveryCollection] = await this.db
+            .select({ collection })
+            .from(collection)
+            .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
+            .where(
+                and(
+                    eq(collection.deliverySlug, deliverySlug),
+                    eq(collection.type, 'delivery'),
+                    eq(catalogue.status, 'published')
+                )
+            );
+
+        if (!deliveryCollection) {
+            throw new NotFoundException(
+                `Delivery with slug ${deliverySlug} not found`
+            );
+        }
+
+        const [foundPhoto] = await this.db
+            .select()
+            .from(photo)
+            .where(
+                and(
+                    eq(photo.id, photoId),
+                    eq(photo.collectionId, deliveryCollection.collection.id)
+                )
+            );
+
+        if (!foundPhoto) {
+            throw new NotFoundException(`Photo not found in this delivery`);
+        }
+
+        return foundPhoto;
+    }
+
+    /**
      * Record a download event for a delivery collection
      */
     async recordDownload(deliverySlug: string, ipAddress?: string) {
