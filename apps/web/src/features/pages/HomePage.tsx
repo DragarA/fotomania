@@ -116,7 +116,7 @@ export function HomePage() {
                 </div>
             </section>
 
-            {/* How It Works Section */}
+            {/* How It Works Section - Flowchart Style */}
             <section className="bg-stone-50 py-20 lg:py-28">
                 <div className="mx-auto max-w-6xl px-6 sm:px-8">
                     <div className="mb-16 text-center">
@@ -131,39 +131,54 @@ export function HomePage() {
                         </p>
                     </div>
 
-                    <div className="grid gap-6 md:grid-cols-3">
-                        {[
-                            {
-                                icon: Folder,
-                                title: t('home.howItWorks.steps.create.title'),
-                                description: t('home.howItWorks.steps.create.description'),
-                            },
-                            {
-                                icon: Image,
-                                title: t('home.howItWorks.steps.organize.title'),
-                                description: t('home.howItWorks.steps.organize.description'),
-                            },
-                            {
-                                icon: Share2,
-                                title: t('home.howItWorks.steps.share.title'),
-                                description: t('home.howItWorks.steps.share.description'),
-                            },
-                        ].map(({ icon: Icon, title, description }) => (
-                            <div
-                                key={title}
-                                className="rounded-xl border border-white/40 bg-white/80 p-6 shadow-[0_35px_90px_-70px_rgba(0,0,0,0.85)]"
-                            >
-                                <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600">
-                                    <Icon className="h-5 w-5" strokeWidth={1.4} />
+                    {/* Flowchart */}
+                    <div className="relative">
+                        {/* Connecting line - horizontal on desktop, vertical on mobile */}
+                        <div className="absolute left-1/2 top-6 hidden h-0.5 w-[calc(100%-200px)] -translate-x-1/2 bg-gradient-to-r from-stone-200 via-stone-300 to-stone-200 md:block" />
+                        <div className="absolute left-6 top-12 h-[calc(100%-48px)] w-0.5 bg-gradient-to-b from-stone-200 via-stone-300 to-stone-200 md:hidden" />
+
+                        <div className="relative grid gap-8 md:grid-cols-3 md:gap-12">
+                            {[
+                                {
+                                    step: 1,
+                                    icon: Folder,
+                                    title: t('home.howItWorks.steps.create.title'),
+                                    description: t('home.howItWorks.steps.create.description'),
+                                },
+                                {
+                                    step: 2,
+                                    icon: Image,
+                                    title: t('home.howItWorks.steps.organize.title'),
+                                    description: t('home.howItWorks.steps.organize.description'),
+                                },
+                                {
+                                    step: 3,
+                                    icon: Share2,
+                                    title: t('home.howItWorks.steps.share.title'),
+                                    description: t('home.howItWorks.steps.share.description'),
+                                },
+                            ].map(({ step, icon: Icon, title, description }) => (
+                                <div key={title} className="relative flex gap-5 md:flex-col md:items-center md:text-center">
+                                    {/* Step number circle */}
+                                    <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-stone-800 text-lg font-medium text-white shadow-lg">
+                                        {step}
+                                    </div>
+
+                                    {/* Content */}
+                                    <div className="flex-1 pb-8 md:pb-0 md:pt-6">
+                                        <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white text-stone-600 shadow-sm md:mb-4">
+                                            <Icon className="h-5 w-5" strokeWidth={1.5} />
+                                        </div>
+                                        <h3 className="mb-2 text-lg font-medium tracking-wide text-stone-800">
+                                            {title}
+                                        </h3>
+                                        <p className="text-sm leading-relaxed text-stone-500">
+                                            {description}
+                                        </p>
+                                    </div>
                                 </div>
-                                <h3 className="mb-3 text-base font-medium tracking-wide text-stone-800">
-                                    {title}
-                                </h3>
-                                <p className="text-sm leading-relaxed text-stone-500">
-                                    {description}
-                                </p>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
