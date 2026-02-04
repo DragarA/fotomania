@@ -107,6 +107,30 @@ export class UserResDto {
     })
     updatedAt!: Date;
 
+    @ApiProperty({
+        description: 'Whether to collect client name',
+        example: true,
+    })
+    collectClientName!: boolean;
+
+    @ApiProperty({
+        description: 'Whether to collect client address',
+        example: false,
+    })
+    collectClientAddress!: boolean;
+
+    @ApiProperty({
+        description: 'Whether to collect client phone number',
+        example: true,
+    })
+    collectClientPhone!: boolean;
+
+    @ApiProperty({
+        description: 'Whether to collect client notes',
+        example: false,
+    })
+    collectClientNotes!: boolean;
+
     constructor(user: any) {
         this.id = user.id;
         this.name = user.name;
@@ -123,6 +147,10 @@ export class UserResDto {
         this.preferredLanguage = user.preferredLanguage;
         this.createdAt = user.createdAt;
         this.updatedAt = user.updatedAt;
+        this.collectClientName = user.collectClientName;
+        this.collectClientAddress = user.collectClientAddress;
+        this.collectClientPhone = user.collectClientPhone;
+        this.collectClientNotes = user.collectClientNotes;
     }
 }
 

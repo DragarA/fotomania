@@ -59,6 +59,18 @@ export class UsersService {
         if (data.preferredLanguage !== undefined) {
             updateData.preferredLanguage = data.preferredLanguage;
         }
+        if (data.collectClientName !== undefined) {
+            updateData.collectClientName = data.collectClientName;
+        }
+        if (data.collectClientAddress !== undefined) {
+            updateData.collectClientAddress = data.collectClientAddress;
+        }
+        if (data.collectClientPhone !== undefined) {
+            updateData.collectClientPhone = data.collectClientPhone;
+        }
+        if (data.collectClientNotes !== undefined) {
+            updateData.collectClientNotes = data.collectClientNotes;
+        }
 
         const [updatedUser] = await this.db
             .update(user)

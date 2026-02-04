@@ -7,7 +7,8 @@ Extend the "Send to photographer" form on the public Gallery page to collect add
 - ✅ Field toggles in **photographer profile settings** (global for all catalogues)
 - ✅ **Single full name** field (not first/last separately)
 - ✅ **Structured address**: street, city, postal code, country
-- ✅ **Phone input** with country code selector
+- ✅ **Phone input** with country code selector using `react-phone-number-input`
+- ✅ **Country dropdown** using combobox with static country list (reuse from phone library)
 - ✅ No localStorage caching for these fields
 
 ## Field Groups
@@ -22,13 +23,13 @@ Extend the "Send to photographer" form on the public Gallery page to collect add
   - `clientAddressStreet` (text)
   - `clientAddressCity` (text)
   - `clientAddressPostalCode` (text)
-  - `clientAddressCountry` (text)
+  - `clientAddressCountry` (text) - combobox with country list
 - All fields required as a group when `collectClientAddress` is enabled
 
 ### 3. Client Phone
 - Field: `clientPhoneNumber` (text)
-- Format: International format with country code (e.g., +1 234 567 8900)
-- UI: Phone input with country code selector
+- Format: E.164 international format (e.g., +12345678900)
+- UI: `react-phone-number-input` with country code selector
 - Required when `collectClientPhone` is enabled
 
 ### 4. Additional Notes
@@ -36,12 +37,17 @@ Extend the "Send to photographer" form on the public Gallery page to collect add
 - Freeform text area
 - Required when `collectClientNotes` is enabled
 
-## Phase 1: Database Layer
+---
 
-### Files to Modify
+## Phase 1: Database Layer ✅ COMPLETE
+**Model: haiku** (mechanical schema additions)
+
+> **Status:** Migration already executed. Schema changes are in place.
+
+### Files Modified
 
 1. **apps/api/src/common/db/schema/client-session.schema.ts**
-   - Add new columns to clientSession table:
+   - Added columns to clientSession table:
      - `clientName: text`
      - `clientAddressStreet: text`
      - `clientAddressCity: text`
@@ -51,18 +57,16 @@ Extend the "Send to photographer" form on the public Gallery page to collect add
      - `clientNotes: text`
 
 2. **apps/api/src/common/db/schema/users.schema.ts**
-   - Add toggle columns to user table:
+   - Added toggle columns to user table:
      - `collectClientName: boolean` (default: false)
      - `collectClientAddress: boolean` (default: false)
      - `collectClientPhone: boolean` (default: false)
      - `collectClientNotes: boolean` (default: false)
 
-### Command to Run
-```bash
-pnpm --filter @repo/api db:generate
-```
+---
 
 ## Phase 2: Backend Updates
+**Model: sonnet** (error handling, validation logic, conditional field handling)
 
 ### Files to Modify
 
@@ -70,28 +74,60 @@ pnpm --filter @repo/api db:generate
    - Update `addFavouritesSchema` with new optional fields
    - Update `AddFavouritesReqDtoClass` with Swagger documentation
 
-2. **apps/api/src/public/public.controller.ts**
-   - Update public catalogue endpoint to include photographer's field configuration
+2. **apps/api/src/public/dto/catalogue-public-res.dto.ts**
+   - Add photographer's field collection settings to public catalogue response:
+     - `collectClientName: boolean`
+     - `collectClientAddress: boolean`
+     - `collectClientPhone: boolean`
+     - `collectClientNotes: boolean`
+   - This exposes settings to frontend so it knows which fields to render
+
+3. **apps/api/src/public/public.service.ts**
+   - Update catalogue query to join user settings
+   - Map collection settings to public response
+
+4. **apps/api/src/public/public.controller.ts**
    - Ensure new fields are passed through to service
 
-3. **apps/api/src/client-sessions/client-sessions.service.ts**
+5. **apps/api/src/client-sessions/client-sessions.service.ts**
    - Update `addFavourites` method to save new fields to database
    - Update queries to return new client information
 
-4. **apps/api/src/client-sessions/dto/client-session-favourite.dto.ts**
+6. **apps/api/src/client-sessions/dto/client-session-favourite.dto.ts**
    - Update `ClientSessionFavouritesResDto` to include new fields
    - Update response mapping to include new data
 
-5. **apps/api/src/client-sessions/client-sessions.controller.ts**
+7. **apps/api/src/client-sessions/client-sessions.controller.ts**
    - Update endpoint to return new fields in response
 
-6. **apps/api/src/users/dto/update-user.dto.ts**
+8. **apps/api/src/users/dto/update-user.dto.ts**
    - Add toggle fields to update schema
 
-7. **apps/api/src/users/users.service.ts**
-   - Update profile update method to handle toggle fields
+9. **apps/api/src/users/dto/user-res.dto.ts**
+   - Add toggle fields to user response DTO
+
+10. **apps/api/src/users/users.service.ts**
+    - Update profile update method to handle toggle fields
+
+### Unit Tests to Write
+
+1. **apps/api/src/client-sessions/client-sessions.service.spec.ts**
+   - Test `addFavourites` saves new client info fields
+   - Test fields are optional and nullable
+
+2. **apps/api/src/users/users.service.spec.ts**
+   - Test profile update with toggle fields
+   - Test default values for new users
+
+---
 
 ## Phase 3: Frontend Updates
+**Model: sonnet** (conditional rendering, dynamic validation, complex form logic)
+
+### Dependencies to Install
+```bash
+pnpm --filter @repo/web add react-phone-number-input
+```
 
 ### Files to Modify
 
@@ -108,21 +144,37 @@ pnpm --filter @repo/api db:generate
    - Update User type to include new toggle fields
 
 3. **apps/web/src/features/gallery/utils/favourites-validation.ts**
-   - Update `saveFavouritesSchema` with conditional validation based on settings
-   - Add fields: clientName, clientAddress (object), clientPhoneNumber, clientNotes
+   - Create dynamic schema factory function:
+     ```typescript
+     type CollectionSettings = {
+       collectClientName: boolean;
+       collectClientAddress: boolean;
+       collectClientPhone: boolean;
+       collectClientNotes: boolean;
+     };
+
+     export const createSaveFavouritesSchema = (settings: CollectionSettings) => {
+       return z.object({
+         // ... existing fields
+         clientName: settings.collectClientName ? z.string().min(1) : z.string().optional(),
+         // ... etc
+       });
+     };
+     ```
+   - Add fields: clientName, clientAddress (street, city, postalCode, country), clientPhoneNumber, clientNotes
 
 4. **apps/web/src/features/gallery/components/favourites/SaveFavouritesModal.tsx**
    - Fetch photographer settings from catalogue data
    - Add conditional form fields:
      - Full name input (when collectClientName enabled)
-     - Address fields: street, city, postal code, country (when collectClientAddress enabled)
-     - Phone input with country code selector (when collectClientPhone enabled)
+     - Address fields: street, city, postal code, country combobox (when collectClientAddress enabled)
+     - Phone input with `react-phone-number-input` (when collectClientPhone enabled)
      - Notes textarea (when collectClientNotes enabled)
+   - Pass settings to `createSaveFavouritesSchema()` for dynamic validation
    - Update form submission to include new fields
-   - Remove localStorage caching for new fields
 
 5. **apps/web/src/features/gallery/pages/PublicCataloguePage.tsx**
-   - Ensure photographer settings are available for the form
+   - Pass photographer settings from catalogue response to SaveFavouritesModal
 
 6. **apps/web/src/features/gallery/hooks/useCatalogueFavourites.tsx**
    - Update `ClientFavouriteSession` interface to include new fields
@@ -138,16 +190,24 @@ pnpm --filter @repo/api db:generate
 8. **apps/web/src/hooks/useClientSessions.ts**
    - Update `useAddFavouritesMutation` to send new fields
 
+---
+
 ## Phase 4: Translations
+**Model: haiku** (mechanical key additions)
 
 ### Files to Update
 
 Add i18n keys to:
-- `apps/web/src/locales/en/public.json`
-- `apps/web/src/locales/sl/public.json`
+- `apps/web/src/i18n/locales/en/public.json`
+- `apps/web/src/i18n/locales/sl/public.json`
+- `apps/web/src/i18n/locales/en/profile.json`
+- `apps/web/src/i18n/locales/sl/profile.json`
+- `apps/web/src/i18n/locales/en/gallery.json`
+- `apps/web/src/i18n/locales/sl/gallery.json`
 
 ### New Keys Needed
 
+**public.json** - Save favourites modal:
 ```json
 {
   "modal": {
@@ -162,7 +222,7 @@ Add i18n keys to:
       "postalCodeLabel": "Postal Code",
       "postalCodePlaceholder": "10001",
       "countryLabel": "Country",
-      "countryPlaceholder": "United States",
+      "countryPlaceholder": "Select country...",
       "phoneLabel": "Phone Number",
       "notesLabel": "Additional Notes",
       "notesPlaceholder": "Any special requests or information..."
@@ -171,11 +231,12 @@ Add i18n keys to:
 }
 ```
 
-Profile settings translations:
+**profile.json** - Profile settings:
 ```json
 {
   "form": {
     "submissionFields": "Client Information Fields",
+    "submissionFieldsDescription": "Configure which information clients must provide when submitting favourites",
     "collectClientName": "Collect client name",
     "collectClientNameDescription": "Require clients to provide their full name",
     "collectClientAddress": "Collect client address",
@@ -188,7 +249,7 @@ Profile settings translations:
 }
 ```
 
-Gallery translations:
+**gallery.json** - Favourites modal display:
 ```json
 {
   "favouritesModal": {
@@ -200,58 +261,81 @@ Gallery translations:
 }
 ```
 
+---
+
 ## Phase 5: SDK Regeneration & Testing
+**Model: sonnet** (test design, edge cases)
 
 ### Steps
 
 1. Ensure API server is running to generate OpenAPI spec
+
 2. Regenerate SDK:
    ```bash
    pnpm --filter @repo/sdk generate
    ```
 
-3. Run tests:
+3. Run unit tests:
    ```bash
-   pnpm --filter @repo/api test
+   pnpm --filter @repo/api test:unit
    ```
 
-4. Run linting:
+4. Run E2E tests:
+   ```bash
+   pnpm --filter @repo/api test:e2e
+   ```
+
+5. Run linting:
    ```bash
    pnpm lint
    ```
 
-5. Format code:
+6. Format code:
    ```bash
    pnpm format
    ```
 
+---
+
 ## Implementation Order
 
-1. Database schema changes (with migration)
+1. ~~Database schema changes (with migration)~~ ✅ COMPLETE
 2. Backend DTOs and API updates
-3. Frontend profile settings (toggles)
-4. Frontend public gallery form
-5. Frontend favourites modal display
-6. Translations
-7. SDK regeneration
-8. Testing and linting
+3. Backend unit tests
+4. Frontend profile settings (toggles)
+5. Frontend public gallery form
+6. Frontend favourites modal display
+7. Translations
+8. SDK regeneration
+9. Testing and linting
 
-## Dependencies to Check
-
-- Phone input component library (e.g., `react-phone-number-input` or `react-phone-input-2`)
-- Country selector for address (if needed)
+---
 
 ## Testing Checklist
 
-- [ ] Migration runs successfully
+### Database & Backend
+- [x] Migration runs successfully
 - [ ] Profile settings save correctly
-- [ ] Form fields show/hide based on settings
-- [ ] Form validation works for required fields
-- [ ] Data saves correctly to database
+- [ ] New user defaults have all toggles as false
+- [ ] Public catalogue response includes collection settings
+- [ ] Client session saves all new fields correctly
+
+### Frontend Form
+- [ ] Form fields show/hide based on photographer settings
+- [ ] Form validation works for required fields when enabled
+- [ ] Phone input formats correctly (E.164)
+- [ ] Country dropdown works and stores correct value
+- [ ] Form submits successfully with new fields
+
+### Frontend Display
 - [ ] Data displays correctly in favourites modal
-- [ ] Phone number format is preserved
+- [ ] Phone number displays in readable format
 - [ ] Address displays in formatted layout
-- [ ] All translations work
+- [ ] Empty fields don't show empty cards
+
+### General
+- [ ] All translations work (EN and SL)
 - [ ] SDK types are correct
 - [ ] No TypeScript errors
-- [ ] All tests pass
+- [ ] All unit tests pass
+- [ ] All E2E tests pass

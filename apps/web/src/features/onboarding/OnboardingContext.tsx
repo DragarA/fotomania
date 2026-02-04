@@ -64,7 +64,7 @@ export const OnboardingContext = createContext<
 export function OnboardingProvider({ children }: { children: ReactNode }) {
     const { user } = useAuth();
     const [state, setState] = useState<OnboardingState>(defaultState);
-    const [isFirstTime, setIsFirstTime] = useState<boolean>(false);
+    const [_isFirstTime, setIsFirstTime] = useState<boolean>(false);
     const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {

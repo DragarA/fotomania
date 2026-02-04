@@ -15,6 +15,7 @@ import { clientFavourite } from '../common/db/schema/client-favourite.schema';
 import { clientSession } from '../common/db/schema/client-session.schema';
 import { collection } from '../common/db/schema/collections.schema';
 import { photo } from '../common/db/schema/photos.schema';
+import { user } from '../common/db/schema/users.schema';
 
 import { ClientFavouritesResDto } from './dto/client-favourites-res.dto';
 import { CreateCatalogueDto } from './dto/create-catalogue.dto';
@@ -99,9 +100,17 @@ export class CataloguesService {
             )
             .having(gt(count(photo.id), 0))
             .groupBy(collection.id);
+
+        // Get photographer settings for client info collection
+        const [photographer] = await this.db
+            .select()
+            .from(user)
+            .where(eq(user.id, catalogueResult.catalogue.ownerId));
+
         return {
             catalogue: catalogueResult.catalogue,
             collections: collectionResult.map((cr) => cr.collection),
+            photographer,
         };
     }
 
@@ -248,6 +257,13 @@ export class CataloguesService {
                 email: clientSession.email,
                 createdAt: clientSession.createdAt,
                 photoCount: count(clientFavourite.photoId),
+                clientName: clientSession.clientName,
+                clientAddressStreet: clientSession.clientAddressStreet,
+                clientAddressCity: clientSession.clientAddressCity,
+                clientAddressPostalCode: clientSession.clientAddressPostalCode,
+                clientAddressCountry: clientSession.clientAddressCountry,
+                clientPhoneNumber: clientSession.clientPhoneNumber,
+                clientNotes: clientSession.clientNotes,
             })
             .from(clientSession)
             .innerJoin(

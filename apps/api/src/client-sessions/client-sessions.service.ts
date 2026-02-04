@@ -25,7 +25,20 @@ export class ClientSessionsService {
         private readonly i18n: I18nService
     ) {}
 
-    async addFavourites(slug: string, email: string, photoIds: string[]) {
+    async addFavourites(
+        slug: string,
+        email: string,
+        photoIds: string[],
+        clientInfo?: {
+            clientName?: string;
+            clientAddressStreet?: string;
+            clientAddressCity?: string;
+            clientAddressPostalCode?: string;
+            clientAddressCountry?: string;
+            clientPhoneNumber?: string;
+            clientNotes?: string;
+        }
+    ) {
         const [existingCatalogue] = await this.db
             .select({
                 id: catalogue.id,
@@ -88,11 +101,34 @@ export class ClientSessionsService {
                     id: crypto.randomUUID(),
                     email,
                     catalogueId: existingCatalogue.id,
+                    clientName: clientInfo?.clientName ?? null,
+                    clientAddressStreet: clientInfo?.clientAddressStreet ?? null,
+                    clientAddressCity: clientInfo?.clientAddressCity ?? null,
+                    clientAddressPostalCode: clientInfo?.clientAddressPostalCode ?? null,
+                    clientAddressCountry: clientInfo?.clientAddressCountry ?? null,
+                    clientPhoneNumber: clientInfo?.clientPhoneNumber ?? null,
+                    clientNotes: clientInfo?.clientNotes ?? null,
                     createdAt: now,
                     updatedAt: now,
                 })
                 .returning()
                 .then((res) => res[0]);
+        } else {
+            // Update existing session with new client info
+            [existingSession] = await this.db
+                .update(clientSession)
+                .set({
+                    clientName: clientInfo?.clientName ?? existingSession.clientName,
+                    clientAddressStreet: clientInfo?.clientAddressStreet ?? existingSession.clientAddressStreet,
+                    clientAddressCity: clientInfo?.clientAddressCity ?? existingSession.clientAddressCity,
+                    clientAddressPostalCode: clientInfo?.clientAddressPostalCode ?? existingSession.clientAddressPostalCode,
+                    clientAddressCountry: clientInfo?.clientAddressCountry ?? existingSession.clientAddressCountry,
+                    clientPhoneNumber: clientInfo?.clientPhoneNumber ?? existingSession.clientPhoneNumber,
+                    clientNotes: clientInfo?.clientNotes ?? existingSession.clientNotes,
+                    updatedAt: now,
+                })
+                .where(eq(clientSession.id, existingSession.id))
+                .returning();
         }
 
         // Insert new favourites
@@ -155,7 +191,20 @@ export class ClientSessionsService {
         }
 
         const [session] = await this.db
-            .select()
+            .select({
+                id: clientSession.id,
+                email: clientSession.email,
+                clientName: clientSession.clientName,
+                clientAddressStreet: clientSession.clientAddressStreet,
+                clientAddressCity: clientSession.clientAddressCity,
+                clientAddressPostalCode: clientSession.clientAddressPostalCode,
+                clientAddressCountry: clientSession.clientAddressCountry,
+                clientPhoneNumber: clientSession.clientPhoneNumber,
+                clientNotes: clientSession.clientNotes,
+                catalogueId: clientSession.catalogueId,
+                createdAt: clientSession.createdAt,
+                updatedAt: clientSession.updatedAt,
+            })
             .from(clientSession)
             .where(eq(clientSession.id, sessionId))
             .limit(1);

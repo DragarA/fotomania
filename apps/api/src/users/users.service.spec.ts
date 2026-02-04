@@ -241,6 +241,95 @@ describe('UsersService', () => {
             );
         });
 
+        it('should update client info collection toggles', async () => {
+            // Arrange
+            const updatedUser = TestDataFactory.createUser({
+                collectClientName: true,
+                collectClientAddress: true,
+                collectClientPhone: false,
+                collectClientNotes: true,
+            });
+            const setFn = jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                    returning: jest.fn().mockResolvedValue([updatedUser]),
+                }),
+            });
+            mockDb.update.mockReturnValue({
+                set: setFn,
+            } as any);
+
+            // Act
+            const result = await service.update('test-user-id-1', {
+                collectClientName: true,
+                collectClientAddress: true,
+                collectClientPhone: false,
+                collectClientNotes: true,
+            });
+
+            // Assert
+            expect(result).toBeDefined();
+            expect(result!.collectClientName).toBe(true);
+            expect(result!.collectClientAddress).toBe(true);
+            expect(result!.collectClientPhone).toBe(false);
+            expect(result!.collectClientNotes).toBe(true);
+            expect(setFn).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    collectClientName: true,
+                    collectClientAddress: true,
+                    collectClientPhone: false,
+                    collectClientNotes: true,
+                    updatedAt: expect.any(Date),
+                })
+            );
+        });
+
+        it('should update toggles individually', async () => {
+            // Arrange
+            const updatedUser = TestDataFactory.createUser({
+                collectClientName: true,
+            });
+            const setFn = jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                    returning: jest.fn().mockResolvedValue([updatedUser]),
+                }),
+            });
+            mockDb.update.mockReturnValue({
+                set: setFn,
+            } as any);
+
+            // Act
+            const result = await service.update('test-user-id-1', {
+                collectClientName: true,
+            });
+
+            // Assert
+            expect(result).toBeDefined();
+            expect(result!.collectClientName).toBe(true);
+            expect(setFn).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    collectClientName: true,
+                    updatedAt: expect.any(Date),
+                })
+            );
+            // Verify other toggles are not in the update payload
+            expect(setFn).not.toHaveBeenCalledWith(
+                expect.objectContaining({
+                    collectClientAddress: expect.anything(),
+                })
+            );
+        });
+
+        it('should verify default values for client info toggles in new user', () => {
+            // Arrange & Act
+            const newUser = TestDataFactory.createUser();
+
+            // Assert
+            expect(newUser.collectClientName).toBe(false);
+            expect(newUser.collectClientAddress).toBe(false);
+            expect(newUser.collectClientPhone).toBe(false);
+            expect(newUser.collectClientNotes).toBe(false);
+        });
+
         it('should always update the updatedAt timestamp', async () => {
             // Arrange
             const now = new Date();

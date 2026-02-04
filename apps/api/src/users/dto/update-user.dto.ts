@@ -50,6 +50,10 @@ export const updateUserSchema = z.object({
         .nullable()
         .optional(),
     preferredLanguage: z.enum(SUPPORTED_LANGUAGES).optional(),
+    collectClientName: z.boolean().optional(),
+    collectClientAddress: z.boolean().optional(),
+    collectClientPhone: z.boolean().optional(),
+    collectClientNotes: z.boolean().optional(),
 });
 
 export type UpdateUserDto = z.infer<typeof updateUserSchema>;
@@ -126,5 +130,33 @@ export class UpdateUserDtoClass {
         example: 'en',
     })
     preferredLanguage?: SupportedLanguage;
+
+    @ApiProperty({
+        description: 'Whether to collect client name',
+        required: false,
+        example: true,
+    })
+    collectClientName?: boolean;
+
+    @ApiProperty({
+        description: 'Whether to collect client address',
+        required: false,
+        example: false,
+    })
+    collectClientAddress?: boolean;
+
+    @ApiProperty({
+        description: 'Whether to collect client phone number',
+        required: false,
+        example: true,
+    })
+    collectClientPhone?: boolean;
+
+    @ApiProperty({
+        description: 'Whether to collect client notes',
+        required: false,
+        example: false,
+    })
+    collectClientNotes?: boolean;
 }
 

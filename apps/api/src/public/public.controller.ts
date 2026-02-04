@@ -145,7 +145,16 @@ export class PublicController {
         const result = await this.clientSessionsService.addFavourites(
             slug,
             body.email,
-            body.photoIds
+            body.photoIds,
+            {
+                clientName: body.clientName,
+                clientAddressStreet: body.clientAddressStreet,
+                clientAddressCity: body.clientAddressCity,
+                clientAddressPostalCode: body.clientAddressPostalCode,
+                clientAddressCountry: body.clientAddressCountry,
+                clientPhoneNumber: body.clientPhoneNumber,
+                clientNotes: body.clientNotes,
+            }
         );
         return new AddFavouritesResDto(result?.email, true);
     }

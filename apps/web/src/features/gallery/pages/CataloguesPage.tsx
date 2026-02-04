@@ -3,7 +3,6 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
-
 import { SpotlightTooltip } from "@/features/onboarding/components/SpotlightTooltip";
 import { WelcomeModal } from "@/features/onboarding/components/WelcomeModal";
 import { useOnboarding } from "@/features/onboarding/useOnboarding";

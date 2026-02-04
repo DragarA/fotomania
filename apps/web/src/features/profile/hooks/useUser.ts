@@ -15,6 +15,10 @@ export interface User {
     businessLogo?: string | null;
     businessDescription?: string | null;
     preferredLanguage: string;
+    collectClientName: boolean;
+    collectClientAddress: boolean;
+    collectClientPhone: boolean;
+    collectClientNotes: boolean;
     createdAt: string;
     updatedAt: string;
 }
@@ -29,6 +33,10 @@ export interface UpdateUserDto {
     businessLogo?: string | null;
     businessDescription?: string | null;
     preferredLanguage?: string;
+    collectClientName?: boolean;
+    collectClientAddress?: boolean;
+    collectClientPhone?: boolean;
+    collectClientNotes?: boolean;
 }
 
 async function fetchCurrentUser(): Promise<User> {

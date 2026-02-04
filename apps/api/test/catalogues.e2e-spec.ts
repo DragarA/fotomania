@@ -214,6 +214,16 @@ describe('CataloguesController (e2e)', () => {
         }),
       } as any);
 
+      // Mock photographer/user settings query
+      const mockPhotographer = TestDataFactory.createUser({
+        id: mockCatalogue.ownerId,
+      });
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          where: jest.fn().mockResolvedValue([mockPhotographer]),
+        }),
+      } as any);
+
       const response = await request(app.getHttpServer())
         .get('/public/catalogue/test-slug')
         .expect(200);

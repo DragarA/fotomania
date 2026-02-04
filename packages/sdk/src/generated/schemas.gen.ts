@@ -133,9 +133,29 @@ export const $UserResDto = {
             type: 'string',
             description: 'Timestamp when the user was last updated',
             example: '2024-12-08T19:30:00.000Z'
+        },
+        collectClientName: {
+            type: 'boolean',
+            description: 'Whether to collect client name',
+            example: true
+        },
+        collectClientAddress: {
+            type: 'boolean',
+            description: 'Whether to collect client address',
+            example: false
+        },
+        collectClientPhone: {
+            type: 'boolean',
+            description: 'Whether to collect client phone number',
+            example: true
+        },
+        collectClientNotes: {
+            type: 'boolean',
+            description: 'Whether to collect client notes',
+            example: false
         }
     },
-    required: ['id', 'name', 'email', 'emailVerified', 'preferredLanguage', 'createdAt', 'updatedAt']
+    required: ['id', 'name', 'email', 'emailVerified', 'preferredLanguage', 'createdAt', 'updatedAt', 'collectClientName', 'collectClientAddress', 'collectClientPhone', 'collectClientNotes']
 } as const;
 
 export const $UpdateUserDtoClass = {
@@ -193,6 +213,26 @@ export const $UpdateUserDtoClass = {
             description: 'Preferred language code',
             enum: ['en', 'sl'],
             example: 'en'
+        },
+        collectClientName: {
+            type: 'boolean',
+            description: 'Whether to collect client name',
+            example: true
+        },
+        collectClientAddress: {
+            type: 'boolean',
+            description: 'Whether to collect client address',
+            example: false
+        },
+        collectClientPhone: {
+            type: 'boolean',
+            description: 'Whether to collect client phone number',
+            example: true
+        },
+        collectClientNotes: {
+            type: 'boolean',
+            description: 'Whether to collect client notes',
+            example: false
         }
     }
 } as const;
@@ -335,7 +375,42 @@ export const $ClientFavouritesResDto = {
         },
         photoCount: {
             type: 'number',
-            description: 'Array of favorited photos'
+            description: 'Number of favorited photos'
+        },
+        clientName: {
+            type: 'object',
+            description: 'Client full name',
+            nullable: true
+        },
+        clientAddressStreet: {
+            type: 'object',
+            description: 'Client street address',
+            nullable: true
+        },
+        clientAddressCity: {
+            type: 'object',
+            description: 'Client city',
+            nullable: true
+        },
+        clientAddressPostalCode: {
+            type: 'object',
+            description: 'Client postal code',
+            nullable: true
+        },
+        clientAddressCountry: {
+            type: 'object',
+            description: 'Client country',
+            nullable: true
+        },
+        clientPhoneNumber: {
+            type: 'object',
+            description: 'Client phone number',
+            nullable: true
+        },
+        clientNotes: {
+            type: 'object',
+            description: 'Additional notes from client',
+            nullable: true
         }
     },
     required: ['sessionId', 'email', 'createdAt', 'photoCount']
@@ -525,6 +600,48 @@ export const $ClientSessionFavouritesResDto = {
             items: {
                 '$ref': '#/components/schemas/PhotoResDto'
             }
+        },
+        clientName: {
+            type: 'object',
+            description: 'Client full name',
+            nullable: true,
+            example: 'John Doe'
+        },
+        clientAddressStreet: {
+            type: 'object',
+            description: 'Client street address',
+            nullable: true,
+            example: '123 Main Street'
+        },
+        clientAddressCity: {
+            type: 'object',
+            description: 'Client city',
+            nullable: true,
+            example: 'Ljubljana'
+        },
+        clientAddressPostalCode: {
+            type: 'object',
+            description: 'Client postal code',
+            nullable: true,
+            example: '1000'
+        },
+        clientAddressCountry: {
+            type: 'object',
+            description: 'Client country',
+            nullable: true,
+            example: 'Slovenia'
+        },
+        clientPhoneNumber: {
+            type: 'object',
+            description: 'Client phone number',
+            nullable: true,
+            example: '+386 1 234 5678'
+        },
+        clientNotes: {
+            type: 'object',
+            description: 'Additional notes from the client',
+            nullable: true,
+            example: 'Please deliver photos by email'
         }
     },
     required: ['sessionId', 'email', 'createdAt', 'photos']
@@ -616,9 +733,29 @@ export const $CataloguePublicResDto = {
             items: {
                 '$ref': '#/components/schemas/CollectionPublicResDto'
             }
+        },
+        collectClientName: {
+            type: 'boolean',
+            description: 'Whether the photographer collects client name',
+            example: true
+        },
+        collectClientAddress: {
+            type: 'boolean',
+            description: 'Whether the photographer collects client address',
+            example: false
+        },
+        collectClientPhone: {
+            type: 'boolean',
+            description: 'Whether the photographer collects client phone',
+            example: true
+        },
+        collectClientNotes: {
+            type: 'boolean',
+            description: 'Whether the photographer collects client notes',
+            example: false
         }
     },
-    required: ['id', 'title', 'publicUrlSlug', 'createdAt', 'updatedAt', 'collections']
+    required: ['id', 'title', 'publicUrlSlug', 'createdAt', 'updatedAt', 'collections', 'collectClientName', 'collectClientAddress', 'collectClientPhone', 'collectClientNotes']
 } as const;
 
 export const $CollectionPhotoPublicResDto = {
@@ -695,6 +832,41 @@ export const $AddFavouritesReqDtoClass = {
             items: {
                 type: 'string'
             }
+        },
+        clientName: {
+            type: 'string',
+            description: 'Client full name',
+            example: 'John Doe'
+        },
+        clientAddressStreet: {
+            type: 'string',
+            description: 'Client street address',
+            example: '123 Main Street'
+        },
+        clientAddressCity: {
+            type: 'string',
+            description: 'Client city',
+            example: 'Ljubljana'
+        },
+        clientAddressPostalCode: {
+            type: 'string',
+            description: 'Client postal code',
+            example: '1000'
+        },
+        clientAddressCountry: {
+            type: 'string',
+            description: 'Client country',
+            example: 'Slovenia'
+        },
+        clientPhoneNumber: {
+            type: 'string',
+            description: 'Client phone number',
+            example: '+386 1 234 5678'
+        },
+        clientNotes: {
+            type: 'string',
+            description: 'Additional notes from the client',
+            example: 'Please deliver photos by email'
         }
     },
     required: ['email', 'photoIds']

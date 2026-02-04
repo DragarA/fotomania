@@ -22,6 +22,10 @@ export const TestDataFactory = {
     businessLogo: null,
     businessDescription: null,
     preferredLanguage: 'en',
+    collectClientName: false,
+    collectClientAddress: false,
+    collectClientPhone: false,
+    collectClientNotes: false,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
     ...overrides,
@@ -184,4 +188,33 @@ export const TestDataFactory = {
       })
     );
   },
+
+  /**
+   * Create a test client session
+   */
+  createClientSession: (overrides: Partial<any> = {}) => ({
+    id: 'test-client-session-id-1',
+    email: 'client@example.com',
+    clientName: null,
+    clientAddressStreet: null,
+    clientAddressCity: null,
+    clientAddressPostalCode: null,
+    clientAddressCountry: null,
+    clientPhoneNumber: null,
+    clientNotes: null,
+    catalogueId: 'test-catalogue-id-1',
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01'),
+    ...overrides,
+  }),
+
+  /**
+   * Create a test client favourite
+   */
+  createClientFavourite: (overrides: Partial<any> = {}) => ({
+    id: 'test-client-favourite-id-1',
+    clientSessionId: 'test-client-session-id-1',
+    photoId: 'test-photo-id-1',
+    ...overrides,
+  }),
 };

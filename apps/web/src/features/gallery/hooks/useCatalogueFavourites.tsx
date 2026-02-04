@@ -6,6 +6,13 @@ export interface ClientFavouriteSession {
     email: string;
     createdAt: string;
     photoCount: number;
+    clientName?: string;
+    clientAddressStreet?: string;
+    clientAddressCity?: string;
+    clientAddressPostalCode?: string;
+    clientAddressCountry?: string;
+    clientPhoneNumber?: string;
+    clientNotes?: string;
 }
 
 export function useCatalogueFavouritesQuery(catalogueId: string) {

@@ -2,9 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { catalogue } from '../../common/db/schema/catalogues.schema';
 import { collection } from '../../common/db/schema/collections.schema';
+import { user } from '../../common/db/schema/users.schema';
 
 type CatalogueEntity = typeof catalogue.$inferSelect;
 type CollectionEntity = typeof collection.$inferSelect;
+type UserEntity = typeof user.$inferSelect;
 
 export class CollectionPublicResDto {
     @ApiProperty({
@@ -75,11 +77,36 @@ export class CataloguePublicResDto {
     })
     collections?: CollectionPublicResDto[];
 
+    @ApiProperty({
+        description: 'Whether the photographer collects client name',
+        example: true,
+    })
+    collectClientName!: boolean;
+
+    @ApiProperty({
+        description: 'Whether the photographer collects client address',
+        example: false,
+    })
+    collectClientAddress!: boolean;
+
+    @ApiProperty({
+        description: 'Whether the photographer collects client phone',
+        example: true,
+    })
+    collectClientPhone!: boolean;
+
+    @ApiProperty({
+        description: 'Whether the photographer collects client notes',
+        example: false,
+    })
+    collectClientNotes!: boolean;
+
     constructor(data: {
         catalogue: CatalogueEntity;
         collections: CollectionEntity[];
+        photographer?: UserEntity;
     }) {
-        const { catalogue, collections } = data;
+        const { catalogue, collections, photographer } = data;
         this.id = catalogue.id;
         this.title = catalogue.title;
         this.description = catalogue.description ?? null;
@@ -90,5 +117,9 @@ export class CataloguePublicResDto {
         this.collections = collections?.map(
             (item) => new CollectionPublicResDto(item)
         );
+        this.collectClientName = photographer?.collectClientName ?? false;
+        this.collectClientAddress = photographer?.collectClientAddress ?? false;
+        this.collectClientPhone = photographer?.collectClientPhone ?? false;
+        this.collectClientNotes = photographer?.collectClientNotes ?? false;
     }
 }

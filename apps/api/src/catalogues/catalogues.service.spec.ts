@@ -162,6 +162,9 @@ describe('CataloguesService', () => {
                 id: 'collection-1',
                 catalogueId: mockCatalogue.id,
             });
+            const mockPhotographer = TestDataFactory.createUser({
+                id: mockCatalogue.ownerId,
+            });
 
             // First select - catalogue with collections
             mockDb.select.mockReturnValueOnce({
@@ -196,10 +199,18 @@ describe('CataloguesService', () => {
                 }),
             } as any);
 
+            // Third select - photographer/user settings
+            mockDb.select.mockReturnValueOnce({
+                from: jest.fn().mockReturnValue({
+                    where: jest.fn().mockResolvedValue([mockPhotographer]),
+                }),
+            } as any);
+
             const result = await service.findPublicBySlug(slug);
 
             expect(result.catalogue).toEqual(mockCatalogue);
             expect(result.collections).toEqual([mockCollection]);
+            expect(result.photographer).toEqual(mockPhotographer);
         });
 
         it('should throw NotFoundException when slug not found', async () => {

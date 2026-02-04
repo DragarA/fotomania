@@ -1,9 +1,16 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { z } from 'zod';
 
 export const addFavouritesSchema = z.object({
     email: z.email('Invalid email address'),
     photoIds: z.array(z.string()).min(1, 'At least one photo ID is required'),
+    clientName: z.string().optional(),
+    clientAddressStreet: z.string().optional(),
+    clientAddressCity: z.string().optional(),
+    clientAddressPostalCode: z.string().optional(),
+    clientAddressCountry: z.string().optional(),
+    clientPhoneNumber: z.string().optional(),
+    clientNotes: z.string().optional(),
 });
 
 export type AddFavouritesReqDto = z.infer<typeof addFavouritesSchema>;
@@ -25,4 +32,46 @@ export class AddFavouritesReqDtoClass {
         type: [String],
     })
     photoIds!: string[];
+
+    @ApiPropertyOptional({
+        description: 'Client full name',
+        example: 'John Doe',
+    })
+    clientName?: string;
+
+    @ApiPropertyOptional({
+        description: 'Client street address',
+        example: '123 Main Street',
+    })
+    clientAddressStreet?: string;
+
+    @ApiPropertyOptional({
+        description: 'Client city',
+        example: 'Ljubljana',
+    })
+    clientAddressCity?: string;
+
+    @ApiPropertyOptional({
+        description: 'Client postal code',
+        example: '1000',
+    })
+    clientAddressPostalCode?: string;
+
+    @ApiPropertyOptional({
+        description: 'Client country',
+        example: 'Slovenia',
+    })
+    clientAddressCountry?: string;
+
+    @ApiPropertyOptional({
+        description: 'Client phone number',
+        example: '+386 1 234 5678',
+    })
+    clientPhoneNumber?: string;
+
+    @ApiPropertyOptional({
+        description: 'Additional notes from the client',
+        example: 'Please deliver photos by email',
+    })
+    clientNotes?: string;
 }

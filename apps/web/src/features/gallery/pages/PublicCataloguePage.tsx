@@ -244,6 +244,12 @@ export function PublicCataloguePage() {
                 favoriteIds={getFavoriteIds()}
                 favoritesCount={favoritesCount}
                 onSuccess={handleSaveSuccess}
+                collectionSettings={{
+                    collectClientName: catalogue?.collectClientName ?? false,
+                    collectClientAddress: catalogue?.collectClientAddress ?? false,
+                    collectClientPhone: catalogue?.collectClientPhone ?? false,
+                    collectClientNotes: catalogue?.collectClientNotes ?? false,
+                }}
             />
 
             {/* Success Confirmation Modal */}

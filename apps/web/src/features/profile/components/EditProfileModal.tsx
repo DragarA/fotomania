@@ -37,6 +37,10 @@ export function EditProfileModal({ isOpen, onClose, onSuccess }: EditProfileModa
             businessWebsite: values.businessWebsite || null,
             businessDescription: values.businessDescription || null,
             preferredLanguage: values.preferredLanguage,
+            collectClientName: values.collectClientName,
+            collectClientAddress: values.collectClientAddress,
+            collectClientPhone: values.collectClientPhone,
+            collectClientNotes: values.collectClientNotes,
         };
 
         updateMutation.mutate(payload, {

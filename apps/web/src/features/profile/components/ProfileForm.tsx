@@ -1,7 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+
+import { Switch } from '@/components/ui/switch';
 
 import { SUPPORTED_LANGUAGES } from '../constants';
 import type { User } from '../hooks/useUser';
@@ -25,6 +27,10 @@ const profileFormSchema = z.object({
         .or(z.literal('')),
     businessDescription: z.string().max(2000, 'Business description is too long').optional().or(z.literal('')),
     preferredLanguage: z.enum(['en', 'sl']),
+    collectClientName: z.boolean(),
+    collectClientAddress: z.boolean(),
+    collectClientPhone: z.boolean(),
+    collectClientNotes: z.boolean(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -40,6 +46,7 @@ export function ProfileForm({ initialValues, isSubmitting, onSubmit }: ProfileFo
     const {
         register,
         handleSubmit,
+        control,
         formState: { errors, isDirty },
     } = useForm<ProfileFormValues>({
         resolver: zodResolver(profileFormSchema),
@@ -52,6 +59,10 @@ export function ProfileForm({ initialValues, isSubmitting, onSubmit }: ProfileFo
             businessWebsite: initialValues.businessWebsite || '',
             businessDescription: initialValues.businessDescription || '',
             preferredLanguage: (initialValues.preferredLanguage as 'en' | 'sl') || 'en',
+            collectClientName: initialValues.collectClientName ?? false,
+            collectClientAddress: initialValues.collectClientAddress ?? false,
+            collectClientPhone: initialValues.collectClientPhone ?? false,
+            collectClientNotes: initialValues.collectClientNotes ?? false,
         },
     });
 
@@ -262,6 +273,122 @@ export function ProfileForm({ initialValues, isSubmitting, onSubmit }: ProfileFo
                             {errors.businessDescription.message}
                         </p>
                     )}
+                </div>
+            </div>
+
+            {/* Client Information Collection Section */}
+            <div className="space-y-4">
+                <div>
+                    <h3 className="text-xs uppercase tracking-[0.3em] text-stone-500">
+                        {t('form.clientInfoCollection')}
+                    </h3>
+                    <p className="mt-1 text-xs text-stone-400">
+                        {t('form.clientInfoCollectionDescription')}
+                    </p>
+                </div>
+
+                {/* Collect Client Name Toggle */}
+                <div className="flex items-center justify-between space-x-4 rounded border border-black/10 bg-white/80 px-4 py-3">
+                    <div className="flex-1 space-y-1">
+                        <label
+                            className="text-xs uppercase tracking-[0.4em] text-stone-700"
+                            htmlFor="collectClientName"
+                        >
+                            {t('form.collectClientName')}
+                        </label>
+                        <p className="text-xs text-stone-400">
+                            {t('form.collectClientNameDescription')}
+                        </p>
+                    </div>
+                    <Controller
+                        control={control}
+                        name="collectClientName"
+                        render={({ field }) => (
+                            <Switch
+                                id="collectClientName"
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                            />
+                        )}
+                    />
+                </div>
+
+                {/* Collect Client Address Toggle */}
+                <div className="flex items-center justify-between space-x-4 rounded border border-black/10 bg-white/80 px-4 py-3">
+                    <div className="flex-1 space-y-1">
+                        <label
+                            className="text-xs uppercase tracking-[0.4em] text-stone-700"
+                            htmlFor="collectClientAddress"
+                        >
+                            {t('form.collectClientAddress')}
+                        </label>
+                        <p className="text-xs text-stone-400">
+                            {t('form.collectClientAddressDescription')}
+                        </p>
+                    </div>
+                    <Controller
+                        control={control}
+                        name="collectClientAddress"
+                        render={({ field }) => (
+                            <Switch
+                                id="collectClientAddress"
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                            />
+                        )}
+                    />
+                </div>
+
+                {/* Collect Client Phone Toggle */}
+                <div className="flex items-center justify-between space-x-4 rounded border border-black/10 bg-white/80 px-4 py-3">
+                    <div className="flex-1 space-y-1">
+                        <label
+                            className="text-xs uppercase tracking-[0.4em] text-stone-700"
+                            htmlFor="collectClientPhone"
+                        >
+                            {t('form.collectClientPhone')}
+                        </label>
+                        <p className="text-xs text-stone-400">
+                            {t('form.collectClientPhoneDescription')}
+                        </p>
+                    </div>
+                    <Controller
+                        control={control}
+                        name="collectClientPhone"
+                        render={({ field }) => (
+                            <Switch
+                                id="collectClientPhone"
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                            />
+                        )}
+                    />
+                </div>
+
+                {/* Collect Client Notes Toggle */}
+                <div className="flex items-center justify-between space-x-4 rounded border border-black/10 bg-white/80 px-4 py-3">
+                    <div className="flex-1 space-y-1">
+                        <label
+                            className="text-xs uppercase tracking-[0.4em] text-stone-700"
+                            htmlFor="collectClientNotes"
+                        >
+                            {t('form.collectClientNotes')}
+                        </label>
+                        <p className="text-xs text-stone-400">
+                            {t('form.collectClientNotesDescription')}
+                        </p>
+                    </div>
+                    <Controller
+                        control={control}
+                        name="collectClientNotes"
+                        render={({ field }) => (
+                            <Switch
+                                id="collectClientNotes"
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                            />
+                        )}
+                    />
                 </div>
             </div>
 

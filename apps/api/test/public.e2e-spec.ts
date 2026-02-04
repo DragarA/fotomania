@@ -198,6 +198,16 @@ describe('PublicController (e2e)', () => {
         }),
       } as any);
 
+      // Fourth select - photographer/user settings
+      const mockPhotographer = TestDataFactory.createUser({
+        id: mockCatalogue.ownerId,
+      });
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          where: jest.fn().mockResolvedValue([mockPhotographer]),
+        }),
+      } as any);
+
       const response = await request(app.getHttpServer())
         .get('/public/catalogue/wedding-2024')
         .expect(200);
@@ -264,6 +274,16 @@ describe('PublicController (e2e)', () => {
               }),
             }),
           }),
+        }),
+      } as any);
+
+      // Photographer/user settings
+      const mockPhotographer = TestDataFactory.createUser({
+        id: mockCatalogue.ownerId,
+      });
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          where: jest.fn().mockResolvedValue([mockPhotographer]),
         }),
       } as any);
 

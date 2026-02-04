@@ -7,7 +7,7 @@ interface GoogleSignInButtonProps {
 }
 
 export function GoogleSignInButton({
-    className = '',
+    className: _className = '',
 }: GoogleSignInButtonProps) {
     const { t } = useTranslation('auth');
 

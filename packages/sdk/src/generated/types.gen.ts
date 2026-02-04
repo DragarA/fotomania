@@ -110,6 +110,22 @@ export type UserResDto = {
      * Timestamp when the user was last updated
      */
     updatedAt: string;
+    /**
+     * Whether to collect client name
+     */
+    collectClientName: boolean;
+    /**
+     * Whether to collect client address
+     */
+    collectClientAddress: boolean;
+    /**
+     * Whether to collect client phone number
+     */
+    collectClientPhone: boolean;
+    /**
+     * Whether to collect client notes
+     */
+    collectClientNotes: boolean;
 };
 
 export type UpdateUserDtoClass = {
@@ -163,6 +179,22 @@ export type UpdateUserDtoClass = {
      * Preferred language code
      */
     preferredLanguage?: 'en' | 'sl';
+    /**
+     * Whether to collect client name
+     */
+    collectClientName?: boolean;
+    /**
+     * Whether to collect client address
+     */
+    collectClientAddress?: boolean;
+    /**
+     * Whether to collect client phone number
+     */
+    collectClientPhone?: boolean;
+    /**
+     * Whether to collect client notes
+     */
+    collectClientNotes?: boolean;
 };
 
 /**
@@ -274,9 +306,51 @@ export type ClientFavouritesResDto = {
      */
     createdAt: string;
     /**
-     * Array of favorited photos
+     * Number of favorited photos
      */
     photoCount: number;
+    /**
+     * Client full name
+     */
+    clientName?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Client street address
+     */
+    clientAddressStreet?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Client city
+     */
+    clientAddressCity?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Client postal code
+     */
+    clientAddressPostalCode?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Client country
+     */
+    clientAddressCountry?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Client phone number
+     */
+    clientPhoneNumber?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Additional notes from client
+     */
+    clientNotes?: {
+        [key: string]: unknown;
+    } | null;
 };
 
 export type CreateCollectionDtoClass = {
@@ -416,6 +490,48 @@ export type ClientSessionFavouritesResDto = {
      * Array of favorited photos
      */
     photos: Array<PhotoResDto>;
+    /**
+     * Client full name
+     */
+    clientName?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Client street address
+     */
+    clientAddressStreet?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Client city
+     */
+    clientAddressCity?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Client postal code
+     */
+    clientAddressPostalCode?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Client country
+     */
+    clientAddressCountry?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Client phone number
+     */
+    clientPhoneNumber?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Additional notes from the client
+     */
+    clientNotes?: {
+        [key: string]: unknown;
+    } | null;
 };
 
 export type VerifyPasswordReqDtoClass = {
@@ -480,6 +596,22 @@ export type CataloguePublicResDto = {
      * Collections grouped under this catalogue
      */
     collections: Array<CollectionPublicResDto>;
+    /**
+     * Whether the photographer collects client name
+     */
+    collectClientName: boolean;
+    /**
+     * Whether the photographer collects client address
+     */
+    collectClientAddress: boolean;
+    /**
+     * Whether the photographer collects client phone
+     */
+    collectClientPhone: boolean;
+    /**
+     * Whether the photographer collects client notes
+     */
+    collectClientNotes: boolean;
 };
 
 export type CollectionPhotoPublicResDto = {
@@ -542,6 +674,34 @@ export type AddFavouritesReqDtoClass = {
      * Array of photo IDs to mark as favourites
      */
     photoIds: Array<(string)>;
+    /**
+     * Client full name
+     */
+    clientName?: string;
+    /**
+     * Client street address
+     */
+    clientAddressStreet?: string;
+    /**
+     * Client city
+     */
+    clientAddressCity?: string;
+    /**
+     * Client postal code
+     */
+    clientAddressPostalCode?: string;
+    /**
+     * Client country
+     */
+    clientAddressCountry?: string;
+    /**
+     * Client phone number
+     */
+    clientPhoneNumber?: string;
+    /**
+     * Additional notes from the client
+     */
+    clientNotes?: string;
 };
 
 export type AddFavouritesResDto = {

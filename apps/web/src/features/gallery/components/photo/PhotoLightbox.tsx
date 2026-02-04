@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, Heart, X } from 'lucide-react';
 import { useEffect } from 'react';
 
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
+
 import { API_BASE_URL } from '../../../../lib/api-client';
 import type { Photo } from '../../types';
 
