@@ -123,7 +123,9 @@
     "edit": "Edit",
     "delete": "Delete",
     "shareDelivery": "Copy Delivery Link",
-    "sendDeliveryEmail": "Send Email to Client"
+    "sendDeliveryEmail": "Send Email to Client",
+    "uploadInvoice": "Upload Invoice",
+    "removeInvoice": "Remove Invoice"
   },
   "favouritesView": {
     "noFavouritesYet": "No favorites yet",
@@ -163,7 +165,19 @@
     "deliveryEmailSent": "Delivery email sent successfully",
     "deliveryEmailFailed": "Failed to send delivery email",
     "catalogueCoverUpdated": "Catalogue cover updated",
-    "catalogueCoverUpdateFailed": "Failed to update cover"
+    "catalogueCoverUpdateFailed": "Failed to update cover",
+    "invoiceUploadSuccess": "Invoice uploaded successfully",
+    "invoiceUploadFailed": "Failed to upload invoice",
+    "invoiceRemoveSuccess": "Invoice removed successfully",
+    "invoiceRemoveFailed": "Failed to remove invoice"
+  },
+  "invoice": {
+    "uploadTitle": "Upload Invoice",
+    "uploadDescription": "Attach a PDF invoice to this delivery",
+    "selectFile": "Select PDF file",
+    "uploading": "Uploading...",
+    "uploadButton": "Upload",
+    "removeConfirm": "Remove invoice?"
   },
   "passwordModal": {
     "manageTitle": "Manage Password",

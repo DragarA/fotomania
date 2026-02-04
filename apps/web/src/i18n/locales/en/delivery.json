@@ -15,6 +15,9 @@
   "downloadPhoto": "Download photo",
   "noPhotosYet": "No photos have been added to this delivery yet.",
   "preview": "Preview",
-  "footer": "Powered by Fotomania"
+  "footer": "Powered by Fotomania",
+  "invoiceIncluded": "Invoice Included",
+  "downloadInvoice": "Download Invoice",
+  "downloadingInvoice": "Downloading..."
 }
 

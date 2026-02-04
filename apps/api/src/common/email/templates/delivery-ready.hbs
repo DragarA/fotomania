@@ -9,8 +9,14 @@
 </p>
 
 {{#if photographerName}}
-<p style="margin: 0 0 36px 0; color: rgba(41, 37, 36, 0.7); font-size: 15px; font-weight: 300; line-height: 1.7; letter-spacing: 0.2px;">
+<p style="margin: 0 0 24px 0; color: rgba(41, 37, 36, 0.7); font-size: 15px; font-weight: 300; line-height: 1.7; letter-spacing: 0.2px;">
   {{t 'emails.delivery_ready.photographer_prepared' photographerName=photographerName}}
+</p>
+{{/if}}
+
+{{#if hasInvoice}}
+<p style="margin: 0 0 36px 0; color: rgba(41, 37, 36, 0.7); font-size: 15px; font-weight: 300; line-height: 1.7; letter-spacing: 0.2px;">
+  {{t 'emails.delivery_ready.invoice_attached'}}
 </p>
 {{/if}}
 

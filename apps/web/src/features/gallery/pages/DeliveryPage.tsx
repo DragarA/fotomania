@@ -1,5 +1,5 @@
 import { useParams } from '@tanstack/react-router';
-import { Download, Image, Loader2, Mail, Package } from 'lucide-react';
+import { Download, FileText, Image, Loader2, Mail, Package } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -21,6 +21,7 @@ export function DeliveryPage() {
     const { slug } = useParams({ from: '/d/$slug' });
     const { t } = useTranslation('delivery');
     const [isDownloading, setIsDownloading] = useState(false);
+    const [isDownloadingInvoice, setIsDownloadingInvoice] = useState(false);
     const [selectedPhoto, setSelectedPhoto] = useState<PublicPhoto | null>(null);
 
     // Password protection
@@ -94,6 +95,41 @@ export function DeliveryPage() {
             console.error('Download error:', err);
         } finally {
             setIsDownloading(false);
+        }
+    };
+
+    // Handle invoice download
+    const handleDownloadInvoice = async () => {
+        setIsDownloadingInvoice(true);
+        try {
+            const token = getDeliveryAccessToken(slug);
+            const headers: Record<string, string> = {};
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            const response = await fetch(
+                `${API_BASE_URL}/public/delivery/${slug}/invoice`,
+                { headers }
+            );
+
+            if (!response.ok) {
+                throw new Error('Invoice download failed');
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'invoice.pdf';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (err) {
+            console.error('Invoice download error:', err);
+        } finally {
+            setIsDownloadingInvoice(false);
         }
     };
 
@@ -226,6 +262,46 @@ export function DeliveryPage() {
                             </div>
                         </div>
                     </div>
+
+                    {/* Invoice Section */}
+                    {delivery?.hasInvoice && (
+                        <div className="border-b border-stone-100 px-8 py-7">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-600">
+                                        <FileText className="h-4 w-4" strokeWidth={1.5} />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs uppercase tracking-[0.2em] text-stone-400">
+                                            {t('invoiceIncluded')}
+                                        </p>
+                                        <p className="mt-1 text-lg font-medium tracking-wide text-stone-800">
+                                            invoice.pdf
+                                        </p>
+                                    </div>
+                                </div>
+                                <Button
+                                    onClick={handleDownloadInvoice}
+                                    disabled={isDownloadingInvoice}
+                                    variant="outline"
+                                    size="sm"
+                                    className="border-stone-200 text-stone-600 hover:bg-stone-50"
+                                >
+                                    {isDownloadingInvoice ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            {t('downloadingInvoice')}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Download className="mr-2 h-4 w-4" />
+                                            {t('downloadInvoice')}
+                                        </>
+                                    )}
+                                </Button>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Download Section */}
                     <div className="px-8 py-8">

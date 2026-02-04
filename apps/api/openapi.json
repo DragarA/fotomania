@@ -925,6 +925,110 @@
         ]
       }
     },
+    "/collections/{id}/invoice": {
+      "post": {
+        "operationId": "CollectionsController_uploadInvoice",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "PDF invoice file (max 10MB)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Invoice uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadInvoiceResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid file type or not a delivery collection"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Upload an invoice PDF to a delivery collection",
+        "tags": [
+          "collections"
+        ]
+      },
+      "delete": {
+        "operationId": "CollectionsController_removeInvoice",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Collection ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invoice removed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadInvoiceResDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Collection or invoice not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Remove invoice from a delivery collection",
+        "tags": [
+          "collections"
+        ]
+      }
+    },
     "/photos/upload/{collectionId}": {
       "post": {
         "operationId": "PhotosController_uploadFile",
@@ -1580,6 +1684,42 @@
           "public"
         ]
       }
+    },
+    "/public/delivery/{deliverySlug}/invoice": {
+      "get": {
+        "operationId": "PublicController_downloadInvoice",
+        "parameters": [
+          {
+            "name": "deliverySlug",
+            "required": true,
+            "in": "path",
+            "description": "Delivery URL slug",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the invoice PDF file"
+          },
+          "401": {
+            "description": "Password required or invalid token"
+          },
+          "404": {
+            "description": "Delivery or invoice not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Download the invoice PDF for a delivery",
+        "tags": [
+          "public"
+        ]
+      }
     }
   },
   "info": {
@@ -2054,6 +2194,11 @@
             "type": "string",
             "description": "Email of the client for delivery collections",
             "example": "client@example.com"
+          },
+          "hasInvoice": {
+            "type": "boolean",
+            "description": "Whether this delivery collection has an invoice attached",
+            "example": true
           }
         },
         "required": [
@@ -2075,6 +2220,25 @@
             "example": "Ceremony Photos"
           }
         }
+      },
+      "UploadInvoiceResDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Success message",
+            "example": "Invoice uploaded successfully"
+          },
+          "hasInvoice": {
+            "type": "boolean",
+            "description": "Whether the collection now has an invoice",
+            "example": true
+          }
+        },
+        "required": [
+          "message",
+          "hasInvoice"
+        ]
       },
       "PhotoResDto": {
         "type": "object",
@@ -2406,6 +2570,11 @@
             "type": "number",
             "description": "Number of photos in the delivery collection",
             "example": 42
+          },
+          "hasInvoice": {
+            "type": "boolean",
+            "description": "Whether the delivery has an attached invoice",
+            "example": true
           }
         },
         "required": [
@@ -2413,7 +2582,8 @@
           "name",
           "catalogueTitle",
           "deliverySlug",
-          "photoCount"
+          "photoCount",
+          "hasInvoice"
         ]
       }
     }

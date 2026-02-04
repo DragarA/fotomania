@@ -9,4 +9,5 @@ export interface Collection {
     type?: 'proofing' | 'delivery';
     deliverySlug?: string | null;
     clientEmail?: string | null;
+    hasInvoice?: boolean;
 }

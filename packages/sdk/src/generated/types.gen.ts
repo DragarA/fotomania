@@ -331,6 +331,10 @@ export type CollectionResDto = {
      * Email of the client for delivery collections
      */
     clientEmail?: string;
+    /**
+     * Whether this delivery collection has an invoice attached
+     */
+    hasInvoice?: boolean;
 };
 
 /**
@@ -343,6 +347,17 @@ export type UpdateCollectionDtoClass = {
      * Collection name
      */
     name?: string;
+};
+
+export type UploadInvoiceResDto = {
+    /**
+     * Success message
+     */
+    message: string;
+    /**
+     * Whether the collection now has an invoice
+     */
+    hasInvoice: boolean;
 };
 
 export type PhotoResDto = {
@@ -567,6 +582,10 @@ export type DeliveryPublicResDto = {
      * Number of photos in the delivery collection
      */
     photoCount: number;
+    /**
+     * Whether the delivery has an attached invoice
+     */
+    hasInvoice: boolean;
 };
 
 export type AppControllerGetHelloResponse = unknown;
@@ -745,6 +764,30 @@ export type CollectionsControllerSendDeliveryEmailData = {
 
 export type CollectionsControllerSendDeliveryEmailResponse = unknown;
 
+export type CollectionsControllerUploadInvoiceData = {
+    formData: {
+        /**
+         * PDF invoice file (max 10MB)
+         */
+        file?: (Blob | File);
+    };
+    /**
+     * Collection ID
+     */
+    id: string;
+};
+
+export type CollectionsControllerUploadInvoiceResponse = UploadInvoiceResDto;
+
+export type CollectionsControllerRemoveInvoiceData = {
+    /**
+     * Collection ID
+     */
+    id: string;
+};
+
+export type CollectionsControllerRemoveInvoiceResponse = UploadInvoiceResDto;
+
 export type PhotosControllerUploadFileData = {
     /**
      * Collection ID
@@ -885,6 +928,15 @@ export type PublicControllerDownloadDeliveryData = {
 };
 
 export type PublicControllerDownloadDeliveryResponse = unknown;
+
+export type PublicControllerDownloadInvoiceData = {
+    /**
+     * Delivery URL slug
+     */
+    deliverySlug: string;
+};
+
+export type PublicControllerDownloadInvoiceResponse = unknown;
 
 export type $OpenApiTs = {
     '/': {
@@ -1292,6 +1344,46 @@ export type $OpenApiTs = {
             };
         };
     };
+    '/collections/{id}/invoice': {
+        post: {
+            req: CollectionsControllerUploadInvoiceData;
+            res: {
+                /**
+                 * Invoice uploaded successfully
+                 */
+                201: UploadInvoiceResDto;
+                /**
+                 * Invalid file type or not a delivery collection
+                 */
+                400: unknown;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Collection not found
+                 */
+                404: unknown;
+            };
+        };
+        delete: {
+            req: CollectionsControllerRemoveInvoiceData;
+            res: {
+                /**
+                 * Invoice removed successfully
+                 */
+                200: UploadInvoiceResDto;
+                /**
+                 * Forbidden
+                 */
+                403: unknown;
+                /**
+                 * Collection or invoice not found
+                 */
+                404: unknown;
+            };
+        };
+    };
     '/photos/upload/{collectionId}': {
         post: {
             req: PhotosControllerUploadFileData;
@@ -1556,6 +1648,25 @@ export type $OpenApiTs = {
                 401: unknown;
                 /**
                  * Delivery not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/public/delivery/{deliverySlug}/invoice': {
+        get: {
+            req: PublicControllerDownloadInvoiceData;
+            res: {
+                /**
+                 * Returns the invoice PDF file
+                 */
+                200: unknown;
+                /**
+                 * Password required or invalid token
+                 */
+                401: unknown;
+                /**
+                 * Delivery or invoice not found
                  */
                 404: unknown;
             };

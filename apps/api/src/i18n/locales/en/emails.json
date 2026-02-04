@@ -4,6 +4,7 @@
     "greeting": "Your photos are ready",
     "message": "Great news — your photos have been professionally edited and are now ready for download.",
     "photographer_prepared": "{photographerName} has prepared your gallery.",
+    "invoice_attached": "An invoice is attached to this email.",
     "cta_button": "View Gallery",
     "alt_link_text": "Or copy this link to your browser:"
   },

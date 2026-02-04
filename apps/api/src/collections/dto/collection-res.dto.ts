@@ -64,9 +64,16 @@ export class CollectionResDto {
     })
     clientEmail?: string;
 
+    @ApiPropertyOptional({
+        description: 'Whether this delivery collection has an invoice attached',
+        example: true,
+    })
+    hasInvoice?: boolean;
+
     constructor(data: { collection: any; photoCount: any; clientEmail?: string }) {
         Object.assign(this, data.collection);
         this.photoCount = data.photoCount;
         this.clientEmail = data.clientEmail;
+        this.hasInvoice = !!data.collection.invoicePath;
     }
 }

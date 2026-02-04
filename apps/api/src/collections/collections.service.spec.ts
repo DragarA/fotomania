@@ -1,4 +1,10 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { promises as fsPromises } from 'fs';
+
+import {
+    BadRequestException,
+    ForbiddenException,
+    NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 
@@ -398,6 +404,319 @@ describe('CollectionsService', () => {
 
             // Cleanup spy
             rmdirSyncSpy.mockRestore();
+        });
+    });
+
+    describe('uploadInvoice', () => {
+        const mockFindOneDelivery = () => {
+            const existingCollection = {
+                collection: {
+                    id: 'collection-123',
+                    name: 'Delivery',
+                    catalogueId: 'cat-1',
+                    type: 'delivery',
+                },
+                photoCount: 5,
+            };
+            mockDb.select.mockReturnValueOnce({
+                from: jest.fn().mockReturnValue({
+                    innerJoin: jest.fn().mockReturnValue({
+                        leftJoin: jest.fn().mockReturnValue({
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockReturnValue({
+                                    groupBy: jest
+                                        .fn()
+                                        .mockResolvedValue([existingCollection]),
+                                }),
+                            }),
+                        }),
+                    }),
+                }),
+            } as any);
+            return existingCollection;
+        };
+
+        it('should upload invoice successfully', async () => {
+            const collectionId = 'collection-123';
+            const ownerId = 'user-123';
+            const mockFile = {
+                buffer: Buffer.from('fake pdf content'),
+                mimetype: 'application/pdf',
+            } as Express.Multer.File;
+
+            mockFindOneDelivery();
+
+            // Mock fs operations
+            const mkdirSpy = jest
+                .spyOn(fsPromises, 'mkdir')
+                .mockResolvedValue(undefined);
+            const writeFileSpy = jest
+                .spyOn(fsPromises, 'writeFile')
+                .mockResolvedValue(undefined);
+
+            // Mock update
+            mockDb.update.mockReturnValueOnce({
+                set: jest.fn().mockReturnValue({
+                    where: jest.fn().mockResolvedValue(undefined),
+                }),
+            } as any);
+
+            const result = await service.uploadInvoice(
+                mockFile,
+                collectionId,
+                ownerId
+            );
+
+            expect(result.message).toBe('Invoice uploaded successfully');
+            expect(result.hasInvoice).toBe(true);
+            expect(mkdirSpy).toHaveBeenCalled();
+            expect(writeFileSpy).toHaveBeenCalled();
+
+            mkdirSpy.mockRestore();
+            writeFileSpy.mockRestore();
+        });
+
+        it('should throw NotFoundException when collection not found', async () => {
+            const collectionId = 'non-existent';
+            const ownerId = 'user-123';
+            const mockFile = {
+                buffer: Buffer.from('fake pdf content'),
+            } as Express.Multer.File;
+
+            mockDb.select.mockReturnValueOnce({
+                from: jest.fn().mockReturnValue({
+                    innerJoin: jest.fn().mockReturnValue({
+                        leftJoin: jest.fn().mockReturnValue({
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockReturnValue({
+                                    groupBy: jest.fn().mockResolvedValue([]),
+                                }),
+                            }),
+                        }),
+                    }),
+                }),
+            } as any);
+
+            await expect(
+                service.uploadInvoice(mockFile, collectionId, ownerId)
+            ).rejects.toThrow(NotFoundException);
+        });
+
+        it('should throw BadRequestException when not a delivery collection', async () => {
+            const collectionId = 'collection-123';
+            const ownerId = 'user-123';
+            const mockFile = {
+                buffer: Buffer.from('fake pdf content'),
+            } as Express.Multer.File;
+
+            // Mock findOne with proofing type
+            const existingCollection = {
+                collection: {
+                    id: collectionId,
+                    name: 'Proofing',
+                    catalogueId: 'cat-1',
+                    type: 'proofing',
+                },
+                photoCount: 5,
+            };
+            mockDb.select.mockReturnValueOnce({
+                from: jest.fn().mockReturnValue({
+                    innerJoin: jest.fn().mockReturnValue({
+                        leftJoin: jest.fn().mockReturnValue({
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockReturnValue({
+                                    groupBy: jest
+                                        .fn()
+                                        .mockResolvedValue([existingCollection]),
+                                }),
+                            }),
+                        }),
+                    }),
+                }),
+            } as any);
+
+            await expect(
+                service.uploadInvoice(mockFile, collectionId, ownerId)
+            ).rejects.toThrow(BadRequestException);
+        });
+    });
+
+    describe('removeInvoice', () => {
+        it('should remove invoice successfully', async () => {
+            const collectionId = 'collection-123';
+            const ownerId = 'user-123';
+
+            // Mock findOne with invoice
+            const existingCollection = {
+                collection: {
+                    id: collectionId,
+                    name: 'Delivery',
+                    catalogueId: 'cat-1',
+                    type: 'delivery',
+                    invoicePath: 'invoices/collection-123/invoice.pdf',
+                },
+                photoCount: 5,
+            };
+            mockDb.select.mockReturnValueOnce({
+                from: jest.fn().mockReturnValue({
+                    innerJoin: jest.fn().mockReturnValue({
+                        leftJoin: jest.fn().mockReturnValue({
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockReturnValue({
+                                    groupBy: jest
+                                        .fn()
+                                        .mockResolvedValue([existingCollection]),
+                                }),
+                            }),
+                        }),
+                    }),
+                }),
+            } as any);
+
+            // Mock fs unlink
+            const unlinkSpy = jest
+                .spyOn(fsPromises, 'unlink')
+                .mockResolvedValue(undefined);
+
+            // Mock update
+            mockDb.update.mockReturnValueOnce({
+                set: jest.fn().mockReturnValue({
+                    where: jest.fn().mockResolvedValue(undefined),
+                }),
+            } as any);
+
+            const result = await service.removeInvoice(collectionId, ownerId);
+
+            expect(result.message).toBe('Invoice removed successfully');
+            expect(result.hasInvoice).toBe(false);
+            expect(unlinkSpy).toHaveBeenCalled();
+
+            unlinkSpy.mockRestore();
+        });
+
+        it('should throw NotFoundException when no invoice exists', async () => {
+            const collectionId = 'collection-123';
+            const ownerId = 'user-123';
+
+            // Mock findOne without invoice
+            const existingCollection = {
+                collection: {
+                    id: collectionId,
+                    name: 'Delivery',
+                    catalogueId: 'cat-1',
+                    type: 'delivery',
+                    invoicePath: null,
+                },
+                photoCount: 5,
+            };
+            mockDb.select.mockReturnValueOnce({
+                from: jest.fn().mockReturnValue({
+                    innerJoin: jest.fn().mockReturnValue({
+                        leftJoin: jest.fn().mockReturnValue({
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockReturnValue({
+                                    groupBy: jest
+                                        .fn()
+                                        .mockResolvedValue([existingCollection]),
+                                }),
+                            }),
+                        }),
+                    }),
+                }),
+            } as any);
+
+            await expect(
+                service.removeInvoice(collectionId, ownerId)
+            ).rejects.toThrow(NotFoundException);
+        });
+    });
+
+    describe('sendDeliveryEmail with invoice', () => {
+        it('should send email with invoice attachment when invoice exists', async () => {
+            const collectionId = 'collection-123';
+            const ownerId = 'user-123';
+
+            // Mock query for delivery collection
+            const mockResult = {
+                collection: {
+                    id: collectionId,
+                    type: 'delivery',
+                    deliverySlug: 'abc123',
+                    invoicePath: 'invoices/collection-123/invoice.pdf',
+                },
+                clientEmail: 'client@example.com',
+                catalogueTitle: 'Wedding 2024',
+                photographerName: 'John Doe',
+                photographerLanguage: 'en',
+            };
+            mockDb.select.mockReturnValueOnce({
+                from: jest.fn().mockReturnValue({
+                    innerJoin: jest.fn().mockReturnValue({
+                        innerJoin: jest.fn().mockReturnValue({
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockResolvedValue([mockResult]),
+                            }),
+                        }),
+                    }),
+                }),
+            } as any);
+
+            // Mock fs readFile
+            const readFileSpy = jest
+                .spyOn(fsPromises, 'readFile')
+                .mockResolvedValue(Buffer.from('fake pdf content'));
+
+            const result = await service.sendDeliveryEmail(
+                collectionId,
+                ownerId
+            );
+
+            expect(result.message).toBe('Delivery email sent successfully');
+            expect(readFileSpy).toHaveBeenCalled();
+
+            readFileSpy.mockRestore();
+        });
+
+        it('should send email without attachment when no invoice', async () => {
+            const collectionId = 'collection-123';
+            const ownerId = 'user-123';
+
+            // Mock query for delivery collection without invoice
+            const mockResult = {
+                collection: {
+                    id: collectionId,
+                    type: 'delivery',
+                    deliverySlug: 'abc123',
+                    invoicePath: null,
+                },
+                clientEmail: 'client@example.com',
+                catalogueTitle: 'Wedding 2024',
+                photographerName: 'John Doe',
+                photographerLanguage: 'en',
+            };
+            mockDb.select.mockReturnValueOnce({
+                from: jest.fn().mockReturnValue({
+                    innerJoin: jest.fn().mockReturnValue({
+                        innerJoin: jest.fn().mockReturnValue({
+                            leftJoin: jest.fn().mockReturnValue({
+                                where: jest.fn().mockResolvedValue([mockResult]),
+                            }),
+                        }),
+                    }),
+                }),
+            } as any);
+
+            const readFileSpy = jest.spyOn(fsPromises, 'readFile');
+
+            const result = await service.sendDeliveryEmail(
+                collectionId,
+                ownerId
+            );
+
+            expect(result.message).toBe('Delivery email sent successfully');
+            expect(readFileSpy).not.toHaveBeenCalled();
+
+            readFileSpy.mockRestore();
         });
     });
 });

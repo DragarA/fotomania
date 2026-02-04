@@ -37,6 +37,12 @@ export class DeliveryPublicResDto {
     })
     photoCount!: number;
 
+    @ApiProperty({
+        description: 'Whether the delivery has an attached invoice',
+        example: true,
+    })
+    hasInvoice!: boolean;
+
     constructor(data: {
         collection: {
             id: string;
@@ -46,8 +52,15 @@ export class DeliveryPublicResDto {
         clientEmail: string | null;
         catalogueTitle: string;
         photoCount: number;
+        hasInvoice?: boolean;
     }) {
-        Object.assign(this, data);
+        this.id = data.collection.id;
+        this.name = data.collection.name;
+        this.deliverySlug = data.collection.deliverySlug ?? '';
+        this.clientEmail = data.clientEmail;
+        this.catalogueTitle = data.catalogueTitle;
+        this.photoCount = data.photoCount;
+        this.hasInvoice = data.hasInvoice ?? false;
     }
 }
 

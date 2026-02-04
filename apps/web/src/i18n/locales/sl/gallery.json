@@ -129,7 +129,9 @@
         "edit": "Uredi",
         "delete": "Izbriši",
         "shareDelivery": "Kopiraj povezavo dostave",
-        "sendDeliveryEmail": "Pošlji e-pošto stranki"
+        "sendDeliveryEmail": "Pošlji e-pošto stranki",
+        "uploadInvoice": "Naloži račun",
+        "removeInvoice": "Odstrani račun"
     },
     "favouritesView": {
         "noFavouritesYet": "Še ni priljubljenih",
@@ -173,7 +175,19 @@
         "deliveryEmailSent": "E-pošta o dostavi uspešno poslana",
         "deliveryEmailFailed": "Pošiljanje e-pošte o dostavi ni uspelo",
         "catalogueCoverUpdated": "Naslovnica kataloga posodobljena",
-        "catalogueCoverUpdateFailed": "Posodabljanje naslovnice ni uspelo"
+        "catalogueCoverUpdateFailed": "Posodabljanje naslovnice ni uspelo",
+        "invoiceUploadSuccess": "Račun uspešno naložen",
+        "invoiceUploadFailed": "Nalaganje računa ni uspelo",
+        "invoiceRemoveSuccess": "Račun uspešno odstranjen",
+        "invoiceRemoveFailed": "Odstranjevanje računa ni uspelo"
+    },
+    "invoice": {
+        "uploadTitle": "Naloži račun",
+        "uploadDescription": "Priložite PDF račun tej dostavi",
+        "selectFile": "Izberite PDF datoteko",
+        "uploading": "Nalaganje...",
+        "uploadButton": "Naloži",
+        "removeConfirm": "Odstrani račun?"
     },
     "passwordModal": {
         "manageTitle": "Upravljanje gesla",
