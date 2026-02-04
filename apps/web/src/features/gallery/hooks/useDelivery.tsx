@@ -72,7 +72,10 @@ export function useDeliveryQuery(deliverySlug: string) {
     });
 }
 
-export function useDeliveryPhotosQuery(deliverySlug: string) {
+export function useDeliveryPhotosQuery(
+    deliverySlug: string,
+    options?: { enabled?: boolean }
+) {
     return useQuery<CollectionPhotoPublicResDto[]>({
         queryKey: ['delivery', deliverySlug, 'photos'],
         queryFn: async () => {
@@ -99,7 +102,7 @@ export function useDeliveryPhotosQuery(deliverySlug: string) {
 
             return response.json();
         },
-        enabled: !!deliverySlug,
+        enabled: !!deliverySlug && (options?.enabled ?? true),
         retry: (failureCount, error: any) => {
             // Don't retry on 401 (password required)
             if (error?.status === 401) return false;

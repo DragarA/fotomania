@@ -855,6 +855,28 @@ export type PublicControllerFindDeliveryBySlugData = {
 
 export type PublicControllerFindDeliveryBySlugResponse = DeliveryPublicResDto;
 
+export type PublicControllerFindDeliveryPhotosData = {
+    /**
+     * Delivery URL slug
+     */
+    deliverySlug: string;
+};
+
+export type PublicControllerFindDeliveryPhotosResponse = Array<CollectionPhotoPublicResDto>;
+
+export type PublicControllerDownloadDeliveryPhotoData = {
+    /**
+     * Delivery URL slug
+     */
+    deliverySlug: string;
+    /**
+     * Photo ID
+     */
+    photoId: string;
+};
+
+export type PublicControllerDownloadDeliveryPhotoResponse = unknown;
+
 export type PublicControllerDownloadDeliveryData = {
     /**
      * Delivery URL slug
@@ -1480,6 +1502,41 @@ export type $OpenApiTs = {
                 401: unknown;
                 /**
                  * Delivery not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/public/delivery/{deliverySlug}/photos': {
+        get: {
+            req: PublicControllerFindDeliveryPhotosData;
+            res: {
+                200: Array<CollectionPhotoPublicResDto>;
+                /**
+                 * Password required or invalid token
+                 */
+                401: unknown;
+                /**
+                 * Delivery not found
+                 */
+                404: unknown;
+            };
+        };
+    };
+    '/public/delivery/{deliverySlug}/photo/{photoId}/download': {
+        get: {
+            req: PublicControllerDownloadDeliveryPhotoData;
+            res: {
+                /**
+                 * Returns the photo file
+                 */
+                200: unknown;
+                /**
+                 * Password required or invalid token
+                 */
+                401: unknown;
+                /**
+                 * Photo or delivery not found
                  */
                 404: unknown;
             };

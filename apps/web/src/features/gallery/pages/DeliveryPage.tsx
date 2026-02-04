@@ -39,8 +39,10 @@ export function DeliveryPage() {
         refetch,
     } = useDeliveryQuery(slug);
 
-    const { data: photos, isLoading: photosLoading } =
-        useDeliveryPhotosQuery(slug);
+    const { data: photos, isLoading: photosLoading } = useDeliveryPhotosQuery(
+        slug,
+        { enabled: !!delivery && delivery.photoCount > 0 }
+    );
 
     // Check if password is required (401 error)
     const isPasswordRequired =
@@ -123,10 +125,11 @@ export function DeliveryPage() {
     // Loading state
     if (deliveryLoading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-stone-100 to-stone-200">
-                <div className="flex flex-col items-center gap-4">
-                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-stone-300 border-t-stone-700"></div>
-                    <p className="text-stone-600">{t('loading')}</p>
+            <div className="relative flex min-h-screen items-center justify-center bg-stone-50">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(0,0,0,0.02)_0%,_transparent_50%)]" />
+                <div className="relative flex flex-col items-center gap-4">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-stone-200 border-t-stone-700"></div>
+                    <p className="text-sm font-light text-stone-500">{t('loading')}</p>
                 </div>
             </div>
         );
@@ -146,13 +149,16 @@ export function DeliveryPage() {
     // Error state
     if (isError && !isPasswordRequired) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-stone-100 to-stone-200 p-4">
-                <div className="text-center">
-                    <Package className="mx-auto h-16 w-16 text-stone-400" />
-                    <h1 className="mt-4 text-2xl font-light text-stone-800">
+            <div className="relative flex min-h-screen items-center justify-center bg-stone-50 p-4">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(0,0,0,0.02)_0%,_transparent_50%)]" />
+                <div className="relative text-center">
+                    <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-400 shadow-sm">
+                        <Package className="h-7 w-7" strokeWidth={1.5} />
+                    </div>
+                    <h1 className="text-2xl font-light tracking-tight text-stone-800">
                         {t('notFound')}
                     </h1>
-                    <p className="mt-2 text-stone-600">
+                    <p className="mt-3 text-sm font-light text-stone-500">
                         {t('notFoundDescription')}
                     </p>
                 </div>
@@ -161,56 +167,64 @@ export function DeliveryPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-stone-50 via-stone-100 to-amber-50">
+        <div className="relative min-h-screen bg-stone-50">
+            {/* Background pattern */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(0,0,0,0.02)_0%,_transparent_50%)]" />
+
             {/* Header */}
-            <div className="border-b border-stone-200 bg-white/60 backdrop-blur-sm">
-                <div className="mx-auto max-w-4xl px-6 py-8">
-                    <div className="flex items-center gap-3 text-stone-400">
-                        <Package className="h-5 w-5" />
-                        <span className="text-xs uppercase tracking-[0.3em]">
-                            {t('deliveryLabel')}
-                        </span>
-                    </div>
-                    <h1 className="mt-3 text-3xl font-light tracking-wide text-stone-800">
+            <div className="relative border-b border-black/5 bg-white">
+                <div className="mx-auto max-w-4xl px-6 py-10 sm:px-8">
+                    <p className="mb-3 text-xs uppercase tracking-[0.4em] text-stone-400">
+                        {t('deliveryLabel')}
+                    </p>
+                    <h1 className="text-3xl font-light tracking-tight text-stone-800 sm:text-4xl">
                         {delivery?.catalogueTitle}
                     </h1>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className="mx-auto max-w-4xl px-6 py-12">
-                <div className="overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-xl shadow-stone-200/50">
+            <div className="relative mx-auto max-w-4xl px-6 py-12 sm:px-8 sm:py-16">
+                <div className="overflow-hidden rounded-2xl border border-black/5 bg-white shadow-[0_35px_80px_-70px_rgba(0,0,0,0.85)]">
                     {/* Recipient Info */}
-                    <div className="border-b border-stone-100 px-8 py-6">
-                        <div className="flex items-center gap-3 text-stone-500">
-                            <Mail className="h-5 w-5" />
-                            <span className="text-sm uppercase tracking-[0.2em]">
-                                {t('preparedFor')}
-                            </span>
+                    <div className="border-b border-stone-100 px-8 py-7">
+                        <div className="flex items-center gap-4">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-600">
+                                <Mail className="h-4 w-4" strokeWidth={1.5} />
+                            </div>
+                            <div>
+                                <p className="text-xs uppercase tracking-[0.2em] text-stone-400">
+                                    {t('preparedFor')}
+                                </p>
+                                <p className="mt-1 text-lg font-medium tracking-wide text-stone-800">
+                                    {String(delivery?.clientEmail || '') ||
+                                        t('noRecipient')}
+                                </p>
+                            </div>
                         </div>
-                        <p className="mt-2 text-xl font-medium text-stone-800">
-                            {String(delivery?.clientEmail || '') ||
-                                t('noRecipient')}
-                        </p>
                     </div>
 
                     {/* Photo Count */}
-                    <div className="border-b border-stone-100 px-8 py-6">
-                        <div className="flex items-center gap-3 text-stone-500">
-                            <Image className="h-5 w-5" />
-                            <span className="text-sm uppercase tracking-[0.2em]">
-                                {t('photosIncluded')}
-                            </span>
+                    <div className="border-b border-stone-100 px-8 py-7">
+                        <div className="flex items-center gap-4">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-600">
+                                <Image className="h-4 w-4" strokeWidth={1.5} />
+                            </div>
+                            <div>
+                                <p className="text-xs uppercase tracking-[0.2em] text-stone-400">
+                                    {t('photosIncluded')}
+                                </p>
+                                <p className="mt-1 text-lg font-medium tracking-wide text-stone-800">
+                                    {deliveryLoading ? (
+                                        <span className="text-stone-300">...</span>
+                                    ) : (
+                                        t('photoCount', {
+                                            count: delivery?.photoCount || 0,
+                                        })
+                                    )}
+                                </p>
+                            </div>
                         </div>
-                        <p className="mt-2 text-xl font-medium text-stone-800">
-                            {deliveryLoading ? (
-                                <span className="text-stone-400">...</span>
-                            ) : (
-                                t('photoCount', {
-                                    count: delivery?.photoCount || 0,
-                                })
-                            )}
-                        </p>
                     </div>
 
                     {/* Download Section */}
@@ -221,16 +235,16 @@ export function DeliveryPage() {
                                 isDownloading || delivery?.photoCount === 0
                             }
                             size="lg"
-                            className="w-full bg-stone-800 py-6 text-base tracking-wide hover:bg-stone-900"
+                            className="w-full bg-stone-800 py-6 text-base tracking-[0.15em] transition-all duration-500 hover:-translate-y-[1px] hover:bg-stone-900 hover:shadow-lg"
                         >
                             {isDownloading ? (
                                 <>
-                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                    <Loader2 className="mr-3 h-5 w-5 animate-spin" />
                                     {t('downloading')}
                                 </>
                             ) : (
                                 <>
-                                    <Download className="mr-2 h-5 w-5" />
+                                    <Download className="mr-3 h-5 w-5" />
                                     {t('downloadAll')}
                                 </>
                             )}
@@ -240,10 +254,10 @@ export function DeliveryPage() {
 
                 {/* Photo Preview Section */}
                 {delivery && delivery.photoCount > 0 && (
-                    <div className="mt-12">
-                        <h2 className="mb-6 text-sm uppercase tracking-[0.2em] text-stone-500">
+                    <div className="mt-16">
+                        <p className="mb-6 text-xs uppercase tracking-[0.4em] text-stone-400">
                             {t('preview')}
-                        </h2>
+                        </p>
                         <DeliveryPhotoGrid
                             photos={photos || []}
                             isLoading={photosLoading}
@@ -254,8 +268,8 @@ export function DeliveryPage() {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-stone-200 bg-white/40 py-6 text-center">
-                <p className="text-xs tracking-wide text-stone-400">
+            <div className="relative border-t border-black/5 bg-white py-8 text-center">
+                <p className="text-xs uppercase tracking-[0.3em] text-stone-400">
                     {t('footer')}
                 </p>
             </div>
