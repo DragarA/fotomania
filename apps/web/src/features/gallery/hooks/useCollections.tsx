@@ -170,3 +170,66 @@ export function useSendDeliveryEmailMutation() {
         },
     });
 }
+
+export function useUploadInvoiceMutation() {
+    const { t } = useTranslation('gallery');
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({
+            collectionId,
+            file,
+        }: {
+            collectionId: string;
+            catalogueId: string;
+            file: File;
+        }) =>
+            CollectionsService.collectionsControllerUploadInvoice({
+                id: collectionId,
+                formData: { file },
+            }),
+        onSuccess: (_data, { catalogueId }) => {
+            queryClient.invalidateQueries({
+                queryKey: ['collections', catalogueId],
+            });
+            toast.success(t('toast.invoiceUploadSuccess'));
+        },
+        onError: (error: any) => {
+            toast.error(
+                error.body?.message ||
+                    error.message ||
+                    t('toast.invoiceUploadFailed')
+            );
+        },
+    });
+}
+
+export function useRemoveInvoiceMutation() {
+    const { t } = useTranslation('gallery');
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({
+            collectionId,
+        }: {
+            collectionId: string;
+            catalogueId: string;
+        }) =>
+            CollectionsService.collectionsControllerRemoveInvoice({
+                id: collectionId,
+            }),
+        onSuccess: (_data, { catalogueId }) => {
+            queryClient.invalidateQueries({
+                queryKey: ['collections', catalogueId],
+            });
+            toast.success(t('toast.invoiceRemoveSuccess'));
+        },
+        onError: (error: any) => {
+            toast.error(
+                error.body?.message ||
+                    error.message ||
+                    t('toast.invoiceRemoveFailed')
+            );
+        },
+    });
+}

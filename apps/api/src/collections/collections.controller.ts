@@ -8,7 +8,11 @@ import {
     Delete,
     UseGuards,
     Query,
+    UseInterceptors,
+    UploadedFile,
+    BadRequestException,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
     ApiTags,
     ApiOperation,
@@ -17,6 +21,7 @@ import {
     ApiBody,
     ApiParam,
     ApiQuery,
+    ApiConsumes,
 } from '@nestjs/swagger';
 
 import { User } from '../common/auth/decorators/current-user.decorator';
@@ -36,6 +41,12 @@ import {
     UpdateCollectionDtoClass,
     updateCollectionSchema,
 } from './dto/update-collection.dto';
+import { UploadInvoiceResDto } from './dto/upload-invoice-res.dto';
+import {
+    invoiceFileFilter,
+    invoiceStorage,
+    INVOICE_MAX_SIZE,
+} from './multer-invoice.config';
 
 @ApiTags('collections')
 @Controller('collections')
@@ -216,5 +227,71 @@ export class CollectionsController {
     @ApiResponse({ status: 403, description: 'Forbidden' })
     remove(@Param('id') id: string, @User() user: UserEntity) {
         return this.collectionsService.remove(id, user.id);
+    }
+
+    @Post(':id/invoice')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    @UseInterceptors(
+        FileInterceptor('file', {
+            storage: invoiceStorage,
+            fileFilter: invoiceFileFilter,
+            limits: { fileSize: INVOICE_MAX_SIZE },
+        })
+    )
+    @ApiOperation({ summary: 'Upload an invoice PDF to a delivery collection' })
+    @ApiConsumes('multipart/form-data')
+    @ApiParam({ name: 'id', description: 'Collection ID' })
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                file: {
+                    type: 'string',
+                    format: 'binary',
+                    description: 'PDF invoice file (max 10MB)',
+                },
+            },
+        },
+    })
+    @ApiResponse({
+        status: 201,
+        description: 'Invoice uploaded successfully',
+        type: UploadInvoiceResDto,
+    })
+    @ApiResponse({ status: 400, description: 'Invalid file type or not a delivery collection' })
+    @ApiResponse({ status: 404, description: 'Collection not found' })
+    @ApiResponse({ status: 403, description: 'Forbidden' })
+    async uploadInvoice(
+        @Param('id') id: string,
+        @UploadedFile() file: Express.Multer.File,
+        @User() user: UserEntity
+    ) {
+        if (!file) {
+            throw new BadRequestException('No file uploaded');
+        }
+        const result = await this.collectionsService.uploadInvoice(
+            file,
+            id,
+            user.id
+        );
+        return new UploadInvoiceResDto(result.message, result.hasInvoice);
+    }
+
+    @Delete(':id/invoice')
+    @UseGuards(JwtAuthGuard)
+    @ApiBearerAuth('JWT-auth')
+    @ApiOperation({ summary: 'Remove invoice from a delivery collection' })
+    @ApiParam({ name: 'id', description: 'Collection ID' })
+    @ApiResponse({
+        status: 200,
+        description: 'Invoice removed successfully',
+        type: UploadInvoiceResDto,
+    })
+    @ApiResponse({ status: 404, description: 'Collection or invoice not found' })
+    @ApiResponse({ status: 403, description: 'Forbidden' })
+    async removeInvoice(@Param('id') id: string, @User() user: UserEntity) {
+        const result = await this.collectionsService.removeInvoice(id, user.id);
+        return new UploadInvoiceResDto(result.message, result.hasInvoice);
     }
 }

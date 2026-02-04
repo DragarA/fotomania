@@ -318,4 +318,48 @@ export class PublicController {
 
         await archive.finalize();
     }
+
+    @Get('/delivery/:deliverySlug/invoice')
+    @UseGuards(DeliveryAccessGuard)
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Download the invoice PDF for a delivery' })
+    @ApiParam({ name: 'deliverySlug', description: 'Delivery URL slug' })
+    @ApiResponse({
+        status: 200,
+        description: 'Returns the invoice PDF file',
+    })
+    @ApiResponse({
+        status: 401,
+        description: 'Password required or invalid token',
+    })
+    @ApiResponse({ status: 404, description: 'Delivery or invoice not found' })
+    async downloadInvoice(
+        @Param('deliverySlug') deliverySlug: string,
+        @Res() res: Response
+    ) {
+        const invoicePath =
+            await this.publicService.getDeliveryInvoicePath(deliverySlug);
+
+        if (!invoicePath) {
+            res.status(404).send('No invoice found for this delivery');
+            return;
+        }
+
+        const uploadRoot = path.resolve('./uploads');
+        const filePath = path.join(uploadRoot, invoicePath);
+
+        if (!fs.existsSync(filePath)) {
+            res.status(404).send('Invoice file not found');
+            return;
+        }
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader(
+            'Content-Disposition',
+            'attachment; filename="invoice.pdf"'
+        );
+
+        const fileStream = fs.createReadStream(filePath);
+        fileStream.pipe(res);
+    }
 }

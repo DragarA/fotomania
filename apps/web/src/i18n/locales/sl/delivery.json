@@ -17,6 +17,9 @@
   "downloadPhoto": "Prenesi fotografijo",
   "noPhotosYet": "Tej dostavi še niso bile dodane nobene fotografije.",
   "preview": "Predogled",
-  "footer": "Poganja Fotomania"
+  "footer": "Poganja Fotomania",
+  "invoiceIncluded": "Račun priložen",
+  "downloadInvoice": "Prenesi račun",
+  "downloadingInvoice": "Prenašam..."
 }
 

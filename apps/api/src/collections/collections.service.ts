@@ -1,4 +1,5 @@
 import { promises as fsPromises } from 'fs';
+import * as fs from 'fs';
 import * as path from 'path';
 
 import {
@@ -206,6 +207,22 @@ export class CollectionsService {
             // Directory doesn't exist, no need to log
         }
 
+        // Delete invoice directory if exists
+        const invoicePath = path.join(this.uploadRoot, 'invoices', id);
+        try {
+            await fsPromises.access(invoicePath);
+            try {
+                await fsPromises.rm(invoicePath, { recursive: true });
+            } catch (error) {
+                this.logger.error(
+                    `Failed to remove invoice directory: ${invoicePath}`,
+                    error
+                );
+            }
+        } catch {
+            // Directory doesn't exist, no need to log
+        }
+
         // Delete delivery downloads for this collection
         await dbInstance
             .delete(deliveryDownload)
@@ -356,21 +373,143 @@ export class CollectionsService {
         const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
         const deliveryUrl = `${frontendUrl}/d/${result.collection.deliverySlug}`;
 
-        // 6. Send the email using photographer's preferred language
-        await this.emailService.send({
+        // 6. Prepare email options
+        const emailOptions: Parameters<typeof this.emailService.send>[0] = {
             to: result.clientEmail,
             template: EmailTemplate.DELIVERY_READY,
             language: result.photographerLanguage || 'en',
             context: {
                 deliveryUrl,
                 photographerName: result.photographerName || undefined,
+                hasInvoice: !!result.collection.invoicePath,
             },
-        });
+        };
+
+        // 7. Add invoice attachment if exists
+        if (result.collection.invoicePath) {
+            const invoicePath = this.getInvoiceFullPath(result.collection.invoicePath);
+            try {
+                const invoiceBuffer = await fsPromises.readFile(invoicePath);
+                emailOptions.attachments = [
+                    {
+                        filename: 'invoice.pdf',
+                        data: invoiceBuffer,
+                        contentType: 'application/pdf',
+                    },
+                ];
+            } catch (error) {
+                this.logger.warn(
+                    `Failed to read invoice file for collection ${collectionId}`,
+                    error
+                );
+            }
+        }
+
+        // 8. Send the email using photographer's preferred language
+        await this.emailService.send(emailOptions);
 
         this.logger.log(
             `Delivery email sent to ${result.clientEmail} for collection ${collectionId}`
         );
 
         return { message: 'Delivery email sent successfully' };
+    }
+
+    /**
+     * Upload an invoice PDF to a delivery collection
+     */
+    async uploadInvoice(
+        file: Express.Multer.File,
+        collectionId: string,
+        ownerId: string
+    ) {
+        // Verify collection exists and user owns it
+        const existing = await this.findOne(collectionId, ownerId);
+
+        if (existing.collection.type !== 'delivery') {
+            throw new BadRequestException(
+                'Invoices can only be uploaded to delivery collections'
+            );
+        }
+
+        // Create invoice directory
+        const invoiceDir = path.join(this.uploadRoot, 'invoices', collectionId);
+        await fsPromises.mkdir(invoiceDir, { recursive: true });
+
+        // Save the invoice file
+        const invoicePath = path.join(invoiceDir, 'invoice.pdf');
+        await fsPromises.writeFile(invoicePath, file.buffer);
+
+        // Update the collection with the invoice path
+        const relativePath = `invoices/${collectionId}/invoice.pdf`;
+        await this.db
+            .update(collection)
+            .set({
+                invoicePath: relativePath,
+                updatedAt: new Date(),
+            })
+            .where(eq(collection.id, collectionId));
+
+        this.logger.log(`Invoice uploaded for collection ${collectionId}`);
+
+        return { message: 'Invoice uploaded successfully', hasInvoice: true };
+    }
+
+    /**
+     * Remove an invoice from a delivery collection
+     */
+    async removeInvoice(collectionId: string, ownerId: string) {
+        // Verify collection exists and user owns it
+        const existing = await this.findOne(collectionId, ownerId);
+
+        if (!existing.collection.invoicePath) {
+            throw new NotFoundException('No invoice found for this collection');
+        }
+
+        // Delete the invoice file
+        const invoicePath = this.getInvoiceFullPath(existing.collection.invoicePath);
+        try {
+            await fsPromises.unlink(invoicePath);
+        } catch (error) {
+            this.logger.warn(
+                `Failed to delete invoice file: ${invoicePath}`,
+                error
+            );
+        }
+
+        // Update the collection
+        await this.db
+            .update(collection)
+            .set({
+                invoicePath: null,
+                updatedAt: new Date(),
+            })
+            .where(eq(collection.id, collectionId));
+
+        this.logger.log(`Invoice removed for collection ${collectionId}`);
+
+        return { message: 'Invoice removed successfully', hasInvoice: false };
+    }
+
+    /**
+     * Get the full file path for an invoice
+     */
+    getInvoicePath(collectionId: string): string | null {
+        const invoicePath = path.join(
+            this.uploadRoot,
+            'invoices',
+            collectionId,
+            'invoice.pdf'
+        );
+
+        if (fs.existsSync(invoicePath)) {
+            return invoicePath;
+        }
+
+        return null;
+    }
+
+    private getInvoiceFullPath(relativePath: string): string {
+        return path.join(this.uploadRoot, relativePath);
     }
 }

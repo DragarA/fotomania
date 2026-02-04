@@ -515,4 +515,89 @@ describe('PublicController (e2e)', () => {
         .expect(400);
     });
   });
+
+  describe('GET /public/delivery/:deliverySlug/invoice', () => {
+    // Helper to mock delivery password protection check
+    const mockDeliveryPasswordProtectionCheck = (password: string | null) => {
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([{ password }]),
+          }),
+        }),
+      } as any);
+    };
+
+    it('should return 404 when no invoice exists', async () => {
+      // Mock delivery password check (guard)
+      mockDeliveryPasswordProtectionCheck(null);
+
+      // Mock invoice path lookup - no invoice
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([{ invoicePath: null }]),
+          }),
+        }),
+      } as any);
+
+      await request(app.getHttpServer())
+        .get('/public/delivery/abc123/invoice')
+        .expect(404);
+    });
+
+    it('should return 401 for password protected delivery without token', async () => {
+      const hashedPassword = await bcrypt.hash('secret123', 10);
+
+      // Mock delivery password check (guard)
+      mockDeliveryPasswordProtectionCheck(hashedPassword);
+
+      await request(app.getHttpServer())
+        .get('/public/delivery/abc123/invoice')
+        .expect(401);
+    });
+
+    it('should return 404 when delivery not found', async () => {
+      // Mock delivery password check (guard) - not found
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([]),
+          }),
+        }),
+      } as any);
+
+      await request(app.getHttpServer())
+        .get('/public/delivery/non-existent/invoice')
+        .expect(404);
+    });
+
+    it('should allow access for password protected delivery with valid token', async () => {
+      const hashedPassword = await bcrypt.hash('secret123', 10);
+
+      // Generate a valid token
+      const token = jwtService.sign({
+        slug: 'abc123',
+        type: 'delivery-access',
+      });
+
+      // Mock delivery password check (guard)
+      mockDeliveryPasswordProtectionCheck(hashedPassword);
+
+      // Mock invoice path lookup - no invoice (to test 404 path with valid auth)
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            where: jest.fn().mockResolvedValue([{ invoicePath: null }]),
+          }),
+        }),
+      } as any);
+
+      // Should get 404 for no invoice, not 401 for auth
+      await request(app.getHttpServer())
+        .get('/public/delivery/abc123/invoice')
+        .set('Authorization', `Bearer ${token}`)
+        .expect(404);
+    });
+  });
 });

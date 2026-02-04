@@ -1,4 +1,4 @@
-import { Mail, Pencil, Share2, Trash2 } from 'lucide-react';
+import { FileText, Mail, Pencil, Share2, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -10,8 +10,11 @@ interface CollectionContextMenuProps {
     onEdit: () => void;
     onDelete: () => void;
     isDelivery?: boolean;
+    hasInvoice?: boolean;
     onShareDelivery?: () => void;
     onSendDeliveryEmail?: () => void;
+    onUploadInvoice?: () => void;
+    onRemoveInvoice?: () => void;
 }
 
 export function CollectionContextMenu({
@@ -21,8 +24,11 @@ export function CollectionContextMenu({
     onEdit,
     onDelete,
     isDelivery = false,
+    hasInvoice = false,
     onShareDelivery,
     onSendDeliveryEmail,
+    onUploadInvoice,
+    onRemoveInvoice,
 }: CollectionContextMenuProps) {
     const { t } = useTranslation('gallery');
     const menuRef = useRef<HTMLDivElement>(null);
@@ -90,6 +96,26 @@ export function CollectionContextMenu({
                       label: t('collectionContextMenu.sendDeliveryEmail'),
                       icon: <Mail className="h-4 w-4" strokeWidth={1.5} />,
                       onClick: onSendDeliveryEmail,
+                  },
+              ]
+            : []),
+        // Upload/Remove invoice (only for delivery collections)
+        ...(isDelivery && onUploadInvoice && !hasInvoice
+            ? [
+                  {
+                      label: t('collectionContextMenu.uploadInvoice'),
+                      icon: <FileText className="h-4 w-4" strokeWidth={1.5} />,
+                      onClick: onUploadInvoice,
+                  },
+              ]
+            : []),
+        ...(isDelivery && onRemoveInvoice && hasInvoice
+            ? [
+                  {
+                      label: t('collectionContextMenu.removeInvoice'),
+                      icon: <FileText className="h-4 w-4" strokeWidth={1.5} />,
+                      onClick: onRemoveInvoice,
+                      danger: true,
                   },
               ]
             : []),

@@ -12,11 +12,18 @@ import { EmailTemplate } from './email.constants';
 
 const DEFAULT_LANGUAGE = 'en';
 
+export interface EmailAttachment {
+    filename: string;
+    data: Buffer;
+    contentType: string;
+}
+
 export interface SendEmailOptions {
     to: string | string[];
     template: EmailTemplate;
     language?: string;
     context: Record<string, unknown>;
+    attachments?: EmailAttachment[];
 }
 
 // Map template enum values to translation keys
@@ -59,7 +66,7 @@ export class EmailService implements OnModuleInit {
     }
 
     async send(options: SendEmailOptions): Promise<void> {
-        const { template, context, to } = options;
+        const { template, context, to, attachments } = options;
         const language = options.language || DEFAULT_LANGUAGE;
 
         // Get the translated subject
@@ -73,12 +80,27 @@ export class EmailService implements OnModuleInit {
         const recipients = Array.isArray(to) ? to : [to];
 
         try {
-            const result = await this.mg.messages.create(this.domain, {
+            // Build message options
+            const messageOptions: Parameters<typeof this.mg.messages.create>[1] = {
                 from: `${this.fromName} <${this.fromEmail}>`,
                 to: recipients,
                 subject,
                 html,
-            });
+            };
+
+            // Add attachments if provided
+            if (attachments && attachments.length > 0) {
+                messageOptions.attachment = attachments.map((att) => ({
+                    filename: att.filename,
+                    data: att.data,
+                    contentType: att.contentType,
+                }));
+            }
+
+            const result = await this.mg.messages.create(
+                this.domain,
+                messageOptions
+            );
 
             this.logger.log(
                 `Email sent successfully to ${recipients.join(', ')}: ${result.id}`

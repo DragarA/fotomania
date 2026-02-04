@@ -71,6 +71,13 @@
       "when": 1765996639282,
       "tag": "0009_cooing_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1770207246849,
+      "tag": "0010_certain_moira_mactaggert",
+      "breakpoints": true
     }
   ]
 }

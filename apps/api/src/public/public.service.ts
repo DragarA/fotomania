@@ -232,7 +232,37 @@ export class PublicService {
             );
         }
 
-        return result;
+        return {
+            ...result,
+            hasInvoice: !!result.collection.invoicePath,
+        };
+    }
+
+    /**
+     * Get the invoice path for a delivery collection
+     */
+    async getDeliveryInvoicePath(deliverySlug: string): Promise<string | null> {
+        const [result] = await this.db
+            .select({
+                invoicePath: collection.invoicePath,
+            })
+            .from(collection)
+            .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
+            .where(
+                and(
+                    eq(collection.deliverySlug, deliverySlug),
+                    eq(collection.type, 'delivery'),
+                    eq(catalogue.status, 'published')
+                )
+            );
+
+        if (!result) {
+            throw new NotFoundException(
+                `Delivery with slug ${deliverySlug} not found`
+            );
+        }
+
+        return result.invoicePath;
     }
 
     /**

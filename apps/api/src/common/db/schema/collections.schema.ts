@@ -17,6 +17,7 @@ export const collection = pgTable('collection', {
     type: collectionTypeEnum('type').notNull().default('proofing'),
     clientSessionId: text('clientSessionId').references(() => clientSession.id),
     deliverySlug: varchar('deliverySlug', { length: 255 }).unique(),
+    invoicePath: text('invoicePath'),
     createdAt: timestamp('createdAt').notNull(),
     updatedAt: timestamp('updatedAt').notNull(),
 });

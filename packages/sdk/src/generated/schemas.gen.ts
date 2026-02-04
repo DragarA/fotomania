@@ -413,6 +413,11 @@ export const $CollectionResDto = {
             type: 'string',
             description: 'Email of the client for delivery collections',
             example: 'client@example.com'
+        },
+        hasInvoice: {
+            type: 'boolean',
+            description: 'Whether this delivery collection has an invoice attached',
+            example: true
         }
     },
     required: ['id', 'name', 'catalogueId', 'type', 'createdAt', 'updatedAt', 'photoCount']
@@ -427,6 +432,23 @@ export const $UpdateCollectionDtoClass = {
             example: 'Ceremony Photos'
         }
     }
+} as const;
+
+export const $UploadInvoiceResDto = {
+    type: 'object',
+    properties: {
+        message: {
+            type: 'string',
+            description: 'Success message',
+            example: 'Invoice uploaded successfully'
+        },
+        hasInvoice: {
+            type: 'boolean',
+            description: 'Whether the collection now has an invoice',
+            example: true
+        }
+    },
+    required: ['message', 'hasInvoice']
 } as const;
 
 export const $PhotoResDto = {
@@ -727,7 +749,12 @@ export const $DeliveryPublicResDto = {
             type: 'number',
             description: 'Number of photos in the delivery collection',
             example: 42
+        },
+        hasInvoice: {
+            type: 'boolean',
+            description: 'Whether the delivery has an attached invoice',
+            example: true
         }
     },
-    required: ['id', 'name', 'catalogueTitle', 'deliverySlug', 'photoCount']
+    required: ['id', 'name', 'catalogueTitle', 'deliverySlug', 'photoCount', 'hasInvoice']
 } as const;

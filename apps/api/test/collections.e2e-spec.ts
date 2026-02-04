@@ -402,4 +402,214 @@ describe('CollectionsController (e2e)', () => {
         .expect(404);
     });
   });
+
+  describe('POST /collections/:id/invoice', () => {
+    const mockFindOneDelivery = (collectionId: string) => {
+      const existingCollection = {
+        collection: {
+          id: collectionId,
+          name: 'Delivery',
+          catalogueId: 'cat-1',
+          type: 'delivery',
+        },
+        photoCount: 5,
+      };
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              leftJoin: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                  groupBy: jest.fn().mockResolvedValue([existingCollection]),
+                }),
+              }),
+            }),
+          }),
+        }),
+      } as any);
+    };
+
+    it('should upload invoice successfully', async () => {
+      const collectionId = 'collection-123';
+
+      mockFindOneDelivery(collectionId);
+
+      // Mock update
+      mockDb.update.mockReturnValueOnce({
+        set: jest.fn().mockReturnValue({
+          where: jest.fn().mockResolvedValue(undefined),
+        }),
+      } as any);
+
+      const response = await request(app.getHttpServer())
+        .post(`/collections/${collectionId}/invoice`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .attach('file', Buffer.from('fake pdf content'), {
+          filename: 'invoice.pdf',
+          contentType: 'application/pdf',
+        })
+        .expect(201);
+
+      expect(response.body.message).toBe('Invoice uploaded successfully');
+      expect(response.body.hasInvoice).toBe(true);
+    });
+
+    it('should reject invalid file type', async () => {
+      const collectionId = 'collection-123';
+
+      // Multer file filter errors return 500 by default (unhandled exception)
+      await request(app.getHttpServer())
+        .post(`/collections/${collectionId}/invoice`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .attach('file', Buffer.from('fake image content'), {
+          filename: 'image.jpg',
+          contentType: 'image/jpeg',
+        })
+        .expect(500);
+    });
+
+    it('should return 400 for non-delivery collection', async () => {
+      const collectionId = 'collection-123';
+
+      // Mock findOne with proofing type
+      const existingCollection = {
+        collection: {
+          id: collectionId,
+          name: 'Proofing',
+          catalogueId: 'cat-1',
+          type: 'proofing',
+        },
+        photoCount: 5,
+      };
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              leftJoin: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                  groupBy: jest.fn().mockResolvedValue([existingCollection]),
+                }),
+              }),
+            }),
+          }),
+        }),
+      } as any);
+
+      await request(app.getHttpServer())
+        .post(`/collections/${collectionId}/invoice`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .attach('file', Buffer.from('fake pdf content'), {
+          filename: 'invoice.pdf',
+          contentType: 'application/pdf',
+        })
+        .expect(400);
+    });
+
+    it('should return 404 when collection not found', async () => {
+      const collectionId = 'non-existent';
+
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              leftJoin: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                  groupBy: jest.fn().mockResolvedValue([]),
+                }),
+              }),
+            }),
+          }),
+        }),
+      } as any);
+
+      await request(app.getHttpServer())
+        .post(`/collections/${collectionId}/invoice`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .attach('file', Buffer.from('fake pdf content'), {
+          filename: 'invoice.pdf',
+          contentType: 'application/pdf',
+        })
+        .expect(404);
+    });
+  });
+
+  describe('DELETE /collections/:id/invoice', () => {
+    it('should remove invoice successfully', async () => {
+      const collectionId = 'collection-123';
+
+      // Mock findOne with invoice
+      const existingCollection = {
+        collection: {
+          id: collectionId,
+          name: 'Delivery',
+          catalogueId: 'cat-1',
+          type: 'delivery',
+          invoicePath: 'invoices/collection-123/invoice.pdf',
+        },
+        photoCount: 5,
+      };
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              leftJoin: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                  groupBy: jest.fn().mockResolvedValue([existingCollection]),
+                }),
+              }),
+            }),
+          }),
+        }),
+      } as any);
+
+      // Mock update
+      mockDb.update.mockReturnValueOnce({
+        set: jest.fn().mockReturnValue({
+          where: jest.fn().mockResolvedValue(undefined),
+        }),
+      } as any);
+
+      const response = await request(app.getHttpServer())
+        .delete(`/collections/${collectionId}/invoice`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(200);
+
+      expect(response.body.message).toBe('Invoice removed successfully');
+      expect(response.body.hasInvoice).toBe(false);
+    });
+
+    it('should return 404 when no invoice exists', async () => {
+      const collectionId = 'collection-123';
+
+      // Mock findOne without invoice
+      const existingCollection = {
+        collection: {
+          id: collectionId,
+          name: 'Delivery',
+          catalogueId: 'cat-1',
+          type: 'delivery',
+          invoicePath: null,
+        },
+        photoCount: 5,
+      };
+      mockDb.select.mockReturnValueOnce({
+        from: jest.fn().mockReturnValue({
+          innerJoin: jest.fn().mockReturnValue({
+            leftJoin: jest.fn().mockReturnValue({
+              leftJoin: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                  groupBy: jest.fn().mockResolvedValue([existingCollection]),
+                }),
+              }),
+            }),
+          }),
+        }),
+      } as any);
+
+      await request(app.getHttpServer())
+        .delete(`/collections/${collectionId}/invoice`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .expect(404);
+    });
+  });
 });

@@ -4,6 +4,7 @@
     "greeting": "Vaše fotografije so pripravljene",
     "message": "Odlična novica — vaše fotografije so bile profesionalno obdelane in so zdaj pripravljene za prenos.",
     "photographer_prepared": "{photographerName} je pripravil/a vašo galerijo.",
+    "invoice_attached": "Račun je priložen tej e-pošti.",
     "cta_button": "Oglej si galerijo",
     "alt_link_text": "Ali kopirajte to povezavo v brskalnik:"
   },

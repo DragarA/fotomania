@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -16,12 +17,15 @@ import {
     usePhotoUpload,
     useCatalogueFavouritesQuery,
     useSendDeliveryEmailMutation,
+    useUploadInvoiceMutation,
+    useRemoveInvoiceMutation,
 } from '../../hooks';
 import { useCatalogueDetailState } from '../../state/useCatalogueDetailState';
 import type { Collection, Photo } from '../../types';
 import { CatalogueSidebar } from '../catalogue/CatalogueSidebar';
 import { CollectionContextMenu } from '../collection/CollectionContextMenu';
 import { CollectionModal } from '../collection/CollectionModal';
+import { InvoiceUploadDialog } from '../collection/InvoiceUploadDialog';
 import { PhotoLightbox } from '../photo/PhotoLightbox';
 import { PhotoWorkspace } from '../photo/PhotoWorkspace';
 import { UploadQueue } from '../photo/UploadQueue';
@@ -61,11 +65,18 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
         setSelectedPhoto,
     } = useCatalogueDetailState(collections);
 
+    // Invoice upload state
+    const [invoiceUploadCollectionId, setInvoiceUploadCollectionId] = useState<
+        string | null
+    >(null);
+
     // Mutations
     const deleteMutation = useDeleteCollectionMutation();
     const deletePhotoMutation = useDeletePhotoMutation();
     const setCoverMutation = useSetCatalogueCoverMutation();
     const sendDeliveryEmailMutation = useSendDeliveryEmailMutation();
+    const uploadInvoiceMutation = useUploadInvoiceMutation();
+    const removeInvoiceMutation = useRemoveInvoiceMutation();
 
     // Photo upload
     const { uploadQueue, addFiles, removeFile, clearCompleted } =
@@ -149,6 +160,35 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
     ) => {
         const rect = e.currentTarget.getBoundingClientRect();
         openContextMenu(rect.left, rect.bottom + 4, collection);
+    };
+
+    const handleUploadInvoice = (file: File) => {
+        if (!invoiceUploadCollectionId) return;
+        uploadInvoiceMutation.mutate(
+            {
+                collectionId: invoiceUploadCollectionId,
+                catalogueId,
+                file,
+            },
+            {
+                onSuccess: () => {
+                    setInvoiceUploadCollectionId(null);
+                },
+            }
+        );
+    };
+
+    const handleRemoveInvoice = (collectionId: string) => {
+        confirmDelete({
+            title: t('invoice.removeConfirm'),
+            description: t('workspace.cannotBeUndone'),
+            onConfirm: () => {
+                removeInvoiceMutation.mutate({
+                    collectionId,
+                    catalogueId,
+                });
+            },
+        });
     };
 
     // Loading state
@@ -305,6 +345,7 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                     isDelivery={
                         collectionContextMenu.collection.type === 'delivery'
                     }
+                    hasInvoice={collectionContextMenu.collection.hasInvoice}
                     onShareDelivery={
                         collectionContextMenu.collection.type === 'delivery' &&
                         collectionContextMenu.collection.deliverySlug
@@ -322,6 +363,27 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                                   sendDeliveryEmailMutation.mutate({
                                       collectionId: collectionContextMenu.collection.id,
                                   });
+                                  closeContextMenu();
+                              }
+                            : undefined
+                    }
+                    onUploadInvoice={
+                        collectionContextMenu.collection.type === 'delivery'
+                            ? () => {
+                                  setInvoiceUploadCollectionId(
+                                      collectionContextMenu.collection.id
+                                  );
+                                  closeContextMenu();
+                              }
+                            : undefined
+                    }
+                    onRemoveInvoice={
+                        collectionContextMenu.collection.type === 'delivery' &&
+                        collectionContextMenu.collection.hasInvoice
+                            ? () => {
+                                  handleRemoveInvoice(
+                                      collectionContextMenu.collection.id
+                                  );
                                   closeContextMenu();
                               }
                             : undefined
@@ -360,6 +422,13 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                     }}
                 />
             )}
+
+            <InvoiceUploadDialog
+                isOpen={!!invoiceUploadCollectionId}
+                onClose={() => setInvoiceUploadCollectionId(null)}
+                onUpload={handleUploadInvoice}
+                isUploading={uploadInvoiceMutation.isPending}
+            />
         </div>
     );
 }
