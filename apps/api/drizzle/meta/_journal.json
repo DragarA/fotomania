@@ -78,6 +78,13 @@
       "when": 1770207246849,
       "tag": "0010_certain_moira_mactaggert",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1770219600706,
+      "tag": "0011_faulty_rocket_racer",
+      "breakpoints": true
     }
   ]
 }

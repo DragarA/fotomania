@@ -16,6 +16,12 @@ export const user = pgTable('user', {
     businessDescription: text('businessDescription'),
 
     preferredLanguage: text('preferredLanguage').notNull().default('en'),
+    collectClientName: boolean('collectClientName').notNull().default(false),
+    collectClientAddress: boolean('collectClientAddress')
+        .notNull()
+        .default(false),
+    collectClientPhone: boolean('collectClientPhone').notNull().default(false),
+    collectClientNotes: boolean('collectClientNotes').notNull().default(false),
 
     createdAt: timestamp('createdAt').notNull(),
     updatedAt: timestamp('updatedAt').notNull(),
