@@ -14,4 +14,3 @@ node_modules
 **/test
 **/*.spec.ts
 **/*.e2e-spec.ts
-apps/web
