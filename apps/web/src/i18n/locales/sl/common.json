@@ -2,6 +2,8 @@
   "nav": {
     "home": "Domov",
     "about": "O nas",
+    "features": "Funkcije",
+    "pricing": "Cenik",
     "catalogues": "Katalogi",
     "signIn": "Prijava",
     "getStarted": "Začni",
@@ -62,7 +64,7 @@
       "title": "Zajemite. Organizirajte. Delite.",
       "subtitle": "Ultimativna platforma za fotografe za shranjevanje, upravljanje in prikazovanje svojega dela.",
       "getStarted": "Začni",
-      "watchDemo": "Oglej si predstavitev",
+      "learnMore": "Več o funkcijah",
       "goToProfile": "Pojdi na profil"
     },
     "features": {
@@ -161,5 +163,230 @@
   "confirmDialog": {
     "delete": "Izbriši",
     "cancel": "Prekliči"
+  },
+  "about": {
+    "hero": {
+      "label": "O Fotomaniji",
+      "title": "Ustvarjeno s strani fotografov, za fotografe",
+      "subtitle": "Verjamemo, da si vsak fotograf zasluži orodja, ki ustrezajo njegovi strasti. Zato smo ustvarili Fotomanijo."
+    },
+    "mission": {
+      "label": "Naše poslanstvo",
+      "title": "Omogočamo fotografom, da se osredotočijo na pomembne stvari",
+      "description": "Pri Fotomaniji imamo poslanstvo poenostaviti poslovno plat fotografije. Mi skrbimo za tehnologijo, da se vi lahko osredotočite na zajemanje najdragocenejših življenjskih trenutkov.",
+      "description2": "Od upravljanja galerij za stranke do dostave končnih fotografij smo vsako funkcijo zgradili z mislijo na delujočega fotografa. Brez nepotrebne kompleksnosti, le orodja, ki delujejo."
+    },
+    "story": {
+      "label": "Naša zgodba",
+      "title": "Od frustracije do rešitve",
+      "paragraph1": "Fotomania se je začela, ko smo iz prve roke izkusili izzive, s katerimi se srečujejo fotografi. Žongliranje z več orodji za shranjevanje, deljenje in dostavo je bilo zamudno in frustrirajoče. Vedeli smo, da mora obstajati boljši način.",
+      "paragraph2": "Zato smo ga zgradili. Ustvarili smo platformo, ki združuje vse na enem mestu: varno shrambo, čudovite galerije, pregled za stranke in brezhibno dostavo. Vse zasnovano, da vam prihrani čas in navduši vaše stranke.",
+      "paragraph3": "Danes fotografi zaupajo Fotomaniji svoje najpomembnejše delo. Ponosni smo, da smo del njihove ustvarjalne poti, in zavezani smo k gradnji orodij, ki jim pomagajo uspeti."
+    },
+    "values": {
+      "label": "Naše vrednote",
+      "title": "Kaj nas vodi vsak dan",
+      "subtitle": "Ta načela vodijo vse, kar gradimo, in vsako odločitev, ki jo sprejmemo.",
+      "craftsmanship": {
+        "title": "Mojstrstvo",
+        "description": "Obsedeni smo s podrobnostmi, ker vemo, da ste tudi vi. Vsak piksel, vsaka interakcija šteje."
+      },
+      "trust": {
+        "title": "Zaupanje",
+        "description": "Vaše fotografije so vaš vir preživetja. Ščitimo jih z varnostjo in zanesljivostjo na ravni podjetij."
+      },
+      "simplicity": {
+        "title": "Preprostost",
+        "description": "Močno ne pomeni nujno zapleteno. Gradimo intuitivna orodja, ki preprosto delujejo."
+      },
+      "passion": {
+        "title": "Strast",
+        "description": "Fotografijo ljubimo enako kot vi. Vaš uspeh je naš uspeh."
+      }
+    },
+    "apart": {
+      "focused": {
+        "title": "Osredotočeno na fotografijo",
+        "description": "Ne generična shramba v oblaku. Zgrajeno posebej za edinstvene delovne procese fotografov."
+      },
+      "community": {
+        "title": "Vodeno s strani skupnosti",
+        "description": "Vsaka funkcija izvira iz pravih povratnih informacij in potreb fotografov."
+      },
+      "innovation": {
+        "title": "Nenehno izboljševanje",
+        "description": "Nenehno se razvijamo, da ustrezamo načinu dela sodobnih fotografov."
+      }
+    },
+    "contact": {
+      "title": "Sodelujmo skupaj",
+      "subtitle": "Imate vprašanja? Želite deliti povratne informacije? Z veseljem bi slišali od vas.",
+      "getStarted": "Začnite brezplačno preizkusno obdobje",
+      "contactUs": "Kontaktirajte nas"
+    }
+  },
+  "features": {
+    "hero": {
+      "label": "Funkcije",
+      "title": "Vse, kar potrebujete za uspeh",
+      "subtitle": "Močna orodja, zasnovana posebej za profesionalne fotografe. Od nalaganja do dostave, poskrbimo za vas."
+    },
+    "list": {
+      "storage": {
+        "title": "Neomejena shramba v oblaku",
+        "description": "Varno shranjujte vse svoje fotografije v oblaku brez omejitev. Polna ločljivost, samodejne varnostne kopije, vedno dostopno."
+      },
+      "organization": {
+        "title": "Pametna organizacija",
+        "description": "Ustvarjajte kataloge, zbirke in albume. Označite, razvrstite in takoj najdite fotografije z močnim iskanjem."
+      },
+      "sharing": {
+        "title": "Deljenje s strankami",
+        "description": "Delite čudovite galerije s strankami prek prilagojenih povezav. Stranke ne potrebujejo računa za ogled."
+      },
+      "password": {
+        "title": "Zaščita z geslom",
+        "description": "Zavarujte zasebne galerije z zaščito z geslom. Natančno nadzirajte, kdo lahko dostopa do vsakega kataloga."
+      },
+      "favorites": {
+        "title": "Priljubljene strank",
+        "description": "Strankam omogočite označevanje priljubljenih fotografij. Enostavno preglejte izbire in pripravite končne dostave."
+      },
+      "delivery": {
+        "title": "Dostava fotografij",
+        "description": "Dostavite končne fotografije neposredno prek platforme. Stranke prenesejo svoje izbire z enim klikom."
+      },
+      "branding": {
+        "title": "Prilagojena blagovna znamka",
+        "description": "Dodajte svoj logotip in prilagodite videz galerije. Predstavite profesionalno, brendirano izkušnjo."
+      },
+      "galleries": {
+        "title": "Čudovite galerije",
+        "description": "Predstavite svoje delo v osupljivih, odzivnih galerijah, ki izgledajo odlično na vsaki napravi."
+      },
+      "public": {
+        "title": "Javni dogodki",
+        "description": "Ustvarite javne kataloge za dogodke, kjer udeleženci lahko brskajo in zahtevajo svoje fotografije."
+      },
+      "security": {
+        "title": "Varnost na ravni podjetij",
+        "description": "Vaše fotografije so šifrirane in zaščitene z varnostnimi ukrepi na ravni podjetij."
+      },
+      "responsive": {
+        "title": "Prijazno mobilnim napravam",
+        "description": "Upravljajte svoje poslovanje na poti. Polna funkcionalnost na telefonih, tabličnih računalnikih in namiznih računalnikih."
+      },
+      "fast": {
+        "title": "Bliskovito hitro",
+        "description": "Optimizirano za hitrost. Hitro nalaganje, takojšni predogledi in hitre naložitve strani povsod."
+      }
+    },
+    "workflow": {
+      "label": "Delovni procesi",
+      "title": "Zgrajeno za vaš način dela",
+      "subtitle": "Ne glede na to, ali snemate poroke, portrete ali dogodke, se Fotomania prilagodi vašemu delovnemu procesu.",
+      "private": {
+        "title": "Zasebni delovni proces za stranke",
+        "step1": "Ustvarite katalog za svojo stranko",
+        "step2": "Naložite in organizirajte fotografije v zbirke",
+        "step3": "Delite povezavo, zaščiteno z geslom",
+        "step4": "Stranka izbere priljubljene in vi dostavite"
+      },
+      "public": {
+        "title": "Javni delovni proces za dogodke",
+        "step1": "Ustvarite javni katalog za dogodek",
+        "step2": "Naložite vse fotografije dogodka",
+        "step3": "Delite povezavo z vsemi udeleženci",
+        "step4": "Udeleženci brskajo, izbirajo priljubljene in zahtevajo dostavo"
+      }
+    },
+    "cta": {
+      "title": "Pripravljeni poenostaviti svoj delovni proces?",
+      "subtitle": "Začnite brezplačno preizkusno obdobje danes in vidite razliko.",
+      "getStarted": "Začnite brezplačno",
+      "seePricing": "Oglejte si cenik"
+    }
+  },
+  "pricing": {
+    "hero": {
+      "label": "Cenik",
+      "title": "Preprosto, pregledno oblikovanje cen",
+      "subtitle": "Izberite paket, ki ustreza vašim potrebam. Vsi paketi vključujejo 14-dnevno brezplačno preizkusno obdobje."
+    },
+    "popular": "Najbolj priljubljen",
+    "plans": {
+      "starter": {
+        "name": "Začetni",
+        "price": "9 €",
+        "period": "/mesec",
+        "description": "Popoln za fotografe, ki šele začenjajo.",
+        "features": {
+          "storage": "50 GB shrambe",
+          "catalogues": "10 katalogov",
+          "sharing": "Povezave za deljenje s strankami",
+          "galleries": "Čudovite galerije",
+          "support": "Podpora po e-pošti"
+        },
+        "cta": "Začni brezplačno preizkusno obdobje"
+      },
+      "professional": {
+        "name": "Profesionalni",
+        "price": "29 €",
+        "period": "/mesec",
+        "description": "Za rastoča fotografska podjetja.",
+        "features": {
+          "storage": "500 GB shrambe",
+          "catalogues": "Neomejeno katalogov",
+          "sharing": "Povezave za deljenje s strankami",
+          "galleries": "Čudovite galerije",
+          "branding": "Prilagojena blagovna znamka",
+          "delivery": "Dostava fotografij",
+          "support": "Prednostna podpora"
+        },
+        "cta": "Začni brezplačno preizkusno obdobje"
+      },
+      "studio": {
+        "name": "Studio",
+        "price": "79 €",
+        "period": "/mesec",
+        "description": "Za studie in fotografe z velikim obsegom.",
+        "features": {
+          "storage": "Neomejena shramba",
+          "catalogues": "Neomejeno katalogov",
+          "sharing": "Povezave za deljenje s strankami",
+          "galleries": "Čudovite galerije",
+          "branding": "Prilagojena blagovna znamka",
+          "delivery": "Dostava fotografij",
+          "team": "Timsko sodelovanje",
+          "support": "Namenska podpora"
+        },
+        "cta": "Začni brezplačno preizkusno obdobje"
+      }
+    },
+    "faq": {
+      "label": "Pogosta vprašanja",
+      "title": "Pogosto zastavljena vprašanja",
+      "trial": {
+        "question": "Kako deluje brezplačno preizkusno obdobje?",
+        "answer": "Vsi paketi vključujejo 14-dnevno brezplačno preizkusno obdobje s polnim dostopom do vseh funkcij. Za začetek ni potrebna kreditna kartica. Kadarkoli lahko nadgradite, znižate ali prekličete."
+      },
+      "cancel": {
+        "question": "Ali lahko kadarkoli prekličem?",
+        "answer": "Da, svojo naročnino lahko kadarkoli prekličete. Dostop boste imeli do konca svojega obračunskega obdobja."
+      },
+      "storage": {
+        "question": "Kaj se zgodi, če presežem svojo omejitev shrambe?",
+        "answer": "Obvestili vas bomo, ko se približujete svoji omejitvi. Lahko nadgradite na višji paket ali odstranite nekaj datotek. Nikoli ne izbrišemo vaših fotografij brez dovoljenja."
+      },
+      "upgrade": {
+        "question": "Ali lahko kasneje zamenjam paket?",
+        "answer": "Absolutno. Svoj paket lahko kadarkoli nadgradite ali znižate. Spremembe začnejo veljati ob naslednjem obračunskem ciklu."
+      }
+    },
+    "cta": {
+      "title": "Začnite brezplačno preizkusno obdobje danes",
+      "subtitle": "Kreditna kartica ni potrebna. Prekličite kadarkoli.",
+      "getStarted": "Začnite brezplačno"
+    }
   }
 }

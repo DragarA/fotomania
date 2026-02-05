@@ -51,8 +51,10 @@ export function HomePage() {
                                             {t('home.hero.getStarted')}
                                         </Link>
                                     </Button>
-                                    <Button variant="outline" size="lg">
-                                        {t('home.hero.watchDemo')}
+                                    <Button asChild variant="outline" size="lg">
+                                        <Link to="/features">
+                                            {t('home.hero.learnMore')}
+                                        </Link>
                                     </Button>
                                 </>
                             )}

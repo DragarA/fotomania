@@ -2,6 +2,8 @@
   "nav": {
     "home": "Home",
     "about": "About",
+    "features": "Features",
+    "pricing": "Pricing",
     "catalogues": "Catalogues",
     "signIn": "Sign In",
     "getStarted": "Get Started",
@@ -62,7 +64,7 @@
       "title": "Capture. Organize. Share.",
       "subtitle": "The ultimate platform for photographers to store, manage, and showcase their work beautifully.",
       "getStarted": "Get Started",
-      "watchDemo": "Watch Demo",
+      "learnMore": "Learn More",
       "goToProfile": "Go to Profile"
     },
     "features": {
@@ -161,5 +163,230 @@
   "confirmDialog": {
     "delete": "Delete",
     "cancel": "Cancel"
+  },
+  "about": {
+    "hero": {
+      "label": "About Fotomania",
+      "title": "Built by photographers, for photographers",
+      "subtitle": "We believe every photographer deserves tools that match their passion. That's why we built Fotomania."
+    },
+    "mission": {
+      "label": "Our Mission",
+      "title": "Empowering photographers to focus on what matters",
+      "description": "At Fotomania, we're on a mission to simplify the business side of photography. We handle the technology so you can focus on capturing life's most precious moments.",
+      "description2": "From managing client galleries to delivering final photos, we've built every feature with the working photographer in mind. No unnecessary complexity, just tools that work."
+    },
+    "story": {
+      "label": "Our Story",
+      "title": "From frustration to solution",
+      "paragraph1": "Fotomania started when we experienced firsthand the challenges photographers face. Juggling multiple tools for storage, sharing, and delivery was time-consuming and frustrating. We knew there had to be a better way.",
+      "paragraph2": "So we built it. We created a platform that brings everything together in one place: secure storage, beautiful galleries, client proofing, and seamless delivery. All designed to save you time and impress your clients.",
+      "paragraph3": "Today, photographers trust Fotomania with their most important work. We're proud to be part of their creative journey, and we're committed to building tools that help them succeed."
+    },
+    "values": {
+      "label": "Our Values",
+      "title": "What drives us every day",
+      "subtitle": "These principles guide everything we build and every decision we make.",
+      "craftsmanship": {
+        "title": "Craftsmanship",
+        "description": "We obsess over details because we know you do too. Every pixel, every interaction matters."
+      },
+      "trust": {
+        "title": "Trust",
+        "description": "Your photos are your livelihood. We protect them with enterprise-grade security and reliability."
+      },
+      "simplicity": {
+        "title": "Simplicity",
+        "description": "Powerful doesn't have to mean complicated. We build intuitive tools that just work."
+      },
+      "passion": {
+        "title": "Passion",
+        "description": "We love photography as much as you do. Your success is our success."
+      }
+    },
+    "apart": {
+      "focused": {
+        "title": "Photography-Focused",
+        "description": "Not a generic cloud storage. Built specifically for photographers' unique workflows."
+      },
+      "community": {
+        "title": "Community-Driven",
+        "description": "Every feature comes from real photographer feedback and needs."
+      },
+      "innovation": {
+        "title": "Always Improving",
+        "description": "We continuously evolve to match how modern photographers work."
+      }
+    },
+    "contact": {
+      "title": "Let's work together",
+      "subtitle": "Have questions? Want to share feedback? We'd love to hear from you.",
+      "getStarted": "Start Your Free Trial",
+      "contactUs": "Contact Us"
+    }
+  },
+  "features": {
+    "hero": {
+      "label": "Features",
+      "title": "Everything you need to succeed",
+      "subtitle": "Powerful tools designed specifically for professional photographers. From upload to delivery, we've got you covered."
+    },
+    "list": {
+      "storage": {
+        "title": "Unlimited Cloud Storage",
+        "description": "Store all your photos securely in the cloud with no storage limits. Full resolution, automatic backups, always accessible."
+      },
+      "organization": {
+        "title": "Smart Organization",
+        "description": "Create catalogues, collections, and albums. Tag, sort, and find photos instantly with powerful search."
+      },
+      "sharing": {
+        "title": "Client Sharing",
+        "description": "Share beautiful galleries with clients via custom links. No account required for clients to view."
+      },
+      "password": {
+        "title": "Password Protection",
+        "description": "Secure private galleries with password protection. Control exactly who can access each catalogue."
+      },
+      "favorites": {
+        "title": "Client Favorites",
+        "description": "Let clients mark their favorite photos. Easily see selections and prepare final deliveries."
+      },
+      "delivery": {
+        "title": "Photo Delivery",
+        "description": "Deliver final photos directly through the platform. Clients download their selections with one click."
+      },
+      "branding": {
+        "title": "Custom Branding",
+        "description": "Add your logo and customize gallery appearance. Present a professional, branded experience."
+      },
+      "galleries": {
+        "title": "Beautiful Galleries",
+        "description": "Showcase your work in stunning, responsive galleries that look great on any device."
+      },
+      "public": {
+        "title": "Public Events",
+        "description": "Create public catalogues for events where attendees can browse and request their photos."
+      },
+      "security": {
+        "title": "Enterprise Security",
+        "description": "Your photos are encrypted and protected with enterprise-grade security measures."
+      },
+      "responsive": {
+        "title": "Mobile Friendly",
+        "description": "Manage your business on the go. Full functionality on phones, tablets, and desktops."
+      },
+      "fast": {
+        "title": "Lightning Fast",
+        "description": "Optimized for speed. Fast uploads, instant previews, and quick page loads everywhere."
+      }
+    },
+    "workflow": {
+      "label": "Workflows",
+      "title": "Built for how you work",
+      "subtitle": "Whether you shoot weddings, portraits, or events, Fotomania adapts to your workflow.",
+      "private": {
+        "title": "Private Client Workflow",
+        "step1": "Create a catalogue for your client",
+        "step2": "Upload and organize photos into collections",
+        "step3": "Share a password-protected link",
+        "step4": "Client selects favorites and you deliver"
+      },
+      "public": {
+        "title": "Public Event Workflow",
+        "step1": "Create a public catalogue for the event",
+        "step2": "Upload all event photos",
+        "step3": "Share the link with all attendees",
+        "step4": "Attendees browse, favorite, and request delivery"
+      }
+    },
+    "cta": {
+      "title": "Ready to streamline your workflow?",
+      "subtitle": "Start your free trial today and see the difference.",
+      "getStarted": "Get Started Free",
+      "seePricing": "See Pricing"
+    }
+  },
+  "pricing": {
+    "hero": {
+      "label": "Pricing",
+      "title": "Simple, transparent pricing",
+      "subtitle": "Choose the plan that fits your needs. All plans include a 14-day free trial."
+    },
+    "popular": "Most Popular",
+    "plans": {
+      "starter": {
+        "name": "Starter",
+        "price": "€9",
+        "period": "/month",
+        "description": "Perfect for photographers just getting started.",
+        "features": {
+          "storage": "50 GB storage",
+          "catalogues": "10 catalogues",
+          "sharing": "Client sharing links",
+          "galleries": "Beautiful galleries",
+          "support": "Email support"
+        },
+        "cta": "Start Free Trial"
+      },
+      "professional": {
+        "name": "Professional",
+        "price": "€29",
+        "period": "/month",
+        "description": "For growing photography businesses.",
+        "features": {
+          "storage": "500 GB storage",
+          "catalogues": "Unlimited catalogues",
+          "sharing": "Client sharing links",
+          "galleries": "Beautiful galleries",
+          "branding": "Custom branding",
+          "delivery": "Photo delivery",
+          "support": "Priority support"
+        },
+        "cta": "Start Free Trial"
+      },
+      "studio": {
+        "name": "Studio",
+        "price": "€79",
+        "period": "/month",
+        "description": "For studios and high-volume photographers.",
+        "features": {
+          "storage": "Unlimited storage",
+          "catalogues": "Unlimited catalogues",
+          "sharing": "Client sharing links",
+          "galleries": "Beautiful galleries",
+          "branding": "Custom branding",
+          "delivery": "Photo delivery",
+          "team": "Team collaboration",
+          "support": "Dedicated support"
+        },
+        "cta": "Start Free Trial"
+      }
+    },
+    "faq": {
+      "label": "FAQ",
+      "title": "Frequently asked questions",
+      "trial": {
+        "question": "How does the free trial work?",
+        "answer": "All plans include a 14-day free trial with full access to all features. No credit card required to start. You can upgrade, downgrade, or cancel anytime."
+      },
+      "cancel": {
+        "question": "Can I cancel anytime?",
+        "answer": "Yes, you can cancel your subscription at any time. You'll continue to have access until the end of your billing period."
+      },
+      "storage": {
+        "question": "What happens if I exceed my storage limit?",
+        "answer": "We'll notify you when you're approaching your limit. You can upgrade to a higher plan or remove some files. We never delete your photos without permission."
+      },
+      "upgrade": {
+        "question": "Can I change plans later?",
+        "answer": "Absolutely. You can upgrade or downgrade your plan at any time. Changes take effect on your next billing cycle."
+      }
+    },
+    "cta": {
+      "title": "Start your free trial today",
+      "subtitle": "No credit card required. Cancel anytime.",
+      "getStarted": "Get Started Free"
+    }
   }
 }

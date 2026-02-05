@@ -20,28 +20,22 @@ export function Footer() {
                         </h4>
                         <ul className="space-y-2 text-sm">
                             <li>
-                                <a
-                                    href="#"
+                                <Link
+                                    to="/features"
                                     className="hover:text-accent-600 transition-colors"
+                                    onClick={() => window.scrollTo(0, 0)}
                                 >
                                     {t('footer.product.features')}
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a
-                                    href="#"
+                                <Link
+                                    to="/pricing"
                                     className="hover:text-accent-600 transition-colors"
+                                    onClick={() => window.scrollTo(0, 0)}
                                 >
                                     {t('footer.product.pricing')}
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-accent-600 transition-colors"
-                                >
-                                    {t('footer.product.security')}
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -54,25 +48,10 @@ export function Footer() {
                                 <Link
                                     to="/about"
                                     className="hover:text-accent-600 transition-colors"
+                                    onClick={() => window.scrollTo(0, 0)}
                                 >
                                     {t('footer.company.about')}
                                 </Link>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-accent-600 transition-colors"
-                                >
-                                    {t('footer.company.blog')}
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="#"
-                                    className="hover:text-accent-600 transition-colors"
-                                >
-                                    {t('footer.company.careers')}
-                                </a>
                             </li>
                         </ul>
                     </div>

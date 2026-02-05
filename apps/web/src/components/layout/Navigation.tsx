@@ -54,6 +54,24 @@ export function Navigation() {
                         >
                             {t('nav.about')}
                         </Link>
+                        {!user && (
+                            <>
+                                <Link
+                                    to="/features"
+                                    className="text-sm font-light tracking-[0.02em] text-stone-500 transition-colors duration-500 hover:text-stone-800"
+                                    activeProps={{ className: 'text-stone-800' }}
+                                >
+                                    {t('nav.features')}
+                                </Link>
+                                <Link
+                                    to="/pricing"
+                                    className="text-sm font-light tracking-[0.02em] text-stone-500 transition-colors duration-500 hover:text-stone-800"
+                                    activeProps={{ className: 'text-stone-800' }}
+                                >
+                                    {t('nav.pricing')}
+                                </Link>
+                            </>
+                        )}
                         {user && (
                             <Link
                                 to="/catalogues"
@@ -163,6 +181,30 @@ export function Navigation() {
                             >
                                 {t('nav.about')}
                             </Link>
+                            {!user && (
+                                <>
+                                    <Link
+                                        to="/features"
+                                        className="rounded-lg px-4 py-3 text-base font-light tracking-[0.02em] text-stone-600 transition-colors hover:bg-stone-50 hover:text-stone-800"
+                                        activeProps={{
+                                            className: 'bg-stone-50 text-stone-800',
+                                        }}
+                                        onClick={closeMobileMenu}
+                                    >
+                                        {t('nav.features')}
+                                    </Link>
+                                    <Link
+                                        to="/pricing"
+                                        className="rounded-lg px-4 py-3 text-base font-light tracking-[0.02em] text-stone-600 transition-colors hover:bg-stone-50 hover:text-stone-800"
+                                        activeProps={{
+                                            className: 'bg-stone-50 text-stone-800',
+                                        }}
+                                        onClick={closeMobileMenu}
+                                    >
+                                        {t('nav.pricing')}
+                                    </Link>
+                                </>
+                            )}
                             {user && (
                                 <Link
                                     to="/catalogues"
