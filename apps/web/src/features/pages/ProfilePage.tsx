@@ -5,8 +5,10 @@ import {
     Folder,
     Globe,
     IdCard,
+    Image,
     Mail,
     MapPin,
+    Palette,
     Pencil,
     Phone,
     Settings,
@@ -52,7 +54,20 @@ export function ProfilePage() {
         user.businessPhone ||
         user.businessAddress ||
         user.businessWebsite ||
-        user.businessDescription;
+        user.businessDescription ||
+        user.businessLogo;
+
+    const renderStatusPill = (isEnabled: boolean) => (
+        <span
+            className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-medium uppercase tracking-[0.1em] ${
+                isEnabled
+                    ? 'bg-emerald-50 text-emerald-700'
+                    : 'bg-stone-100 text-stone-500'
+            }`}
+        >
+            {isEnabled ? t('enabled') : t('disabled')}
+        </span>
+    );
 
     return (
         <div className="min-h-screen bg-stone-100 px-6 py-10 sm:px-10">
@@ -156,6 +171,28 @@ export function ProfilePage() {
                         </h2>
 
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <ProfileInfoCard
+                                icon={<Image />}
+                                label={t('form.businessLogo')}
+                            >
+                                {user.businessLogo ? (
+                                    <div className="flex items-center gap-3">
+                                        <img
+                                            src={user.businessLogo}
+                                            alt={t('form.businessLogo')}
+                                            className="h-10 w-10 rounded border border-black/10 object-cover"
+                                        />
+                                        <span className="text-sm font-medium">
+                                            {t('uploaded')}
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <p className="text-sm font-medium">
+                                        {t('notProvided')}
+                                    </p>
+                                )}
+                            </ProfileInfoCard>
+
                             {user.businessName && (
                                 <ProfileInfoCard
                                     icon={<Building2 />}
@@ -229,6 +266,103 @@ export function ProfilePage() {
                         )}
                     </div>
                 )}
+
+                {/* Brand Settings */}
+                <div className="rounded-lg border border-black/5 bg-white p-6 shadow-sm sm:p-8">
+                    <h2 className="mb-6 text-xs uppercase tracking-[0.3em] text-stone-500">
+                        {t('brandSettings')}
+                    </h2>
+
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <ProfileInfoCard
+                            icon={<Palette />}
+                            label={t('form.brandColorMain')}
+                        >
+                            {user.brandColorMain ? (
+                                <div className="flex items-center gap-3">
+                                    <span
+                                        className="h-6 w-6 rounded-full border border-black/10"
+                                        style={{
+                                            backgroundColor:
+                                                user.brandColorMain,
+                                        }}
+                                    />
+                                    <span className="text-sm font-medium">
+                                        {user.brandColorMain}
+                                    </span>
+                                </div>
+                            ) : (
+                                <p className="text-sm font-medium">
+                                    {t('notProvided')}
+                                </p>
+                            )}
+                        </ProfileInfoCard>
+
+                        <ProfileInfoCard
+                            icon={<Palette />}
+                            label={t('form.brandColorAccent')}
+                        >
+                            {user.brandColorAccent ? (
+                                <div className="flex items-center gap-3">
+                                    <span
+                                        className="h-6 w-6 rounded-full border border-black/10"
+                                        style={{
+                                            backgroundColor:
+                                                user.brandColorAccent,
+                                        }}
+                                    />
+                                    <span className="text-sm font-medium">
+                                        {user.brandColorAccent}
+                                    </span>
+                                </div>
+                            ) : (
+                                <p className="text-sm font-medium">
+                                    {t('notProvided')}
+                                </p>
+                            )}
+                        </ProfileInfoCard>
+                    </div>
+                </div>
+
+                {/* Client Info Collection */}
+                <div className="rounded-lg border border-black/5 bg-white p-6 shadow-sm sm:p-8">
+                    <h2 className="mb-2 text-xs uppercase tracking-[0.3em] text-stone-500">
+                        {t('form.clientInfoCollection')}
+                    </h2>
+                    <p className="mb-6 text-xs text-stone-400">
+                        {t('form.clientInfoCollectionDescription')}
+                    </p>
+
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <ProfileInfoCard
+                            icon={<User />}
+                            label={t('form.collectClientName')}
+                        >
+                            {renderStatusPill(user.collectClientName)}
+                        </ProfileInfoCard>
+
+                        <ProfileInfoCard
+                            icon={<MapPin />}
+                            label={t('form.collectClientAddress')}
+                        >
+                            {renderStatusPill(user.collectClientAddress)}
+                        </ProfileInfoCard>
+
+                        <ProfileInfoCard
+                            icon={<Phone />}
+                            label={t('form.collectClientPhone')}
+                        >
+                            {renderStatusPill(user.collectClientPhone)}
+                        </ProfileInfoCard>
+
+                        <ProfileInfoCard
+                            icon={<Settings />}
+                            label={t('form.collectClientNotes')}
+                        >
+                            {renderStatusPill(user.collectClientNotes)}
+                        </ProfileInfoCard>
+                    </div>
+                </div>
 
                 {/* Quick Actions */}
                 <div className="rounded-lg border border-black/5 bg-white p-6 shadow-sm sm:p-8">

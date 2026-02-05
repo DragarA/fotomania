@@ -23,6 +23,10 @@
     "businessAddress": "Naslov podjetja",
     "businessWebsite": "Spletna stran podjetja",
     "businessDescription": "Opis podjetja",
+    "brandSettings": "Nastavitve blagovne znamke",
+    "enabled": "Omogočeno",
+    "disabled": "Onemogočeno",
+    "uploaded": "Naloženo",
     "error": {
         "loadFailed": "Nalaganje profila ni uspelo"
     },
@@ -82,4 +86,3 @@
         "logoRemoveError": "Odstranjevanje logotipa ni uspelo"
     }
 }
-

@@ -23,6 +23,10 @@
     "businessAddress": "Business Address",
     "businessWebsite": "Business Website",
     "businessDescription": "Business Description",
+    "brandSettings": "Brand Settings",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "uploaded": "Uploaded",
     "error": {
         "loadFailed": "Failed to load profile"
     },
@@ -82,4 +86,3 @@
         "logoRemoveError": "Failed to remove logo"
     }
 }
-

@@ -1,0 +1,150 @@
+name: Deploy to DirectAdmin
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '24'
+  PNPM_VERSION: '10.25.0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build API
+        run: pnpm --filter @repo/api build
+        env:
+          NODE_ENV: production
+
+      - name: Build SDK
+        run: pnpm --filter @repo/sdk build
+
+      - name: Build Web
+        run: pnpm --filter @repo/web build
+        env:
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+
+      - name: Prepare API deployment package
+        run: |
+          mkdir -p deploy/api
+          cp -r apps/api/dist deploy/api/
+          cp -r apps/api/drizzle deploy/api/ 2>/dev/null || true
+          cp apps/api/package.json deploy/api/
+          cp apps/api/drizzle.config.ts deploy/api/ 2>/dev/null || true
+          cp apps/api/app.js deploy/api/
+          mkdir -p deploy/api/tmp
+          touch deploy/api/tmp/restart.txt
+
+      - name: Prepare Web deployment package
+        run: |
+          mkdir -p deploy/web
+          cp -r apps/web/dist/* deploy/web/
+          cp apps/web/.htaccess deploy/web/
+
+      - name: Upload API artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-build
+          path: deploy/api
+          retention-days: 7
+
+      - name: Upload Web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: deploy/web
+          retention-days: 7
+
+  deploy-api:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Download API artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: api-build
+          path: api-build
+
+      - name: Deploy API via SSH
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "api-build/*"
+          target: "/home/${{ secrets.SSH_USERNAME }}/domains/${{ vars.API_DOMAIN }}/public_html"
+          strip_components: 1
+
+      - name: Install dependencies and restart
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /home/${{ secrets.SSH_USERNAME }}/domains/${{ vars.API_DOMAIN }}/public_html
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            npm install --production --legacy-peer-deps
+            npx drizzle-kit migrate 2>/dev/null || echo "Migrations skipped"
+            touch tmp/restart.txt
+            echo "API deployment complete!"
+
+  deploy-web:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Download Web artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: web-build
+
+      - name: Deploy Web via SSH
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "web-build/*"
+          target: "/home/${{ secrets.SSH_USERNAME }}/domains/${{ vars.WEB_DOMAIN }}/public_html"
+          strip_components: 1
+
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            ls -la /home/${{ secrets.SSH_USERNAME }}/domains/${{ vars.WEB_DOMAIN }}/public_html
+            echo "Web deployment complete!"

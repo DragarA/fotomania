@@ -14,20 +14,11 @@ external-db.com       → PostgreSQL (external managed database)
 
 ---
 
-## Critical Pre-requisite: Node.js Version
+## Node.js Version (Confirmed)
 
 **Current requirement**: `>=24.0.0` (in `package.json`)
 
-**Issue**: DirectAdmin NodeJS Selector typically supports up to Node 20 or 22.
-
-**Action Required**: Test the app with Node 20 LTS before deployment. If it works, lower the requirement:
-
-```json
-// package.json
-"engines": {
-  "node": ">=20.0.0"
-}
-```
+**Status**: Deployment environment supports Node 24. No downgrade required.
 
 ---
 
@@ -64,6 +55,9 @@ Handles:
 Two jobs:
 1. **build**: Install deps, build all packages, create deployment artifacts
 2. **deploy**: SSH to server, upload artifacts, install production deps, restart Passenger
+
+**SDK policy**: Do not regenerate SDK during CI/CD. The generated SDK is committed to git and used as-is during builds.
+This means developers must keep `packages/sdk/src/generated` up to date before merging.
 
 ---
 
@@ -153,7 +147,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: '24'
   PNPM_VERSION: '10.25.0'
 
 jobs:
@@ -182,20 +176,6 @@ jobs:
         run: pnpm --filter @repo/api build
         env:
           NODE_ENV: production
-
-      - name: Generate OpenAPI spec
-        run: |
-          cd apps/api
-          echo "DATABASE_URL=postgresql://x:x@localhost:5432/x" > .env.build
-          echo "JWT_SECRET=build-time-secret-minimum-32-characters" >> .env.build
-          echo "JWT_REFRESH_SECRET=build-refresh-secret-minimum-32-chars" >> .env.build
-          echo "MAILGUN_API_KEY=build" >> .env.build
-          echo "MAILGUN_DOMAIN=build.mailgun.org" >> .env.build
-          echo "MAILGUN_FROM_EMAIL=build@example.com" >> .env.build
-          mv .env.build .env
-          timeout 10 node dist/main.js || true
-          rm .env
-          cd ../..
 
       - name: Build SDK
         run: pnpm --filter @repo/sdk build
@@ -310,10 +290,15 @@ jobs:
             echo "Web deployment complete!"
 ```
 
-### Stage 5: Lower Node.js Version (if needed)
-**File**: `package.json`
+### Stage 5: SDK Generation Policy (Required for CI/CD)
+**Goal**: CI/CD does not regenerate SDK. The generated SDK must be committed to git.
 
-Change engines from `>=24.0.0` to `>=20.0.0` after testing.
+Required developer workflow (before merging API changes):
+1. Run the API locally so it writes `apps/api/openapi.json`.
+2. Run `pnpm --filter @repo/sdk generate` to regenerate `packages/sdk/src/generated`.
+3. Commit the updated generated files.
+
+CI/CD will only run `pnpm --filter @repo/sdk build`, which compiles the committed SDK sources without regeneration.
 
 ---
 

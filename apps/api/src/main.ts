@@ -50,17 +50,22 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api-docs', app, document);
 
-    // Write OpenAPI spec to file on startup
-    const openApiPath = resolve(__dirname, '../openapi.json');
-    writeFileSync(openApiPath, JSON.stringify(document, null, 2));
-    logger.log(`✅ OpenAPI spec written to: ${openApiPath}`);
+    // Write OpenAPI spec to file on startup (skip in production)
+    if (process.env.NODE_ENV !== 'production') {
+        const openApiPath = resolve(__dirname, '../openapi.json');
+        writeFileSync(openApiPath, JSON.stringify(document, null, 2));
+        logger.log(`OpenAPI spec written to: ${openApiPath}`);
+    }
 
     // Expose OpenAPI spec as JSON endpoint
     app.getHttpAdapter().get('/api-json', (_req: any, res: any) => {
         res.json(document);
     });
 
-    const port = configService.get<number>('API_PORT') || 3000;
+    const port =
+        configService.get<number>('PORT') ||
+        configService.get<number>('API_PORT') ||
+        3000;
     const apiBaseUrl =
         configService.get<string>('API_BASE_URL') || `http://localhost:${port}`;
 
