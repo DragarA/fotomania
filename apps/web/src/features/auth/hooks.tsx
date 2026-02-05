@@ -9,6 +9,7 @@ import {
 } from 'react';
 
 import '@/lib/api-client';
+import { getJwtExpiryMs } from '@/lib/jwt';
 import { queryClient } from '@/queryClient';
 
 // Types
@@ -104,8 +105,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('refreshToken', newRefreshToken);
         localStorage.setItem('user', JSON.stringify(newUser));
 
-        // Calculate and store token expiry (7 days from now based on backend)
-        const expiryTime = Date.now() + 7 * 24 * 60 * 60 * 1000;
+        // Calculate and store token expiry based on JWT exp
+        const expiryTime =
+            getJwtExpiryMs(newAccessToken) ||
+            Date.now() + 7 * 24 * 60 * 60 * 1000;
         localStorage.setItem('tokenExpiry', expiryTime.toString());
     };
 
@@ -151,8 +154,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             localStorage.setItem('refreshToken', data.refreshToken);
             localStorage.setItem('user', JSON.stringify(data.user));
 
-            // Calculate and store token expiry (7 days from now based on backend)
-            const expiryTime = Date.now() + 7 * 24 * 60 * 60 * 1000;
+            // Calculate and store token expiry based on JWT exp
+            const expiryTime =
+                getJwtExpiryMs(data.accessToken) ||
+                Date.now() + 7 * 24 * 60 * 60 * 1000;
             localStorage.setItem('tokenExpiry', expiryTime.toString());
 
             return true;

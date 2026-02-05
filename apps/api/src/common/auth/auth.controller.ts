@@ -8,6 +8,7 @@ import {
     Res,
     UseGuards,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
     ApiBearerAuth,
     ApiBody,
@@ -27,6 +28,11 @@ import {
     authLoginSchema,
 } from './dto/auth-login.dto';
 import {
+    AuthExchangeDto,
+    AuthExchangeDtoClass,
+    authExchangeSchema,
+} from './dto/auth-exchange.dto';
+import {
     AuthRefreshDto,
     AuthRefreshDtoClass,
     authRefreshSchema,
@@ -44,7 +50,10 @@ import { UserEntity } from './interfaces/user-entity.interface';
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly configService: ConfigService
+    ) {}
 
     @Post('register')
     @ApiOperation({ summary: 'Register a new user' })
@@ -113,6 +122,22 @@ export class AuthController {
         };
     }
 
+    @Post('exchange')
+    @HttpCode(200)
+    @ApiOperation({ summary: 'Exchange OAuth code for tokens' })
+    @ApiBody({ type: AuthExchangeDtoClass })
+    @ApiResponse({ status: 200, description: 'Tokens exchanged successfully' })
+    @ApiResponse({ status: 400, description: 'Invalid or expired OAuth code' })
+    async exchange(
+        @Body(new ZodValidationPipe(authExchangeSchema)) dto: AuthExchangeDto
+    ) {
+        const tokens = this.authService.consumeOauthExchangeCode(dto.code);
+        return {
+            message: 'Tokens exchanged successfully',
+            ...tokens,
+        };
+    }
+
     @UseGuards(GoogleAuthGuard)
     @Get('google')
     @ApiOperation({ summary: 'Initiate Google OAuth login' })
@@ -127,9 +152,12 @@ export class AuthController {
         // Generate JWT for the authenticated user
         const tokens = await this.authService.login(req.user);
 
-        // Redirect to frontend with tokens as query params
-        // In production, you might want to use a more secure method
-        const frontendUrl = `http://localhost:5173/auth/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`;
+        // Redirect to frontend with a short-lived exchange code
+        const frontendBaseUrl =
+            this.configService.get<string>('FRONTEND_URL') ||
+            'http://localhost:5173';
+        const code = this.authService.createOauthExchangeCode(tokens);
+        const frontendUrl = `${frontendBaseUrl}/auth/callback?code=${code}`;
         return res.redirect(frontendUrl);
     }
 

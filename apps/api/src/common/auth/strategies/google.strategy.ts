@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 
 import { DRIZZLE, DrizzleDB } from '../../db/drizzle';
@@ -13,11 +13,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         @Inject(DRIZZLE) private readonly db: DrizzleDB,
         private readonly configService: ConfigService
     ) {
+        const apiBaseUrl =
+            configService.get<string>('API_BASE_URL') ||
+            'http://localhost:3000';
+        const callbackUrl =
+            configService.get<string>('GOOGLE_CALLBACK_URL') ||
+            `${apiBaseUrl}/auth/google/callback`;
+
         super({
             clientID: configService.get<string>('GOOGLE_CLIENT_ID') || '',
             clientSecret:
                 configService.get<string>('GOOGLE_CLIENT_SECRET') || '',
-            callbackURL: 'http://localhost:3000/auth/google/callback',
+            callbackURL: callbackUrl,
             scope: ['email', 'profile'],
         });
     }
@@ -61,7 +68,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         const [existingAccount] = await this.db
             .select()
             .from(account)
-            .where(eq(account.userId, foundUser!.id));
+            .where(
+                and(
+                    eq(account.userId, foundUser!.id),
+                    eq(account.providerId, 'google')
+                )
+            );
 
         if (!existingAccount) {
             // Link Google account

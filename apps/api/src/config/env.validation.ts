@@ -22,6 +22,7 @@ export const envSchema = z.object({
     // Google OAuth (optional)
     GOOGLE_CLIENT_ID: z.string().optional(),
     GOOGLE_CLIENT_SECRET: z.string().optional(),
+    GOOGLE_CALLBACK_URL: z.string().url().optional(),
 
     // Node environment
     NODE_ENV: z
@@ -39,6 +40,17 @@ export const envSchema = z.object({
         .string()
         .url('FRONTEND_URL must be a valid URL')
         .default('http://localhost:5173'),
+
+    // API configuration
+    API_BASE_URL: z
+        .string()
+        .url('API_BASE_URL must be a valid URL')
+        .default('http://localhost:3000'),
+    API_PORT: z.coerce
+        .number()
+        .int()
+        .positive()
+        .default(3000),
 });
 
 export type Env = z.infer<typeof envSchema>;

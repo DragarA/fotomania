@@ -124,6 +124,34 @@
         ]
       }
     },
+    "/auth/exchange": {
+      "post": {
+        "operationId": "AuthController_exchange",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthExchangeDtoClass"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokens exchanged successfully"
+          },
+          "400": {
+            "description": "Invalid or expired OAuth code"
+          }
+        },
+        "summary": "Exchange OAuth code for tokens",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
     "/auth/google": {
       "get": {
         "operationId": "AuthController_googleAuth",
@@ -1868,6 +1896,19 @@
         },
         "required": [
           "refreshToken"
+        ]
+      },
+      "AuthExchangeDtoClass": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "0d64f7b4-7b0b-4a3e-97d9-3b6f2f3d4d2a",
+            "description": "OAuth exchange code"
+          }
+        },
+        "required": [
+          "code"
         ]
       },
       "UserResDto": {

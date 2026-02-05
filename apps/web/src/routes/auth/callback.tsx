@@ -18,22 +18,38 @@ function AuthCallbackPage() {
 
     useEffect(() => {
         const handleCallback = async () => {
-            // Extract tokens from URL query params
+            // Extract exchange code from URL query params
             const params = new URLSearchParams(window.location.search);
-            const accessToken = params.get('accessToken');
-            const refreshToken = params.get('refreshToken');
+            const code = params.get('code');
 
-            if (!accessToken || !refreshToken) {
+            if (!code) {
                 setError(t('oauth.error'));
                 setTimeout(() => navigate({ to: '/login' }), 2000);
                 return;
             }
 
             try {
+                const exchangeResponse = await fetch(
+                    `${API_BASE_URL}/auth/exchange`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ code }),
+                    }
+                );
+
+                if (!exchangeResponse.ok) {
+                    throw new Error('Failed to exchange OAuth code');
+                }
+
+                const exchangeData = await exchangeResponse.json();
+
                 // Fetch user data using the received token
                 const response = await fetch(`${API_BASE_URL}/auth/me`, {
                     headers: {
-                        Authorization: `Bearer ${accessToken}`,
+                        Authorization: `Bearer ${exchangeData.accessToken}`,
                     },
                 });
 
@@ -44,7 +60,11 @@ function AuthCallbackPage() {
                 const user = await response.json();
 
                 // Store credentials in AuthContext
-                login(accessToken, refreshToken, user);
+                login(
+                    exchangeData.accessToken,
+                    exchangeData.refreshToken,
+                    user
+                );
 
                 // Redirect to profile
                 navigate({ to: '/profile' });
@@ -81,4 +101,3 @@ function AuthCallbackPage() {
         </div>
     );
 }
-

@@ -2,6 +2,7 @@ import { writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -17,9 +18,14 @@ async function bootstrap() {
         prefix: '/uploads',
     });
 
+    const configService = app.get(ConfigService);
+    const frontendUrl =
+        configService.get<string>('FRONTEND_URL') ||
+        'http://localhost:5173';
+
     // Enable CORS for frontend
     app.enableCors({
-        origin: ['http://localhost:5173'],
+        origin: [frontendUrl],
         credentials: true,
     });
 
@@ -55,10 +61,15 @@ async function bootstrap() {
         res.json(document);
     });
 
-    await app.listen(3000);
-    logger.log('Application is running on: http://localhost:3000');
-    logger.log('API Documentation: http://localhost:3000/api-docs');
-    logger.log('OpenAPI JSON: http://localhost:3000/api-json');
+    const port = configService.get<number>('API_PORT') || 3000;
+    const apiBaseUrl =
+        configService.get<string>('API_BASE_URL') ||
+        `http://localhost:${port}`;
+
+    await app.listen(port);
+    logger.log(`Application is running on: ${apiBaseUrl}`);
+    logger.log(`API Documentation: ${apiBaseUrl}/api-docs`);
+    logger.log(`OpenAPI JSON: ${apiBaseUrl}/api-json`);
 }
 
 bootstrap();

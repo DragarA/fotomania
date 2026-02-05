@@ -1,14 +1,37 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+    BadRequestException,
+    ConflictException,
+    Inject,
+    Injectable,
+    InternalServerErrorException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 import { DRIZZLE, DrizzleDB } from '../db/drizzle';
 import { account, user } from '../db/schema';
 
+type AuthTokens = {
+    accessToken: string;
+    refreshToken: string;
+    user: {
+        id: string;
+        email: string;
+        name: string;
+        emailVerified: boolean;
+    };
+};
+
 @Injectable()
 export class AuthService {
+    private oauthCodeStore = new Map<
+        string,
+        { tokens: AuthTokens; expiresAt: number }
+    >();
+
     constructor(
         @Inject(DRIZZLE) private readonly db: DrizzleDB,
         private jwtService: JwtService,
@@ -29,7 +52,12 @@ export class AuthService {
         const [passwordAccount] = await this.db
             .select()
             .from(account)
-            .where(eq(account.userId, foundUser.id));
+            .where(
+                and(
+                    eq(account.userId, foundUser.id),
+                    eq(account.providerId, 'credential')
+                )
+            );
 
         if (!passwordAccount || !passwordAccount.password) {
             return null;
@@ -56,42 +84,53 @@ export class AuthService {
             .where(eq(user.email, email));
 
         if (existingUser) {
-            throw new Error('User already exists');
+            throw new ConflictException('User already exists');
         }
 
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user
-        const [newUser] = await this.db
-            .insert(user)
-            .values({
+        return this.db.transaction(async (tx) => {
+            const [newUser] = await tx
+                .insert(user)
+                .values({
+                    id: crypto.randomUUID(),
+                    email,
+                    name,
+                    emailVerified: false,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                })
+                .returning();
+
+            if (!newUser) {
+                throw new InternalServerErrorException(
+                    'Failed to create user'
+                );
+            }
+
+            await tx.insert(account).values({
                 id: crypto.randomUUID(),
-                email,
-                name,
-                emailVerified: false,
+                accountId: email,
+                providerId: 'credential',
+                userId: newUser.id,
+                password: hashedPassword,
                 createdAt: new Date(),
                 updatedAt: new Date(),
-            })
-            .returning();
+            });
 
-        // Create password account
-        await this.db.insert(account).values({
-            id: crypto.randomUUID(),
-            accountId: email,
-            providerId: 'credential',
-            userId: newUser!.id,
-            password: hashedPassword,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            return newUser;
         });
-
-        return newUser;
     }
 
     generateAccessToken(userId: string, email: string): string {
         const payload = { sub: userId, email };
         const secret = this.configService.get<string>('JWT_SECRET');
+        if (!secret) {
+            throw new InternalServerErrorException(
+                'JWT_SECRET is not configured'
+            );
+        }
 
         return this.jwtService.sign(payload, {
             secret,
@@ -102,6 +141,11 @@ export class AuthService {
     generateRefreshToken(userId: string, email: string): string {
         const payload = { sub: userId, email };
         const secret = this.configService.get<string>('JWT_REFRESH_SECRET');
+        if (!secret) {
+            throw new InternalServerErrorException(
+                'JWT_REFRESH_SECRET is not configured'
+            );
+        }
 
         return this.jwtService.sign(payload, {
             secret,
@@ -128,12 +172,6 @@ export class AuthService {
     async refreshAccessToken(refreshToken: string) {
         const secret = this.configService.get<string>('JWT_REFRESH_SECRET');
 
-        if (!secret) {
-            throw new Error(
-                'JWT_REFRESH_SECRET is not configured. Please set JWT_REFRESH_SECRET in your environment variables.'
-            );
-        }
-
         try {
             const payload = this.jwtService.verify(refreshToken, {
                 secret,
@@ -146,7 +184,7 @@ export class AuthService {
                 .where(eq(user.id, payload.sub));
 
             if (!foundUser) {
-                throw new Error('User not found');
+                throw new UnauthorizedException('User not found');
             }
 
             // Generate new tokens
@@ -170,8 +208,29 @@ export class AuthService {
                 },
             };
         } catch {
-            throw new Error('Invalid refresh token');
+            throw new UnauthorizedException('Invalid refresh token');
         }
+    }
+
+    createOauthExchangeCode(tokens: Awaited<ReturnType<AuthService['login']>>) {
+        const code = crypto.randomUUID();
+        const expiresAt = Date.now() + 5 * 60 * 1000;
+        this.oauthCodeStore.set(code, { tokens, expiresAt });
+        return code;
+    }
+
+    consumeOauthExchangeCode(code: string) {
+        const entry = this.oauthCodeStore.get(code);
+        if (!entry) {
+            throw new BadRequestException('Invalid or expired OAuth code');
+        }
+        if (Date.now() > entry.expiresAt) {
+            this.oauthCodeStore.delete(code);
+            throw new BadRequestException('Invalid or expired OAuth code');
+        }
+
+        this.oauthCodeStore.delete(code);
+        return entry.tokens;
     }
 
     async findUserById(id: string) {
