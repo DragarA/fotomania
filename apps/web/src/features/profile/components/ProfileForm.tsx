@@ -1,12 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { HexColorPicker } from 'react-colorful';
 import { z } from 'zod';
 
 import { Switch } from '@/components/ui/switch';
 
 import { SUPPORTED_LANGUAGES } from '../constants';
 import type { User } from '../hooks/useUser';
+
+import { LogoUploadField } from './LogoUploadField';
 
 const profileFormSchema = z.object({
     name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
@@ -26,6 +29,16 @@ const profileFormSchema = z.object({
         .optional()
         .or(z.literal('')),
     businessDescription: z.string().max(2000, 'Business description is too long').optional().or(z.literal('')),
+    brandColorMain: z
+        .string()
+        .regex(/^#[0-9A-F]{6}$/i, 'Invalid hex color')
+        .optional()
+        .or(z.literal('')),
+    brandColorAccent: z
+        .string()
+        .regex(/^#[0-9A-F]{6}$/i, 'Invalid hex color')
+        .optional()
+        .or(z.literal('')),
     preferredLanguage: z.enum(['en', 'sl']),
     collectClientName: z.boolean(),
     collectClientAddress: z.boolean(),
@@ -39,9 +52,21 @@ interface ProfileFormProps {
     initialValues: Partial<User>;
     isSubmitting: boolean;
     onSubmit: (values: ProfileFormValues) => void;
+    onUploadLogo: (file: File) => void;
+    onRemoveLogo: () => void;
+    isUploadingLogo: boolean;
+    isRemovingLogo: boolean;
 }
 
-export function ProfileForm({ initialValues, isSubmitting, onSubmit }: ProfileFormProps) {
+export function ProfileForm({
+    initialValues,
+    isSubmitting,
+    onSubmit,
+    onUploadLogo,
+    onRemoveLogo,
+    isUploadingLogo,
+    isRemovingLogo,
+}: ProfileFormProps) {
     const { t } = useTranslation('profile');
     const {
         register,
@@ -58,6 +83,8 @@ export function ProfileForm({ initialValues, isSubmitting, onSubmit }: ProfileFo
             businessEmail: initialValues.businessEmail || '',
             businessWebsite: initialValues.businessWebsite || '',
             businessDescription: initialValues.businessDescription || '',
+            brandColorMain: initialValues.brandColorMain || '',
+            brandColorAccent: initialValues.brandColorAccent || '',
             preferredLanguage: (initialValues.preferredLanguage as 'en' | 'sl') || 'en',
             collectClientName: initialValues.collectClientName ?? false,
             collectClientAddress: initialValues.collectClientAddress ?? false,
@@ -154,6 +181,15 @@ export function ProfileForm({ initialValues, isSubmitting, onSubmit }: ProfileFo
                         </p>
                     )}
                 </div>
+
+                {/* Business Logo Field */}
+                <LogoUploadField
+                    currentLogoUrl={initialValues.businessLogo}
+                    onUpload={onUploadLogo}
+                    onRemove={onRemoveLogo}
+                    isUploading={isUploadingLogo}
+                    isRemoving={isRemovingLogo}
+                />
 
                 {/* Business Email Field */}
                 <div className="space-y-2">
@@ -273,6 +309,71 @@ export function ProfileForm({ initialValues, isSubmitting, onSubmit }: ProfileFo
                             {errors.businessDescription.message}
                         </p>
                     )}
+                </div>
+
+                {/* Brand Colors */}
+                <div className="grid grid-cols-2 gap-4">
+                    {/* Main Color */}
+                    <div className="space-y-2">
+                        <label className="text-xs uppercase tracking-[0.4em] text-stone-400">
+                            {t('form.brandColorMain')}
+                        </label>
+                        <Controller
+                            control={control}
+                            name="brandColorMain"
+                            render={({ field }) => (
+                                <div className="space-y-2">
+                                    <HexColorPicker
+                                        color={field.value || '#292524'}
+                                        onChange={field.onChange}
+                                    />
+                                    <input
+                                        type="text"
+                                        value={field.value || ''}
+                                        onChange={field.onChange}
+                                        className="w-full rounded border border-black/10 bg-white/80 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300"
+                                        placeholder="#292524"
+                                    />
+                                </div>
+                            )}
+                        />
+                        {errors.brandColorMain && (
+                            <p className="text-xs uppercase tracking-[0.3em] text-red-500">
+                                {errors.brandColorMain.message}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Accent Color */}
+                    <div className="space-y-2">
+                        <label className="text-xs uppercase tracking-[0.4em] text-stone-400">
+                            {t('form.brandColorAccent')}
+                        </label>
+                        <Controller
+                            control={control}
+                            name="brandColorAccent"
+                            render={({ field }) => (
+                                <div className="space-y-2">
+                                    <HexColorPicker
+                                        color={field.value || '#78716c'}
+                                        onChange={field.onChange}
+                                    />
+                                    <input
+                                        type="text"
+                                        value={field.value || ''}
+                                        onChange={field.onChange}
+                                        className="w-full rounded border border-black/10 bg-white/80 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300"
+                                        placeholder="#78716c"
+                                    />
+                                </div>
+                            )}
+                        />
+                        {errors.brandColorAccent && (
+                            <p className="text-xs uppercase tracking-[0.3em] text-red-500">
+                                {errors.brandColorAccent.message}
+                            </p>
+                        )}
+                    </div>
                 </div>
             </div>
 

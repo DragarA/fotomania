@@ -9,6 +9,7 @@ import { API_BASE_URL } from '@/lib/api-client';
 import { DeliveryLightbox } from '../components/photo/DeliveryLightbox';
 import { DeliveryPhotoGrid } from '../components/photo/DeliveryPhotoGrid';
 import { PasswordPrompt } from '../components/public/PasswordPrompt';
+import { PhotographerBranding } from '../components/public/PhotographerBranding';
 import {
     getDeliveryAccessToken,
     useDeliveryAccess,
@@ -203,13 +204,33 @@ export function DeliveryPage() {
     }
 
     return (
-        <div className="relative min-h-screen bg-stone-50">
+        <div
+            className="relative flex min-h-screen flex-col bg-stone-50"
+            style={{
+                '--brand-main': delivery?.photographerBrandColorMain || '#292524',
+                '--brand-accent': delivery?.photographerBrandColorAccent || '#78716c',
+            } as React.CSSProperties}
+        >
+            {/* Branded background gradient overlay */}
+            <div
+                className="absolute inset-0 opacity-[0.15]"
+                style={{
+                    background: `linear-gradient(135deg, var(--brand-main) 0%, transparent 50%, var(--brand-accent) 100%)`,
+                }}
+            />
             {/* Background pattern */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(0,0,0,0.02)_0%,_transparent_50%)]" />
 
             {/* Header */}
             <div className="relative border-b border-black/5 bg-white">
                 <div className="mx-auto max-w-4xl px-6 py-10 sm:px-8">
+                    <div className="mb-6">
+                        <PhotographerBranding
+                            businessName={delivery?.photographerBusinessName}
+                            businessWebsite={delivery?.photographerBusinessWebsite}
+                            logoUrl={delivery?.photographerLogo}
+                        />
+                    </div>
                     <p className="mb-3 text-xs uppercase tracking-[0.4em] text-stone-400">
                         {t('deliveryLabel')}
                     </p>
@@ -220,7 +241,7 @@ export function DeliveryPage() {
             </div>
 
             {/* Main Content */}
-            <div className="relative mx-auto max-w-4xl px-6 py-12 sm:px-8 sm:py-16">
+            <div className="relative mx-auto w-full max-w-4xl flex-1 px-6 py-12 sm:px-8 sm:py-16">
                 <div className="overflow-hidden rounded-2xl border border-black/5 bg-white shadow-[0_35px_80px_-70px_rgba(0,0,0,0.85)]">
                     {/* Recipient Info */}
                     <div className="border-b border-stone-100 px-8 py-7">

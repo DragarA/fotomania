@@ -90,6 +90,22 @@ export class UserResDto {
     businessDescription?: string | null;
 
     @ApiProperty({
+        description: 'Brand main color (hex format)',
+        required: false,
+        nullable: true,
+        example: '#292524',
+    })
+    brandColorMain?: string | null;
+
+    @ApiProperty({
+        description: 'Brand accent color (hex format)',
+        required: false,
+        nullable: true,
+        example: '#78716c',
+    })
+    brandColorAccent?: string | null;
+
+    @ApiProperty({
         description: 'Preferred language code',
         example: 'en',
     })
@@ -144,6 +160,8 @@ export class UserResDto {
         this.businessWebsite = user.businessWebsite;
         this.businessLogo = user.businessLogo;
         this.businessDescription = user.businessDescription;
+        this.brandColorMain = user.brandColorMain;
+        this.brandColorAccent = user.brandColorAccent;
         this.preferredLanguage = user.preferredLanguage;
         this.createdAt = user.createdAt;
         this.updatedAt = user.updatedAt;

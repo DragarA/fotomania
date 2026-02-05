@@ -101,6 +101,46 @@ export class CataloguePublicResDto {
     })
     collectClientNotes!: boolean;
 
+    @ApiProperty({
+        description: 'Photographer business name',
+        required: false,
+        nullable: true,
+        example: 'Photo Studio Pro',
+    })
+    photographerBusinessName?: string | null;
+
+    @ApiProperty({
+        description: 'Photographer business website',
+        required: false,
+        nullable: true,
+        example: 'https://photostudio.com',
+    })
+    photographerBusinessWebsite?: string | null;
+
+    @ApiProperty({
+        description: 'Photographer logo URL',
+        required: false,
+        nullable: true,
+        example: './uploads/logos/user-123/logo.png',
+    })
+    photographerLogo?: string | null;
+
+    @ApiProperty({
+        description: 'Photographer brand main color',
+        required: false,
+        nullable: true,
+        example: '#292524',
+    })
+    photographerBrandColorMain?: string | null;
+
+    @ApiProperty({
+        description: 'Photographer brand accent color',
+        required: false,
+        nullable: true,
+        example: '#78716c',
+    })
+    photographerBrandColorAccent?: string | null;
+
     constructor(data: {
         catalogue: CatalogueEntity;
         collections: CollectionEntity[];
@@ -121,5 +161,10 @@ export class CataloguePublicResDto {
         this.collectClientAddress = photographer?.collectClientAddress ?? false;
         this.collectClientPhone = photographer?.collectClientPhone ?? false;
         this.collectClientNotes = photographer?.collectClientNotes ?? false;
+        this.photographerBusinessName = photographer?.businessName ?? null;
+        this.photographerBusinessWebsite = photographer?.businessWebsite ?? null;
+        this.photographerLogo = photographer?.businessLogo ?? null;
+        this.photographerBrandColorMain = photographer?.brandColorMain ?? null;
+        this.photographerBrandColorAccent = photographer?.brandColorAccent ?? null;
     }
 }

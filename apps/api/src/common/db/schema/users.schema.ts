@@ -14,6 +14,8 @@ export const user = pgTable('user', {
     businessWebsite: text('businessWebsite'),
     businessLogo: text('businessLogo'),
     businessDescription: text('businessDescription'),
+    brandColorMain: text('brandColorMain'),
+    brandColorAccent: text('brandColorAccent'),
 
     preferredLanguage: text('preferredLanguage').notNull().default('en'),
     collectClientName: boolean('collectClientName').notNull().default(false),

@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
+import { unlinkSync } from 'fs';
 
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
 import { user } from '../common/db/schema';
@@ -56,6 +57,12 @@ export class UsersService {
         if (data.businessDescription !== undefined) {
             updateData.businessDescription = data.businessDescription || null;
         }
+        if (data.brandColorMain !== undefined) {
+            updateData.brandColorMain = data.brandColorMain || null;
+        }
+        if (data.brandColorAccent !== undefined) {
+            updateData.brandColorAccent = data.brandColorAccent || null;
+        }
         if (data.preferredLanguage !== undefined) {
             updateData.preferredLanguage = data.preferredLanguage;
         }
@@ -77,6 +84,57 @@ export class UsersService {
             .set(updateData)
             .where(eq(user.id, id))
             .returning();
+        return updatedUser;
+    }
+
+    async uploadLogo(userId: string, file: Express.Multer.File) {
+        if (!file) {
+            throw new Error('No file provided');
+        }
+
+        // Get current user to check if old logo exists
+        const currentUser = await this.findOne(userId);
+        if (currentUser?.businessLogo) {
+            try {
+                unlinkSync(currentUser.businessLogo);
+            } catch (error) {
+                // Ignore if file doesn't exist
+            }
+        }
+
+        // Update user with new logo path
+        const [updatedUser] = await this.db
+            .update(user)
+            .set({
+                businessLogo: file.path,
+                updatedAt: new Date(),
+            })
+            .where(eq(user.id, userId))
+            .returning();
+
+        return updatedUser;
+    }
+
+    async removeLogo(userId: string) {
+        const currentUser = await this.findOne(userId);
+
+        if (currentUser?.businessLogo) {
+            try {
+                unlinkSync(currentUser.businessLogo);
+            } catch (error) {
+                // Ignore if file doesn't exist
+            }
+        }
+
+        const [updatedUser] = await this.db
+            .update(user)
+            .set({
+                businessLogo: null,
+                updatedAt: new Date(),
+            })
+            .where(eq(user.id, userId))
+            .returning();
+
         return updatedUser;
     }
 }

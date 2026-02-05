@@ -99,6 +99,18 @@ export type UserResDto = {
         [key: string]: unknown;
     } | null;
     /**
+     * Brand main color (hex format)
+     */
+    brandColorMain?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Brand accent color (hex format)
+     */
+    brandColorAccent?: {
+        [key: string]: unknown;
+    } | null;
+    /**
      * Preferred language code
      */
     preferredLanguage: string;
@@ -173,6 +185,18 @@ export type UpdateUserDtoClass = {
      * Business description
      */
     businessDescription?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Brand main color (hex format)
+     */
+    brandColorMain?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Brand accent color (hex format)
+     */
+    brandColorAccent?: {
         [key: string]: unknown;
     } | null;
     /**
@@ -612,6 +636,36 @@ export type CataloguePublicResDto = {
      * Whether the photographer collects client notes
      */
     collectClientNotes: boolean;
+    /**
+     * Photographer business name
+     */
+    photographerBusinessName?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Photographer business website
+     */
+    photographerBusinessWebsite?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Photographer logo URL
+     */
+    photographerLogo?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Photographer brand main color
+     */
+    photographerBrandColorMain?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Photographer brand accent color
+     */
+    photographerBrandColorAccent?: {
+        [key: string]: unknown;
+    } | null;
 };
 
 export type CollectionPhotoPublicResDto = {
@@ -746,6 +800,36 @@ export type DeliveryPublicResDto = {
      * Whether the delivery has an attached invoice
      */
     hasInvoice: boolean;
+    /**
+     * Photographer business name
+     */
+    photographerBusinessName?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Photographer business website
+     */
+    photographerBusinessWebsite?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Photographer logo URL
+     */
+    photographerLogo?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Photographer brand main color
+     */
+    photographerBrandColorMain?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Photographer brand accent color
+     */
+    photographerBrandColorAccent?: {
+        [key: string]: unknown;
+    } | null;
 };
 
 export type AppControllerGetHelloResponse = unknown;
@@ -785,6 +869,16 @@ export type UsersControllerUpdateMeData = {
 };
 
 export type UsersControllerUpdateMeResponse = UserResDto;
+
+export type UsersControllerUploadLogoData = {
+    formData: {
+        file?: (Blob | File);
+    };
+};
+
+export type UsersControllerUploadLogoResponse = UserResDto;
+
+export type UsersControllerRemoveLogoResponse = UserResDto;
 
 export type CataloguesControllerCreateData = {
     requestBody: CreateCatalogueDtoClass;
@@ -1210,6 +1304,29 @@ export type $OpenApiTs = {
                  * Invalid request data
                  */
                 400: unknown;
+            };
+        };
+    };
+    '/users/me/logo': {
+        post: {
+            req: UsersControllerUploadLogoData;
+            res: {
+                /**
+                 * Logo uploaded successfully
+                 */
+                200: UserResDto;
+                /**
+                 * Invalid file
+                 */
+                400: unknown;
+            };
+        };
+        delete: {
+            res: {
+                /**
+                 * Logo removed successfully
+                 */
+                200: UserResDto;
             };
         };
     };

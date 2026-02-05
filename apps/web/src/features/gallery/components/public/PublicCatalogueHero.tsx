@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { API_BASE_URL } from '@/lib/api-client';
 
+import { PhotographerBranding } from './PhotographerBranding';
+
 interface PublicCatalogueHeroProps {
     catalogue: CataloguePublicResDto;
     onScrollToGallery: () => void;
@@ -35,6 +37,15 @@ export function PublicCatalogueHero({
             ) : (
                 <div className="absolute inset-0 bg-gradient-to-br from-[#312b28] to-[#1a1614]" />
             )}
+
+            {/* Photographer Branding - Top Left */}
+            <div className="absolute left-6 top-6 z-10">
+                <PhotographerBranding
+                    businessName={catalogue.photographerBusinessName}
+                    businessWebsite={catalogue.photographerBusinessWebsite}
+                    logoUrl={catalogue.photographerLogo}
+                />
+            </div>
 
             {/* Hero Content */}
             <div className="relative flex h-full flex-col items-center justify-center px-6 text-center">

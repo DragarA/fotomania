@@ -22,8 +22,8 @@ export function CollectionTabs({
               pb-3 text-xs uppercase tracking-[0.4em] transition-all duration-500 whitespace-nowrap border-b-2
               ${
                   selectedCollectionId === collection.id
-                      ? 'border-stone-800 text-stone-800'
-                      : 'border-transparent text-stone-400 hover:text-stone-600 hover:border-stone-300'
+                      ? 'text-stone-800 border-[var(--brand-main)]'
+                      : 'border-transparent text-stone-400 hover:text-stone-700 hover:border-[var(--brand-accent)]'
               }`}
                     >
                         {collection.name}

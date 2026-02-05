@@ -43,6 +43,46 @@ export class DeliveryPublicResDto {
     })
     hasInvoice!: boolean;
 
+    @ApiProperty({
+        description: 'Photographer business name',
+        required: false,
+        nullable: true,
+        example: 'Photo Studio Pro',
+    })
+    photographerBusinessName?: string | null;
+
+    @ApiProperty({
+        description: 'Photographer business website',
+        required: false,
+        nullable: true,
+        example: 'https://photostudio.com',
+    })
+    photographerBusinessWebsite?: string | null;
+
+    @ApiProperty({
+        description: 'Photographer logo URL',
+        required: false,
+        nullable: true,
+        example: './uploads/logos/user-123/logo.png',
+    })
+    photographerLogo?: string | null;
+
+    @ApiProperty({
+        description: 'Photographer brand main color',
+        required: false,
+        nullable: true,
+        example: '#292524',
+    })
+    photographerBrandColorMain?: string | null;
+
+    @ApiProperty({
+        description: 'Photographer brand accent color',
+        required: false,
+        nullable: true,
+        example: '#78716c',
+    })
+    photographerBrandColorAccent?: string | null;
+
     constructor(data: {
         collection: {
             id: string;
@@ -53,6 +93,11 @@ export class DeliveryPublicResDto {
         catalogueTitle: string;
         photoCount: number;
         hasInvoice?: boolean;
+        photographerBusinessName?: string | null;
+        photographerBusinessWebsite?: string | null;
+        photographerLogo?: string | null;
+        photographerBrandColorMain?: string | null;
+        photographerBrandColorAccent?: string | null;
     }) {
         this.id = data.collection.id;
         this.name = data.collection.name;
@@ -61,6 +106,11 @@ export class DeliveryPublicResDto {
         this.catalogueTitle = data.catalogueTitle;
         this.photoCount = data.photoCount;
         this.hasInvoice = data.hasInvoice ?? false;
+        this.photographerBusinessName = data.photographerBusinessName ?? null;
+        this.photographerBusinessWebsite = data.photographerBusinessWebsite ?? null;
+        this.photographerLogo = data.photographerLogo ?? null;
+        this.photographerBrandColorMain = data.photographerBrandColorMain ?? null;
+        this.photographerBrandColorAccent = data.photographerBrandColorAccent ?? null;
     }
 }
 

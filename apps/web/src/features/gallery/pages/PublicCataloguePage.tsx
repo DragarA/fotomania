@@ -149,7 +149,13 @@ export function PublicCataloguePage() {
     }
 
     return (
-        <div className="bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.95),_rgba(249,246,241,1))]">
+        <div
+            className="bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.95),_rgba(249,246,241,1))]"
+            style={{
+                '--brand-main': catalogue.photographerBrandColorMain || '#292524',
+                '--brand-accent': catalogue.photographerBrandColorAccent || '#78716c',
+            } as React.CSSProperties}
+        >
             {/* Hero Section - Full Height */}
             <PublicCatalogueHero
                 catalogue={catalogue}
@@ -159,10 +165,20 @@ export function PublicCataloguePage() {
             {/* Gallery Section - Full Height */}
             <section
                 id="gallery-section"
-                className="min-h-screen bg-gradient-to-b from-white/95 to-[#f7f4ef] py-10 sm:py-16"
+                className="relative min-h-screen py-10 sm:py-16"
             >
-                <div className="mx-auto max-w-6xl px-4 sm:px-8">
-                    {/* Collection Tabs */}
+                {/* Branded background gradient overlay */}
+                <div
+                    className="absolute inset-0 opacity-[0.15]"
+                    style={{
+                        background: `linear-gradient(135deg, var(--brand-main) 0%, transparent 50%, var(--brand-accent) 100%)`,
+                    }}
+                />
+                {/* Original background */}
+                <div className="absolute inset-0 -z-10 bg-gradient-to-b from-white/95 to-[#f7f4ef]" />
+
+                <div className="relative mx-auto max-w-6xl px-4 sm:px-8">
+                    {/* Collection Tabs Header */}
                     {catalogue.collections &&
                     catalogue.collections.length > 0 ? (
                         <div className="mb-8">

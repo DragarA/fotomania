@@ -117,6 +117,18 @@ export const $UserResDto = {
             nullable: true,
             example: 'Professional photography services for weddings and events.'
         },
+        brandColorMain: {
+            type: 'object',
+            description: 'Brand main color (hex format)',
+            nullable: true,
+            example: '#292524'
+        },
+        brandColorAccent: {
+            type: 'object',
+            description: 'Brand accent color (hex format)',
+            nullable: true,
+            example: '#78716c'
+        },
         preferredLanguage: {
             type: 'string',
             description: 'Preferred language code',
@@ -207,6 +219,18 @@ export const $UpdateUserDtoClass = {
             description: 'Business description',
             nullable: true,
             example: 'Professional photography services for weddings and events.'
+        },
+        brandColorMain: {
+            type: 'object',
+            description: 'Brand main color (hex format)',
+            nullable: true,
+            example: '#292524'
+        },
+        brandColorAccent: {
+            type: 'object',
+            description: 'Brand accent color (hex format)',
+            nullable: true,
+            example: '#78716c'
         },
         preferredLanguage: {
             type: 'string',
@@ -753,6 +777,36 @@ export const $CataloguePublicResDto = {
             type: 'boolean',
             description: 'Whether the photographer collects client notes',
             example: false
+        },
+        photographerBusinessName: {
+            type: 'object',
+            description: 'Photographer business name',
+            nullable: true,
+            example: 'Photo Studio Pro'
+        },
+        photographerBusinessWebsite: {
+            type: 'object',
+            description: 'Photographer business website',
+            nullable: true,
+            example: 'https://photostudio.com'
+        },
+        photographerLogo: {
+            type: 'object',
+            description: 'Photographer logo URL',
+            nullable: true,
+            example: './uploads/logos/user-123/logo.png'
+        },
+        photographerBrandColorMain: {
+            type: 'object',
+            description: 'Photographer brand main color',
+            nullable: true,
+            example: '#292524'
+        },
+        photographerBrandColorAccent: {
+            type: 'object',
+            description: 'Photographer brand accent color',
+            nullable: true,
+            example: '#78716c'
         }
     },
     required: ['id', 'title', 'publicUrlSlug', 'createdAt', 'updatedAt', 'collections', 'collectClientName', 'collectClientAddress', 'collectClientPhone', 'collectClientNotes']
@@ -926,6 +980,36 @@ export const $DeliveryPublicResDto = {
             type: 'boolean',
             description: 'Whether the delivery has an attached invoice',
             example: true
+        },
+        photographerBusinessName: {
+            type: 'object',
+            description: 'Photographer business name',
+            nullable: true,
+            example: 'Photo Studio Pro'
+        },
+        photographerBusinessWebsite: {
+            type: 'object',
+            description: 'Photographer business website',
+            nullable: true,
+            example: 'https://photostudio.com'
+        },
+        photographerLogo: {
+            type: 'object',
+            description: 'Photographer logo URL',
+            nullable: true,
+            example: './uploads/logos/user-123/logo.png'
+        },
+        photographerBrandColorMain: {
+            type: 'object',
+            description: 'Photographer brand main color',
+            nullable: true,
+            example: '#292524'
+        },
+        photographerBrandColorAccent: {
+            type: 'object',
+            description: 'Photographer brand accent color',
+            nullable: true,
+            example: '#78716c'
         }
     },
     required: ['id', 'name', 'catalogueTitle', 'deliverySlug', 'photoCount', 'hasInvoice']

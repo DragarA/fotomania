@@ -53,6 +53,15 @@
         "businessWebsitePlaceholder": "https://primer.si",
         "businessDescription": "Opis",
         "businessDescriptionPlaceholder": "Povejte strankam o svojih fotografskih storitvah...",
+        "businessLogo": "Logotip podjetja",
+        "uploadLogo": "Naloži logotip",
+        "removeLogo": "Odstrani logotip",
+        "uploading": "Nalaganje...",
+        "removing": "Odstranjevanje...",
+        "fileTooLarge": "Datoteka je prevelika (maks. 2MB)",
+        "invalidFileType": "Neveljavna vrsta datoteke (uporabite JPG, PNG ali WebP)",
+        "brandColorMain": "Glavna barva blagovne znamke",
+        "brandColorAccent": "Poudarjena barva blagovne znamke",
         "collectClientName": "Zbiranje imena stranke",
         "collectClientNameDescription": "Zahtevaj polno ime stranke",
         "collectClientAddress": "Zbiranje naslova stranke",
@@ -66,7 +75,11 @@
     },
     "toast": {
         "updateSuccess": "Profil uspešno posodobljen!",
-        "updateError": "Posodabljanje profila ni uspelo"
+        "updateError": "Posodabljanje profila ni uspelo",
+        "logoUploadSuccess": "Logotip uspešno naložen!",
+        "logoUploadError": "Nalaganje logotipa ni uspelo",
+        "logoRemoveSuccess": "Logotip uspešno odstranjen!",
+        "logoRemoveError": "Odstranjevanje logotipa ni uspelo"
     }
 }
 

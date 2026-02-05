@@ -239,6 +239,77 @@
         ]
       }
     },
+    "/users/me/logo": {
+      "post": {
+        "operationId": "UsersController_uploadLogo",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logo uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid file"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Upload user logo",
+        "tags": [
+          "users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_removeLogo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Logo removed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Remove user logo",
+        "tags": [
+          "users"
+        ]
+      }
+    },
     "/catalogues": {
       "post": {
         "operationId": "CataloguesController_create",
@@ -1870,6 +1941,18 @@
             "nullable": true,
             "example": "Professional photography services for weddings and events."
           },
+          "brandColorMain": {
+            "type": "object",
+            "description": "Brand main color (hex format)",
+            "nullable": true,
+            "example": "#292524"
+          },
+          "brandColorAccent": {
+            "type": "object",
+            "description": "Brand accent color (hex format)",
+            "nullable": true,
+            "example": "#78716c"
+          },
           "preferredLanguage": {
             "type": "string",
             "description": "Preferred language code",
@@ -1971,6 +2054,18 @@
             "description": "Business description",
             "nullable": true,
             "example": "Professional photography services for weddings and events."
+          },
+          "brandColorMain": {
+            "type": "object",
+            "description": "Brand main color (hex format)",
+            "nullable": true,
+            "example": "#292524"
+          },
+          "brandColorAccent": {
+            "type": "object",
+            "description": "Brand accent color (hex format)",
+            "nullable": true,
+            "example": "#78716c"
           },
           "preferredLanguage": {
             "type": "string",
@@ -2559,6 +2654,36 @@
             "type": "boolean",
             "description": "Whether the photographer collects client notes",
             "example": false
+          },
+          "photographerBusinessName": {
+            "type": "object",
+            "description": "Photographer business name",
+            "nullable": true,
+            "example": "Photo Studio Pro"
+          },
+          "photographerBusinessWebsite": {
+            "type": "object",
+            "description": "Photographer business website",
+            "nullable": true,
+            "example": "https://photostudio.com"
+          },
+          "photographerLogo": {
+            "type": "object",
+            "description": "Photographer logo URL",
+            "nullable": true,
+            "example": "./uploads/logos/user-123/logo.png"
+          },
+          "photographerBrandColorMain": {
+            "type": "object",
+            "description": "Photographer brand main color",
+            "nullable": true,
+            "example": "#292524"
+          },
+          "photographerBrandColorAccent": {
+            "type": "object",
+            "description": "Photographer brand accent color",
+            "nullable": true,
+            "example": "#78716c"
           }
         },
         "required": [
@@ -2755,6 +2880,36 @@
             "type": "boolean",
             "description": "Whether the delivery has an attached invoice",
             "example": true
+          },
+          "photographerBusinessName": {
+            "type": "object",
+            "description": "Photographer business name",
+            "nullable": true,
+            "example": "Photo Studio Pro"
+          },
+          "photographerBusinessWebsite": {
+            "type": "object",
+            "description": "Photographer business website",
+            "nullable": true,
+            "example": "https://photostudio.com"
+          },
+          "photographerLogo": {
+            "type": "object",
+            "description": "Photographer logo URL",
+            "nullable": true,
+            "example": "./uploads/logos/user-123/logo.png"
+          },
+          "photographerBrandColorMain": {
+            "type": "object",
+            "description": "Photographer brand main color",
+            "nullable": true,
+            "example": "#292524"
+          },
+          "photographerBrandColorAccent": {
+            "type": "object",
+            "description": "Photographer brand accent color",
+            "nullable": true,
+            "example": "#78716c"
           }
         },
         "required": [

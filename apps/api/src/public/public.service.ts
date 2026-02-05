@@ -14,6 +14,7 @@ import { clientSession } from '../common/db/schema/client-session.schema';
 import { collection } from '../common/db/schema/collections.schema';
 import { deliveryDownload } from '../common/db/schema/delivery-download.schema';
 import { photo } from '../common/db/schema/photos.schema';
+import { user } from '../common/db/schema/users.schema';
 
 export interface PublicAccessTokenPayload {
     slug: string;
@@ -209,9 +210,15 @@ export class PublicService {
                 clientEmail: clientSession.email,
                 catalogueTitle: catalogue.title,
                 photoCount: count(photo.id),
+                photographerBusinessName: user.businessName,
+                photographerBusinessWebsite: user.businessWebsite,
+                photographerLogo: user.businessLogo,
+                photographerBrandColorMain: user.brandColorMain,
+                photographerBrandColorAccent: user.brandColorAccent,
             })
             .from(collection)
             .innerJoin(catalogue, eq(collection.catalogueId, catalogue.id))
+            .innerJoin(user, eq(catalogue.ownerId, user.id))
             .innerJoin(photo, eq(collection.id, photo.collectionId))
             .leftJoin(
                 clientSession,
@@ -224,7 +231,16 @@ export class PublicService {
                     eq(catalogue.status, 'published')
                 )
             )
-            .groupBy(collection.id, clientSession.email, catalogue.title);
+            .groupBy(
+                collection.id,
+                clientSession.email,
+                catalogue.title,
+                user.businessName,
+                user.businessWebsite,
+                user.businessLogo,
+                user.brandColorMain,
+                user.brandColorAccent
+            );
 
         if (!result) {
             throw new NotFoundException(

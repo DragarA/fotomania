@@ -53,6 +53,15 @@
         "businessWebsitePlaceholder": "https://example.com",
         "businessDescription": "Description",
         "businessDescriptionPlaceholder": "Tell clients about your photography services...",
+        "businessLogo": "Business Logo",
+        "uploadLogo": "Upload Logo",
+        "removeLogo": "Remove Logo",
+        "uploading": "Uploading...",
+        "removing": "Removing...",
+        "fileTooLarge": "File too large (max 2MB)",
+        "invalidFileType": "Invalid file type (use JPG, PNG, or WebP)",
+        "brandColorMain": "Main Brand Color",
+        "brandColorAccent": "Accent Brand Color",
         "collectClientName": "Collect client name",
         "collectClientNameDescription": "Request client's full name",
         "collectClientAddress": "Collect client address",
@@ -66,7 +75,11 @@
     },
     "toast": {
         "updateSuccess": "Profile updated successfully!",
-        "updateError": "Failed to update profile"
+        "updateError": "Failed to update profile",
+        "logoUploadSuccess": "Logo uploaded successfully!",
+        "logoUploadError": "Failed to upload logo",
+        "logoRemoveSuccess": "Logo removed successfully!",
+        "logoRemoveError": "Failed to remove logo"
     }
 }
 

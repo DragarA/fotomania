@@ -49,6 +49,16 @@ export const updateUserSchema = z.object({
         .max(2000, 'Business description is too long')
         .nullable()
         .optional(),
+    brandColorMain: z
+        .string()
+        .regex(/^#[0-9A-F]{6}$/i, 'Invalid hex color')
+        .nullable()
+        .optional(),
+    brandColorAccent: z
+        .string()
+        .regex(/^#[0-9A-F]{6}$/i, 'Invalid hex color')
+        .nullable()
+        .optional(),
     preferredLanguage: z.enum(SUPPORTED_LANGUAGES).optional(),
     collectClientName: z.boolean().optional(),
     collectClientAddress: z.boolean().optional(),
@@ -122,6 +132,22 @@ export class UpdateUserDtoClass {
         example: 'Professional photography services for weddings and events.',
     })
     businessDescription?: string | null;
+
+    @ApiProperty({
+        description: 'Brand main color (hex format)',
+        required: false,
+        nullable: true,
+        example: '#292524',
+    })
+    brandColorMain?: string | null;
+
+    @ApiProperty({
+        description: 'Brand accent color (hex format)',
+        required: false,
+        nullable: true,
+        example: '#78716c',
+    })
+    brandColorAccent?: string | null;
 
     @ApiProperty({
         description: 'Preferred language code',

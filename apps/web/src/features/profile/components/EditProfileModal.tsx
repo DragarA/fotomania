@@ -5,7 +5,13 @@ import { toast } from 'sonner';
 
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 
-import { useCurrentUserQuery, useUpdateUserMutation, type UpdateUserDto } from '../hooks/useUser';
+import {
+    useCurrentUserQuery,
+    useRemoveLogoMutation,
+    useUpdateUserMutation,
+    useUploadLogoMutation,
+    type UpdateUserDto,
+} from '../hooks/useUser';
 
 import { ProfileForm, type ProfileFormValues } from './ProfileForm';
 
@@ -19,6 +25,8 @@ export function EditProfileModal({ isOpen, onClose, onSuccess }: EditProfileModa
     const { t } = useTranslation('profile');
     const { data: user, isLoading } = useCurrentUserQuery();
     const updateMutation = useUpdateUserMutation();
+    const uploadLogoMutation = useUploadLogoMutation();
+    const removeLogoMutation = useRemoveLogoMutation();
 
     useBodyScrollLock(isOpen);
 
@@ -36,6 +44,8 @@ export function EditProfileModal({ isOpen, onClose, onSuccess }: EditProfileModa
             businessEmail: values.businessEmail || null,
             businessWebsite: values.businessWebsite || null,
             businessDescription: values.businessDescription || null,
+            brandColorMain: values.brandColorMain || null,
+            brandColorAccent: values.brandColorAccent || null,
             preferredLanguage: values.preferredLanguage,
             collectClientName: values.collectClientName,
             collectClientAddress: values.collectClientAddress,
@@ -51,6 +61,28 @@ export function EditProfileModal({ isOpen, onClose, onSuccess }: EditProfileModa
             },
             onError: (error) => {
                 toast.error(error.message || t('toast.updateError'));
+            },
+        });
+    };
+
+    const handleUploadLogo = (file: File) => {
+        uploadLogoMutation.mutate(file, {
+            onSuccess: () => {
+                toast.success(t('toast.logoUploadSuccess'));
+            },
+            onError: (error) => {
+                toast.error(error.message || t('toast.logoUploadError'));
+            },
+        });
+    };
+
+    const handleRemoveLogo = () => {
+        removeLogoMutation.mutate(undefined, {
+            onSuccess: () => {
+                toast.success(t('toast.logoRemoveSuccess'));
+            },
+            onError: (error) => {
+                toast.error(error.message || t('toast.logoRemoveError'));
             },
         });
     };
@@ -102,6 +134,10 @@ export function EditProfileModal({ isOpen, onClose, onSuccess }: EditProfileModa
                             initialValues={user}
                             isSubmitting={updateMutation.isPending}
                             onSubmit={handleSubmit}
+                            onUploadLogo={handleUploadLogo}
+                            onRemoveLogo={handleRemoveLogo}
+                            isUploadingLogo={uploadLogoMutation.isPending}
+                            isRemovingLogo={removeLogoMutation.isPending}
                         />
                     )}
                 </div>
