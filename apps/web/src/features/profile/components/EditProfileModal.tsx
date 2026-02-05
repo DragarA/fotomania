@@ -21,7 +21,11 @@ interface EditProfileModalProps {
     onSuccess?: () => void;
 }
 
-export function EditProfileModal({ isOpen, onClose, onSuccess }: EditProfileModalProps) {
+export function EditProfileModal({
+    isOpen,
+    onClose,
+    onSuccess,
+}: EditProfileModalProps) {
     const { t } = useTranslation('profile');
     const { data: user, isLoading } = useCurrentUserQuery();
     const updateMutation = useUpdateUserMutation();
@@ -125,7 +129,8 @@ export function EditProfileModal({ isOpen, onClose, onSuccess }: EditProfileModa
                         </div>
                     ) : updateMutation.isError ? (
                         <div className="mb-6 rounded border border-red-200 bg-red-50/80 px-4 py-3 text-sm uppercase tracking-[0.3em] text-red-700">
-                            {updateMutation.error?.message || t('toast.updateError')}
+                            {updateMutation.error?.message ||
+                                t('toast.updateError')}
                         </div>
                     ) : null}
 
@@ -146,4 +151,3 @@ export function EditProfileModal({ isOpen, onClose, onSuccess }: EditProfileModa
         document.body
     );
 }
-

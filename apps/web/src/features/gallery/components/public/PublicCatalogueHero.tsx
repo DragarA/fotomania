@@ -20,7 +20,8 @@ export function PublicCatalogueHero({
     return (
         <section className="relative h-screen w-full overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.8),_rgba(27,24,20,0.95))]">
             {/* Cover Photo Background */}
-            {catalogue.coverImage && typeof catalogue.coverImage === 'string' ? (
+            {catalogue.coverImage &&
+            typeof catalogue.coverImage === 'string' ? (
                 <>
                     {/* Main Cover Image - Full page */}
                     <div className="absolute inset-0">

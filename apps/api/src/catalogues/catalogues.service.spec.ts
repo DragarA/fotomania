@@ -170,14 +170,12 @@ describe('CataloguesService', () => {
             mockDb.select.mockReturnValueOnce({
                 from: jest.fn().mockReturnValue({
                     leftJoin: jest.fn().mockReturnValue({
-                        where: jest
-                            .fn()
-                            .mockResolvedValue([
-                                {
-                                    catalogue: mockCatalogue,
-                                    collection: mockCollection,
-                                },
-                            ]),
+                        where: jest.fn().mockResolvedValue([
+                            {
+                                catalogue: mockCatalogue,
+                                collection: mockCollection,
+                            },
+                        ]),
                     }),
                 }),
             } as any);

@@ -30,7 +30,9 @@ export function useAddFavouritesMutation() {
             );
 
             if (!response.ok) {
-                const error = new Error('Failed to save favourites') as Error & {
+                const error = new Error(
+                    'Failed to save favourites'
+                ) as Error & {
                     status?: number;
                 };
                 error.status = response.status;

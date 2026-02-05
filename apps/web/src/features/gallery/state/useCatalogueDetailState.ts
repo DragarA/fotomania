@@ -57,11 +57,7 @@ export function useCatalogueDetailState(collections: Collection[] | undefined) {
         }
     };
 
-    const openContextMenu = (
-        x: number,
-        y: number,
-        collection: Collection
-    ) => {
+    const openContextMenu = (x: number, y: number, collection: Collection) => {
         setCollectionContextMenu({ x, y, collection });
     };
 

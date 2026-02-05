@@ -158,10 +158,7 @@ export class CollectionsService {
         return updated;
     }
 
-    async removeAllForCatalogue(
-        catalogueId: string,
-        tx?: DbInstance
-    ) {
+    async removeAllForCatalogue(catalogueId: string, tx?: DbInstance) {
         const dbInstance = tx || this.db;
 
         const collections = await dbInstance
@@ -339,7 +336,10 @@ export class CollectionsService {
                 eq(collection.clientSessionId, clientSession.id)
             )
             .where(
-                and(eq(collection.id, collectionId), eq(catalogue.ownerId, ownerId))
+                and(
+                    eq(collection.id, collectionId),
+                    eq(catalogue.ownerId, ownerId)
+                )
             );
 
         if (!result) {
@@ -370,7 +370,8 @@ export class CollectionsService {
         }
 
         // 5. Build the delivery URL
-        const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
+        const frontendUrl =
+            this.configService.getOrThrow<string>('FRONTEND_URL');
         const deliveryUrl = `${frontendUrl}/d/${result.collection.deliverySlug}`;
 
         // 6. Prepare email options
@@ -387,7 +388,9 @@ export class CollectionsService {
 
         // 7. Add invoice attachment if exists
         if (result.collection.invoicePath) {
-            const invoicePath = this.getInvoiceFullPath(result.collection.invoicePath);
+            const invoicePath = this.getInvoiceFullPath(
+                result.collection.invoicePath
+            );
             try {
                 const invoiceBuffer = await fsPromises.readFile(invoicePath);
                 emailOptions.attachments = [
@@ -467,7 +470,9 @@ export class CollectionsService {
         }
 
         // Delete the invoice file
-        const invoicePath = this.getInvoiceFullPath(existing.collection.invoicePath);
+        const invoicePath = this.getInvoiceFullPath(
+            existing.collection.invoicePath
+        );
         try {
             await fsPromises.unlink(invoicePath);
         } catch (error) {

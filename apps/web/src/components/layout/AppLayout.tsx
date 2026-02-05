@@ -1,7 +1,6 @@
 import { Outlet, useRouterState } from '@tanstack/react-router';
 import { lazy, Suspense } from 'react';
 
-
 import ErrorBoundary from '../common/ErrorBoundary';
 
 import { Footer } from './Footer';
@@ -21,7 +20,8 @@ export function AppLayout() {
     const { pathname } = useRouterState({
         select: (state) => state.location,
     });
-    const isPublicGallery = pathname.startsWith('/c/') || pathname.startsWith('/d/');
+    const isPublicGallery =
+        pathname.startsWith('/c/') || pathname.startsWith('/d/');
 
     return (
         <>

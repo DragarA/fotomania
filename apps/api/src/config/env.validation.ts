@@ -46,11 +46,7 @@ export const envSchema = z.object({
         .string()
         .url('API_BASE_URL must be a valid URL')
         .default('http://localhost:3000'),
-    API_PORT: z.coerce
-        .number()
-        .int()
-        .positive()
-        .default(3000),
+    API_PORT: z.coerce.number().int().positive().default(3000),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -61,10 +57,7 @@ export function validateEnv(config: Record<string, unknown>): Env {
     } catch (error) {
         if (error instanceof z.ZodError) {
             const errorMessages = error.issues
-                .map(
-                    (issue) =>
-                        `  - ${issue.path.join('.')}: ${issue.message}`
-                )
+                .map((issue) => `  - ${issue.path.join('.')}: ${issue.message}`)
                 .join('\n');
 
             throw new Error(

@@ -55,4 +55,3 @@ export class DeliveryAccessGuard implements CanActivate {
         return type === 'Bearer' ? token : undefined;
     }
 }
-

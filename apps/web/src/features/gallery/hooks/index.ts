@@ -14,7 +14,7 @@ export {
     useUpdateCatalogueMutation,
     useDeleteCatalogueMutation,
     useSetCatalogueCoverMutation,
-    useUpdateCatalogueStatusMutation
+    useUpdateCatalogueStatusMutation,
 } from './useCatalogues';
 
 // Collection hooks

@@ -6,7 +6,9 @@ export const updateCatalogueStatusSchema = z.object({
     password: z.string().optional().nullable(),
 });
 
-export type UpdateCatalogueStatusDto = z.infer<typeof updateCatalogueStatusSchema>;
+export type UpdateCatalogueStatusDto = z.infer<
+    typeof updateCatalogueStatusSchema
+>;
 
 // Class for Swagger documentation
 export class UpdateCatalogueStatusDtoClass {

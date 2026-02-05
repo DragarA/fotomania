@@ -45,7 +45,9 @@ export function SpotlightTooltip({
             const element =
                 targetRef?.current ??
                 (targetSelector
-                    ? (document.querySelector(targetSelector) as HTMLElement | null)
+                    ? (document.querySelector(
+                          targetSelector
+                      ) as HTMLElement | null)
                     : null);
 
             if (!element) {
@@ -82,7 +84,11 @@ export function SpotlightTooltip({
 
     const tooltipStyle = useMemo(() => {
         if (!targetRect) {
-            return { top: 0, left: 0, transform: 'translate(-9999px, -9999px)' };
+            return {
+                top: 0,
+                left: 0,
+                transform: 'translate(-9999px, -9999px)',
+            };
         }
 
         const top = targetRect.top + window.scrollY;

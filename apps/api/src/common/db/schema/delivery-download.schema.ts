@@ -10,4 +10,3 @@ export const deliveryDownload = pgTable('deliveryDownload', {
     downloadedAt: timestamp('downloadedAt').notNull(),
     ipAddress: varchar('ipAddress', { length: 45 }), // Supports IPv6
 });
-

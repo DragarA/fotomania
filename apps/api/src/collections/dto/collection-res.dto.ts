@@ -29,7 +29,8 @@ export class CollectionResDto {
     type!: CollectionType;
 
     @ApiPropertyOptional({
-        description: 'ID of the client session this delivery collection was created from',
+        description:
+            'ID of the client session this delivery collection was created from',
         example: '550e8400-e29b-41d4-a716-446655440002',
     })
     clientSessionId?: string;
@@ -70,7 +71,11 @@ export class CollectionResDto {
     })
     hasInvoice?: boolean;
 
-    constructor(data: { collection: any; photoCount: any; clientEmail?: string }) {
+    constructor(data: {
+        collection: any;
+        photoCount: any;
+        clientEmail?: string;
+    }) {
         Object.assign(this, data.collection);
         this.photoCount = data.photoCount;
         this.clientEmail = data.clientEmail;

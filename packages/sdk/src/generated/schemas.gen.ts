@@ -46,6 +46,18 @@ export const $AuthRefreshDtoClass = {
     required: ['refreshToken']
 } as const;
 
+export const $AuthExchangeDtoClass = {
+    type: 'object',
+    properties: {
+        code: {
+            type: 'string',
+            example: '0d64f7b4-7b0b-4a3e-97d9-3b6f2f3d4d2a',
+            description: 'OAuth exchange code'
+        }
+    },
+    required: ['code']
+} as const;
+
 export const $UserResDto = {
     type: 'object',
     properties: {

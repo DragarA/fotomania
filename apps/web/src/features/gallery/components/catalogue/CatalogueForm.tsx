@@ -49,7 +49,9 @@ export function CatalogueForm({
                     id="title"
                     {...register('title')}
                     className={`w-full rounded border bg-white/80 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300 ${
-                        errors.title ? 'border-red-400 focus:ring-red-200' : 'border-black/10'
+                        errors.title
+                            ? 'border-red-400 focus:ring-red-200'
+                            : 'border-black/10'
                     }`}
                     placeholder={t('catalogueForm.titlePlaceholder')}
                 />

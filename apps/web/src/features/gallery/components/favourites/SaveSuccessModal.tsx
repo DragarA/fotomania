@@ -30,7 +30,10 @@ export function SaveSuccessModal({
             <DialogContent className="border border-black/5 bg-white/90 backdrop-blur">
                 <DialogHeader>
                     <div className="mb-4 flex justify-center">
-                        <CheckCircle2 className="h-16 w-16 text-emerald-500" strokeWidth={1.5} />
+                        <CheckCircle2
+                            className="h-16 w-16 text-emerald-500"
+                            strokeWidth={1.5}
+                        />
                     </div>
                     <DialogTitle className="text-center text-2xl font-light tracking-[0.02em] text-stone-800">
                         {t('modal.success.title')}
@@ -56,7 +59,9 @@ export function SaveSuccessModal({
                             </span>
                             <span className="font-light text-stone-800">
                                 {favoritesCount}{' '}
-                                {t('modal.success.photo', { count: favoritesCount })}
+                                {t('modal.success.photo', {
+                                    count: favoritesCount,
+                                })}
                             </span>
                         </div>
                     </div>

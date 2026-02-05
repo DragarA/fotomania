@@ -102,10 +102,13 @@ export class ClientSessionsService {
                     email,
                     catalogueId: existingCatalogue.id,
                     clientName: clientInfo?.clientName ?? null,
-                    clientAddressStreet: clientInfo?.clientAddressStreet ?? null,
+                    clientAddressStreet:
+                        clientInfo?.clientAddressStreet ?? null,
                     clientAddressCity: clientInfo?.clientAddressCity ?? null,
-                    clientAddressPostalCode: clientInfo?.clientAddressPostalCode ?? null,
-                    clientAddressCountry: clientInfo?.clientAddressCountry ?? null,
+                    clientAddressPostalCode:
+                        clientInfo?.clientAddressPostalCode ?? null,
+                    clientAddressCountry:
+                        clientInfo?.clientAddressCountry ?? null,
                     clientPhoneNumber: clientInfo?.clientPhoneNumber ?? null,
                     clientNotes: clientInfo?.clientNotes ?? null,
                     createdAt: now,
@@ -118,13 +121,25 @@ export class ClientSessionsService {
             [existingSession] = await this.db
                 .update(clientSession)
                 .set({
-                    clientName: clientInfo?.clientName ?? existingSession.clientName,
-                    clientAddressStreet: clientInfo?.clientAddressStreet ?? existingSession.clientAddressStreet,
-                    clientAddressCity: clientInfo?.clientAddressCity ?? existingSession.clientAddressCity,
-                    clientAddressPostalCode: clientInfo?.clientAddressPostalCode ?? existingSession.clientAddressPostalCode,
-                    clientAddressCountry: clientInfo?.clientAddressCountry ?? existingSession.clientAddressCountry,
-                    clientPhoneNumber: clientInfo?.clientPhoneNumber ?? existingSession.clientPhoneNumber,
-                    clientNotes: clientInfo?.clientNotes ?? existingSession.clientNotes,
+                    clientName:
+                        clientInfo?.clientName ?? existingSession.clientName,
+                    clientAddressStreet:
+                        clientInfo?.clientAddressStreet ??
+                        existingSession.clientAddressStreet,
+                    clientAddressCity:
+                        clientInfo?.clientAddressCity ??
+                        existingSession.clientAddressCity,
+                    clientAddressPostalCode:
+                        clientInfo?.clientAddressPostalCode ??
+                        existingSession.clientAddressPostalCode,
+                    clientAddressCountry:
+                        clientInfo?.clientAddressCountry ??
+                        existingSession.clientAddressCountry,
+                    clientPhoneNumber:
+                        clientInfo?.clientPhoneNumber ??
+                        existingSession.clientPhoneNumber,
+                    clientNotes:
+                        clientInfo?.clientNotes ?? existingSession.clientNotes,
                     updatedAt: now,
                 })
                 .where(eq(clientSession.id, existingSession.id))

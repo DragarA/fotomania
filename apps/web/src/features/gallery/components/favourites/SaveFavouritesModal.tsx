@@ -83,7 +83,8 @@ export function SaveFavouritesModal({
 
     // Create dynamic schema based on collection settings
     const schema = useMemo(
-        () => createSaveFavouritesSchema(collectionSettings, validationMessages),
+        () =>
+            createSaveFavouritesSchema(collectionSettings, validationMessages),
         [collectionSettings, validationMessages]
     );
 
@@ -164,7 +165,10 @@ export function SaveFavouritesModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-            <DialogContent showCloseButton={!isSubmitting} className="bg-white/90 backdrop-blur border border-black/5">
+            <DialogContent
+                showCloseButton={!isSubmitting}
+                className="bg-white/90 backdrop-blur border border-black/5"
+            >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <DialogHeader>
                         <DialogTitle className="text-xl font-light tracking-[0.02em] text-stone-800">
@@ -173,8 +177,9 @@ export function SaveFavouritesModal({
                         <DialogDescription className="text-stone-500">
                             {t('modal.save.description', {
                                 count: favoritesCount,
-                                photoText:
-                                    t('modal.save.photo', { count: favoritesCount }),
+                                photoText: t('modal.save.photo', {
+                                    count: favoritesCount,
+                                }),
                             })}
                         </DialogDescription>
                     </DialogHeader>
@@ -226,7 +231,9 @@ export function SaveFavouritesModal({
                                             ? 'border-red-400 focus:ring-red-200'
                                             : 'border-black/10 focus:ring-stone-300'
                                     } disabled:opacity-50 disabled:cursor-not-allowed`}
-                                    placeholder={t('modal.save.namePlaceholder')}
+                                    placeholder={t(
+                                        'modal.save.namePlaceholder'
+                                    )}
                                 />
                                 {errors.clientName && (
                                     <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-500">
@@ -291,7 +298,9 @@ export function SaveFavouritesModal({
                                                 ? 'border-red-400 focus:ring-red-200'
                                                 : 'border-black/10 focus:ring-stone-300'
                                         } disabled:opacity-50 disabled:cursor-not-allowed`}
-                                        placeholder={t('modal.save.streetPlaceholder')}
+                                        placeholder={t(
+                                            'modal.save.streetPlaceholder'
+                                        )}
                                     />
                                     {errors.clientAddressStreet && (
                                         <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-500">
@@ -318,7 +327,9 @@ export function SaveFavouritesModal({
                                                 ? 'border-red-400 focus:ring-red-200'
                                                 : 'border-black/10 focus:ring-stone-300'
                                         } disabled:opacity-50 disabled:cursor-not-allowed`}
-                                        placeholder={t('modal.save.cityPlaceholder')}
+                                        placeholder={t(
+                                            'modal.save.cityPlaceholder'
+                                        )}
                                     />
                                     {errors.clientAddressCity && (
                                         <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-500">
@@ -345,11 +356,16 @@ export function SaveFavouritesModal({
                                                 ? 'border-red-400 focus:ring-red-200'
                                                 : 'border-black/10 focus:ring-stone-300'
                                         } disabled:opacity-50 disabled:cursor-not-allowed`}
-                                        placeholder={t('modal.save.postalCodePlaceholder')}
+                                        placeholder={t(
+                                            'modal.save.postalCodePlaceholder'
+                                        )}
                                     />
                                     {errors.clientAddressPostalCode && (
                                         <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-500">
-                                            {errors.clientAddressPostalCode.message}
+                                            {
+                                                errors.clientAddressPostalCode
+                                                    .message
+                                            }
                                         </p>
                                     )}
                                 </div>
@@ -376,14 +392,20 @@ export function SaveFavouritesModal({
                                             {t('modal.save.countryPlaceholder')}
                                         </option>
                                         {COUNTRIES.map((country) => (
-                                            <option key={country.value} value={country.value}>
+                                            <option
+                                                key={country.value}
+                                                value={country.value}
+                                            >
                                                 {country.label}
                                             </option>
                                         ))}
                                     </select>
                                     {errors.clientAddressCountry && (
                                         <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-500">
-                                            {errors.clientAddressCountry.message}
+                                            {
+                                                errors.clientAddressCountry
+                                                    .message
+                                            }
                                         </p>
                                     )}
                                 </div>
@@ -409,7 +431,9 @@ export function SaveFavouritesModal({
                                             ? 'border-red-400 focus:ring-red-200'
                                             : 'border-black/10 focus:ring-stone-300'
                                     } disabled:opacity-50 disabled:cursor-not-allowed resize-none`}
-                                    placeholder={t('modal.save.notesPlaceholder')}
+                                    placeholder={t(
+                                        'modal.save.notesPlaceholder'
+                                    )}
                                 />
                                 {errors.clientNotes && (
                                     <p className="mt-1 text-xs uppercase tracking-[0.3em] text-red-500">

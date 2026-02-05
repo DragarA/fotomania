@@ -48,14 +48,12 @@ describe('PhotosService', () => {
             mockDb.select.mockReturnValueOnce({
                 from: jest.fn().mockReturnValue({
                     innerJoin: jest.fn().mockReturnValue({
-                        where: jest
-                            .fn()
-                            .mockResolvedValue([
-                                {
-                                    collection: mockCollection,
-                                    catalogue: mockCatalogue,
-                                },
-                            ]),
+                        where: jest.fn().mockResolvedValue([
+                            {
+                                collection: mockCollection,
+                                catalogue: mockCatalogue,
+                            },
+                        ]),
                     }),
                 }),
             } as any);
@@ -109,14 +107,12 @@ describe('PhotosService', () => {
             mockDb.select.mockReturnValueOnce({
                 from: jest.fn().mockReturnValue({
                     innerJoin: jest.fn().mockReturnValue({
-                        where: jest
-                            .fn()
-                            .mockResolvedValue([
-                                {
-                                    collection: mockCollection,
-                                    catalogue: mockCatalogue,
-                                },
-                            ]),
+                        where: jest.fn().mockResolvedValue([
+                            {
+                                collection: mockCollection,
+                                catalogue: mockCatalogue,
+                            },
+                        ]),
                     }),
                 }),
             } as any);
@@ -138,14 +134,12 @@ describe('PhotosService', () => {
                 from: jest.fn().mockReturnValue({
                     innerJoin: jest.fn().mockReturnValue({
                         innerJoin: jest.fn().mockReturnValue({
-                            where: jest
-                                .fn()
-                                .mockResolvedValue([
-                                    {
-                                        photo: mockPhoto,
-                                        catalogue: mockCatalogue,
-                                    },
-                                ]),
+                            where: jest.fn().mockResolvedValue([
+                                {
+                                    photo: mockPhoto,
+                                    catalogue: mockCatalogue,
+                                },
+                            ]),
                         }),
                     }),
                 }),
@@ -193,14 +187,12 @@ describe('PhotosService', () => {
                 from: jest.fn().mockReturnValue({
                     innerJoin: jest.fn().mockReturnValue({
                         innerJoin: jest.fn().mockReturnValue({
-                            where: jest
-                                .fn()
-                                .mockResolvedValue([
-                                    {
-                                        photo: mockPhoto,
-                                        catalogue: mockCatalogue,
-                                    },
-                                ]),
+                            where: jest.fn().mockResolvedValue([
+                                {
+                                    photo: mockPhoto,
+                                    catalogue: mockCatalogue,
+                                },
+                            ]),
                         }),
                     }),
                 }),

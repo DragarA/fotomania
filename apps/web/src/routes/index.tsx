@@ -5,5 +5,3 @@ import { HomePage } from '../features/pages/HomePage';
 export const Route = createFileRoute('/')({
     component: HomePage,
 });
-
-

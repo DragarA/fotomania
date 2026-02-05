@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { HexColorPicker } from 'react-colorful';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { HexColorPicker } from 'react-colorful';
 import { z } from 'zod';
 
 import { Switch } from '@/components/ui/switch';
@@ -13,9 +13,21 @@ import { LogoUploadField } from './LogoUploadField';
 
 const profileFormSchema = z.object({
     name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
-    businessName: z.string().max(255, 'Business name is too long').optional().or(z.literal('')),
-    businessAddress: z.string().max(500, 'Business address is too long').optional().or(z.literal('')),
-    businessPhone: z.string().max(50, 'Business phone is too long').optional().or(z.literal('')),
+    businessName: z
+        .string()
+        .max(255, 'Business name is too long')
+        .optional()
+        .or(z.literal('')),
+    businessAddress: z
+        .string()
+        .max(500, 'Business address is too long')
+        .optional()
+        .or(z.literal('')),
+    businessPhone: z
+        .string()
+        .max(50, 'Business phone is too long')
+        .optional()
+        .or(z.literal('')),
     businessEmail: z
         .string()
         .email('Invalid email format')
@@ -28,7 +40,11 @@ const profileFormSchema = z.object({
         .max(500, 'Business website URL is too long')
         .optional()
         .or(z.literal('')),
-    businessDescription: z.string().max(2000, 'Business description is too long').optional().or(z.literal('')),
+    businessDescription: z
+        .string()
+        .max(2000, 'Business description is too long')
+        .optional()
+        .or(z.literal('')),
     brandColorMain: z
         .string()
         .regex(/^#[0-9A-F]{6}$/i, 'Invalid hex color')
@@ -85,7 +101,8 @@ export function ProfileForm({
             businessDescription: initialValues.businessDescription || '',
             brandColorMain: initialValues.brandColorMain || '',
             brandColorAccent: initialValues.brandColorAccent || '',
-            preferredLanguage: (initialValues.preferredLanguage as 'en' | 'sl') || 'en',
+            preferredLanguage:
+                (initialValues.preferredLanguage as 'en' | 'sl') || 'en',
             collectClientName: initialValues.collectClientName ?? false,
             collectClientAddress: initialValues.collectClientAddress ?? false,
             collectClientPhone: initialValues.collectClientPhone ?? false,
@@ -113,7 +130,9 @@ export function ProfileForm({
                         id="name"
                         {...register('name')}
                         className={`w-full rounded border bg-white/80 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300 ${
-                            errors.name ? 'border-red-400 focus:ring-red-200' : 'border-black/10'
+                            errors.name
+                                ? 'border-red-400 focus:ring-red-200'
+                                : 'border-black/10'
                         }`}
                         placeholder={t('form.namePlaceholder')}
                     />
@@ -136,7 +155,9 @@ export function ProfileForm({
                         id="preferredLanguage"
                         {...register('preferredLanguage')}
                         className={`w-full rounded border bg-white/80 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300 ${
-                            errors.preferredLanguage ? 'border-red-400 focus:ring-red-200' : 'border-black/10'
+                            errors.preferredLanguage
+                                ? 'border-red-400 focus:ring-red-200'
+                                : 'border-black/10'
                         }`}
                     >
                         {SUPPORTED_LANGUAGES.map((lang) => (
@@ -171,7 +192,9 @@ export function ProfileForm({
                         id="businessName"
                         {...register('businessName')}
                         className={`w-full rounded border bg-white/80 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300 ${
-                            errors.businessName ? 'border-red-400 focus:ring-red-200' : 'border-black/10'
+                            errors.businessName
+                                ? 'border-red-400 focus:ring-red-200'
+                                : 'border-black/10'
                         }`}
                         placeholder={t('form.businessNamePlaceholder')}
                     />
@@ -204,7 +227,9 @@ export function ProfileForm({
                         type="email"
                         {...register('businessEmail')}
                         className={`w-full rounded border bg-white/80 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300 ${
-                            errors.businessEmail ? 'border-red-400 focus:ring-red-200' : 'border-black/10'
+                            errors.businessEmail
+                                ? 'border-red-400 focus:ring-red-200'
+                                : 'border-black/10'
                         }`}
                         placeholder={t('form.businessEmailPlaceholder')}
                     />
@@ -228,7 +253,9 @@ export function ProfileForm({
                         type="tel"
                         {...register('businessPhone')}
                         className={`w-full rounded border bg-white/80 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300 ${
-                            errors.businessPhone ? 'border-red-400 focus:ring-red-200' : 'border-black/10'
+                            errors.businessPhone
+                                ? 'border-red-400 focus:ring-red-200'
+                                : 'border-black/10'
                         }`}
                         placeholder={t('form.businessPhonePlaceholder')}
                     />
@@ -251,7 +278,9 @@ export function ProfileForm({
                         id="businessAddress"
                         {...register('businessAddress')}
                         className={`w-full rounded border bg-white/80 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300 ${
-                            errors.businessAddress ? 'border-red-400 focus:ring-red-200' : 'border-black/10'
+                            errors.businessAddress
+                                ? 'border-red-400 focus:ring-red-200'
+                                : 'border-black/10'
                         }`}
                         placeholder={t('form.businessAddressPlaceholder')}
                     />
@@ -275,7 +304,9 @@ export function ProfileForm({
                         type="url"
                         {...register('businessWebsite')}
                         className={`w-full rounded border bg-white/80 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300 ${
-                            errors.businessWebsite ? 'border-red-400 focus:ring-red-200' : 'border-black/10'
+                            errors.businessWebsite
+                                ? 'border-red-400 focus:ring-red-200'
+                                : 'border-black/10'
                         }`}
                         placeholder={t('form.businessWebsitePlaceholder')}
                     />
@@ -504,4 +535,3 @@ export function ProfileForm({
         </form>
     );
 }
-

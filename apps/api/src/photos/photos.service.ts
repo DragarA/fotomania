@@ -115,7 +115,9 @@ export class PhotosService {
 
             // Delete original file
             try {
-                await fsPromises.unlink(path.join(this.uploadRoot, result.storagePath));
+                await fsPromises.unlink(
+                    path.join(this.uploadRoot, result.storagePath)
+                );
             } catch (error) {
                 this.logger.error(
                     `Failed to delete photo file: ${result.storagePath}`,
@@ -292,7 +294,8 @@ export class PhotosService {
         const originalMetadata = await originalSharp.metadata();
 
         // Check if this is a delivery collection - skip compression for delivery
-        const isDeliveryCollection = existingCollection.collection.type === 'delivery';
+        const isDeliveryCollection =
+            existingCollection.collection.type === 'delivery';
 
         if (isDeliveryCollection) {
             // For delivery collections, save original file without compression
@@ -322,7 +325,10 @@ export class PhotosService {
             const stats = await fsPromises.stat(filePath);
             fileSize = stats.size;
         } catch (error) {
-            this.logger.error(`Failed to read file stats for: ${filePath}`, error);
+            this.logger.error(
+                `Failed to read file stats for: ${filePath}`,
+                error
+            );
             fileSize = file.size; // Fallback to original file size
         }
 

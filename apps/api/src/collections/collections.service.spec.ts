@@ -324,7 +324,9 @@ describe('CollectionsService', () => {
                                 where: jest.fn().mockReturnValue({
                                     groupBy: jest
                                         .fn()
-                                        .mockResolvedValue([existingCollection]),
+                                        .mockResolvedValue([
+                                            existingCollection,
+                                        ]),
                                 }),
                             }),
                         }),
@@ -380,7 +382,9 @@ describe('CollectionsService', () => {
                                 where: jest.fn().mockReturnValue({
                                     groupBy: jest
                                         .fn()
-                                        .mockResolvedValue([existingCollection]),
+                                        .mockResolvedValue([
+                                            existingCollection,
+                                        ]),
                                 }),
                             }),
                         }),
@@ -426,7 +430,9 @@ describe('CollectionsService', () => {
                                 where: jest.fn().mockReturnValue({
                                     groupBy: jest
                                         .fn()
-                                        .mockResolvedValue([existingCollection]),
+                                        .mockResolvedValue([
+                                            existingCollection,
+                                        ]),
                                 }),
                             }),
                         }),
@@ -527,7 +533,9 @@ describe('CollectionsService', () => {
                                 where: jest.fn().mockReturnValue({
                                     groupBy: jest
                                         .fn()
-                                        .mockResolvedValue([existingCollection]),
+                                        .mockResolvedValue([
+                                            existingCollection,
+                                        ]),
                                 }),
                             }),
                         }),
@@ -565,7 +573,9 @@ describe('CollectionsService', () => {
                                 where: jest.fn().mockReturnValue({
                                     groupBy: jest
                                         .fn()
-                                        .mockResolvedValue([existingCollection]),
+                                        .mockResolvedValue([
+                                            existingCollection,
+                                        ]),
                                 }),
                             }),
                         }),
@@ -617,7 +627,9 @@ describe('CollectionsService', () => {
                                 where: jest.fn().mockReturnValue({
                                     groupBy: jest
                                         .fn()
-                                        .mockResolvedValue([existingCollection]),
+                                        .mockResolvedValue([
+                                            existingCollection,
+                                        ]),
                                 }),
                             }),
                         }),
@@ -654,7 +666,9 @@ describe('CollectionsService', () => {
                     innerJoin: jest.fn().mockReturnValue({
                         innerJoin: jest.fn().mockReturnValue({
                             leftJoin: jest.fn().mockReturnValue({
-                                where: jest.fn().mockResolvedValue([mockResult]),
+                                where: jest
+                                    .fn()
+                                    .mockResolvedValue([mockResult]),
                             }),
                         }),
                     }),
@@ -699,7 +713,9 @@ describe('CollectionsService', () => {
                     innerJoin: jest.fn().mockReturnValue({
                         innerJoin: jest.fn().mockReturnValue({
                             leftJoin: jest.fn().mockReturnValue({
-                                where: jest.fn().mockResolvedValue([mockResult]),
+                                where: jest
+                                    .fn()
+                                    .mockResolvedValue([mockResult]),
                             }),
                         }),
                     }),

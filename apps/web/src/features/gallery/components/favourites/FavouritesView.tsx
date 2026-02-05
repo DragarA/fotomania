@@ -52,7 +52,9 @@ export function FavouritesView({
                             </p>
                             <p className="text-sm text-gray-500 mt-1">
                                 {session.photoCount}{' '}
-                                {t('favouritesView.photo', { count: session.photoCount })}{' '}
+                                {t('favouritesView.photo', {
+                                    count: session.photoCount,
+                                })}{' '}
                                 •{' '}
                                 {new Date(session.createdAt).toLocaleDateString(
                                     t('favouritesView.locale'),

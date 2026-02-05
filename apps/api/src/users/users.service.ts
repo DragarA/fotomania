@@ -1,6 +1,7 @@
+import { unlinkSync } from 'fs';
+
 import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import { unlinkSync } from 'fs';
 
 import { DRIZZLE, DrizzleDB } from '../common/db/drizzle';
 import { user } from '../common/db/schema';
@@ -97,7 +98,7 @@ export class UsersService {
         if (currentUser?.businessLogo) {
             try {
                 unlinkSync(currentUser.businessLogo);
-            } catch (error) {
+            } catch {
                 // Ignore if file doesn't exist
             }
         }
@@ -121,7 +122,7 @@ export class UsersService {
         if (currentUser?.businessLogo) {
             try {
                 unlinkSync(currentUser.businessLogo);
-            } catch (error) {
+            } catch {
                 // Ignore if file doesn't exist
             }
         }

@@ -30,7 +30,11 @@ import {
     CreateCatalogueDtoClass,
     createCatalogueSchema,
 } from './dto/create-catalogue.dto';
-import { UpdateCatalogueStatusDto, UpdateCatalogueStatusDtoClass, updateCatalogueStatusSchema } from './dto/update-catalogue-status.dto';
+import {
+    UpdateCatalogueStatusDto,
+    UpdateCatalogueStatusDtoClass,
+    updateCatalogueStatusSchema,
+} from './dto/update-catalogue-status.dto';
 import {
     UpdateCatalogueDto,
     UpdateCatalogueDtoClass,
@@ -91,7 +95,7 @@ export class CataloguesController {
     @ApiResponse({ status: 404, description: 'Catalogue not found' })
     async findOne(@Param('id') id: string, @User() user: UserEntity) {
         const catalogue = await this.cataloguesService.findOne(id, user.id);
-        return new CatalogueResDto({ catalogue })
+        return new CatalogueResDto({ catalogue });
     }
 
     @Patch(':id')
@@ -136,7 +140,11 @@ export class CataloguesController {
         dto: UpdateCatalogueStatusDto,
         @User() user: UserEntity
     ) {
-        const catalogue = await this.cataloguesService.updateStatus(id, dto, user.id);
+        const catalogue = await this.cataloguesService.updateStatus(
+            id,
+            dto,
+            user.id
+        );
         return new CatalogueResDto({ catalogue });
     }
 

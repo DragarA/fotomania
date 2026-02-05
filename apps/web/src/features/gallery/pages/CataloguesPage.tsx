@@ -1,15 +1,15 @@
-import { useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useNavigate } from '@tanstack/react-router';
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { Button } from "@/components/ui/button";
-import { SpotlightTooltip } from "@/features/onboarding/components/SpotlightTooltip";
-import { WelcomeModal } from "@/features/onboarding/components/WelcomeModal";
-import { useOnboarding } from "@/features/onboarding/useOnboarding";
+import { Button } from '@/components/ui/button';
+import { SpotlightTooltip } from '@/features/onboarding/components/SpotlightTooltip';
+import { WelcomeModal } from '@/features/onboarding/components/WelcomeModal';
+import { useOnboarding } from '@/features/onboarding/useOnboarding';
 
-import { CatalogueCard } from "../components/catalogue/CatalogueCard";
-import { CatalogueFormModal } from "../components/catalogue/CatalogueFormModal";
-import { useCataloguesQuery } from "../hooks";
+import { CatalogueCard } from '../components/catalogue/CatalogueCard';
+import { CatalogueFormModal } from '../components/catalogue/CatalogueFormModal';
+import { useCataloguesQuery } from '../hooks';
 
 export function CataloguesPage() {
     const { t } = useTranslation('gallery');
@@ -77,7 +77,10 @@ export function CataloguesPage() {
             return (
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                     {data.map((catalogue) => (
-                        <CatalogueCard key={catalogue.id} catalogue={catalogue} />
+                        <CatalogueCard
+                            key={catalogue.id}
+                            catalogue={catalogue}
+                        />
                     ))}
                 </div>
             );

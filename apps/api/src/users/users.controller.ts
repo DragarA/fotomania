@@ -67,7 +67,7 @@ export class UsersController {
     @ApiResponse({ status: 400, description: 'Invalid request data' })
     async updateMe(
         @User() user: UserEntity,
-        @Body(new ZodValidationPipe(updateUserSchema)) dto: UpdateUserDto,
+        @Body(new ZodValidationPipe(updateUserSchema)) dto: UpdateUserDto
     ) {
         const updatedUser = await this.usersService.update(user.id, dto);
         return new UserResDto(updatedUser);
@@ -98,11 +98,11 @@ export class UsersController {
             storage: logoStorage,
             fileFilter: logoFileFilter,
             limits: { fileSize: LOGO_MAX_SIZE },
-        }),
+        })
     )
     async uploadLogo(
         @User() user: UserEntity,
-        @UploadedFile() file: Express.Multer.File,
+        @UploadedFile() file: Express.Multer.File
     ) {
         const updatedUser = await this.usersService.uploadLogo(user.id, file);
         return new UserResDto(updatedUser);

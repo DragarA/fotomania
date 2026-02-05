@@ -223,16 +223,13 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
     const showStatusToggle =
         isActive && currentStep === 'catalogue-status' && !modalState.isOpen;
     const showCreateCollection =
-        isActive &&
-        currentStep === 'create-collection' &&
-        !modalState.isOpen;
+        isActive && currentStep === 'create-collection' && !modalState.isOpen;
     const showUploadPhotos =
         isActive &&
         currentStep === 'upload-photos' &&
         Boolean(selectedCollectionId) &&
         !modalState.isOpen;
-    const showFavourites =
-        isActive && currentStep === 'favourites-delivery';
+    const showFavourites = isActive && currentStep === 'favourites-delivery';
 
     const handleCollectionModalClose = (createdCollectionId?: string) => {
         closeModal(createdCollectionId);
@@ -387,7 +384,8 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                         collectionContextMenu.collection.type === 'delivery'
                             ? () => {
                                   sendDeliveryEmailMutation.mutate({
-                                      collectionId: collectionContextMenu.collection.id,
+                                      collectionId:
+                                          collectionContextMenu.collection.id,
                                   });
                                   closeContextMenu();
                               }

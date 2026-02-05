@@ -7,4 +7,3 @@ export const Route = createFileRoute('/catalogues/')({
     beforeLoad: requireAuth,
     component: CataloguesPage,
 });
-

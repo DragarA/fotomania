@@ -38,7 +38,9 @@ export function ProfilePage() {
         return (
             <div className="flex min-h-screen items-center justify-center bg-stone-100">
                 <div className="text-center">
-                    <p className="text-sm text-stone-500">{t('error.loadFailed')}</p>
+                    <p className="text-sm text-stone-500">
+                        {t('error.loadFailed')}
+                    </p>
                 </div>
             </div>
         );
@@ -81,7 +83,9 @@ export function ProfilePage() {
                             className="gap-2"
                         >
                             <Pencil className="h-4 w-4" strokeWidth={1.5} />
-                            <span className="hidden sm:inline">{t('editProfile')}</span>
+                            <span className="hidden sm:inline">
+                                {t('editProfile')}
+                            </span>
                         </Button>
                     </div>
                 </div>
@@ -93,10 +97,7 @@ export function ProfilePage() {
                     </h2>
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <ProfileInfoCard
-                            icon={<User />}
-                            label={t('fullName')}
-                        >
+                        <ProfileInfoCard icon={<User />} label={t('fullName')}>
                             <p className="text-sm font-medium">
                                 {user.name || t('notProvided')}
                             </p>
@@ -133,14 +134,13 @@ export function ProfilePage() {
                             label={t('preferredLanguage')}
                         >
                             <p className="text-sm font-medium">
-                                {user.preferredLanguage === 'sl' ? 'Slovenščina' : 'English'}
+                                {user.preferredLanguage === 'sl'
+                                    ? 'Slovenščina'
+                                    : 'English'}
                             </p>
                         </ProfileInfoCard>
 
-                        <ProfileInfoCard
-                            icon={<IdCard />}
-                            label={t('userId')}
-                        >
+                        <ProfileInfoCard icon={<IdCard />} label={t('userId')}>
                             <p className="break-all font-mono text-xs text-stone-500">
                                 {user.id || 'N/A'}
                             </p>
@@ -161,7 +161,9 @@ export function ProfilePage() {
                                     icon={<Building2 />}
                                     label={t('businessName')}
                                 >
-                                    <p className="text-sm font-medium">{user.businessName}</p>
+                                    <p className="text-sm font-medium">
+                                        {user.businessName}
+                                    </p>
                                 </ProfileInfoCard>
                             )}
 
@@ -170,7 +172,9 @@ export function ProfilePage() {
                                     icon={<Mail />}
                                     label={t('businessEmail')}
                                 >
-                                    <p className="text-sm font-medium">{user.businessEmail}</p>
+                                    <p className="text-sm font-medium">
+                                        {user.businessEmail}
+                                    </p>
                                 </ProfileInfoCard>
                             )}
 
@@ -179,7 +183,9 @@ export function ProfilePage() {
                                     icon={<Phone />}
                                     label={t('businessPhone')}
                                 >
-                                    <p className="text-sm font-medium">{user.businessPhone}</p>
+                                    <p className="text-sm font-medium">
+                                        {user.businessPhone}
+                                    </p>
                                 </ProfileInfoCard>
                             )}
 
@@ -188,7 +194,9 @@ export function ProfilePage() {
                                     icon={<MapPin />}
                                     label={t('businessAddress')}
                                 >
-                                    <p className="text-sm font-medium">{user.businessAddress}</p>
+                                    <p className="text-sm font-medium">
+                                        {user.businessAddress}
+                                    </p>
                                 </ProfileInfoCard>
                             )}
 
@@ -214,7 +222,9 @@ export function ProfilePage() {
                                 <p className="mb-2 text-xs uppercase tracking-[0.3em] text-stone-400">
                                     {t('businessDescription')}
                                 </p>
-                                <p className="text-sm text-stone-600">{user.businessDescription}</p>
+                                <p className="text-sm text-stone-600">
+                                    {user.businessDescription}
+                                </p>
                             </div>
                         )}
                     </div>
@@ -227,7 +237,11 @@ export function ProfilePage() {
                     </h2>
 
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        <Button asChild variant="outline" className="h-auto justify-start gap-3 px-5 py-4">
+                        <Button
+                            asChild
+                            variant="outline"
+                            className="h-auto justify-start gap-3 px-5 py-4"
+                        >
                             <Link to="/catalogues">
                                 <Folder className="h-5 w-5" strokeWidth={1.5} />
                                 <span className="normal-case tracking-normal">
@@ -236,8 +250,8 @@ export function ProfilePage() {
                             </Link>
                         </Button>
 
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             className="h-auto justify-start gap-3 px-5 py-4"
                             onClick={() => setIsEditModalOpen(true)}
                         >

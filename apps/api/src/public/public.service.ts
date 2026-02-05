@@ -46,7 +46,9 @@ export class PublicService {
             );
 
         if (!catalogueResult) {
-            throw new NotFoundException(`Catalogue with slug ${slug} not found`);
+            throw new NotFoundException(
+                `Catalogue with slug ${slug} not found`
+            );
         }
 
         if (!catalogueResult.password) {
@@ -54,7 +56,10 @@ export class PublicService {
             return this.generateAccessToken(slug);
         }
 
-        const isValid = await bcrypt.compare(password, catalogueResult.password);
+        const isValid = await bcrypt.compare(
+            password,
+            catalogueResult.password
+        );
 
         if (!isValid) {
             throw new UnauthorizedException('Invalid password');
@@ -80,7 +85,9 @@ export class PublicService {
             );
 
         if (!catalogueResult) {
-            throw new NotFoundException(`Catalogue with slug ${slug} not found`);
+            throw new NotFoundException(
+                `Catalogue with slug ${slug} not found`
+            );
         }
 
         return !!catalogueResult.password;
@@ -91,7 +98,8 @@ export class PublicService {
      */
     validateAccessToken(token: string, slug: string): boolean {
         try {
-            const payload = this.jwtService.verify<PublicAccessTokenPayload>(token);
+            const payload =
+                this.jwtService.verify<PublicAccessTokenPayload>(token);
             return payload.type === 'public-access' && payload.slug === slug;
         } catch {
             return false;
@@ -377,4 +385,3 @@ export class PublicService {
         });
     }
 }
-

@@ -94,7 +94,9 @@ function AuthCallbackPage() {
                 ) : (
                     <div className="space-y-4">
                         <Loader2 className="mx-auto h-8 w-8 animate-spin text-stone-600" />
-                        <p className="text-sm text-stone-600">{t('oauth.loading')}</p>
+                        <p className="text-sm text-stone-600">
+                            {t('oauth.loading')}
+                        </p>
                     </div>
                 )}
             </div>

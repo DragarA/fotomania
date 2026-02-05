@@ -83,7 +83,7 @@ export function PublicPhotoGrid({
                             >
                                 <Heart
                                     className={`h-5 w-5 ${isPhotoFavorite ? 'fill-red-500 text-red-500' : 'text-white'}`}
-                                    />
+                                />
                             </button>
                         )}
 

@@ -54,8 +54,10 @@ export class EmailService implements OnModuleInit {
         });
 
         this.domain = this.configService.getOrThrow<string>('MAILGUN_DOMAIN');
-        this.fromEmail = this.configService.getOrThrow<string>('MAILGUN_FROM_EMAIL');
-        this.fromName = this.configService.getOrThrow<string>('MAILGUN_FROM_NAME');
+        this.fromEmail =
+            this.configService.getOrThrow<string>('MAILGUN_FROM_EMAIL');
+        this.fromName =
+            this.configService.getOrThrow<string>('MAILGUN_FROM_NAME');
     }
 
     onModuleInit() {
@@ -81,7 +83,9 @@ export class EmailService implements OnModuleInit {
 
         try {
             // Build message options
-            const messageOptions: Parameters<typeof this.mg.messages.create>[1] = {
+            const messageOptions: Parameters<
+                typeof this.mg.messages.create
+            >[1] = {
                 from: `${this.fromName} <${this.fromEmail}>`,
                 to: recipients,
                 subject,

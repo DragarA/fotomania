@@ -23,15 +23,15 @@ import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 import { AuthService } from './auth.service';
 import { User } from './decorators/current-user.decorator';
 import {
-    AuthLoginDto,
-    AuthLoginDtoClass,
-    authLoginSchema,
-} from './dto/auth-login.dto';
-import {
     AuthExchangeDto,
     AuthExchangeDtoClass,
     authExchangeSchema,
 } from './dto/auth-exchange.dto';
+import {
+    AuthLoginDto,
+    AuthLoginDtoClass,
+    authLoginSchema,
+} from './dto/auth-login.dto';
 import {
     AuthRefreshDto,
     AuthRefreshDtoClass,

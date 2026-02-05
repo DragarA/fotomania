@@ -71,7 +71,14 @@ export function PhotoWorkspace({
                                 {t('sidebar.collectionsTab')}
                             </p>
                             <h2 className="truncate text-2xl font-light tracking-[0.02em] text-stone-800 sm:text-3xl">
-                                {selectedCollection.type === 'delivery' ? selectedCollection.name.replace('Delivery', t('collection.delivery_collection_name')) : selectedCollection.name}
+                                {selectedCollection.type === 'delivery'
+                                    ? selectedCollection.name.replace(
+                                          'Delivery',
+                                          t(
+                                              'collection.delivery_collection_name'
+                                          )
+                                      )
+                                    : selectedCollection.name}
                             </h2>
                         </div>
                         <div className="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
@@ -84,7 +91,10 @@ export function PhotoWorkspace({
                                 {t('photoWorkspace.uploadPhotos')}
                             </button>
                             <div className="whitespace-nowrap text-xs uppercase tracking-[0.4em] text-stone-400">
-                                {photos?.length || 0} {t('sidebar.photos', { count: photos?.length || 0 })}
+                                {photos?.length || 0}{' '}
+                                {t('sidebar.photos', {
+                                    count: photos?.length || 0,
+                                })}
                             </div>
                         </div>
                     </div>

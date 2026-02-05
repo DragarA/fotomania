@@ -151,10 +151,14 @@ export function PublicCataloguePage() {
     return (
         <div
             className="bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.95),_rgba(249,246,241,1))]"
-            style={{
-                '--brand-main': catalogue.photographerBrandColorMain || '#292524',
-                '--brand-accent': catalogue.photographerBrandColorAccent || '#78716c',
-            } as React.CSSProperties}
+            style={
+                {
+                    '--brand-main':
+                        catalogue.photographerBrandColorMain || '#292524',
+                    '--brand-accent':
+                        catalogue.photographerBrandColorAccent || '#78716c',
+                } as React.CSSProperties
+            }
         >
             {/* Hero Section - Full Height */}
             <PublicCatalogueHero
@@ -262,7 +266,8 @@ export function PublicCataloguePage() {
                 onSuccess={handleSaveSuccess}
                 collectionSettings={{
                     collectClientName: catalogue?.collectClientName ?? false,
-                    collectClientAddress: catalogue?.collectClientAddress ?? false,
+                    collectClientAddress:
+                        catalogue?.collectClientAddress ?? false,
                     collectClientPhone: catalogue?.collectClientPhone ?? false,
                     collectClientNotes: catalogue?.collectClientNotes ?? false,
                 }}

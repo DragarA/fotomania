@@ -107,10 +107,12 @@ export class DeliveryPublicResDto {
         this.photoCount = data.photoCount;
         this.hasInvoice = data.hasInvoice ?? false;
         this.photographerBusinessName = data.photographerBusinessName ?? null;
-        this.photographerBusinessWebsite = data.photographerBusinessWebsite ?? null;
+        this.photographerBusinessWebsite =
+            data.photographerBusinessWebsite ?? null;
         this.photographerLogo = data.photographerLogo ?? null;
-        this.photographerBrandColorMain = data.photographerBrandColorMain ?? null;
-        this.photographerBrandColorAccent = data.photographerBrandColorAccent ?? null;
+        this.photographerBrandColorMain =
+            data.photographerBrandColorMain ?? null;
+        this.photographerBrandColorAccent =
+            data.photographerBrandColorAccent ?? null;
     }
 }
-

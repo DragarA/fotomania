@@ -27,25 +27,53 @@ export class ClientFavouritesResDto {
     @ApiProperty({ description: 'Number of favorited photos' })
     photoCount!: number;
 
-    @ApiProperty({ description: 'Client full name', required: false, nullable: true })
+    @ApiProperty({
+        description: 'Client full name',
+        required: false,
+        nullable: true,
+    })
     clientName?: string | null;
 
-    @ApiProperty({ description: 'Client street address', required: false, nullable: true })
+    @ApiProperty({
+        description: 'Client street address',
+        required: false,
+        nullable: true,
+    })
     clientAddressStreet?: string | null;
 
-    @ApiProperty({ description: 'Client city', required: false, nullable: true })
+    @ApiProperty({
+        description: 'Client city',
+        required: false,
+        nullable: true,
+    })
     clientAddressCity?: string | null;
 
-    @ApiProperty({ description: 'Client postal code', required: false, nullable: true })
+    @ApiProperty({
+        description: 'Client postal code',
+        required: false,
+        nullable: true,
+    })
     clientAddressPostalCode?: string | null;
 
-    @ApiProperty({ description: 'Client country', required: false, nullable: true })
+    @ApiProperty({
+        description: 'Client country',
+        required: false,
+        nullable: true,
+    })
     clientAddressCountry?: string | null;
 
-    @ApiProperty({ description: 'Client phone number', required: false, nullable: true })
+    @ApiProperty({
+        description: 'Client phone number',
+        required: false,
+        nullable: true,
+    })
     clientPhoneNumber?: string | null;
 
-    @ApiProperty({ description: 'Additional notes from client', required: false, nullable: true })
+    @ApiProperty({
+        description: 'Additional notes from client',
+        required: false,
+        nullable: true,
+    })
     clientNotes?: string | null;
 
     constructor(data: SessionDbData) {

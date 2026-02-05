@@ -33,6 +33,13 @@ export type AuthRefreshDtoClass = {
     refreshToken: string;
 };
 
+export type AuthExchangeDtoClass = {
+    /**
+     * OAuth exchange code
+     */
+    code: string;
+};
+
 export type UserResDto = {
     /**
      * Unique identifier for the user
@@ -856,6 +863,12 @@ export type AuthControllerRefreshData = {
 
 export type AuthControllerRefreshResponse = unknown;
 
+export type AuthControllerExchangeData = {
+    requestBody: AuthExchangeDtoClass;
+};
+
+export type AuthControllerExchangeResponse = unknown;
+
 export type AuthControllerGoogleAuthResponse = unknown;
 
 export type AuthControllerGoogleAuthRedirectResponse = unknown;
@@ -1257,6 +1270,21 @@ export type $OpenApiTs = {
                  * Invalid refresh token
                  */
                 401: unknown;
+            };
+        };
+    };
+    '/auth/exchange': {
+        post: {
+            req: AuthControllerExchangeData;
+            res: {
+                /**
+                 * Tokens exchanged successfully
+                 */
+                200: unknown;
+                /**
+                 * Invalid or expired OAuth code
+                 */
+                400: unknown;
             };
         };
     };

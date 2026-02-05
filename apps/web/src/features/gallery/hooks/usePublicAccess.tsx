@@ -106,4 +106,3 @@ export function usePublicAccess(slug: string) {
         getToken,
     };
 }
-

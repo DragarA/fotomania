@@ -1,7 +1,8 @@
-import { diskStorage } from 'multer';
 import { mkdirSync } from 'fs';
 import { extname } from 'path';
+
 import { Request } from 'express';
+import { diskStorage } from 'multer';
 
 export const LOGO_MAX_SIZE = 2 * 1024 * 1024; // 2MB
 
@@ -25,7 +26,7 @@ export const logoStorage = diskStorage({
 export const logoFileFilter = (
     req: Request,
     file: Express.Multer.File,
-    cb: any,
+    cb: any
 ) => {
     const allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
     if (allowedMimes.includes(file.mimetype)) {
@@ -33,9 +34,9 @@ export const logoFileFilter = (
     } else {
         cb(
             new Error(
-                'Invalid file type. Only JPG, PNG, and WebP are allowed.',
+                'Invalid file type. Only JPG, PNG, and WebP are allowed.'
             ),
-            false,
+            false
         );
     }
 };

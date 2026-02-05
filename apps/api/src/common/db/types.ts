@@ -5,4 +5,6 @@ import type { DrizzleDB } from './drizzle';
  * or a transaction context. Used for methods that support both transactional
  * and non-transactional operations.
  */
-export type DbInstance = DrizzleDB | Parameters<Parameters<DrizzleDB['transaction']>[0]>[0];
+export type DbInstance =
+    | DrizzleDB
+    | Parameters<Parameters<DrizzleDB['transaction']>[0]>[0];

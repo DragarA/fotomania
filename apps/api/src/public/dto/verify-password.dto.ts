@@ -27,4 +27,3 @@ export class VerifyPasswordResDto {
         this.accessToken = accessToken;
     }
 }
-

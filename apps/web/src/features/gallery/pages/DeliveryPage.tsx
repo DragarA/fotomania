@@ -1,5 +1,12 @@
 import { useParams } from '@tanstack/react-router';
-import { Download, FileText, Image, Loader2, Mail, Package } from 'lucide-react';
+import {
+    Download,
+    FileText,
+    Image,
+    Loader2,
+    Mail,
+    Package,
+} from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -23,7 +30,9 @@ export function DeliveryPage() {
     const { t } = useTranslation('delivery');
     const [isDownloading, setIsDownloading] = useState(false);
     const [isDownloadingInvoice, setIsDownloadingInvoice] = useState(false);
-    const [selectedPhoto, setSelectedPhoto] = useState<PublicPhoto | null>(null);
+    const [selectedPhoto, setSelectedPhoto] = useState<PublicPhoto | null>(
+        null
+    );
 
     // Password protection
     const {
@@ -166,7 +175,9 @@ export function DeliveryPage() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,_rgba(0,0,0,0.02)_0%,_transparent_50%)]" />
                 <div className="relative flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-stone-200 border-t-stone-700"></div>
-                    <p className="text-sm font-light text-stone-500">{t('loading')}</p>
+                    <p className="text-sm font-light text-stone-500">
+                        {t('loading')}
+                    </p>
                 </div>
             </div>
         );
@@ -206,10 +217,14 @@ export function DeliveryPage() {
     return (
         <div
             className="relative flex min-h-screen flex-col bg-stone-50"
-            style={{
-                '--brand-main': delivery?.photographerBrandColorMain || '#292524',
-                '--brand-accent': delivery?.photographerBrandColorAccent || '#78716c',
-            } as React.CSSProperties}
+            style={
+                {
+                    '--brand-main':
+                        delivery?.photographerBrandColorMain || '#292524',
+                    '--brand-accent':
+                        delivery?.photographerBrandColorAccent || '#78716c',
+                } as React.CSSProperties
+            }
         >
             {/* Branded background gradient overlay */}
             <div
@@ -227,7 +242,9 @@ export function DeliveryPage() {
                     <div className="mb-6">
                         <PhotographerBranding
                             businessName={delivery?.photographerBusinessName}
-                            businessWebsite={delivery?.photographerBusinessWebsite}
+                            businessWebsite={
+                                delivery?.photographerBusinessWebsite
+                            }
                             logoUrl={delivery?.photographerLogo}
                         />
                     </div>
@@ -273,7 +290,9 @@ export function DeliveryPage() {
                                 </p>
                                 <p className="mt-1 text-lg font-medium tracking-wide text-stone-800">
                                     {deliveryLoading ? (
-                                        <span className="text-stone-300">...</span>
+                                        <span className="text-stone-300">
+                                            ...
+                                        </span>
                                     ) : (
                                         t('photoCount', {
                                             count: delivery?.photoCount || 0,
@@ -290,7 +309,10 @@ export function DeliveryPage() {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
                                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-stone-100 text-stone-600">
-                                        <FileText className="h-4 w-4" strokeWidth={1.5} />
+                                        <FileText
+                                            className="h-4 w-4"
+                                            strokeWidth={1.5}
+                                        />
                                     </div>
                                     <div>
                                         <p className="text-xs uppercase tracking-[0.2em] text-stone-400">

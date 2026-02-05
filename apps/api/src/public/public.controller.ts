@@ -89,7 +89,10 @@ export class PublicController {
         description: 'Returns the catalogue',
         type: CataloguePublicResDto,
     })
-    @ApiResponse({ status: 401, description: 'Password required or invalid token' })
+    @ApiResponse({
+        status: 401,
+        description: 'Password required or invalid token',
+    })
     @ApiResponse({ status: 404, description: 'Catalogue not found' })
     async findBySlug(@Param('slug') slug: string) {
         const result = await this.cataloguesService.findPublicBySlug(slug);
@@ -107,7 +110,10 @@ export class PublicController {
         description: 'Returns the photos',
         type: [CollectionPhotoPublicResDto],
     })
-    @ApiResponse({ status: 401, description: 'Password required or invalid token' })
+    @ApiResponse({
+        status: 401,
+        description: 'Password required or invalid token',
+    })
     @ApiResponse({ status: 404, description: 'Collection not found' })
     async findCollectionPhotosBySlug(
         @Param('slug') slug: string,
@@ -200,7 +206,8 @@ export class PublicController {
     })
     @ApiResponse({ status: 404, description: 'Delivery not found' })
     async findDeliveryBySlug(@Param('deliverySlug') deliverySlug: string) {
-        const result = await this.publicService.findDeliveryBySlug(deliverySlug);
+        const result =
+            await this.publicService.findDeliveryBySlug(deliverySlug);
         return new DeliveryPublicResDto(result);
     }
 
@@ -216,7 +223,8 @@ export class PublicController {
     })
     @ApiResponse({ status: 404, description: 'Delivery not found' })
     async findDeliveryPhotos(@Param('deliverySlug') deliverySlug: string) {
-        const photos = await this.publicService.findDeliveryPhotos(deliverySlug);
+        const photos =
+            await this.publicService.findDeliveryPhotos(deliverySlug);
         return photos.map((photo) => new CollectionPhotoPublicResDto(photo));
     }
 
@@ -293,7 +301,8 @@ export class PublicController {
         @Req() req: Request,
         @Res() res: Response
     ) {
-        const photos = await this.publicService.findDeliveryPhotos(deliverySlug);
+        const photos =
+            await this.publicService.findDeliveryPhotos(deliverySlug);
         const delivery =
             await this.publicService.findDeliveryBySlug(deliverySlug);
 

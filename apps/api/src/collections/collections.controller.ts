@@ -100,7 +100,11 @@ export class CollectionsController {
         );
         return data.map(
             ({ collection, photoCount, clientEmail }) =>
-                new CollectionResDto({ collection, photoCount, clientEmail: clientEmail || undefined })
+                new CollectionResDto({
+                    collection,
+                    photoCount,
+                    clientEmail: clientEmail || undefined,
+                })
         );
     }
 
@@ -141,7 +145,10 @@ export class CollectionsController {
         type: CollectionResDto,
     })
     @ApiResponse({ status: 404, description: 'Session not found' })
-    @ApiResponse({ status: 400, description: 'Delivery collection already exists' })
+    @ApiResponse({
+        status: 400,
+        description: 'Delivery collection already exists',
+    })
     @ApiResponse({ status: 403, description: 'Forbidden' })
     async createFromSession(
         @Param('sessionId') sessionId: string,
@@ -183,12 +190,12 @@ export class CollectionsController {
         description: 'Delivery email sent successfully',
     })
     @ApiResponse({ status: 404, description: 'Collection not found' })
-    @ApiResponse({ status: 400, description: 'Not a delivery collection or no client email' })
+    @ApiResponse({
+        status: 400,
+        description: 'Not a delivery collection or no client email',
+    })
     @ApiResponse({ status: 403, description: 'Forbidden' })
-    async sendDeliveryEmail(
-        @Param('id') id: string,
-        @User() user: UserEntity
-    ) {
+    async sendDeliveryEmail(@Param('id') id: string, @User() user: UserEntity) {
         return this.collectionsService.sendDeliveryEmail(id, user.id);
     }
 
@@ -259,7 +266,10 @@ export class CollectionsController {
         description: 'Invoice uploaded successfully',
         type: UploadInvoiceResDto,
     })
-    @ApiResponse({ status: 400, description: 'Invalid file type or not a delivery collection' })
+    @ApiResponse({
+        status: 400,
+        description: 'Invalid file type or not a delivery collection',
+    })
     @ApiResponse({ status: 404, description: 'Collection not found' })
     @ApiResponse({ status: 403, description: 'Forbidden' })
     async uploadInvoice(
@@ -288,7 +298,10 @@ export class CollectionsController {
         description: 'Invoice removed successfully',
         type: UploadInvoiceResDto,
     })
-    @ApiResponse({ status: 404, description: 'Collection or invoice not found' })
+    @ApiResponse({
+        status: 404,
+        description: 'Collection or invoice not found',
+    })
     @ApiResponse({ status: 403, description: 'Forbidden' })
     async removeInvoice(@Param('id') id: string, @User() user: UserEntity) {
         const result = await this.collectionsService.removeInvoice(id, user.id);

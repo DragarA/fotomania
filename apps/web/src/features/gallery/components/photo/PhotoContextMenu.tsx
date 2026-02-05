@@ -129,8 +129,8 @@ export function PhotoContextMenu({
                         item.disabled
                             ? 'cursor-not-allowed text-stone-300'
                             : item.danger
-                                ? 'text-red-600 hover:bg-red-50'
-                                : 'text-stone-600 hover:bg-stone-100'
+                              ? 'text-red-600 hover:bg-red-50'
+                              : 'text-stone-600 hover:bg-stone-100'
                     }`}
                 >
                     {item.icon}

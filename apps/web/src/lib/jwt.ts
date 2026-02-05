@@ -13,9 +13,7 @@ export const getJwtExpiryMs = (token: string): number | null => {
     if (parts.length !== 3) return null;
 
     try {
-        const payload = JSON.parse(
-            decodeBase64Url(parts[1])
-        ) as JwtPayload;
+        const payload = JSON.parse(decodeBase64Url(parts[1])) as JwtPayload;
         if (!payload.exp) return null;
         return payload.exp * 1000;
     } catch {

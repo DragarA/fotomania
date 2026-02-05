@@ -25,7 +25,10 @@ export function RegisterPage() {
                 {/* Header */}
                 <div className="mb-10 text-center">
                     <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-stone-200/60">
-                        <UserPlus className="h-6 w-6 text-stone-600" strokeWidth={1.5} />
+                        <UserPlus
+                            className="h-6 w-6 text-stone-600"
+                            strokeWidth={1.5}
+                        />
                     </div>
                     <h1 className="text-3xl font-light tracking-[0.02em] text-stone-800">
                         {t('register.title')}

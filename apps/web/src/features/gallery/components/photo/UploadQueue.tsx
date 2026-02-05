@@ -68,19 +68,30 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
                                                     {file.file.name}
                                                 </span>
                                                 <div className="flex items-center gap-2 text-stone-500">
-                                                    {file.status === 'uploading' && (
+                                                    {file.status ===
+                                                        'uploading' && (
                                                         <span className="h-4 w-4 animate-spin rounded-full border border-stone-400 border-t-stone-800" />
                                                     )}
-                                                    {file.status === 'success' && (
-                                                        <span className="text-emerald-500">✓</span>
+                                                    {file.status ===
+                                                        'success' && (
+                                                        <span className="text-emerald-500">
+                                                            ✓
+                                                        </span>
                                                     )}
-                                                    {file.status === 'error' && (
-                                                        <span className="text-red-500">×</span>
+                                                    {file.status ===
+                                                        'error' && (
+                                                        <span className="text-red-500">
+                                                            ×
+                                                        </span>
                                                     )}
                                                     <button
-                                                        onClick={() => onRemove(file.id)}
+                                                        onClick={() =>
+                                                            onRemove(file.id)
+                                                        }
                                                         className="text-stone-400 transition hover:text-stone-700"
-                                                        title={t('uploadQueue.remove')}
+                                                        title={t(
+                                                            'uploadQueue.remove'
+                                                        )}
                                                     >
                                                         ×
                                                     </button>
@@ -91,18 +102,25 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
                                                     <div className="h-1 w-full overflow-hidden rounded-full bg-stone-200/80">
                                                         <div
                                                             className="h-full rounded-full bg-stone-700 transition-all"
-                                                            style={{ width: `${file.progress}%` }}
+                                                            style={{
+                                                                width: `${file.progress}%`,
+                                                            }}
                                                         />
                                                     </div>
                                                     <span className="text-xs uppercase tracking-[0.3em] text-stone-400">
-                                                        {Math.round(file.progress)}%
+                                                        {Math.round(
+                                                            file.progress
+                                                        )}
+                                                        %
                                                     </span>
                                                 </div>
                                             )}
 
                                             {file.status === 'success' && (
                                                 <span className="text-xs uppercase tracking-[0.3em] text-emerald-600">
-                                                    {t('uploadQueue.uploadComplete')}
+                                                    {t(
+                                                        'uploadQueue.uploadComplete'
+                                                    )}
                                                 </span>
                                             )}
 
@@ -110,7 +128,9 @@ export function UploadQueue({ files, onRemove, onClear }: UploadQueueProps) {
                                                 <div className="space-y-1 text-xs text-red-500">
                                                     <span>
                                                         {file.error ||
-                                                            t('uploadQueue.uploadFailed')}
+                                                            t(
+                                                                'uploadQueue.uploadFailed'
+                                                            )}
                                                     </span>
                                                     <button className="text-[0.65rem] uppercase tracking-[0.3em] text-stone-500">
                                                         {t('uploadQueue.retry')}

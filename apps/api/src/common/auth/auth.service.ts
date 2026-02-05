@@ -104,9 +104,7 @@ export class AuthService {
                 .returning();
 
             if (!newUser) {
-                throw new InternalServerErrorException(
-                    'Failed to create user'
-                );
+                throw new InternalServerErrorException('Failed to create user');
             }
 
             await tx.insert(account).values({

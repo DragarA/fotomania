@@ -4,8 +4,7 @@ import { getJwtExpiryMs } from './jwt';
 
 // Configure the OpenAPI client
 OpenAPI.BASE =
-    (import.meta.env?.VITE_API_BASE_URL as string) ||
-    'http://localhost:3000';
+    (import.meta.env?.VITE_API_BASE_URL as string) || 'http://localhost:3000';
 
 // Export the base URL for use in components that need direct URL access
 export const API_BASE_URL = OpenAPI.BASE;
@@ -42,7 +41,9 @@ const encodePair = (key: string, value: unknown, qs: string[]) => {
     if (value === undefined || value === null) return;
 
     if (value instanceof Date) {
-        qs.push(`${encodeURIComponent(key)}=${encodeURIComponent(value.toISOString())}`);
+        qs.push(
+            `${encodeURIComponent(key)}=${encodeURIComponent(value.toISOString())}`
+        );
     } else if (Array.isArray(value)) {
         value.forEach((v) => encodePair(key, v, qs));
     } else if (typeof value === 'object') {
@@ -50,7 +51,9 @@ const encodePair = (key: string, value: unknown, qs: string[]) => {
             encodePair(`${key}[${k}]`, v, qs)
         );
     } else {
-        qs.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
+        qs.push(
+            `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`
+        );
     }
 };
 
@@ -58,7 +61,10 @@ const buildUrl = (options: any) => {
     const path = String(options.url || '').replace(
         /{(.*?)}/g,
         (substring: string, group: string) => {
-            if (options.path && Object.prototype.hasOwnProperty.call(options.path, group)) {
+            if (
+                options.path &&
+                Object.prototype.hasOwnProperty.call(options.path, group)
+            ) {
                 return encodeURIComponent(String(options.path[group]));
             }
             return substring;

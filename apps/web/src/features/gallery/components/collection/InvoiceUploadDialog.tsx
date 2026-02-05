@@ -102,7 +102,8 @@ export function InvoiceUploadDialog({
                                         {selectedFile.name}
                                     </p>
                                     <p className="text-xs text-stone-400">
-                                        {(selectedFile.size / 1024).toFixed(1)} KB
+                                        {(selectedFile.size / 1024).toFixed(1)}{' '}
+                                        KB
                                     </p>
                                 </div>
                             </div>

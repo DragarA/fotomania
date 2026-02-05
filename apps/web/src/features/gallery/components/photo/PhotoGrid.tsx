@@ -72,7 +72,9 @@ export function PhotoGrid({
                 <h3 className="mb-2 text-xl font-light tracking-[0.02em] text-stone-800">
                     {t('photoGrid.noPhotosYet')}
                 </h3>
-                <p className="mb-4 text-stone-500">{t('photoGrid.dragAndDrop')}</p>
+                <p className="mb-4 text-stone-500">
+                    {t('photoGrid.dragAndDrop')}
+                </p>
                 {onUploadClick && (
                     <button
                         onClick={onUploadClick}

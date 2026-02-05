@@ -81,7 +81,12 @@ export class CataloguesService {
             .select()
             .from(catalogue)
             .leftJoin(collection, eq(catalogue.id, collection.catalogueId))
-            .where(and(eq(catalogue.publicUrlSlug, slug), eq(catalogue.status, 'published')));
+            .where(
+                and(
+                    eq(catalogue.publicUrlSlug, slug),
+                    eq(catalogue.status, 'published')
+                )
+            );
 
         if (!catalogueResult) {
             throw new NotFoundException(
@@ -96,7 +101,10 @@ export class CataloguesService {
             .from(collection)
             .innerJoin(photo, eq(collection.id, photo.collectionId))
             .where(
-                and(eq(collection.catalogueId, catalogueResult.catalogue.id), eq(collection.type, 'proofing'))
+                and(
+                    eq(collection.catalogueId, catalogueResult.catalogue.id),
+                    eq(collection.type, 'proofing')
+                )
             )
             .having(gt(count(photo.id), 0))
             .groupBy(collection.id);

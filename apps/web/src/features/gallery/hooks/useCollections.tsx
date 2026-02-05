@@ -165,7 +165,9 @@ export function useSendDeliveryEmailMutation() {
         },
         onError: (error: any) => {
             toast.error(
-                error.body?.message || error.message || t('toast.deliveryEmailFailed')
+                error.body?.message ||
+                    error.message ||
+                    t('toast.deliveryEmailFailed')
             );
         },
     });

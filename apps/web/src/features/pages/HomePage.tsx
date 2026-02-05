@@ -142,42 +142,62 @@ export function HomePage() {
                                 {
                                     step: 1,
                                     icon: Folder,
-                                    title: t('home.howItWorks.steps.create.title'),
-                                    description: t('home.howItWorks.steps.create.description'),
+                                    title: t(
+                                        'home.howItWorks.steps.create.title'
+                                    ),
+                                    description: t(
+                                        'home.howItWorks.steps.create.description'
+                                    ),
                                 },
                                 {
                                     step: 2,
                                     icon: Image,
-                                    title: t('home.howItWorks.steps.organize.title'),
-                                    description: t('home.howItWorks.steps.organize.description'),
+                                    title: t(
+                                        'home.howItWorks.steps.organize.title'
+                                    ),
+                                    description: t(
+                                        'home.howItWorks.steps.organize.description'
+                                    ),
                                 },
                                 {
                                     step: 3,
                                     icon: Share2,
-                                    title: t('home.howItWorks.steps.share.title'),
-                                    description: t('home.howItWorks.steps.share.description'),
+                                    title: t(
+                                        'home.howItWorks.steps.share.title'
+                                    ),
+                                    description: t(
+                                        'home.howItWorks.steps.share.description'
+                                    ),
                                 },
-                            ].map(({ step, icon: Icon, title, description }) => (
-                                <div key={title} className="relative flex gap-5 md:flex-col md:items-center md:text-center">
-                                    {/* Step number circle */}
-                                    <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-stone-800 text-lg font-medium text-white shadow-lg">
-                                        {step}
-                                    </div>
-
-                                    {/* Content */}
-                                    <div className="flex-1 pb-8 md:pb-0 md:pt-6">
-                                        <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white text-stone-600 shadow-sm md:mb-4">
-                                            <Icon className="h-5 w-5" strokeWidth={1.5} />
+                            ].map(
+                                ({ step, icon: Icon, title, description }) => (
+                                    <div
+                                        key={title}
+                                        className="relative flex gap-5 md:flex-col md:items-center md:text-center"
+                                    >
+                                        {/* Step number circle */}
+                                        <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-stone-800 text-lg font-medium text-white shadow-lg">
+                                            {step}
                                         </div>
-                                        <h3 className="mb-2 text-lg font-medium tracking-wide text-stone-800">
-                                            {title}
-                                        </h3>
-                                        <p className="text-sm leading-relaxed text-stone-500">
-                                            {description}
-                                        </p>
+
+                                        {/* Content */}
+                                        <div className="flex-1 pb-8 md:pb-0 md:pt-6">
+                                            <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white text-stone-600 shadow-sm md:mb-4">
+                                                <Icon
+                                                    className="h-5 w-5"
+                                                    strokeWidth={1.5}
+                                                />
+                                            </div>
+                                            <h3 className="mb-2 text-lg font-medium tracking-wide text-stone-800">
+                                                {title}
+                                            </h3>
+                                            <p className="text-sm leading-relaxed text-stone-500">
+                                                {description}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                )
+                            )}
                         </div>
                     </div>
                 </div>

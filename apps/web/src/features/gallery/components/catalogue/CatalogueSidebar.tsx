@@ -101,7 +101,10 @@ export function CatalogueSidebar({
             return;
         }
 
-        if (currentStep === 'favourites-delivery' && activeTab !== 'favourites') {
+        if (
+            currentStep === 'favourites-delivery' &&
+            activeTab !== 'favourites'
+        ) {
             setActiveTab('favourites');
             return;
         }
@@ -262,7 +265,10 @@ export function CatalogueSidebar({
                             size="sm"
                             className="justify-center tracking-[0.1em]"
                         >
-                            <Share className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+                            <Share
+                                className="h-4 w-4 shrink-0"
+                                strokeWidth={1.5}
+                            />
                             {t('sidebar.share')}
                         </Button>
 
@@ -280,9 +286,15 @@ export function CatalogueSidebar({
                                 className="justify-center tracking-[0.1em]"
                             >
                                 {catalogue.isProtected ? (
-                                    <Lock className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+                                    <Lock
+                                        className="h-4 w-4 shrink-0"
+                                        strokeWidth={1.5}
+                                    />
                                 ) : (
-                                    <LockOpen className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+                                    <LockOpen
+                                        className="h-4 w-4 shrink-0"
+                                        strokeWidth={1.5}
+                                    />
                                 )}
                                 {t(
                                     catalogue.isProtected
@@ -295,7 +307,7 @@ export function CatalogueSidebar({
                 )}
 
                 {/* Tab Navigation */}
-             <div className="flex gap-2" data-onboarding="sidebar-tabs">
+                <div className="flex gap-2" data-onboarding="sidebar-tabs">
                     {[
                         {
                             id: 'collections',
@@ -376,7 +388,9 @@ export function CatalogueSidebar({
                                                       : 'border-transparent bg-stone-50 hover:border-black/10'
                                             }`}
                                             onClick={() =>
-                                                onSelectCollection(collection.id)
+                                                onSelectCollection(
+                                                    collection.id
+                                                )
                                             }
                                         >
                                             <div className="flex items-center justify-between gap-2">
@@ -385,16 +399,27 @@ export function CatalogueSidebar({
                                                         {isDelivery && (
                                                             <Package
                                                                 className="h-4 w-4 shrink-0 text-amber-600"
-                                                                strokeWidth={1.5}
+                                                                strokeWidth={
+                                                                    1.5
+                                                                }
                                                             />
                                                         )}
                                                         <p className="truncate font-medium text-stone-900">
-                                                            {isDelivery ? collection.name.replace('Delivery', t('collection.delivery_collection_name')) : collection.name}
+                                                            {isDelivery
+                                                                ? collection.name.replace(
+                                                                      'Delivery',
+                                                                      t(
+                                                                          'collection.delivery_collection_name'
+                                                                      )
+                                                                  )
+                                                                : collection.name}
                                                         </p>
                                                     </div>
                                                     <p className="text-sm text-stone-500">
                                                         {collection.photoCount}{' '}
-                                                        {t('sidebar.photos', { count: collection.photoCount })}
+                                                        {t('sidebar.photos', {
+                                                            count: collection.photoCount,
+                                                        })}
                                                         {isDelivery &&
                                                             collection.clientEmail && (
                                                                 <span className="ml-1">
@@ -415,7 +440,9 @@ export function CatalogueSidebar({
                                                         );
                                                     }}
                                                     className="shrink-0 p-1 text-stone-400 hover:text-stone-700 cursor-pointer"
-                                                    title={t('sidebar.moreOptions')}
+                                                    title={t(
+                                                        'sidebar.moreOptions'
+                                                    )}
                                                 >
                                                     <MoreVertical className="w-5 h-5" />
                                                 </button>

@@ -1,4 +1,14 @@
-import { Calendar, Heart, Mail, MapPin, Package, Phone, User, X, FileText } from 'lucide-react';
+import {
+    Calendar,
+    Heart,
+    Mail,
+    MapPin,
+    Package,
+    Phone,
+    User,
+    X,
+    FileText,
+} from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -120,7 +130,10 @@ export function FavouritesModal({
 
                         <div className="rounded-lg bg-stone-50 p-4">
                             <div className="mb-2 flex items-center gap-2 text-stone-400">
-                                <Calendar className="h-4 w-4" strokeWidth={1.5} />
+                                <Calendar
+                                    className="h-4 w-4"
+                                    strokeWidth={1.5}
+                                />
                                 <span className="text-[0.65rem] uppercase tracking-[0.2em]">
                                     {t('favouritesModal.submittedLabel')}
                                 </span>
@@ -133,19 +146,24 @@ export function FavouritesModal({
 
                     {/* Client Information */}
                     {(session.clientName ||
-                      session.clientAddressStreet ||
-                      session.clientAddressCity ||
-                      session.clientAddressPostalCode ||
-                      session.clientAddressCountry ||
-                      session.clientPhoneNumber ||
-                      session.clientNotes) && (
+                        session.clientAddressStreet ||
+                        session.clientAddressCity ||
+                        session.clientAddressPostalCode ||
+                        session.clientAddressCountry ||
+                        session.clientPhoneNumber ||
+                        session.clientNotes) && (
                         <div className="mt-4 space-y-3">
                             {session.clientName && (
                                 <div className="rounded-lg bg-stone-50 p-4">
                                     <div className="mb-2 flex items-center gap-2 text-stone-400">
-                                        <User className="h-4 w-4" strokeWidth={1.5} />
+                                        <User
+                                            className="h-4 w-4"
+                                            strokeWidth={1.5}
+                                        />
                                         <span className="text-[0.65rem] uppercase tracking-[0.2em]">
-                                            {t('favouritesModal.clientNameLabel')}
+                                            {t(
+                                                'favouritesModal.clientNameLabel'
+                                            )}
                                         </span>
                                     </div>
                                     <p className="text-sm font-medium text-stone-800">
@@ -155,12 +173,15 @@ export function FavouritesModal({
                             )}
 
                             {(session.clientAddressStreet ||
-                              session.clientAddressCity ||
-                              session.clientAddressPostalCode ||
-                              session.clientAddressCountry) && (
+                                session.clientAddressCity ||
+                                session.clientAddressPostalCode ||
+                                session.clientAddressCountry) && (
                                 <div className="rounded-lg bg-stone-50 p-4">
                                     <div className="mb-2 flex items-center gap-2 text-stone-400">
-                                        <MapPin className="h-4 w-4" strokeWidth={1.5} />
+                                        <MapPin
+                                            className="h-4 w-4"
+                                            strokeWidth={1.5}
+                                        />
                                         <span className="text-[0.65rem] uppercase tracking-[0.2em]">
                                             {t('favouritesModal.addressLabel')}
                                         </span>
@@ -171,7 +192,9 @@ export function FavouritesModal({
                                             [
                                                 session.clientAddressPostalCode,
                                                 session.clientAddressCity,
-                                            ].filter(Boolean).join(' '),
+                                            ]
+                                                .filter(Boolean)
+                                                .join(' '),
                                             session.clientAddressCountry,
                                         ]
                                             .filter(Boolean)
@@ -183,7 +206,10 @@ export function FavouritesModal({
                             {session.clientPhoneNumber && (
                                 <div className="rounded-lg bg-stone-50 p-4">
                                     <div className="mb-2 flex items-center gap-2 text-stone-400">
-                                        <Phone className="h-4 w-4" strokeWidth={1.5} />
+                                        <Phone
+                                            className="h-4 w-4"
+                                            strokeWidth={1.5}
+                                        />
                                         <span className="text-[0.65rem] uppercase tracking-[0.2em]">
                                             {t('favouritesModal.phoneLabel')}
                                         </span>
@@ -197,7 +223,10 @@ export function FavouritesModal({
                             {session.clientNotes && (
                                 <div className="rounded-lg bg-stone-50 p-4">
                                     <div className="mb-2 flex items-center gap-2 text-stone-400">
-                                        <FileText className="h-4 w-4" strokeWidth={1.5} />
+                                        <FileText
+                                            className="h-4 w-4"
+                                            strokeWidth={1.5}
+                                        />
                                         <span className="text-[0.65rem] uppercase tracking-[0.2em]">
                                             {t('favouritesModal.notesLabel')}
                                         </span>
@@ -214,7 +243,9 @@ export function FavouritesModal({
                     <div className="mt-6 flex items-center gap-2 text-stone-700">
                         <Heart className="h-5 w-5" strokeWidth={1.5} />
                         <span className="text-base">
-                            {t('favouritesModal.favouritePhotos', { count: session.photoCount })}
+                            {t('favouritesModal.favouritePhotos', {
+                                count: session.photoCount,
+                            })}
                         </span>
                     </div>
 
@@ -251,13 +282,24 @@ export function FavouritesModal({
                                                 {photo.originalFileName}
                                             </p>
                                             <p className="mt-0.5 text-xs text-stone-500">
-                                                {photo.width && photo.height && (
-                                                    <span>{photo.width} × {photo.height}</span>
-                                                )}
+                                                {photo.width &&
+                                                    photo.height && (
+                                                        <span>
+                                                            {photo.width} ×{' '}
+                                                            {photo.height}
+                                                        </span>
+                                                    )}
                                                 {photo.size && (
                                                     <span>
-                                                        {photo.width && photo.height && ' · '}
-                                                        {(photo.size / 1024 / 1024).toFixed(2)} MB
+                                                        {photo.width &&
+                                                            photo.height &&
+                                                            ' · '}
+                                                        {(
+                                                            photo.size /
+                                                            1024 /
+                                                            1024
+                                                        ).toFixed(2)}{' '}
+                                                        MB
                                                     </span>
                                                 )}
                                             </p>

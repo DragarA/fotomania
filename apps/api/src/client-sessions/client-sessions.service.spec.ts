@@ -103,7 +103,8 @@ describe('ClientSessionsService', () => {
                                 id: testCatalogue.id,
                                 title: testCatalogue.title,
                                 ownerEmail: testUser.email,
-                                ownerPreferredLanguage: testUser.preferredLanguage,
+                                ownerPreferredLanguage:
+                                    testUser.preferredLanguage,
                             },
                         ]),
                     }),
@@ -115,9 +116,11 @@ describe('ClientSessionsService', () => {
                 from: jest.fn().mockReturnValue({
                     leftJoin: jest.fn().mockReturnValue({
                         where: jest.fn().mockReturnValue({
-                            groupBy: jest.fn().mockResolvedValue([
-                                { photoCount: photoIds.length },
-                            ]),
+                            groupBy: jest
+                                .fn()
+                                .mockResolvedValue([
+                                    { photoCount: photoIds.length },
+                                ]),
                         }),
                     }),
                 }),
@@ -176,9 +179,7 @@ describe('ClientSessionsService', () => {
             expect(result.clientAddressCountry).toBe(
                 clientInfo.clientAddressCountry
             );
-            expect(result.clientPhoneNumber).toBe(
-                clientInfo.clientPhoneNumber
-            );
+            expect(result.clientPhoneNumber).toBe(clientInfo.clientPhoneNumber);
             expect(result.clientNotes).toBe(clientInfo.clientNotes);
             expect(mockEmailService.send).toHaveBeenCalled();
         });
@@ -201,7 +202,8 @@ describe('ClientSessionsService', () => {
                                 id: testCatalogue.id,
                                 title: testCatalogue.title,
                                 ownerEmail: testUser.email,
-                                ownerPreferredLanguage: testUser.preferredLanguage,
+                                ownerPreferredLanguage:
+                                    testUser.preferredLanguage,
                             },
                         ]),
                     }),
@@ -213,9 +215,11 @@ describe('ClientSessionsService', () => {
                 from: jest.fn().mockReturnValue({
                     leftJoin: jest.fn().mockReturnValue({
                         where: jest.fn().mockReturnValue({
-                            groupBy: jest.fn().mockResolvedValue([
-                                { photoCount: photoIds.length },
-                            ]),
+                            groupBy: jest
+                                .fn()
+                                .mockResolvedValue([
+                                    { photoCount: photoIds.length },
+                                ]),
                         }),
                     }),
                 }),
@@ -294,7 +298,8 @@ describe('ClientSessionsService', () => {
                                 id: testCatalogue.id,
                                 title: testCatalogue.title,
                                 ownerEmail: testUser.email,
-                                ownerPreferredLanguage: testUser.preferredLanguage,
+                                ownerPreferredLanguage:
+                                    testUser.preferredLanguage,
                             },
                         ]),
                     }),
@@ -306,9 +311,11 @@ describe('ClientSessionsService', () => {
                 from: jest.fn().mockReturnValue({
                     leftJoin: jest.fn().mockReturnValue({
                         where: jest.fn().mockReturnValue({
-                            groupBy: jest.fn().mockResolvedValue([
-                                { photoCount: photoIds.length },
-                            ]),
+                            groupBy: jest
+                                .fn()
+                                .mockResolvedValue([
+                                    { photoCount: photoIds.length },
+                                ]),
                         }),
                     }),
                 }),
@@ -331,7 +338,9 @@ describe('ClientSessionsService', () => {
             mockDb.update.mockReturnValueOnce({
                 set: jest.fn().mockReturnValue({
                     where: jest.fn().mockReturnValue({
-                        returning: jest.fn().mockResolvedValue([updatedSession]),
+                        returning: jest
+                            .fn()
+                            .mockResolvedValue([updatedSession]),
                     }),
                 }),
             } as any);
@@ -388,7 +397,8 @@ describe('ClientSessionsService', () => {
                                 id: testCatalogue.id,
                                 title: testCatalogue.title,
                                 ownerEmail: testUser.email,
-                                ownerPreferredLanguage: testUser.preferredLanguage,
+                                ownerPreferredLanguage:
+                                    testUser.preferredLanguage,
                             },
                         ]),
                     }),
@@ -400,9 +410,11 @@ describe('ClientSessionsService', () => {
                 from: jest.fn().mockReturnValue({
                     leftJoin: jest.fn().mockReturnValue({
                         where: jest.fn().mockReturnValue({
-                            groupBy: jest.fn().mockResolvedValue([
-                                { photoCount: photoIds.length },
-                            ]),
+                            groupBy: jest
+                                .fn()
+                                .mockResolvedValue([
+                                    { photoCount: photoIds.length },
+                                ]),
                         }),
                     }),
                 }),
@@ -421,7 +433,9 @@ describe('ClientSessionsService', () => {
             mockDb.update.mockReturnValueOnce({
                 set: jest.fn().mockReturnValue({
                     where: jest.fn().mockReturnValue({
-                        returning: jest.fn().mockResolvedValue([existingSession]),
+                        returning: jest
+                            .fn()
+                            .mockResolvedValue([existingSession]),
                     }),
                 }),
             } as any);
@@ -482,7 +496,8 @@ describe('ClientSessionsService', () => {
                                 id: testCatalogue.id,
                                 title: testCatalogue.title,
                                 ownerEmail: testUser.email,
-                                ownerPreferredLanguage: testUser.preferredLanguage,
+                                ownerPreferredLanguage:
+                                    testUser.preferredLanguage,
                             },
                         ]),
                     }),
@@ -527,7 +542,8 @@ describe('ClientSessionsService', () => {
                                 id: testCatalogue.id,
                                 title: testCatalogue.title,
                                 ownerEmail: testUser.email,
-                                ownerPreferredLanguage: testUser.preferredLanguage,
+                                ownerPreferredLanguage:
+                                    testUser.preferredLanguage,
                             },
                         ]),
                     }),
@@ -539,9 +555,11 @@ describe('ClientSessionsService', () => {
                 from: jest.fn().mockReturnValue({
                     leftJoin: jest.fn().mockReturnValue({
                         where: jest.fn().mockReturnValue({
-                            groupBy: jest.fn().mockResolvedValue([
-                                { photoCount: photoIds.length },
-                            ]),
+                            groupBy: jest
+                                .fn()
+                                .mockResolvedValue([
+                                    { photoCount: photoIds.length },
+                                ]),
                         }),
                     }),
                 }),
@@ -587,10 +605,9 @@ describe('ClientSessionsService', () => {
                     language: 'sl',
                 })
             );
-            expect(mockI18nService.t).toHaveBeenCalledWith(
-                expect.any(String),
-                { lang: 'sl' }
-            );
+            expect(mockI18nService.t).toHaveBeenCalledWith(expect.any(String), {
+                lang: 'sl',
+            });
         });
     });
 
@@ -642,7 +659,9 @@ describe('ClientSessionsService', () => {
             expect(result.sessionId).toBe(testSession.id);
             expect(result.email).toBe(testSession.email);
             expect(result.clientName).toBe(testSession.clientName);
-            expect(result.clientPhoneNumber).toBe(testSession.clientPhoneNumber);
+            expect(result.clientPhoneNumber).toBe(
+                testSession.clientPhoneNumber
+            );
             expect(result.photos).toEqual(testPhotos);
         });
 

@@ -12,7 +12,12 @@ export const invoiceFileFilter = (
     if (allowedMimes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new Error(`Invalid file type: ${file.mimetype}. Only PDF files are allowed.`), false);
+        cb(
+            new Error(
+                `Invalid file type: ${file.mimetype}. Only PDF files are allowed.`
+            ),
+            false
+        );
     }
 };
 

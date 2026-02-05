@@ -70,9 +70,7 @@ function ErrorFallback({ error, onReset }: ErrorFallbackProps) {
                     <h1 className="mb-2 text-2xl font-bold text-gray-900">
                         {t('boundary.title')}
                     </h1>
-                    <p className="text-gray-600">
-                        {t('boundary.message')}
-                    </p>
+                    <p className="text-gray-600">{t('boundary.message')}</p>
                 </div>
 
                 {error && import.meta.env.MODE === 'development' && (

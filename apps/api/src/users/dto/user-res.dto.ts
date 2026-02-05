@@ -171,4 +171,3 @@ export class UserResDto {
         this.collectClientNotes = user.collectClientNotes;
     }
 }
-

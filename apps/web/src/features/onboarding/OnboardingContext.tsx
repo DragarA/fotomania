@@ -44,7 +44,9 @@ export interface OnboardingContextType extends OnboardingState {
     completeWelcome: () => void;
 }
 
-const buildCompletedSteps = (override?: Partial<CompletedSteps>): CompletedSteps =>
+const buildCompletedSteps = (
+    override?: Partial<CompletedSteps>
+): CompletedSteps =>
     onboardingSteps.reduce((acc, step) => {
         acc[step] = Boolean(override?.[step]);
         return acc;
@@ -217,7 +219,13 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
             !state.isCompleted &&
             !state.isActive
         );
-    }, [isInitialized, state.completedSteps.welcome, state.isCompleted, state.isActive, user?.id]);
+    }, [
+        isInitialized,
+        state.completedSteps.welcome,
+        state.isCompleted,
+        state.isActive,
+        user?.id,
+    ]);
 
     const value = useMemo(
         () => ({
@@ -229,7 +237,15 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
             resetOnboarding,
             completeWelcome,
         }),
-        [state, shouldShowWelcome, nextStep, resetOnboarding, skipOnboarding, startOnboarding, completeWelcome]
+        [
+            state,
+            shouldShowWelcome,
+            nextStep,
+            resetOnboarding,
+            skipOnboarding,
+            startOnboarding,
+            completeWelcome,
+        ]
     );
 
     return (

@@ -53,7 +53,9 @@ export function usePublicCatalogueQuery(slug: string) {
             );
 
             if (!response.ok) {
-                const error = new Error('Failed to fetch catalogue') as Error & {
+                const error = new Error(
+                    'Failed to fetch catalogue'
+                ) as Error & {
                     status?: number;
                 };
                 error.status = response.status;
@@ -179,19 +181,20 @@ export function useSetCatalogueCoverMutation() {
 export function useUpdateCatalogueStatusMutation(catalogueId: string) {
     const queryClient = useQueryClient();
 
-    return useMutation<
-        Catalogue,
-        Error,
-        { status: string; password?: string }
-    >({
-        mutationFn: (data) =>
-            CataloguesService.cataloguesControllerUpdateStatus({
-                id: catalogueId,
-                requestBody: data,
-            }) as Promise<Catalogue>,
-        onSuccess: (catalogue) => {
-            queryClient.invalidateQueries({ queryKey: ['catalogues'] });
-            queryClient.setQueryData(['catalogues', catalogue.id], catalogue);
-        },
-    });
+    return useMutation<Catalogue, Error, { status: string; password?: string }>(
+        {
+            mutationFn: (data) =>
+                CataloguesService.cataloguesControllerUpdateStatus({
+                    id: catalogueId,
+                    requestBody: data,
+                }) as Promise<Catalogue>,
+            onSuccess: (catalogue) => {
+                queryClient.invalidateQueries({ queryKey: ['catalogues'] });
+                queryClient.setQueryData(
+                    ['catalogues', catalogue.id],
+                    catalogue
+                );
+            },
+        }
+    );
 }

@@ -32,7 +32,9 @@ export class PublicAccessGuard implements CanActivate {
         const token = this.extractTokenFromHeader(request);
 
         if (!token) {
-            throw new UnauthorizedException('This gallery is password protected');
+            throw new UnauthorizedException(
+                'This gallery is password protected'
+            );
         }
 
         const isValid = this.publicService.validateAccessToken(token, slug);
@@ -49,4 +51,3 @@ export class PublicAccessGuard implements CanActivate {
         return type === 'Bearer' ? token : undefined;
     }
 }
-

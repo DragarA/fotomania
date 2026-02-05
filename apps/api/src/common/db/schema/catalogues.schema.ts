@@ -2,7 +2,11 @@ import { pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 import { user } from './users.schema';
 
-export const catalogueStatusEnum = pgEnum('catalogue_status', ['draft', 'published', 'deleted']);
+export const catalogueStatusEnum = pgEnum('catalogue_status', [
+    'draft',
+    'published',
+    'deleted',
+]);
 
 export const catalogue = pgTable('catalogue', {
     id: text('id').primaryKey(),

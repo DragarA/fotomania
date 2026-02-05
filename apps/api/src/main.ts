@@ -20,8 +20,7 @@ async function bootstrap() {
 
     const configService = app.get(ConfigService);
     const frontendUrl =
-        configService.get<string>('FRONTEND_URL') ||
-        'http://localhost:5173';
+        configService.get<string>('FRONTEND_URL') || 'http://localhost:5173';
 
     // Enable CORS for frontend
     app.enableCors({
@@ -63,8 +62,7 @@ async function bootstrap() {
 
     const port = configService.get<number>('API_PORT') || 3000;
     const apiBaseUrl =
-        configService.get<string>('API_BASE_URL') ||
-        `http://localhost:${port}`;
+        configService.get<string>('API_BASE_URL') || `http://localhost:${port}`;
 
     await app.listen(port);
     logger.log(`Application is running on: ${apiBaseUrl}`);

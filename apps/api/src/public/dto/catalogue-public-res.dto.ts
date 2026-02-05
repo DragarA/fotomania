@@ -162,9 +162,11 @@ export class CataloguePublicResDto {
         this.collectClientPhone = photographer?.collectClientPhone ?? false;
         this.collectClientNotes = photographer?.collectClientNotes ?? false;
         this.photographerBusinessName = photographer?.businessName ?? null;
-        this.photographerBusinessWebsite = photographer?.businessWebsite ?? null;
+        this.photographerBusinessWebsite =
+            photographer?.businessWebsite ?? null;
         this.photographerLogo = photographer?.businessLogo ?? null;
         this.photographerBrandColorMain = photographer?.brandColorMain ?? null;
-        this.photographerBrandColorAccent = photographer?.brandColorAccent ?? null;
+        this.photographerBrandColorAccent =
+            photographer?.brandColorAccent ?? null;
     }
 }

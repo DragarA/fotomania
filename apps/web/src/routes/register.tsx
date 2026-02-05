@@ -5,4 +5,3 @@ import { RegisterPage } from '../features/pages/RegisterPage';
 export const Route = createFileRoute('/register')({
     component: RegisterPage,
 });
-

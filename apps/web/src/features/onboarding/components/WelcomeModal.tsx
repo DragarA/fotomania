@@ -1,10 +1,4 @@
-import {
-    ArrowLeft,
-    ArrowRight,
-    Layers,
-    Share2,
-    Sparkles,
-} from 'lucide-react';
+import { ArrowLeft, ArrowRight, Layers, Share2, Sparkles } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +19,11 @@ type Slide = {
     features?: string[];
 };
 
-export function WelcomeModal({ isOpen, onSkip, onComplete }: WelcomeModalProps) {
+export function WelcomeModal({
+    isOpen,
+    onSkip,
+    onComplete,
+}: WelcomeModalProps) {
     const { t } = useTranslation('onboarding');
     const [activeSlide, setActiveSlide] = useState(0);
 
@@ -135,7 +133,9 @@ export function WelcomeModal({ isOpen, onSkip, onComplete }: WelcomeModalProps) 
                         <button
                             type="button"
                             onClick={() =>
-                                setActiveSlide((value) => Math.max(0, value - 1))
+                                setActiveSlide((value) =>
+                                    Math.max(0, value - 1)
+                                )
                             }
                             disabled={activeSlide === 0}
                             className="inline-flex items-center gap-2 rounded-full border border-stone-200 px-4 py-2 text-sm text-stone-600 transition hover:border-stone-300 hover:text-stone-900 disabled:cursor-not-allowed disabled:opacity-40"
@@ -146,11 +146,11 @@ export function WelcomeModal({ isOpen, onSkip, onComplete }: WelcomeModalProps) 
                         <button
                             type="button"
                             onClick={() =>
-                                (isLastSlide
+                                isLastSlide
                                     ? onComplete()
                                     : setActiveSlide((value) =>
                                           Math.min(slides.length - 1, value + 1)
-                                      ))
+                                      )
                             }
                             className="inline-flex items-center gap-2 rounded-full bg-stone-900 px-5 py-2 text-sm text-white transition hover:bg-stone-800"
                         >
