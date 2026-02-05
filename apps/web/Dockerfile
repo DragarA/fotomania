@@ -30,24 +30,20 @@ ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 RUN pnpm --filter @repo/sdk build
 RUN pnpm --filter @repo/web build
 
-# Production stage - serve with nginx
-FROM nginx:alpine AS runner
+# Production stage - use simple Node server instead of nginx
+FROM node:24-alpine AS runner
+
+WORKDIR /app
+
+# Install serve
+RUN npm install -g serve
 
 # Copy built files
-COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
+COPY --from=builder /app/apps/web/dist ./dist
 
-# Copy nginx config for SPA routing
-RUN echo 'server { \
-    listen 80; \
-    location / { \
-        root /usr/share/nginx/html; \
-        index index.html; \
-        try_files $uri $uri/ /index.html; \
-    } \
-    gzip on; \
-    gzip_types text/plain text/css application/json application/javascript text/xml application/xml; \
-}' > /etc/nginx/conf.d/default.conf
+# Railway provides PORT env var
+ENV PORT=3000
 
-EXPOSE 80
+EXPOSE 3000
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["sh", "-c", "serve -s dist -l $PORT"]
