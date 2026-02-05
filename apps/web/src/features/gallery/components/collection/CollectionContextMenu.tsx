@@ -1,4 +1,4 @@
-import { FileText, Mail, Pencil, Share2, Trash2 } from 'lucide-react';
+import { FileText, Info, Mail, Pencil, Share2, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ interface CollectionContextMenuProps {
     onDelete: () => void;
     isDelivery?: boolean;
     hasInvoice?: boolean;
+    onInfo?: () => void;
     onShareDelivery?: () => void;
     onSendDeliveryEmail?: () => void;
     onUploadInvoice?: () => void;
@@ -25,6 +26,7 @@ export function CollectionContextMenu({
     onDelete,
     isDelivery = false,
     hasInvoice = false,
+    onInfo,
     onShareDelivery,
     onSendDeliveryEmail,
     onUploadInvoice,
@@ -79,6 +81,16 @@ export function CollectionContextMenu({
     }, [x, y]);
 
     const menuItems = [
+        // Info (only for delivery collections)
+        ...(isDelivery && onInfo
+            ? [
+                  {
+                      label: t('collectionContextMenu.info'),
+                      icon: <Info className="h-4 w-4" strokeWidth={1.5} />,
+                      onClick: onInfo,
+                  },
+              ]
+            : []),
         // Share delivery link (only for delivery collections)
         ...(isDelivery && onShareDelivery
             ? [

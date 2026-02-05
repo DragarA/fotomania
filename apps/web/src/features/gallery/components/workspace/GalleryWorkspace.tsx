@@ -21,11 +21,12 @@ import {
     useRemoveInvoiceMutation,
 } from '../../hooks';
 import { useCatalogueDetailState } from '../../state/useCatalogueDetailState';
-import type { Collection, Photo } from '../../types';
+import type { ClientFavouriteSession, Collection, Photo } from '../../types';
 import { CatalogueSidebar } from '../catalogue/CatalogueSidebar';
 import { CollectionContextMenu } from '../collection/CollectionContextMenu';
 import { CollectionModal } from '../collection/CollectionModal';
 import { InvoiceUploadDialog } from '../collection/InvoiceUploadDialog';
+import { FavouritesModal } from '../favourites/FavouritesModal';
 import { PhotoLightbox } from '../photo/PhotoLightbox';
 import { PhotoWorkspace } from '../photo/PhotoWorkspace';
 import { UploadQueue } from '../photo/UploadQueue';
@@ -69,6 +70,10 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
     const [invoiceUploadCollectionId, setInvoiceUploadCollectionId] = useState<
         string | null
     >(null);
+
+    // Delivery info modal state
+    const [deliveryInfoSession, setDeliveryInfoSession] =
+        useState<ClientFavouriteSession | null>(null);
 
     // Mutations
     const deleteMutation = useDeleteCollectionMutation();
@@ -189,6 +194,16 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                 });
             },
         });
+    };
+
+    const handleShowDeliveryInfo = (collection: Collection) => {
+        // Find the client session from favourites based on clientSessionId
+        const session = favouriteSessions?.find(
+            (s) => s.sessionId === collection.clientSessionId
+        );
+        if (session) {
+            setDeliveryInfoSession(session);
+        }
     };
 
     // Loading state
@@ -346,6 +361,17 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                         collectionContextMenu.collection.type === 'delivery'
                     }
                     hasInvoice={collectionContextMenu.collection.hasInvoice}
+                    onInfo={
+                        collectionContextMenu.collection.type === 'delivery' &&
+                        collectionContextMenu.collection.clientSessionId
+                            ? () => {
+                                  handleShowDeliveryInfo(
+                                      collectionContextMenu.collection
+                                  );
+                                  closeContextMenu();
+                              }
+                            : undefined
+                    }
                     onShareDelivery={
                         collectionContextMenu.collection.type === 'delivery' &&
                         collectionContextMenu.collection.deliverySlug
@@ -428,6 +454,14 @@ export function GalleryWorkspace({ catalogueId }: GalleryWorkspaceProps) {
                 onClose={() => setInvoiceUploadCollectionId(null)}
                 onUpload={handleUploadInvoice}
                 isUploading={uploadInvoiceMutation.isPending}
+            />
+
+            {/* Delivery Info Modal */}
+            <FavouritesModal
+                session={deliveryInfoSession}
+                catalogueId={catalogueId}
+                isOpen={!!deliveryInfoSession}
+                onClose={() => setDeliveryInfoSession(null)}
             />
         </div>
     );

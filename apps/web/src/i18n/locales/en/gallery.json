@@ -120,6 +120,7 @@
     "delete": "Delete"
   },
   "collectionContextMenu": {
+    "info": "Info",
     "edit": "Edit",
     "delete": "Delete",
     "shareDelivery": "Copy Delivery Link",

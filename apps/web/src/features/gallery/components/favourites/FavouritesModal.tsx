@@ -8,6 +8,7 @@ import { API_BASE_URL } from '@/lib/api-client';
 
 import type { ClientFavouriteSession } from '../../hooks';
 import {
+    useCollectionsQuery,
     useCreateDeliveryCollectionMutation,
     useSessionFavouritesQuery,
 } from '../../hooks';
@@ -34,9 +35,17 @@ export function FavouritesModal({
         isOpen && Boolean(session)
     );
 
+    const { data: collections } = useCollectionsQuery(catalogueId);
     const createDeliveryMutation = useCreateDeliveryCollectionMutation();
 
     useBodyScrollLock(isOpen && Boolean(session));
+
+    // Check if a delivery already exists for this client session
+    const deliveryExists = collections?.some(
+        (collection) =>
+            collection.type === 'delivery' &&
+            collection.clientSessionId === session?.sessionId
+    );
 
     const handleCreateDelivery = () => {
         if (!session) return;
@@ -267,17 +276,19 @@ export function FavouritesModal({
 
                 {/* Footer */}
                 <div className="space-y-3 px-6 pb-6">
-                    <Button
-                        onClick={handleCreateDelivery}
-                        className="w-full"
-                        size="lg"
-                        disabled={createDeliveryMutation.isPending}
-                    >
-                        <Package className="mr-2 h-4 w-4" />
-                        {createDeliveryMutation.isPending
-                            ? t('favouritesModal.creatingDelivery')
-                            : t('favouritesModal.createDeliveryCollection')}
-                    </Button>
+                    {!deliveryExists && (
+                        <Button
+                            onClick={handleCreateDelivery}
+                            className="w-full"
+                            size="lg"
+                            disabled={createDeliveryMutation.isPending}
+                        >
+                            <Package className="mr-2 h-4 w-4" />
+                            {createDeliveryMutation.isPending
+                                ? t('favouritesModal.creatingDelivery')
+                                : t('favouritesModal.createDeliveryCollection')}
+                        </Button>
+                    )}
                     <Button
                         onClick={onClose}
                         variant="outline"

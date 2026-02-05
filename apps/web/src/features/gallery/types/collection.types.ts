@@ -7,6 +7,7 @@ export interface Collection {
     name: string;
     photoCount?: number;
     type?: 'proofing' | 'delivery';
+    clientSessionId?: string | null;
     deliverySlug?: string | null;
     clientEmail?: string | null;
     hasInvoice?: boolean;

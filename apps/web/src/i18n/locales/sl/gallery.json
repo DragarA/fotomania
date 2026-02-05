@@ -126,6 +126,7 @@
         "delete": "Izbriši"
     },
     "collectionContextMenu": {
+        "info": "Informacije",
         "edit": "Uredi",
         "delete": "Izbriši",
         "shareDelivery": "Kopiraj povezavo dostave",
