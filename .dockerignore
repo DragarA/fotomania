@@ -1,0 +1,17 @@
+node_modules
+**/node_modules
+**/.git
+**/.gitignore
+**/dist
+**/*.log
+**/.env
+**/.env.*
+!**/.env.example
+**/coverage
+**/.turbo
+**/deploy
+**/*.md
+**/test
+**/*.spec.ts
+**/*.e2e-spec.ts
+apps/web
