@@ -267,27 +267,30 @@ Shared configs in `packages/eslint-config`:
 
 Single shared config in `packages/prettier-config/index.js`
 
-## Deployment
+## Deployment (Railway via Docker)
 
-Each app can be deployed independently:
+This repo is deployed to Railway using the Dockerfiles in `apps/api` and `apps/web`.
 
-### API Deployment
+### API Service
 
-```bash
-cd apps/api
-pnpm build
-# Deploy dist/ folder
-```
+- Build context: repo root
+- Dockerfile: `apps/api/Dockerfile`
+- Exposed port: `3000`
+- Required env vars:
+  - `DATABASE_URL`
+  - `SESSION_SECRET`
+  - `GOOGLE_CLIENT_ID`
+  - `GOOGLE_CLIENT_SECRET`
 
-### Web Deployment
+### Web Service
 
-```bash
-cd apps/web
-pnpm build
-# Deploy dist/ folder to static hosting (Vercel, Netlify, etc.)
-```
+- Build context: repo root
+- Dockerfile: `apps/web/Dockerfile`
+- Exposed port: `3000` (Railway provides `PORT`)
+- Build arg (required at build time):
+  - `VITE_API_BASE_URL` (e.g. `https://api.your-domain.com`)
 
-Set environment variables for API URL in production.
+Note: the web Docker build depends on `apps/api/openapi.json`, which is committed in the repo.
 
 ## Troubleshooting
 
