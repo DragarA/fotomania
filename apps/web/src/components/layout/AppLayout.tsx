@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 
 import ErrorBoundary from '../common/ErrorBoundary';
 
+import { DemoBanner } from './DemoBanner';
 import { Footer } from './Footer';
 import { Navigation } from './Navigation';
 
@@ -25,6 +26,7 @@ export function AppLayout() {
 
     return (
         <>
+            <DemoBanner />
             {!isPublicGallery && <Navigation />}
             <main className="min-h-screen">
                 <ErrorBoundary>

@@ -1,10 +1,15 @@
 import { OpenAPI } from '@repo/sdk';
 
+import { installFotomaniaDemoMode, IS_DEMO_MODE } from './demo-mode';
 import { getJwtExpiryMs } from './jwt';
 
+installFotomaniaDemoMode();
+
 // Configure the OpenAPI client
-OpenAPI.BASE =
-    (import.meta.env?.VITE_API_BASE_URL as string) || 'http://localhost:3000';
+OpenAPI.BASE = IS_DEMO_MODE
+    ? (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
+    : (import.meta.env?.VITE_API_BASE_URL as string) ||
+      'http://localhost:3000';
 
 // Export the base URL for use in components that need direct URL access
 export const API_BASE_URL = OpenAPI.BASE;
