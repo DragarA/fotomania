@@ -193,6 +193,10 @@ describe('AuthService', () => {
                 }),
             } as any);
 
+            mockDb.transaction.mockImplementation(
+                async (cb: any) => cb(mockDb)
+            );
+
             mockDb.insert.mockReturnValueOnce({
                 values: jest.fn().mockReturnValue({
                     returning: jest.fn().mockResolvedValue([newUser]),
